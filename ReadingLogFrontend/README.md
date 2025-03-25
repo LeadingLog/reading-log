@@ -1,3 +1,6 @@
+## 루트를 사용한 컬러 재사용
+
+
 ## 디렉토리 구조
 ```
 ReadingLogFrontend/
