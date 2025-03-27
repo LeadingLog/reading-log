@@ -21,4 +21,5 @@ body {
   background-size: cover;
   height: 100vh;
   position: relative;
+  min-width: 1325px;
 }
