@@ -1,4 +1,5 @@
 import TimeLine from "../homeLeft/TimeLine.tsx";
+import MyBookList from "../homeLeft/MyBookList.tsx";
 
 export default function LeftPage() {
   return (
@@ -9,7 +10,8 @@ export default function LeftPage() {
         <li className="flex justify-center flex-1">내 독서 목록</li>
         <li className="flex justify-center flex-1">관심 도서</li>
       </ul>
-      <TimeLine />
+      <MyBookList/>
+      {/*<TimeLine/>*/}
     </section>
   );
 }

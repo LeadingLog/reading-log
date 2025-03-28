@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
+  content   : ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme     : {
     extend: {
       colors: {
 
@@ -27,9 +27,9 @@ export default {
 
         /* 배경 관련 색 */
 
-        modalBg: "#96B2C8",       // 모달배경색
-        searchBg: "#FDFAF3",      // 검색창배경
-        nickNameBg: "#FDFAF3",    // 닉네임표시배경색
+        modalBg    : "#96B2C8",       // 모달배경색
+        searchBg   : "#FDFAF3",      // 검색창배경
+        nickNameBg : "#FDFAF3",    // 닉네임표시배경색
         readingTime: "#E5CEC8",   // 총 독서 시간 표시 배경
         FavoritesBg: "#96B2C8",   // 즐겨찾기아이콘배경색
 
@@ -45,12 +45,12 @@ export default {
         iconColor_5: "#CAE1F3", // 연한하늘색
 
         /* 이번 달 독서 리스트 관련 */
-        titleMarker: "#E5CEC8",    // 타이틀 왼쪽 마커색
-        readingListBg: "#E5CEC8",  // 이번 달 독서 리스트 배경색
-        toggleBg: "#FDFAF3",       // 토글 배경
-        toggleReading: "#E5CEC8",  // 토글이 독서중인 경우 토글버튼 색
+        titleMarker   : "#E5CEC8",    // 타이틀 왼쪽 마커색
+        readingListBg : "#E5CEC8",  // 이번 달 독서 리스트 배경색
+        toggleBg      : "#FDFAF3",       // 토글 배경
+        toggleReading : "#E5CEC8",  // 토글이 독서중인 경우 토글버튼 색
         toggleComplete: "#96B2C8", // 토글이 완독인 경우 토글버튼 색
-        noReadingBg: "#D9D9D9",    // 읽기 전 배경
+        noReadingBg   : "#D9D9D9",    // 읽기 전 배경
 
         // 소셜 버튼 배경색
         socialBg: "#FDFAF3",
@@ -64,5 +64,5 @@ export default {
   fontFamily: {
     primary: "Noto Sans KR",
   },
-  plugins: [],
+  plugins   : [],
 };
