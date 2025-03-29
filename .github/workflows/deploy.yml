@@ -16,7 +16,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: pandoc/latex
+#    container: pandoc/latex
 
     steps:
 
