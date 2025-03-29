@@ -36,4 +36,4 @@ jobs:
           destination-repository-name: "reading-log"  # ✅ 대상 레포지토리 이름 수정
           user-email: ${{ secrets.EMAIL }}
           commit-message: "Deploy: ${{ github.sha }}"
-          target-branch: Publishing
+          target-branch: master
