@@ -16,7 +16,7 @@ export default function TimeLine() {
       </article>
       <button className="flex gap-2 justify-end items-center group">
         <span>2025</span>
-        년 리딩로그 보
+        년 리딩로그 보러가기
         <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover" ><IconTriangle /></span>
       </button>
       <article>
