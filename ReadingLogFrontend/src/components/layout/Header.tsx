@@ -1,6 +1,6 @@
 import IconSearch from "../../assets/Icon-search.svg?react";
 import IconLogOut from "../../assets/Icon-logout.svg?react";
-import IconMyPage from "../../assets/Icon-Mypage.svg?react";
+import IconMyPage from "../../assets/Icon-mypage.svg?react";
 import { Link } from "react-router-dom";
 
 
