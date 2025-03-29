@@ -1,5 +1,5 @@
-import IconSearch from "../../assets/Icon-Search.svg?react";
-import IconReading from "../../assets/Icon-Reading.svg?react";
+import IconSearch from "../../assets/Icon-search.svg?react";
+import IconReading from "../../assets/Icon-reading.svg?react";
 import IconReadComplete from "../../assets/Icon-readcomplete.svg?react"
 
 export default function MyBookList() {
