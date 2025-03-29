@@ -9,7 +9,7 @@ export default function Header() {
     <header className="w-[1325px] h-[50px] flex justify-between">
       {/* 검색창 */}
       <section
-        className="flex relative justify-between items-center border-8 bg-searchBg border-borderColor_4 rounded-full">
+        className="flex justify-between items-center border-8 bg-searchBg border-borderColor_4 rounded-full">
         <span className="flex justify-center items-center text-iconColor_1 bg-bookBG rounded-full w-[50px] h-[50px] ml-[-8px]">
           <IconSearch />
         </span>
