@@ -2,7 +2,11 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'Publishing' ]
+    branches:
+      # 설정한 브랜치를 푸시할때만 배포됩니다.
+      - 'Publishing'
+      # - 'main'
+      # - 'FronDev'
 
 jobs:
   build:
@@ -35,5 +39,5 @@ jobs:
           destination-github-username: "inging-bo"
           destination-repository-name: "reading-log"  # ✅ 대상 레포지토리 이름 수정
           user-email: ${{ secrets.EMAIL }}
-          commit-message: "Deploy: ${{ github.sha }}"
+          commit-message: "${{ github.event.commits[0].message }} Deploy: ${{ github.sha }} "
           target-branch: master

@@ -5,6 +5,14 @@ export default {
     extend: {
       colors: {
         
+        /* 폰트 이름 찾을 때 포함된 명칭 참고 */
+        // 텍스트 > Text
+        // 배경색 > Bg
+        // 보더 > border
+        // 호버 > hover
+        // 아이콘 > icon
+        // 토글 > toggle
+        
         /* 총 사용 색상 */
         color_1 : "#FDFAF3", // 아이보리색
         color_2 : "#C9A89F", // 진한빨강
@@ -33,6 +41,19 @@ export default {
         yearSlideIcon        : "#E5CEC8", // 슬라이드 버튼
         yearSlideIconHover   : "#C9A89F", // 슬라이드 버튼 호버색
         
+        /* 독서 타이머 & 스탑워치 관련 */
+        trackingBg      : "#E5CEC8", // 독서 타이머 & 스탑워치 선택한 책 뒷배경
+        trackingBook    : "#FDFAF3", // 현재 타이머 & 스타워치 선택한 책 썸네일 기본 배경
+        stopWatchTimerBg: "#FDFAF3", // 스탑워치 & 타이머   영역 배경
+        playIcon        : "#E5CEC8", // 재생 버튼 아이콘 색
+        stopIcon        : "#E5CEC8", // 정지 버튼 아이콘 색
+        pauseIcon       : "#E5CEC8", // 일시정지 버튼 아이콘 색
+        playIconBorder  : "#E5CEC8", // 재생 버튼 아이콘 색
+        stopIconBorder  : "#E5CEC8", // 정지 버튼 아이콘 색
+        pauseIconBorder : "#E5CEC8", // 일시정지 버튼 아이콘 색
+        timeIconHover   : "#C9A89F", // 아이콘 호버시 색
+        timerFlow       : "#C9A89F", // 남은 시간을 표시하는 색
+        
         // 중앙 컴포넌트 뒷배경
         bookBG: "#96B2C8",
         // Left, right 컴포넌트 배경
@@ -44,11 +65,13 @@ export default {
         borderColor_4: "#96B2C8", // 진한하늘색
         borderColor_5: "#CAE1F3", // 연한하늘색
         borderColor_6: "#D9D9D9", // 회색
-        /* 책 아이콘 관련 */
-        bookImgItemBg        : "#E5CEC8", // 내 독서 목록 & 관심 도서 책들 배경
-        bookImgItemReadingBg : "#FDFAF3", // (독서중) 상태 표시 배경
-        bookImgItemNoReadBg  : "#FDFAF3", // (읽기전) 상태 표시 배경
-        bookImgItemCompleteBg: "#FDFAF3", // (완 독) 상태 표시 배경
+        /* 독서 목록 & 관심 도서 책 썸네일 아이콘 관련 */
+        bookImgItemBg        : "#E5CEC8", // 내 독서 목록 & 관심 도서 책 썸네일 없을 때 배경
+        bookImgItemReadingBg : "#C9A89F", // (독서중) 상태 표시 배경
+        bookImgItemNoReadBg  : "#D9D9D9", // (읽기전) 상태 표시 배경
+        bookImgItemCompleteBg: "#96B2C8", // (완 독) 상태 표시 배경
+        bookImgIconColor     : "#FDFAF3", // 상태 표시 아이콘
+        
         /* 배경 관련 색 */
         readingListBg: "#E5CEC8", // 이번 달 독서 리스트 배경색
         modalBg      : "#96B2C8", // 모달배경색
@@ -69,8 +92,8 @@ export default {
         iconColor_7: "#D9D9D9", // 연한회색
         
         /* 독서 상태 토글관련 색 */
-        toggleReading     : "#E5CEC8",  // 토글이 독서중인 경우 토글버튼 색
-        toggleComplete    : "#96B2C8",  // 토글이 완독인 경우 토글버튼 색
+        toggleReading     : "#E5CEC8", // 토글이 독서중인 경우 토글버튼 색
+        toggleComplete    : "#96B2C8", // 토글이 완독인 경우 토글버튼 색
         toggleNoReadingBg : "#D9D9D9", // 읽기 전 배경
         toggleReadStatusBg: "#FDFAF3", // 토글 배경
         
