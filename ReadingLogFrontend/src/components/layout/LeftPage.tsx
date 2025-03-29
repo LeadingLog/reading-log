@@ -1,4 +1,4 @@
-import TimeLine from "../homeLeft/TimeLine.tsx";
+// import TimeLine from "../homeLeft/TimeLine.tsx";
 import MyBookList from "../homeLeft/MyBookList.tsx";
 
 export default function LeftPage() {
