@@ -1,5 +1,5 @@
-import IconPlay from "../../assets/Icon-play.svg?react"
-import IconPause from "../../assets/Icon-pause.svg?react"
+// import IconPlay from "../../assets/Icon-play.svg?react"
+// import IconPause from "../../assets/Icon-pause.svg?react"
 import IconStop from "../../assets/Icon-stop.svg?react"
 
 export default function TimeTracking() {
