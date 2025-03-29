@@ -31,7 +31,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
         with:
-          source-directory: 'ReadingLogFrontend/dist'  # ✅ Vite 기본 빌드 결과물 경로
+          source-directory: '/ReadingLogFrontend/dist'  # ✅ Vite 기본 빌드 결과물 경로
           destination-github-username: "inging-bo"
           destination-repository-name: "readinglog"  # ✅ 대상 레포지토리 이름 수정
           user-email: ${{ secrets.EMAIL }}
