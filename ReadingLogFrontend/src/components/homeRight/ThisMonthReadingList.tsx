@@ -1,7 +1,8 @@
 export default function ThisMonthReadingList() {
   return (
+    /* 이번 달 독서 리스트 */
     <section className="flex flex-col gap-4 overflow-hidden">
-      <span className="flex relative text-xl font-bold"><p className="absolute top-0 bottom-0 left-0 w-1.5 h-full bg-titleMarker"></p><span className="pl-2.5">이번 달 독서 리스트</span></span>
+      {/* 책 리스트 */}
       <article className="flex-1 overflow-y-scroll">
         <ul className="flex flex-col gap-3">
           <li className="flex justify-between p-3.5 rounded-xl bg-readingListBg">
