@@ -1,11 +1,24 @@
+import { useModalStore } from "../../store/modalStore.ts";
+
 export default function ThisMonthReadingList() {
+  const {openModal} = useModalStore(); // Zustand의 openModal 가져오기
+
   return (
     /* 이번 달 독서 리스트 */
     <section className="flex flex-col gap-4 overflow-hidden">
       {/* 책 리스트 */}
       <article className="flex-1 overflow-y-scroll">
         <ul className="flex flex-col gap-3">
-          <li className="flex justify-between p-3.5 rounded-xl bg-readingListBg">
+          <li
+            className="flex justify-between p-3.5 rounded-xl bg-readingListBg"
+            onClick={() =>
+              openModal('ModalTrackingPlan', {
+                title: '로그아웃 하시겠어요?',
+                cancelText: '닫기',
+                confirmText: '로그아웃',
+              })
+            }
+          >
             <span className="text-xl">책이름</span>
             <div className="relative flex w-[70px] justify-end items-center bg-toggleReadStatusBg rounded-full">
               <span className="absolute top-1 bottom-1 left-1 w-5 bg-toggleReading rounded-full"></span>

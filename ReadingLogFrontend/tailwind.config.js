@@ -88,27 +88,54 @@ export default {
         /* 배경 관련 색 */
         readingListBg: "#E5CEC8", // 이번 달 독서 리스트 배경색
         /* 모달 관련 */
-        modalBg           : "#96B2C8", // 모달배경색
-        modalLogoBg       : "#E5CEC8", // 모달 로고 표시 영역 기본 배경 색
-        modalContentBg    : "#FDFAF3", // 모달 컨텐츠 배경 색
-        modalTitleText    : "#000000",
-        modalSubTitle     : "#A1A1A1",
-        modalQuitBg       : "#D9D9D950", // 회원탈퇴 버튼 배경
-        modalQuitText     : "#A1A1A1", // 회원탈퇴 버튼 텍스트
-        modalRightBtnBg   : "#E5CEC8", // 모달에서 오른쪽에 있는 버튼 배경
-        modalLeftBtnBorder: "#E5CEC8", // 모달에서 오른쪽에 있는 버튼 보더
+        modalBg                           : "#96B2C8",   // 모달배경색
+        modalLogoBg                       : "#E5CEC8",   // 모달 로고 표시 영역 기본 배경 색
+        modalBookBg                       : "#E5CEC8",   // 모달 책 표지 표시 배경 색
+        modalContentBg                    : "#FDFAF3",   // 모달 컨텐츠 배경 색
+        modalTitleText                    : "#000000",   // 공통 모달 메인 텍스트 색
+        modalSubTitle                     : "#A1A1A1",   // 공통 모달 서브 텍스트 색
+        modalQuitBg                       : "#D9D9D950", // 마이페이지 회원탈퇴 버튼 배경
+        modalQuitText                     : "#A1A1A1",   // 마이페이지 회원탈퇴 버튼 텍스트
+        modalRightBtnBg                   : "#E5CEC8",   // 모달에서 오른쪽 아래 있는 버튼 배경
+        modalLeftBtnBorder                : "#E5CEC8",   // 모달에서 왼쪽 아래 있는 버튼 보더
+        modalTrackingTitleBg              : "#FDFAF3",   // 독서 타임 트래킹 배경
+        modalTrackingTitleText            : "#000000",   // 독서 타임 트래킹 텍스트 색
+        modalTrackingBookTitleText        : "#000000",   // 독서 타임 트래킹 책 제목 텍스트
+        modalTrackingBookSubTitleText     : "#000000",   // 독서 타임 트래킹 저자 텍스트
+        modalTrackingTimerTitleText       : "#000000",   // 독서 타임 트래킹 타이머 텍스트
+        modalTrackingTimerSubTitleText    : "#A1A1A1",   // 독서 타임 트래킹 타이머 설명 텍스트
+        modalTrackingTimerToggleActive    : "#C9A89F",   // 독서 타임 트래킹 타이머 토글 활성화 시 색
+        modalTrackingTimerToggleInActive  : "#E5CEC8",   // 독서 타임 트래킹 타이머 토글 비활성화 시 색
+        modalTrackingTimerToggleActiveBg  : "#E5CEC8",   // 독서 타임 트래킹 타이머 활성화 시 배경 색
+        modalTrackingTimerToggleInActiveBg: "#EEE6E3",   // 독서 타임 트래킹 타이머 비활성화 시 배경 색
+        modalTrackingTimeBg               : "#EEE6E3",   // 독서 타임 트래킹 타이머 시간 선택 요소 배경
+        modalTrackingTimeChoiceBg         : "#FDFAF3",   // 독서 타임 트래킹 타이머 시간 선택 시 배경
+        modalTrackingTimeDivideColor      : "#000000",   // 독서 타임 트래킹 타이머 시간 경계선 색
+        modalTrackingTimeChoiceText       : "#000000",   // 독서 타임 트래킹 타이머 시간 선택 시 텍스트 색
+        modalTrackingTimeNoChoiceText     : "#000000",   // 독서 타임 트래킹 타이머 시간 미 선택 시 텍스트 색
+        modalBookPlanBookTitleText        : "#000000",   // 독서 계획 책 제목 텍스트 색
+        modalBookPlanBookSubTitleText     : "#A1A1A1",   // 독서 계획 책 저자 텍스트 색
+        modalBookPlanStartEndMonthText    : "#000000",   // 독서 계획 시작 & 종료 타이틀 텍스트 색
+        modalBookPlanCalendarText         : "#000000",   // 독서 계획 달력 표시 날짜 텍스트 색 색
+        modalBookPlanCalendarBg           : "#EEE6E3",   // 독서 계획 달력 표시 배경
+        modalBookPlanCalendarIcon         : "#000000",   // 독서 계획 달력 아이콘 색
         
         /* 헤더 상단 오른쪽 닉네임 & 마이페이지 & (로그인 & 로그아웃) 관련 색 */
         nickNameBg     : "#FDFAF3", // 닉네임표시배경색
         myPageLogOutBg : "#96B2C8", // 마이페이지 & 로그아웃 아이콘 배경
-        myPageIconColor: "#FDFAF3", // 마이페이지 & 로그아웃 아이콘 배경
-        LogOutIconColor: "#FDFAF3", // 마이페이지 & 로그아웃 아이콘 배경
-        iconDivideColor: "#FDFAF3", // 마이페이지 & 로그아웃 아이콘 배경
+        myPageIconColor: "#FDFAF3", // 마이페이지 아이콘 색
+        LogOutIconColor: "#FDFAF3", // 로그아웃 아이콘 색
+        iconDivideColor: "#FDFAF3", // 마이페이지 & 로그아웃 경계선 색
         /* 검색 관련 색 */
-        searchBg: "#FDFAF3", // 검색창배경
-        /* 즐겨찾기 관련 색 */
-        FavoritesIcon  : "#FDFAF3", // 즐겨찾기 아이콘 색
-        FavoritesIconBg: "#96B2C8", // 즐겨찾기 아이콘 배경 색
+        searchBackBg     : "#96B2C8", // 검색창뒷배경
+        searchBg         : "#FDFAF3", // 검색창배경
+        searchBorder     : "#96B2C8", // 검색창 보더
+        searchIconDefault: "#FDFAF3", // 검색 아이콘 검색안할 때 색
+        searchIconActive : "#FDFAF3", // 검색 시 색
+        /* 관심도서 아이콘 관련 색 */
+        FavoriteIcon    : "#FDFAF3", // 관심도서 아이콘 색
+        FavoriteIconBg  : "#96B2C8", // 관심도서 아이콘 배경 색
+        noFavoriteIconBg: "#D9D9D9", // 관심도서 아닐 때 아이콘 배경 색
         /* SVG아이콘 색상 */
         iconColor_1: "#FDFAF3", // 아이보리색
         iconColor_2: "#C9A89F", // 진한빨강

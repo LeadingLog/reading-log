@@ -1,10 +1,11 @@
 import IconTriangle from "../../assets/Icon-triangle.svg?react";
 import YearSlideBar from "../common/YearSlideBar.tsx";
-import { usePageStore } from "../../store/pageStore.ts"; // Zustand 스토어 import
+import { usePageStore } from "../../store/pageStore.ts";
+import { useModalStore } from "../../store/modalStore.ts"; // Zustand 스토어 import
 
 export default function TimeLine() {
   const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
-
+  const {openModal} = useModalStore();
   return (
     <section className="flex flex-col gap-4 rounded-xl">
       {/* 총 독서 시간 표시 */}
@@ -91,6 +92,30 @@ export default function TimeLine() {
         }
       >
         독서 타임 트랙킹 타이머 (임시 버튼)
+        <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
+          <IconTriangle/>
+        </span>
+      </button>
+      <button
+        className="flex gap-2 justify-end items-center group"
+        onClick={() =>
+          openModal('ModalTrackingPlan', {
+          })
+        }
+      >
+        독서 타임 트랙킹 모달 (임시 버튼)
+        <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
+          <IconTriangle/>
+        </span>
+      </button>
+      <button
+        className="flex gap-2 justify-end items-center group"
+        onClick={() =>
+          openModal('ModalBookPlan', {
+          })
+        }
+      >
+        독서 계획 모달 (임시 버튼)
         <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
           <IconTriangle/>
         </span>

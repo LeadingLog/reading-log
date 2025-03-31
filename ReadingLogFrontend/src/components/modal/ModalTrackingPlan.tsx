@@ -1,23 +1,67 @@
 import React from 'react';
 import { useModalStore } from '../../store/modalStore';
+import IconFavorite from "../../assets/Icon-favorite.svg?react"
+
 
 const ModalTrackingPlan: React.FC = () => {
-  const { activeModal, closeModal } = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
+  const {activeModal, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
 
-  if (activeModal !== 'ModalTrackingPlan') return null; // activeModal이 ModalTrackingPlan가 아니면 렌더링하지 않음
+  if (activeModal !== 'ModalTrackingPlan') return null; // activeModal이 ModalTrackingPlan이  아니면 렌더링하지 않음
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg w-[400px]">
-        <h2 className="text-xl font-bold mb-4">마이페이지</h2>
-        <p>여기에 마이페이지 내용을 작성하세요.</p>
-        <button
-          onClick={closeModal} // 클릭 시 모달 닫기
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          닫기
-        </button>
-      </div>
+      <section className="flex flex-col gap-3 bg-modalBg p-5 rounded-lg">
+        {/* 타이틀 */}
+        <span className="bg-modalTrackingTitleBg rounded-lg p-2 text-center font-semibold">독서 타임 트래킹</span>
+        {/* 책 표지 */}
+        <article className="relative h-20 bg-modalBookBg rounded-lg">
+          <div className="absolute w-8 h-8 left-2 top-2 text-FavoriteIcon bg-FavoriteIconBg rounded-full p-1.5">
+            <IconFavorite width="100%" height="100%"/>
+          </div>
+        </article>
+        {/* 타이머 기능 관련 */}
+        <article className="flex flex-col gap-2 bg-modalContentBg p-2.5 rounded-lg">
+          <div className="relative">
+            <span className="text-2xl relative">
+              <p className="absolute top-1 bottom-1 left-0 w-1 bg-titleMarker"></p>
+              <span className="m-2">책 제목</span>
+            </span>
+            <p>책 저자</p>
+          </div>
+          <section>
+            <div className="flex">
+              <p>타이머</p>
+              <span className="flex ml-auto w-10 p-1 bg-modalTrackingTimerToggleInActiveBg rounded-full">
+                <span className="w-1/2 aspect-square bg-modalTrackingTimerToggleInActive rounded-full"></span>
+              </span>
+              <span className="flex justify-end w-10 p-1 bg-modalTrackingTimerToggleActiveBg rounded-full">
+                <span className="w-1/2 aspect-square bg-modalTrackingTimerToggleActive rounded-full"></span>
+              </span>
+            </div>
+            <p className="text-xs text-modalTrackingTimerSubTitleText">미 선택 시 시작과 동시에</p>
+            <p className="text-xs text-modalTrackingTimerSubTitleText">스톱워치가 시작 됩니다.</p>
+          </section>
+          <div className="flex p-1 bg-modalTrackingTimeBg rounded-lg divide-x divide-modalTrackingTimeDivideColor">
+            <button className="flex flex-1 text-xl"><span className="flex-1 mr-1.5 drop-shadow-md bg-modalTrackingTimeChoiceBg rounded-lg">15분</span></button>
+            <button className="flex flex-1 text-xl"><span className="flex-1 ">30분</span></button>
+            <button className="flex flex-1 text-xl"><span className="flex-1 ">60분</span></button>
+          </div>
+          <section className="flex gap-4">
+            <button
+              onClick={closeModal} // 클릭 시 모달 닫기
+              className="flex-1 min-w-[120px] px-4 py-1 border-4 border-modalLeftBtnBorder rounded-lg"
+            >
+              다음에 읽기
+            </button>
+            <button
+              onClick={closeModal} // 클릭 시 모달 닫기
+              className="flex-1 min-w-[120px] px-4 py-1 bg-modalRightBtnBg rounded-lg"
+            >
+              독서 시작
+            </button>
+          </section>
+        </article>
+      </section>
     </div>
   );
 };
