@@ -1,4 +1,3 @@
-import ThisMonthReadingList from "../homeRight/ThisMonthReadingList.tsx";
 import TimeTracking from "../homeRight/TimeTracking.tsx";
 import StatsPage from "../homeRight/StatsPage.tsx";
 import { usePageStore } from "../../store/pageStore.ts";
@@ -19,7 +18,6 @@ export default function RightPage() {
         </span>
       </span>
       {/* 조건부 렌더링 */}
-      {rightContent === 'ThisMonthReadingList' && <ThisMonthReadingList />}
       {rightContent === 'TimeTracking' && <TimeTracking />}
       {rightContent === 'StatsPage' && <StatsPage />}
     </section>

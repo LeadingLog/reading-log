@@ -65,14 +65,15 @@ const ModalTrackingPlan: React.FC = () => {
               maxHeight: isOn ? 36 : 0,
             }}
             transition={{duration: 0.2, ease: "easeInOut"}}
-            className="flex overflow-hidden p-1 bg-modalTrackingTimeBg rounded-lg divide-x divide-modalTrackingTimeDivideColor"
+            className="relative h-[36px] flex overflow-hidden p-1 bg-modalTrackingTimeBg rounded-lg divide-x divide-modalTrackingTimeDivideColor"
           >
-            <button className="flex flex-1 text-xl"><span
-              className="flex-1 mr-1.5 drop-shadow-md bg-modalTrackingTimeChoiceBg rounded-lg">15분</span></button>
-            <button className="flex flex-1 text-xl"><span className="flex-1 ">30분</span></button>
-            <button className="flex flex-1 text-xl"><span className="flex-1 ">60분</span></button>
+            <button className="relative flex flex-1 text-xl"><span
+              className="flex-1 absolute inset-0 z-[1]">15분</span></button>
+            <button className="relative flex flex-1 text-xl"><span className="flex-1 absolute inset-0 z-[1]">30분</span></button>
+            <button className="relative flex flex-1 text-xl"><span className="flex-1 absolute inset-0 z-[1]">60분</span></button>
+            <div className="absolute top-1 bottom-1 left-0 w-1/3 p-1 bg-modalTrackingTimeChoiceBg rounded-lg"></div>
           </motion.div>
-          
+
           <section className="flex gap-4">
             <button
               onClick={closeModal} // 클릭 시 모달 닫기
