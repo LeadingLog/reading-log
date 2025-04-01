@@ -1,7 +1,7 @@
-import ThisMonthReadingList from "./ThisMonthReadingList.tsx";
+import ThisMonthReadingList from "./timeTrackingItem/ThisMonthReadingList.tsx";
+import Timer from "./timeTrackingItem/Timer.tsx";
+import StopWatch from "./timeTrackingItem/StopWatch.tsx";
 import { usePageStore } from "../../store/pageStore.ts";
-import Timer from "./timeTrackingType/Timer.tsx";
-import StopWatch from "./timeTrackingType/StopWatch.tsx";
 
 export default function TimeTracking() {
 

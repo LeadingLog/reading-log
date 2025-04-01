@@ -1,9 +1,7 @@
-import { useModalStore } from "../../store/modalStore.ts";
-// import { usePageStore } from "../../store/pageStore.ts";
+import { useModalStore } from "../../../store/modalStore.ts";
 
 export default function ThisMonthReadingList() {
   const {openModal} = useModalStore(); // Zustand의 openModal 가져오기
-  // const { rightContent, pageData } = usePageStore();
 
   return (
     /* 이번 달 독서 리스트 */

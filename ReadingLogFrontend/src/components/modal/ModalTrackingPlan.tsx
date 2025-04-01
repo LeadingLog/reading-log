@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useModalStore } from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { motion } from "framer-motion";
-// import BookSearchResult from "../common/BookSearchResult.tsx";
 
 
 const ModalTrackingPlan: React.FC = () => {
@@ -67,16 +66,26 @@ const ModalTrackingPlan: React.FC = () => {
             transition={{duration: 0.2, ease: "easeInOut"}}
             className="relative h-[36px] flex overflow-hidden p-1 bg-modalTrackingTimeBg rounded-lg divide-x divide-modalTrackingTimeDivideColor"
           >
-            <button className="relative flex flex-1 text-xl"><span
-              className="flex-1 absolute inset-0 z-[1]">15분</span></button>
-            <button className="relative flex flex-1 text-xl"><span className="flex-1 absolute inset-0 z-[1]">30분</span></button>
-            <button className="relative flex flex-1 text-xl"><span className="flex-1 absolute inset-0 z-[1]">60분</span></button>
-            <div className="absolute top-1 bottom-1 left-0 w-1/3 p-1 bg-modalTrackingTimeChoiceBg rounded-lg"></div>
+            <button className="relative flex flex-1 text-xl">
+              <span className="flex-1 absolute inset-0 z-[1]">15분</span>
+            </button>
+            <button className="relative flex flex-1 text-xl">
+              <span className="flex-1 absolute inset-0 z-[1]">30분</span>
+            </button>
+            <button className="relative flex flex-1 text-xl">
+              <span className="flex-1 absolute inset-0 z-[1]">60분</span>
+            </button>
+            <div className={`${ isOn ? 'block' : 'hidden'}
+             absolute top-1 bottom-1 left-0  w-[30%] ml-1.5 drop-shadow-md  border-none bg-modalTrackingTimeChoiceBg rounded-lg`}>
+            </div>
           </motion.div>
 
           <section className="flex gap-4">
             <button
-              onClick={closeModal} // 클릭 시 모달 닫기
+              onClick={() => {
+                setIsOn(false);
+                closeModal()
+              }} // 클릭 시 모달 닫기
               className="flex-1 min-w-[120px] px-4 py-1 border-4 border-modalLeftBtnBorder rounded-lg"
             >
               다음에 읽기
