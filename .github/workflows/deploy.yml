@@ -4,7 +4,7 @@ on:
   push:
     branches:
       # 설정한 브랜치를 푸시할때만 배포됩니다.
-      - 'Publishing'
+      - 'frontdev'
       # - 'main'
       # - 'FronDev'
 
