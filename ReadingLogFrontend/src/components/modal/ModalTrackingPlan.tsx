@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useModalStore } from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { motion } from "framer-motion";
-import BookSearchResult from "../common/BookSearchResult.tsx";
+// import BookSearchResult from "../common/BookSearchResult.tsx";
 
 
 const ModalTrackingPlan: React.FC = () => {
