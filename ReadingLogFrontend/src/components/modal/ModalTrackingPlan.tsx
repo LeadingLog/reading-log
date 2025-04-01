@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useModalStore } from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { motion } from "framer-motion";
@@ -7,9 +7,34 @@ import { motion } from "framer-motion";
 const ModalTrackingPlan: React.FC = () => {
   const {activeModal, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
 
+  type TimeChoice = 15 | 30 | 60;
+
+  const [timeChoice, setTimeChoice] = useState<TimeChoice | undefined>(undefined);
+
+  /* 타이머 시간 선택 시 UI */
+  const getLeftPosition = (choice: TimeChoice | undefined) => {
+    switch (choice) {
+      case 15:
+        return "left-2";
+      case 30:
+        return "left-1/2 -translate-x-1/2"; // 가운데 배치
+      case 60:
+        return "left-[69%]"; // 오른쪽 배치
+      default:
+        return "left-0"; // 기본 위치
+    }
+  };
+
+
   const [isOn, setIsOn] = useState(false) // 타이머 토글 on/off
   const toggleSwitch = () => setIsOn(!isOn)
-  console.log(isOn)
+  console.log(timeChoice);
+
+  useEffect(() => {
+    if (!isOn) {
+      setTimeChoice(15);
+    }
+  }, [isOn]);
 
   if (activeModal !== 'ModalTrackingPlan') return null; // activeModal이 ModalTrackingPlan이  아니면 렌더링하지 않음
 
@@ -66,18 +91,41 @@ const ModalTrackingPlan: React.FC = () => {
             transition={{duration: 0.2, ease: "easeInOut"}}
             className="relative h-[36px] flex overflow-hidden p-1 bg-modalTrackingTimeBg rounded-lg divide-x divide-modalTrackingTimeDivideColor"
           >
-            <button className="relative flex flex-1 text-xl">
-              <span className="flex-1 absolute inset-0 z-[1]">15분</span>
+            <button
+              className="relative flex flex-1 text-xl"
+              onClick={() => setTimeChoice(15)}
+            >
+              <span
+                className="flex-1 absolute inset-0 z-[1]"
+              >
+                15분
+              </span>
             </button>
-            <button className="relative flex flex-1 text-xl">
-              <span className="flex-1 absolute inset-0 z-[1]">30분</span>
+            <button
+              className="relative flex flex-1 text-xl"
+              onClick={() => setTimeChoice(30)}
+            >
+              <span className="flex-1 absolute inset-0 z-[1]"
+              >
+                30분
+              </span>
             </button>
-            <button className="relative flex flex-1 text-xl">
-              <span className="flex-1 absolute inset-0 z-[1]">60분</span>
+            <button className="relative flex flex-1 text-xl"
+                    onClick={() => setTimeChoice(60)}
+            >
+              <span className="flex-1 absolute inset-0 z-[1]"
+              >
+                60분
+              </span>
             </button>
-            <div className={`${ isOn ? 'block' : 'hidden'}
-             absolute top-1 bottom-1 left-0  w-[30%] ml-1.5 drop-shadow-md  border-none bg-modalTrackingTimeChoiceBg rounded-lg`}>
-            </div>
+            <div
+              className={`
+                absolute top-1 bottom-1 w-[calc(30%-6px)] drop-shadow-md border-none 
+                bg-modalTrackingTimeChoiceBg rounded-lg transition-all duration-300 
+                ${isOn ? "block" : "hidden"} 
+                ${getLeftPosition(timeChoice)}
+              `}
+            ></div>
           </motion.div>
 
           <section className="flex gap-4">

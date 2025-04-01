@@ -108,7 +108,7 @@ export default {
         modalTrackingTimerToggleInActive  : "#E5CEC8",   // 독서 타임 트래킹 타이머 토글 비활성화 시 색
         modalTrackingTimerToggleActiveBg  : "#E5CEC8",   // 독서 타임 트래킹 타이머 활성화 시 배경 색
         modalTrackingTimerToggleInActiveBg: "#EEE6E3",   // 독서 타임 트래킹 타이머 비활성화 시 배경 색
-        modalTrackingTimeBg               : "rgba(238,230,227,100)",   // 독서 타임 트래킹 타이머 시간 선택 요소 배경
+        modalTrackingTimeBg               : "#EEE6E3",   // 독서 타임 트래킹 타이머 시간 선택 요소 배경
         modalTrackingTimeChoiceBg         : "#FDFAF3",   // 독서 타임 트래킹 타이머 시간 선택 시 배경
         modalTrackingTimeDivideColor      : "#000000",   // 독서 타임 트래킹 타이머 시간 경계선 색
         modalTrackingTimeChoiceText       : "#000000",   // 독서 타임 트래킹 타이머 시간 선택 시 텍스트 색
