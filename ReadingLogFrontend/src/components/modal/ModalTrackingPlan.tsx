@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useModalStore } from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
+import { motion } from "framer-motion";
+import BookSearchResult from "../common/BookSearchResult.tsx";
 
 
 const ModalTrackingPlan: React.FC = () => {
   const {activeModal, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
+
+  const [isOn, setIsOn] = useState(false) // 타이머 토글 on/off
+  const toggleSwitch = () => setIsOn(!isOn)
+  console.log(isOn)
 
   if (activeModal !== 'ModalTrackingPlan') return null; // activeModal이 ModalTrackingPlan이  아니면 렌더링하지 않음
 
@@ -29,23 +35,44 @@ const ModalTrackingPlan: React.FC = () => {
             <p>책 저자</p>
           </div>
           <section>
-            <div className="flex">
+            <div className="flex justify-between items-center">
               <p>타이머</p>
-              <span className="flex ml-auto w-10 p-1 bg-modalTrackingTimerToggleInActiveBg rounded-full">
-                <span className="w-1/2 aspect-square bg-modalTrackingTimerToggleInActive rounded-full"></span>
-              </span>
-              <span className="flex justify-end w-10 p-1 bg-modalTrackingTimerToggleActiveBg rounded-full">
-                <span className="w-1/2 aspect-square bg-modalTrackingTimerToggleActive rounded-full"></span>
-              </span>
+              <button
+                className={`${isOn ? 'modalTrackingTimerToggleOnBg' : 'modalTrackingTimerToggleOffBg'}`}
+                style={{
+                  justifyContent: "flex-" + (isOn ? "end" : "start"),
+                }}
+                onClick={toggleSwitch}
+              >
+                <motion.div
+                  className={`${isOn ? 'modalTrackingTimerToggleOnCircle' : 'modalTrackingTimerToggleOffCircle'}`}
+                  layout
+                  transition={{
+                    type: "spring",
+                    visualDuration: 0.2,
+                    bounce: 0.3,
+                  }}
+                />
+              </button>
             </div>
             <p className="text-xs text-modalTrackingTimerSubTitleText">미 선택 시 시작과 동시에</p>
             <p className="text-xs text-modalTrackingTimerSubTitleText">스톱워치가 시작 됩니다.</p>
           </section>
-          <div className="flex p-1 bg-modalTrackingTimeBg rounded-lg divide-x divide-modalTrackingTimeDivideColor">
-            <button className="flex flex-1 text-xl"><span className="flex-1 mr-1.5 drop-shadow-md bg-modalTrackingTimeChoiceBg rounded-lg">15분</span></button>
+          <motion.div
+            initial={{maxHeight: 0}}
+            // style={{borderEndEndRadius: '20px', borderEndStartRadius: '20px'}}
+            animate={{
+              maxHeight: isOn ? 36 : 0,
+            }}
+            transition={{duration: 0.2, ease: "easeInOut"}}
+            className="flex overflow-hidden p-1 bg-modalTrackingTimeBg rounded-lg divide-x divide-modalTrackingTimeDivideColor"
+          >
+            <button className="flex flex-1 text-xl"><span
+              className="flex-1 mr-1.5 drop-shadow-md bg-modalTrackingTimeChoiceBg rounded-lg">15분</span></button>
             <button className="flex flex-1 text-xl"><span className="flex-1 ">30분</span></button>
             <button className="flex flex-1 text-xl"><span className="flex-1 ">60분</span></button>
-          </div>
+          </motion.div>
+          
           <section className="flex gap-4">
             <button
               onClick={closeModal} // 클릭 시 모달 닫기
@@ -54,7 +81,10 @@ const ModalTrackingPlan: React.FC = () => {
               다음에 읽기
             </button>
             <button
-              onClick={closeModal} // 클릭 시 모달 닫기
+              onClick={() => {
+                setIsOn(false);
+                closeModal()
+              }} // 클릭 시 모달 닫기
               className="flex-1 min-w-[120px] px-4 py-1 bg-modalRightBtnBg rounded-lg"
             >
               독서 시작

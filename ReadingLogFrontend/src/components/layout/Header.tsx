@@ -69,7 +69,7 @@ export default function Header() {
           transition={{ duration: 0.2, ease: "easeInOut" }}
           className="overflow-y-scroll"
         >
-          {searchValue.trim() !== "" && <BookSearchResult />}
+          <BookSearchResult />
         </motion.div>
 
         {/* 검색 아이콘 */}

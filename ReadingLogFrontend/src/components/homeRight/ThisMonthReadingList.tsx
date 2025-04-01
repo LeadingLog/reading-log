@@ -1,11 +1,14 @@
 import { useModalStore } from "../../store/modalStore.ts";
+import { usePageStore } from "../../store/pageStore.ts";
 
 export default function ThisMonthReadingList() {
   const {openModal} = useModalStore(); // Zustand의 openModal 가져오기
+  const { rightContent, pageData } = usePageStore();
 
   return (
     /* 이번 달 독서 리스트 */
     <section className="flex flex-col gap-4 overflow-hidden">
+
       {/* 책 리스트 */}
       <article className="flex-1 overflow-y-scroll">
         <ul className="flex flex-col gap-3">

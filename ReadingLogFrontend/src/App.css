@@ -24,3 +24,17 @@ body {
   position: relative;
   min-width: 1325px;
 }
+/* 타이머 토글 css */
+
+.modalTrackingTimerToggleOnBg { /* 타이머 토글 on 인 경우 배경 색 */
+  @apply flex w-10 p-1 bg-modalTrackingTimerToggleActiveBg rounded-full;
+}
+.modalTrackingTimerToggleOffBg { /* 타이머 토글 off 인 경우 배경 색 */
+  @apply flex w-10 p-1 bg-modalTrackingTimerToggleInActiveBg rounded-full;
+}
+.modalTrackingTimerToggleOnCircle { /* 타이머 토글 on 인 경우 배경 색 */
+  @apply w-1/2 aspect-square bg-modalTrackingTimerToggleActive rounded-full
+}
+.modalTrackingTimerToggleOffCircle { /* 타이머 토글 off 인 경우 배경 색 */
+  @apply w-1/2 aspect-square bg-modalTrackingTimerToggleInActive rounded-full;
+}

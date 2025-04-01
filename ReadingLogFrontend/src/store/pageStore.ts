@@ -3,7 +3,6 @@ import { create } from 'zustand';
 // 오른쪽 페이지 콘텐츠 타입
 type RightContentType =
   | 'TimeTracking'
-  | 'ThisMonthReadingList'
   | 'StatsPage';
 
 // StatsPage 내부 탭 타입
@@ -46,7 +45,7 @@ type PageState = {
 
 // Zustand 스토어 생성
 export const usePageStore = create<PageState>((set) => ({
-  rightContent: 'ThisMonthReadingList',
+  rightContent: 'TimeTracking',
   params: {},
   pageData: {},
   setRightContent: (content, params = {}, pageData = {}) =>

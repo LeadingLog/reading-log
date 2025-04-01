@@ -56,7 +56,7 @@ export default function TimeLine() {
         className="flex gap-2 justify-end items-center group"
         onClick={() =>
           setRightContent(
-            'ThisMonthReadingList', {},
+            'TimeTracking', {},
             {title: '이번 달 독서 리스트'},
           )
         }
