@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useModalStore } from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { motion } from "framer-motion";
+import { usePageStore } from "../../store/pageStore.ts";
 
 
 const ModalTrackingPlan: React.FC = () => {
   const {activeModal, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
-
+  const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   type TimeChoice = 15 | 30 | 60;
 
   const [timeChoice, setTimeChoice] = useState<TimeChoice | undefined>(undefined);
@@ -140,9 +141,17 @@ const ModalTrackingPlan: React.FC = () => {
             </button>
             <button
               onClick={() => {
+                setRightContent(
+                  'TimeTracking',
+                  {TimeTracking: {tab: isOn ? 'Timer' : 'StopWatch'}},
+                  {
+                    title: `독서 타임 트래킹 - ${isOn ? '타이머' : '스탑워치'}`,
+                    time: timeChoice
+                  }
+                );
                 setIsOn(false);
-                closeModal()
-              }} // 클릭 시 모달 닫기
+                closeModal();
+              }}
               className="flex-1 min-w-[120px] px-4 py-1 bg-modalRightBtnBg rounded-lg"
             >
               독서 시작

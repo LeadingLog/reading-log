@@ -45,17 +45,18 @@ export default {
         yearSlideIconHover   : "#C9A89F", // 슬라이드 버튼 호버색
         
         /* 독서 타이머 & 스탑워치 관련 */
-        trackingBg      : "#E5CEC8", // 독서 타이머 & 스탑워치 선택한 책 뒷배경
-        trackingBook    : "#FDFAF3", // 독서 타이머 & 스탑워치 선택한 책 썸네일 기본 배경
-        stopWatchTimerBg: "#FDFAF3", // 스탑워치 & 타이머   영역 배경
-        playIcon        : "#E5CEC8", // 재생 버튼 아이콘 색
-        stopIcon        : "#E5CEC8", // 정지 버튼 아이콘 색
-        pauseIcon       : "#E5CEC8", // 일시정지 버튼 아이콘 색
-        playIconBorder  : "#E5CEC8", // 재생 버튼 아이콘 보더색
-        stopIconBorder  : "#E5CEC8", // 정지 버튼 아이콘 보더색
-        pauseIconBorder : "#E5CEC8", // 일시정지 버튼 아이콘 보더색
-        timeIconHover   : "#C9A89F", // 아이콘 호버시 색
-        timerFlow       : "#C9A89F", // 남은 시간을 표시하는 색
+        trackingBg            : "#E5CEC8", // 독서 타이머 & 스탑워치 선택한 책 뒷배경
+        trackingBook          : "#FDFAF3", // 독서 타이머 & 스탑워치 선택한 책 썸네일 기본 배경
+        stopWatchTimerBg      : "#FDFAF3", // 스탑워치 & 타이머   영역 배경
+        playIcon              : "#E5CEC8", // 재생 버튼 아이콘 색
+        stopIcon              : "#E5CEC8", // 정지 버튼 아이콘 색
+        pauseIcon             : "#E5CEC8", // 일시정지 버튼 아이콘 색
+        playIconBorder        : "#E5CEC8", // 재생 버튼 아이콘 보더색
+        stopIconBorder        : "#E5CEC8", // 정지 버튼 아이콘 보더색
+        pauseIconBorder       : "#E5CEC8", // 일시정지 버튼 아이콘 보더색
+        timeIconHover         : "#C9A89F", // 아이콘 호버시 색
+        timerFlow             : "#C9A89F", // 남은 시간을 표시하는 색
+        TrackingBottomDivideBg: "#E5CEC8", // 바닥 경계선 색
         
         /* 월별 통계 그래프 관련 */
         statsText               : "#96B2C8", // 통계 설명 텍스트

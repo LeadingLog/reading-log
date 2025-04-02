@@ -5,7 +5,7 @@ export default function ThisMonthReadingList() {
 
   return (
     /* 이번 달 독서 리스트 */
-    <section className="flex flex-col gap-4 overflow-hidden">
+    <>
 
       {/* 책 리스트 */}
       <article className="flex-1 overflow-y-scroll">
@@ -125,6 +125,6 @@ export default function ThisMonthReadingList() {
           </li>
         </ul>
       </article>
-    </section>
+    </>
   );
 }
