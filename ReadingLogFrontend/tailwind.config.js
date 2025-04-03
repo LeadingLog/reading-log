@@ -57,6 +57,8 @@ export default {
         timeIconHover         : "#C9A89F", // 아이콘 호버시 색
         timerFlow             : "#C9A89F", // 남은 시간을 표시하는 색
         TrackingBottomDivideBg: "#E5CEC8", // 바닥 경계선 색
+        timeLeftColor         : "#C9A89F", // 타이머 시간 흐름 표시 색
+        timeLeftBg            : "#D9D9D9", // 타이머 시간 흐름 표시 색
         
         /* 월별 통계 그래프 관련 */
         statsText               : "#96B2C8", // 통계 설명 텍스트

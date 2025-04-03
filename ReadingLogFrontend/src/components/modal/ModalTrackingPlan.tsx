@@ -8,21 +8,21 @@ import { usePageStore } from "../../store/pageStore.ts";
 const ModalTrackingPlan: React.FC = () => {
   const {activeModal, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
   const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
-  type TimeChoice = 15 | 30 | 60;
+  type TimeChoice = 3 | 30 | 60;
 
   const [timeChoice, setTimeChoice] = useState<TimeChoice | undefined>(undefined);
 
   /* 타이머 시간 선택 시 UI */
   const getLeftPosition = (choice: TimeChoice | undefined) => {
     switch (choice) {
-      case 15:
+      case 3:
         return "left-2";
       case 30:
         return "left-1/2 -translate-x-1/2"; // 가운데 배치
       case 60:
         return "left-[69%]"; // 오른쪽 배치
       default:
-        return "left-0"; // 기본 위치
+        return "left-2"; // 기본 위치
     }
   };
 
@@ -33,7 +33,7 @@ const ModalTrackingPlan: React.FC = () => {
 
   useEffect(() => {
     if (!isOn) {
-      setTimeChoice(15);
+      setTimeChoice(3);
     }
   }, [isOn]);
 
@@ -94,7 +94,7 @@ const ModalTrackingPlan: React.FC = () => {
           >
             <button
               className="relative flex flex-1 text-xl"
-              onClick={() => setTimeChoice(15)}
+              onClick={() => setTimeChoice(3)}
             >
               <span
                 className="flex-1 absolute inset-0 z-[1]"
