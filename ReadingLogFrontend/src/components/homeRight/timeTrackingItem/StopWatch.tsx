@@ -12,11 +12,11 @@ export default function StopWatch() {
   const [play, setPlay] = useState<boolean>(true)
 
   const playOrPause = () => {
-    if (!intervalRef.current) {  // 이미 실행 중이 아니라면
+    if (intervalRef.current === undefined) {  // 이미 실행 중이 아니라면
       intervalRef.current = setInterval(plusSecond, 1000); // 2️⃣ interval ID 저장
     } else {
       clearInterval(intervalRef.current); // 3️⃣ 일시정지
-      intervalRef.current = null; // 정지 후 ID 초기화
+      intervalRef.current = undefined; // 정지 후 ID 초기화
     }
     setPlay(!play)
   }
@@ -41,7 +41,7 @@ export default function StopWatch() {
   const [seconds, setSeconds] = useState(0); // 초
   const [minute, setMinute] = useState(0); // 분
   const [hour, setHour] = useState(0); // 시간
-  const intervalRef = useRef<number | null>(null);  // 1️⃣ interval ID 저장용
+  const intervalRef = useRef<number | undefined>(undefined);  // 1️⃣ interval ID 저장용
 
   if (seconds === 5) { // 60초가 되면 분 요소 1 올리기
     setSeconds(0)
@@ -60,8 +60,10 @@ export default function StopWatch() {
     }
   };
   const stop = () => {
-    clearInterval(intervalRef.current); // 3️⃣ 일시정지
-    intervalRef.current = null;
+    if (intervalRef.current !== undefined) {
+      clearInterval(intervalRef.current); // 3️⃣ 일시정지
+      intervalRef.current = undefined;
+    }
   }
 
   useEffect(() => {
