@@ -41,7 +41,7 @@ export default function StopWatch() {
   const [seconds, setSeconds] = useState(0); // 초
   const [minute, setMinute] = useState(0); // 분
   const [hour, setHour] = useState(0); // 시간
-  const intervalRef = useRef(null); // 1️⃣ interval ID 저장용
+  const intervalRef = useRef<number | null>(null);  // 1️⃣ interval ID 저장용
 
   if (seconds === 5) { // 60초가 되면 분 요소 1 올리기
     setSeconds(0)
@@ -74,9 +74,7 @@ export default function StopWatch() {
     <>
       <article className="flex flex-col flex-1 gap-4 justify-between p-6 bg-trackingBg rounded-xl">
         <section className="flex flex-col text-center">
-          <span className="text-2xl"
-                onClick={() => playButton()}
-          >
+          <span className="text-2xl">
             책 체목제목
           </span>
           <span onClick={stop}>책 저자</span>
