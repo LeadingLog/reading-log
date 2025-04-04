@@ -29,7 +29,6 @@ const ModalTrackingPlan: React.FC = () => {
 
   const [isOn, setIsOn] = useState(false) // 타이머 토글 on/off
   const toggleSwitch = () => setIsOn(!isOn)
-  console.log(timeChoice);
 
   useEffect(() => {
     if (!isOn) {
