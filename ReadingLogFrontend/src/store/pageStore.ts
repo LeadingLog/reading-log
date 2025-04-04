@@ -28,6 +28,7 @@ type PageParams = {
 // 페이지 데이터 타입
 type PageData = {
   title?: string; // 타이틀 전달을 위한 필드
+  time?: number;
   // 추가 데이터 필드 확장 가능
 };
 
