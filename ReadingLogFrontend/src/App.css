@@ -27,14 +27,14 @@ body {
 /* 타이머 토글 css */
 
 .modalTrackingTimerToggleOnBg { /* 타이머 토글 on 인 경우 배경 색 */
-  @apply flex w-10 p-1 bg-modalTrackingTimerToggleActiveBg rounded-full;
+  @apply flex w-10 p-1 bg-modal_Tracking_Timer_Toggle_Active_Bg rounded-full;
 }
 .modalTrackingTimerToggleOffBg { /* 타이머 토글 off 인 경우 배경 색 */
-  @apply flex w-10 p-1 bg-modalTrackingTimerToggleInActiveBg rounded-full;
+  @apply flex w-10 p-1 bg-modal_Tracking_Timer_Toggle_InActive_Bg rounded-full;
 }
 .modalTrackingTimerToggleOnCircle { /* 타이머 토글 on 인 경우 배경 색 */
-  @apply w-1/2 aspect-square bg-modalTrackingTimerToggleActive rounded-full
+  @apply w-1/2 aspect-square bg-modal_Tracking_Timer_Toggle_Active_Color rounded-full
 }
 .modalTrackingTimerToggleOffCircle { /* 타이머 토글 off 인 경우 배경 색 */
-  @apply w-1/2 aspect-square bg-modalTrackingTimerToggleInActive rounded-full;
+  @apply w-1/2 aspect-square bg-modal_Tracking_Timer_Toggle_InActive_Color rounded-full;
 }
