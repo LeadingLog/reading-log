@@ -10,7 +10,7 @@ export default function TimeLine() {
     <section className="flex flex-col gap-4 rounded-xl">
       {/* 총 독서 시간 표시 */}
       <article
-        className="flex justify-center items-center text-allReadingTimeText text-2xl bg-allReadingTimeBg rounded-xl p-3.5">
+        className="flex justify-center items-center text-allReadingTime_Text text-2xl bg-allReadingTime_Bg rounded-xl p-3.5">
         총 독서 시간 : <span>00:00:00</span>
       </article>
 
@@ -30,7 +30,7 @@ export default function TimeLine() {
       >
         <span>2025</span>
         년 리딩로그 보러가기
-        <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>
       </button>
@@ -47,7 +47,7 @@ export default function TimeLine() {
         }
       >
         월별 통계 화면 보기 (임시 버튼)
-        <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>
       </button>
@@ -62,7 +62,7 @@ export default function TimeLine() {
         }
       >
         이번 달 독서 리스트 보기 (임시 버튼)
-        <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>
       </button>
@@ -77,7 +77,7 @@ export default function TimeLine() {
         }
       >
         독서 타임 트랙킹 스탑워치 (임시 버튼)
-        <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>
       </button>
@@ -92,7 +92,7 @@ export default function TimeLine() {
         }
       >
         독서 타임 트랙킹 타이머 (임시 버튼)
-        <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>
       </button>
@@ -104,7 +104,7 @@ export default function TimeLine() {
         }
       >
         독서 타임 트랙킹 모달 (임시 버튼)
-        <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>
       </button>
@@ -116,7 +116,7 @@ export default function TimeLine() {
         }
       >
         독서 계획 모달 (임시 버튼)
-        <span className="text-yearSlideIcon group-hover:text-yearSlideIconHover">
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>
       </button>
