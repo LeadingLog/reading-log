@@ -9,13 +9,13 @@ const handleSocialLogin = (provider: string) => {
 
   const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_CLIENT_ID;
   const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code&state=${state}`;
 
+  localStorage.setItem("state", state);
   if (provider === "naver") {
-    localStorage.setItem("state", state);
     window.location.href = NAVER_AUTH_URL;
-  } else if(provider === "kakao"){
-    window.location.href =KAKAO_AUTH_URL;
+  } else if (provider === "kakao") {
+    window.location.href = KAKAO_AUTH_URL;
   }
 };
 

@@ -1,9 +1,8 @@
 import React from 'react';
-import { useModalStore } from '../../store/modalStore';
+import {useModalStore} from '../../store/modalStore';
 
 const ModalAlert: React.FC = () => {
-  const { activeModal, modalData, closeModal } = useModalStore();
-  console.log(activeModal);
+  const {activeModal, modalData, closeModal} = useModalStore();
   if (activeModal !== 'ModalAlert') return null;
 
   const handleConfirm = () => {
