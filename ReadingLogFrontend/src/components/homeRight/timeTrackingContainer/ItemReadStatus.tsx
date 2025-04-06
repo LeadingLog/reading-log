@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useModalStore } from "../../../store/modalStore.ts";
 
 export default function ItemReadStatus() {
@@ -7,7 +7,8 @@ export default function ItemReadStatus() {
 
   /* 독서중 or 완독 토글*/
   const [reading, setReading] = useState(true) // 타이머 토글 on/off
-  const toggleSwitch = () => {
+  const toggleSwitch = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (reading) {
       openModal("ModalNotice", {
         title: "완독한 도서 인가요?",
