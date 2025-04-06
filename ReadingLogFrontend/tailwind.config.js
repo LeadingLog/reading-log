@@ -160,7 +160,10 @@ export default {
         
         // 호버색상
         hover_2: "#C9A89F", // 연한빨강호버시
-        
+
+        /* 로딩 관련 색 */
+        loadingBg : "#D9D9D9", // 로딩 중일 때 배경 색
+        loadingSpinner : "#96B2C8", // 로딩 스피너 색
       },
     },
   },
