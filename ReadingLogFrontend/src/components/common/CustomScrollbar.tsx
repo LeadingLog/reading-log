@@ -28,10 +28,10 @@ const CustomScrollbar = ({
       const containerHeight = container.clientHeight; // 화면에 보이는 높이
 
       if (contentHeight === containerHeight) { // 스크롤 보이지 않게 하기
-        setUseScrollbar(false)
+        setUseScrollbar(false);
         return
       } else {
-        setUseScrollbar(true)
+        setUseScrollbar(true);
         const scrollbarHeightCalc = Math.max(
           (containerHeight / contentHeight) * containerHeight,
           20
