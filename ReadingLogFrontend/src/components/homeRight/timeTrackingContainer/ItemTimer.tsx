@@ -6,8 +6,8 @@ import { motion } from "framer-motion";
 
 export default function ItemTimer() {
 
-  const {pageData} = usePageStore();
-  const {openModal} = useModalStore();
+  const {openModal, closeModal} = useModalStore();
+  const {pageData, setRightContent} = usePageStore();
 
   // 독서 종료 모달
   const stopTimer = () => {
@@ -21,7 +21,16 @@ export default function ItemTimer() {
         setTimeLeft(0)
         openModal("ModalNotice", {
           title: "독서시간 저장 완료!",
-          onlyClose: true,
+          subTitle: "수고하셨어요!",
+          onlyConfirm: true,
+          confirmText: "닫기",
+          onConfirm: () => { // 타이머 컴포넌트 사라짐
+            setRightContent(
+              'TimeTracking',
+              {TimeTracking: {tab: 'onlyMonthReadingList'}}, // 파라미터,
+            )
+            closeModal()
+          }
         })
       }
     })
@@ -67,17 +76,17 @@ export default function ItemTimer() {
         className="relative flex flex-col justify-center flex-1 aspect-square text-center  bg-stopWatchTimer_Item_Bg  rounded-full">
         {/* SVG 애니메이션 */}
         <svg className="absolute inset-0" viewBox="0 0 126 126">
-          <circle cx="63" cy="63" r={radius} className="stroke-timeLeft_Color" fill="none" strokeWidth="6" />
+          <circle cx="63" cy="63" r={radius} className="stroke-timeLeft_Color" fill="none" strokeWidth="6"/>
           <motion.circle
             cx="63" cy="63" r={radius}
             fill="none" strokeWidth="6"
             strokeDasharray={circumference} // 원의 총 길이
             strokeDashoffset={progress} // 시간이 지남에 따라 점점 사라짐
             strokeLinecap="square"
-            animate={{ strokeDashoffset: circumference * (timeLeft / (pageData.time ?? 0)) }}
-            transition={{ duration: 1, ease: "linear" }} // 부드러운 감소 효과
+            animate={{strokeDashoffset: circumference * (timeLeft / (pageData.time ?? 0))}}
+            transition={{duration: 1, ease: "linear"}} // 부드러운 감소 효과
             className="stroke-timeLeft_Bg"
-            style={{ transform: "rotate(-90deg)", transformOrigin: "center" }} // 시작 위치를 상단으로 변경
+            style={{transform: "rotate(-90deg)", transformOrigin: "center"}} // 시작 위치를 상단으로 변경
           />
         </svg>
         {/* 시간 표시 */}

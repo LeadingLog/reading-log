@@ -3,10 +3,12 @@ import IconPause from "../../../assets/Icon-pause.svg?react"
 import IconStop from "../../../assets/Icon-stop.svg?react"
 import { useModalStore } from "../../../store/modalStore.ts";
 import { useEffect, useRef, useState } from "react";
+import { usePageStore } from "../../../store/pageStore.ts";
 
 export default function ItemStopWatch() {
 
-  const {openModal} = useModalStore();
+  const {openModal, closeModal} = useModalStore();
+  const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
 
   /* 시작 & 일시정지 버튼 토글 관련 */
   const [play, setPlay] = useState<boolean>(true)
@@ -33,7 +35,16 @@ export default function ItemStopWatch() {
       onConfirm: () => {
         openModal("ModalNotice", {
           title: "독서시간 저장 완료!",
-          onlyClose: true,
+          subTitle: "수고하셨어요!",
+          onlyConfirm: true,
+          confirmText: "닫기",
+          onConfirm: () => { // 스탑워치 사라짐
+            setRightContent(
+              'TimeTracking',
+              {TimeTracking: {tab: 'onlyMonthReadingList'}}, // 파라미터,
+            )
+            closeModal()
+          }
         })
         setSeconds(0) // 초 초기화
         setMinute(0)  // 분 초기화

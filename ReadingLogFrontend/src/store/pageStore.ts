@@ -13,8 +13,8 @@ type StatsTabType =
 // TimeTracking 내부 탭 타입
 type TimeTrackingType =
   | 'StopWatch'
-  | 'Timer';
-
+  | 'Timer'
+  | 'onlyMonthReadingList'
 // 페이지별 파라미터 타입
 type PageParams = {
   StatsPage?: {
