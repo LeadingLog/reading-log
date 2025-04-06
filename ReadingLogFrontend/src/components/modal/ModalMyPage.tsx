@@ -12,20 +12,19 @@ const ModalMyPage: React.FC = () => {
     openModal('ModalNotice', {
       title: '탈퇴가 완료되었습니다',
       confirmText: '닫기',
-      oneBtn: true,
-      onConfirm: () => {closeModal()}
+      onlyClose: true,
     });
   };
 
   if (activeModal !== 'ModalMyPage') return null; // activeModal이 ModalMyPage가 아니면 렌더링하지 않음
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-      <section className="flex gap-5 bg-modalBg p-5 rounded-lg">
-        <article className="flex-1 bg-modalLogoBg rounded-lg">
+    <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
+      <section className="flex gap-5 bg-modal_Default_Bg p-5 rounded-lg">
+        <article className="flex-1 bg-modal_Logo_Bg rounded-lg">
           로고영역
         </article>
-        <article className="flex flex-col gap-2 flex-1 p-4 bg-modalContentBg rounded-lg">
+        <article className="flex flex-col gap-2 flex-1 p-4 bg-modal_Content_Bg rounded-lg">
           <div className="flex flex-col">
             <div className="flex justify-between">
               <h2>닉네임</h2>
@@ -40,7 +39,7 @@ const ModalMyPage: React.FC = () => {
           </div>
           <div className="flex justify-between">
             <button
-              className="text-xs text-modalQuitText px-1 py-0.5 rounded-lg bg-modalQuitBg"
+              className="text-xs text-modal_Quit_Text px-1 py-0.5 rounded-lg bg-modal_Quit_Bg"
               onClick={() =>
                 openModal('ModalNotice', {
                   title: '정말로 탈퇴하시겠어요??',
@@ -56,7 +55,7 @@ const ModalMyPage: React.FC = () => {
             </button>
             <button
               onClick={closeModal} // 클릭 시 모달 닫기
-              className="px-2 py-1 bg-modalRightBtnBg rounded-lg"
+              className="px-2 py-1 bg-modal_Right_Btn_Bg rounded-lg"
             >
               닫기
             </button>
