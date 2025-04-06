@@ -13,12 +13,13 @@ export default function ItemStopWatch() {
 
   const playOrPause = () => {
     if (intervalRef.current === undefined) {  // 이미 실행 중이 아니라면
+      setPlay(true)
       intervalRef.current = setInterval(plusSecond, 1000); // 2️⃣ interval ID 저장
     } else {
+      setPlay(false)
       clearInterval(intervalRef.current); // 3️⃣ 일시정지
       intervalRef.current = undefined; // 정지 후 ID 초기화
     }
-    setPlay(!play)
   }
 
   /* 정지 버튼 클릭 시  */
@@ -32,8 +33,14 @@ export default function ItemStopWatch() {
       onConfirm: () => {
         openModal("ModalNotice", {
           title: "독서시간 저장 완료!",
-          oneBtn: true,
+          onlyClose: true,
         })
+        setSeconds(0) // 초 초기화
+        setMinute(0)  // 분 초기화
+        setHour(0)    // 시간 초기화
+        setPlay(false) // 정지 버튼으로 변경
+        clearInterval(intervalRef.current); // 시간 정지
+        intervalRef.current = undefined; // 정지 후 ID 초기화
       }
     })
   }

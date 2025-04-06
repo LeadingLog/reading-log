@@ -28,7 +28,7 @@ export default function MyBookList() {
           className="flex w-8 h-full p-1 justify-center items-center text-myBook_SearchBar_SearchIcon_Default_Color ">
           <IconSearch width="100%" height="100%"/>
         </span>
-        <input type="search" className="w-full h-full p-1 bg-MyBook_SearchBar_Bg rounded-e-full" placeholder="어떤 책을 찾으시나요?"/>
+        <input type="search" className="w-full h-full p-1 bg-myBook_SearchBar_Bg rounded-e-full" placeholder="어떤 책을 찾으시나요?"/>
       </article>
       {/* 책 썸네일 아이콘 리스트 */}
       <BookImgList/>

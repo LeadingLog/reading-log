@@ -21,7 +21,7 @@ export default function ItemTimer() {
         setTimeLeft(0)
         openModal("ModalNotice", {
           title: "독서시간 저장 완료!",
-          oneBtn: true,
+          onlyClose: true,
         })
       }
     })
@@ -48,7 +48,7 @@ export default function ItemTimer() {
     //     title: "타이머가 종료되었습니다",
     //     subTitle: "시간이 저장되었습니다.",
     //     cancelText: "닫기",
-    //     oneBtn: true,
+    //     onlyClose: true,
     //   })
     //   return;
     // }

@@ -12,7 +12,7 @@ export default function BookImgList() {
             <div
               className="absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg bg-imgBook_Item_Reading_Bg">
               <span className="text-xs">독서중</span>
-              <span className="flex justify-center items-center mt-[1px]">
+              <span className="flex justify-center items-center text-imgBook_Icon_Color mt-[1px]">
                 <IconReading className="text-imgBook_"/>
               </span>
             </div>
@@ -24,7 +24,7 @@ export default function BookImgList() {
             <div
               className="absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg bg-imgBook_Item_Complete_Bg">
               <span className="text-xs">완독</span>
-              <span className="flex justify-center items-center mt-[1px]">
+              <span className="flex justify-center items-center text-imgBook_Icon_Color mt-[1px]">
                 <IconReadComplete className="text-imgBook_"/>
               </span>
             </div>

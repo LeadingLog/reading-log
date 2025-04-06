@@ -11,12 +11,18 @@ type ModalType =
 
 // 확장된 ModalData 타입 정의
 type ModalData = {
-  title?: string;
-  subTitle?: string;
-  confirmText?: string;
-  cancelText?: string;
-  reverseBtn?: boolean;
-  oneBtn?: boolean;
+  title?: string; // 모달 타이틀 텍스트
+  subTitle?: string; // 모달 부가 설명 텍스트
+  confirmText?: string; // 오른쪽 버튼 텍스트
+  cancelText?: string; // 왼쪽 버튼 텍스트
+  reverseBtn?: boolean; // 버튼 위치 반대로 변경 할 지 선택
+  onlyClose?: boolean; // 닫는 버튼 한개만 사용 할 지?
+  onlyConfirm?: boolean; // 클릭 시 함수 실행할 버튼 하나만 사용할 지?
+
+  /* 책 정보 관련 */
+  bookTitle?: string; // 책 제목
+  bookSubTitle?: string; // 책 저자
+
   onConfirm?: () => void; // 확인 버튼 클릭 시 실행할 함수
 };
 

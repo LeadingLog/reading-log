@@ -12,8 +12,7 @@ const ModalMyPage: React.FC = () => {
     openModal('ModalNotice', {
       title: '탈퇴가 완료되었습니다',
       confirmText: '닫기',
-      oneBtn: true,
-      onConfirm: () => {closeModal()}
+      onlyClose: true,
     });
   };
 

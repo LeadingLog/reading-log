@@ -18,7 +18,7 @@ export default function Header() {
       title: "로그아웃 완료!",
       subTitle: "다음에 또 봐요!",
       confirmText: "닫기",
-      oneBtn: true,
+      onlyClose: true,
     });
   };
 

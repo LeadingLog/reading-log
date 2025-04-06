@@ -17,7 +17,7 @@ export default function ItemReadStatus() {
         onConfirm: () => {
           openModal("ModalNotice", {
             title: "완독을 축하드려요!",
-            oneBtn: true,
+            onlyClose: true,
           })
           setReading(!reading)
         }
@@ -31,7 +31,7 @@ export default function ItemReadStatus() {
         onConfirm: () => {
           openModal("ModalNotice", {
             title: "독서 중 도서로 변경 되었습니다.",
-            oneBtn: true,
+            onlyClose: true,
           })
           setReading(!reading)
         }
