@@ -88,7 +88,7 @@ const CustomScrollbar = ({
       <ul
         ref={containerRef}
         onScroll={handleScroll}
-        className={`${containerClassName} flex flex-col flex-1 gap-3 overflow-auto scrollbar-hide`}
+        className={`${containerClassName} overflow-auto scrollbar-hide`}
       >
         {children}
       </ul>
