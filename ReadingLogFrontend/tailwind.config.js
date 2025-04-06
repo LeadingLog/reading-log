@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   content   : ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme     : {
@@ -158,6 +159,11 @@ export default {
         favorite_Icon_Bg   : "#96B2C8", // 관심도서 아이콘 배경 색
         unFavorite_Icon_Bg : "#D9D9D9", // 관심도서 아닐 때 아이콘 배경 색
         
+        /* 스크롤바 관련 */
+        scrollbar_bg   : "#FDFAF3", // 스크롤바 전체 라인 배경색
+        scrollbar_Color: "#E5CEC8", // 스크롤 되는 바 색상
+        scrollbar_Hover_Color : "#C9A89F", // 책 리스트 영역 호버 시 스크롤 되는 바 색상
+        
         /* 타이틀 왼족 표시 마커 */
         title_Marker: "#E5CEC8",  // 타이틀 왼쪽 마커색
         // 소셜 버튼 배경색
@@ -168,5 +174,5 @@ export default {
   fontFamily: {
     primary: "Noto Sans KR",
   },
-  plugins   : [],
+  plugins   : [require("tailwind-scrollbar-hide")],
 };

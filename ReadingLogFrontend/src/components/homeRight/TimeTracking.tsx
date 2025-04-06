@@ -3,6 +3,7 @@ import BoxTimer from "./timeTrackingContainer/BoxTimer.tsx";
 import { usePageStore } from "../../store/pageStore.ts";
 import { AnimatePresence, motion } from "framer-motion";
 import BoxStopWatch from "./timeTrackingContainer/BoxStopWatch.tsx";
+import CustomScrollbar from "../common/CustomScrollbar.tsx";
 
 export default function TimeTracking() {
 
@@ -40,7 +41,13 @@ export default function TimeTracking() {
           </motion.section>
         )}
       </AnimatePresence>
-      <BoxThisMonthReadingList/>
+      <CustomScrollbar
+        containerClassName=""
+        scrollbarClassName=""
+        // scrollbarWidth=""
+      >
+        <BoxThisMonthReadingList/>
+      </CustomScrollbar>
     </section>
 
 

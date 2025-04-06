@@ -5,7 +5,10 @@ export default function BoxTimer() {
   return (
     // 독서 타임 트랙킹 - 타이머 인 경우
     <>
-      <article className="flex flex-col gap-4 p-6 bg-timer_Box_Bg rounded-xl">
+      <article className="
+      relative flex flex-col gap-4 p-6 mb-6 bg-timer_Box_Bg rounded-xl
+      after:content-[''] after:absolute after:h-1 after:-bottom-3.5 after:left-0 after:right-0 after:rounded-full after:bg-tracking_Box_Bottom_Divide_Bg"
+      >
         <section className="flex flex-col text-center">
           <span className="text-2xl">책 체목제목</span>
           <span>책 저자</span>
@@ -17,7 +20,6 @@ export default function BoxTimer() {
           <ItemTimer/>
         </section>
       </article>
-      <div className="bg-tracking_Box_Bottom_Divide_Bg my-4 h-1 rounded-full"></div>
     </>
   )
 
