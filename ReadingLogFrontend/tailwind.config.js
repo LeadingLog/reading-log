@@ -144,13 +144,14 @@ export default {
         header_Right_Icon_Divide_Color: "#FDFAF3", // 마이페이지 & 로그아웃 경계선 색
         
         /* 상단 검색 관련 색 */
-        main_SearchBar_Back_Bg                        : "#96B2C8", // 상단 검색 바 - 검색창뒷배경
         main_SearchBar_Bg                             : "#FDFAF3", // 상단 검색 바 - 검색창배경
         main_SearchBar_Border                         : "#96B2C8", // 상단 검색 바 - 검색창 보더
+        main_SearchBar_SearchResult_Book_Title_Text   : "#000000", // 상단 검색 바 - 책 타이틀 텍스트 색
+        main_SearchBar_SearchResult_Book_SubTitle_Text: "#000000", // 상단 검색 바 - 책 저자 텍스트 색
         main_SearchBar_SearchIcon_Default_Color       : "#FDFAF3", // 상단 검색 바 - 검색 아이콘 검색안할 때 색
-        main_SearchBar_Searching_SearchIcon_Color     : "#FDFAF3", // 상단 검색 바 - 검색 시 색
-        main_SearchBar_SearchResult_Book_Title_Text   : "#000000", // 상단 검색 바 - 검색 시 색
-        main_SearchBar_SearchResult_Book_SubTitle_Text: "#000000", // 상단 검색 바 - 검색 시 색
+        main_SearchBar_Searching_SearchIcon_Color     : "#000000", // 상단 검색 바 - 검색 시 아이콘 색
+        main_SearchBar_Back_Default_Bg                : "#96B2C8", // 상단 검색 바 - 검색창뒷배경
+        main_SearchBar_Searching_Back_Bg              : "transparent", // 상단 검색 바 - 검색창뒷배경
         
         /* 내 독서 목록 검색 바 관련 색*/
         myBook_SearchBar_Bg                      : "#FDFAF3", // 내 독서 목록 검색 바 - 내 독서 목록 검색창 배경
