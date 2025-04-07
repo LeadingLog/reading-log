@@ -1,6 +1,6 @@
 import IconSearch from "../../assets/Icon-search.svg?react";
 import BookSearchResult from "./BookSearchResult.tsx";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import CustomScrollbar from "../common/CustomScrollbar.tsx"; // Framer Motion import
 
@@ -9,16 +9,17 @@ export default function MainBookSearch() {
   const [focusSearch, setFocusSearch] = useState(false); // 검색바 포커스 상태
   const [searchValue, setSearchValue] = useState(""); // 검색어 값
   const [searchIcon, setSearchIcon] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // 검색바를 클릭하면 실행
   const searchFocus = () => {
     setFocusSearch(true);
+    setSearchIcon(true);
   };
 
   // 검색바의 포커싱이 사라지면 실행
   const outFocus = () => {
     if (searchValue.trim() === "") {
-      // input 값이 비어있으면 focusSearch를 false로 설정
       setFocusSearch(false);
       setSearchIcon(false);
     }
@@ -27,7 +28,6 @@ export default function MainBookSearch() {
   // 검색 중일 때 실행 (onChange 이벤트)
   const searching = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value); // 입력값 업데이트
-    setSearchIcon(true);
   };
   console.log(searchIcon)
   return (
@@ -35,12 +35,12 @@ export default function MainBookSearch() {
       {/* 검색창 */}
       <section
         className={`${focusSearch ? "flex-1" : ""} 
-        flex flex-col w-80 bg-main_SearchBar_Back_Bg rounded-[25px] border-main_SearchBar_Border border-[8px] transition-all duration-200 ease-in-out`}
+        relative flex flex-col w-80 bg-main_SearchBar_Back_Bg rounded-[25px] bg-main_SearchBar_Bg border-main_SearchBar_Border border-8 transition-all duration-200 ease-in-out`}
       >
         {/* 검색 아이콘 */}
         <span
           className={`
-          absolute top-0 flex flex-1 w-[50px] aspect-square justify-center items-center
+          absolute -top-2 flex flex-1 w-[50px] aspect-square justify-center items-center
           transition-all duration-300 ease-in-out rounded-full
           ${searchIcon ? "searching_Icon" : "unSearching_Icon"}
         `}
@@ -48,16 +48,28 @@ export default function MainBookSearch() {
           <IconSearch />
         </span>
         <input
+          ref={inputRef}
           type="search"
           className={`${
             searchValue ? "rounded-t-[20px] rounded-b-0" : "rounded-full"
-          } pl-[50px] h-[34px] bg-main_SearchBar_Bg`}
+          } focus:outline-none focus:ring-0 pl-[50px] h-[34px] bg-main_SearchBar_Bg`}
           placeholder="Searching book"
           value={searchValue}
           onFocus={searchFocus}
           onBlur={outFocus}
           onChange={searching}
         />
+        {searchValue && (
+          <button
+            onClick={() => {
+              setSearchValue("");
+              inputRef.current?.focus(); // ✅ 클릭 시 input에 포커스!
+            }}
+            className="absolute flex justify-center pb-0.5 items-center w-6 h-6 aspect-square right-3 top-2 bg-main_SearchBar_ClearText_Bg z-[1] font-black text-main_SearchBar_ClearText_Color hover:text-gray-600 rounded-full"
+          >
+            ✕
+          </button>
+        )}
 
         {/* 검색 결과 */}
         <motion.div
