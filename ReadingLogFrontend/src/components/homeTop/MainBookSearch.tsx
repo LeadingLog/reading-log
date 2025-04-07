@@ -49,9 +49,10 @@ export default function MainBookSearch() {
         <input
           ref={inputRef}
           type="search"
-          className={`${
-            searchValue ? "rounded-t-[20px] rounded-b-0" : "rounded-full"
-          } focus:outline-none focus:ring-0 pl-[50px] h-[34px] bg-main_SearchBar_Bg`}
+          className={`
+          ${ searchValue ? "rounded-t-[20px] rounded-b-0" : "rounded-full"}
+          ${ searchIcon ? "pl-[40px]" : "pl-[50px]"}
+          transition-[padding] duration-300 ease-in-out focus:outline-none focus:ring-0  h-[34px] bg-main_SearchBar_Bg`}
           placeholder="Searching book"
           value={searchValue}
           onFocus={searchFocus}
