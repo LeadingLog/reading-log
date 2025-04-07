@@ -3,12 +3,17 @@ import { persist } from "zustand/middleware";
 
 interface UserState {
   token: string | null;
-  id: string | null;
+  refreshToken: string | null;
+  expiresAt: number | null; // Unix timestamp
+  user_id: string | null;
   nickname: string | null;
   provider: string | null;
+
   setUser: (user: {
     token: string;
-    id: string;
+    refreshToken: string;
+    expiresAt: number;
+    user_id: string;
     nickname: string;
     provider: string;
   }) => void;
@@ -19,12 +24,14 @@ export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       token: null,
-      id: null,
+      refreshToken: null,
+      expiresAt: 0,
+      user_id: null,
       nickname: null,
       provider: null,
       setUser: (user) => set({ ...user }),
       resetUser: () =>
-        set({ token: null, id: null, nickname: null, provider: null }),
+        set({ token: null, user_id: null, nickname: null, provider: null }),
     }),
     {
       name: "user-storage",
