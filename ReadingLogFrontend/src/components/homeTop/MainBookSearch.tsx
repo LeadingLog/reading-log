@@ -29,7 +29,6 @@ export default function MainBookSearch() {
   const searching = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value); // 입력값 업데이트
   };
-  console.log(searchIcon)
   return (
     <>
       {/* 검색창 */}

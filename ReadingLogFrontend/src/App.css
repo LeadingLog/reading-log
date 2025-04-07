@@ -53,7 +53,7 @@ input[type="search"]::-moz-search-clear-button {
 
 /* 메인 페이지 검색 시 아이콘 트랜지션 관련 */
 .searching_Icon {
-  @apply left-0 scale-75 text-main_SearchBar_Searching_SearchIcon_Color bg-main_SearchBar_Searching_Back_Bg
+  @apply -left-1 scale-75 text-main_SearchBar_Searching_SearchIcon_Color bg-main_SearchBar_Searching_Back_Bg
 }
 .unSearching_Icon {
   @apply -left-2 text-main_SearchBar_SearchIcon_Default_Color bg-main_SearchBar_Back_Default_Bg
