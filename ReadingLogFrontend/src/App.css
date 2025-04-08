@@ -24,6 +24,18 @@ body {
   position: relative;
   min-width: 1325px;
 }
+
+/* Chrome, Safari, Edge */
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* Firefox */
+input[type="search"]::-moz-search-clear-button {
+  display: none;
+}
+
+
 /* 타이머 토글 css */
 
 .modalTrackingTimerToggleOnBg { /* 타이머 토글 on 인 경우 배경 색 */
@@ -37,4 +49,12 @@ body {
 }
 .modalTrackingTimerToggleOffCircle { /* 타이머 토글 off 인 경우 배경 색 */
   @apply w-1/2 aspect-square bg-modal_Tracking_Timer_Toggle_InActive_Color rounded-full;
+}
+
+/* 메인 페이지 검색 시 아이콘 트랜지션 관련 */
+.searching_Icon {
+  @apply -left-1 scale-75 text-main_SearchBar_Searching_SearchIcon_Color bg-main_SearchBar_Searching_Back_Bg
+}
+.unSearching_Icon {
+  @apply -left-2 text-main_SearchBar_SearchIcon_Default_Color bg-main_SearchBar_Back_Default_Bg
 }

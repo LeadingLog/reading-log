@@ -144,11 +144,16 @@ export default {
         header_Right_Icon_Divide_Color: "#FDFAF3", // 마이페이지 & 로그아웃 경계선 색
         
         /* 상단 검색 관련 색 */
-        main_SearchBar_Back_Bg                   : "#96B2C8", // 상단 검색 바 - 검색창뒷배경
-        main_SearchBar_Bg                        : "#FDFAF3", // 상단 검색 바 - 검색창배경
-        main_SearchBar_Border                    : "#96B2C8", // 상단 검색 바 - 검색창 보더
-        main_SearchBar_SearchIcon_Default_Color  : "#FDFAF3", // 상단 검색 바 - 검색 아이콘 검색안할 때 색
-        main_SearchBar_Searching_SearchIcon_Color: "#FDFAF3", // 상단 검색 바 - 검색 시 색
+        main_SearchBar_Bg                             : "#FDFAF3", // 상단 검색 바 - 검색창배경
+        main_SearchBar_Border                         : "#96B2C8", // 상단 검색 바 - 검색창 보더
+        main_SearchBar_SearchResult_Book_Title_Text   : "#000000", // 상단 검색 바 - 책 타이틀 텍스트 색
+        main_SearchBar_SearchResult_Book_SubTitle_Text: "#000000", // 상단 검색 바 - 책 저자 텍스트 색
+        main_SearchBar_SearchIcon_Default_Color       : "#FDFAF3", // 상단 검색 바 - 검색 아이콘 검색안할 때 색
+        main_SearchBar_Searching_SearchIcon_Color     : "#000000", // 상단 검색 바 - 검색 시 아이콘 색
+        main_SearchBar_Back_Default_Bg                : "#96B2C8", // 상단 검색 바 - 검색안할 때 아이콘 배경 색
+        main_SearchBar_Searching_Back_Bg              : "transparent", // 상단 검색 바 - 검색 시 아이콘 배경 색
+        main_SearchBar_ClearText_Color                : "#FDFAF3", // 상단 검색 바 - 검색 텍스트 삭제 버튼 색
+        main_SearchBar_ClearText_Bg                   : "#96B2C8", // 상단 검색 바 - 검색 텍스트 삭제 버튼 배경 색
         
         /* 내 독서 목록 검색 바 관련 색*/
         myBook_SearchBar_Bg                      : "#FDFAF3", // 내 독서 목록 검색 바 - 내 독서 목록 검색창 배경
@@ -164,9 +169,9 @@ export default {
         loadingSpinner : "#96B2C8", // 로딩 스피너 색
         
         /* 스크롤바 관련 */
-        scrollbar_bg   : "#FDFAF3", // 스크롤바 전체 라인 배경색
-        scrollbar_Color: "#E5CEC8", // 스크롤 되는 바 색상
-        scrollbar_Hover_Color : "#C9A89F", // 책 리스트 영역 호버 시 스크롤 되는 바 색상
+        scrollbar_bg         : "#FDFAF3", // 스크롤바 전체 라인 배경색
+        scrollbar_Color      : "#E5CEC8", // 스크롤 되는 바 색상
+        scrollbar_Hover_Color: "#C9A89F", // 책 리스트 영역 호버 시 스크롤 되는 바 색상
         
         /* 타이틀 왼족 표시 마커 */
         title_Marker: "#E5CEC8",  // 타이틀 왼쪽 마커색

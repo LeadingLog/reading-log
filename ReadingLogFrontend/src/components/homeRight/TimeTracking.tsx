@@ -42,7 +42,7 @@ export default function TimeTracking() {
         )}
       </AnimatePresence>
       <CustomScrollbar
-        containerClassName=""
+        containerClassName="flex flex-col flex-1 gap-3"
         scrollbarClassName=""
         // scrollbarWidth=""
       >

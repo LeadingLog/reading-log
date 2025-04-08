@@ -17,6 +17,7 @@ ReadingLogFrontend/
 │       ├── common                    # 양쪽 페이지 모두 재사용 하는 폴더
 │       ├── homeLeft                  # 왼쪽 페이지에 들어갈 컴포넌트 폴더
 │       ├── homeRight                 # 오른쪽 페이지에 들어갈 컴포넌트 폴더
+│       ├── homeTop                   # 홈 상단 컴포넌트 폴더(책검색, 계정)
 │           ├── statsItems            # 연별, 월별 통계 컴토넌트 요소 
 │           └── timeTrackingContainer # 타임 트래킹 컴토넌트 요소 
 │       ├── layout                    # 기본 화면 구성 컴포넌트 폴더
