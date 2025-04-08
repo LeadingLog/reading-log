@@ -16,12 +16,12 @@ const LeftPage: React.FC = () => {
   };
 
   return (
-    <section className="flex flex-col flex-1 overflow-hidden gap-4 h-full bg-pageBg rounded-xl p-7">
+    <section className="flex flex-col flex-1 overflow-hidden gap-4 h-full bg-page_Bg rounded-xl p-7">
       {/* 탭 영역 */}
       <ul className="flex text-base ">
         <li
           className={`flex justify-center flex-1 cursor-pointer pb-1 border-b-2  ${
-            activeTab === 'TimeLine' ? 'font-semibold border-b-8 border-leftPageActiveTabBorder' : 'border-leftPageInActiveTabBorder'
+            activeTab === 'TimeLine' ? 'font-semibold border-b-8 border-leftPage_ActiveTab_Border' : 'border-leftPage_InActiveTab_Border'
           }`}
           onClick={() => handleTabClick('TimeLine')}
         >
@@ -29,7 +29,7 @@ const LeftPage: React.FC = () => {
         </li>
         <li
           className={`flex justify-center flex-1 cursor-pointer pb-1 border-b-2  ${
-            activeTab === 'MyBookList' ? 'font-semibold border-b-8 border-leftPageActiveTabBorder' : 'border-leftPageInActiveTabBorder'
+            activeTab === 'MyBookList' ? 'font-semibold border-b-8 border-leftPage_ActiveTab_Border' : 'border-leftPage_InActiveTab_Border'
           }`}
           onClick={() => handleTabClick('MyBookList')}
         >
@@ -37,7 +37,7 @@ const LeftPage: React.FC = () => {
         </li>
         <li
           className={`flex justify-center flex-1 cursor-pointer pb-1 border-b-2  ${
-            activeTab === 'MyFavoriteList' ? 'font-semibold border-b-8 border-leftPageActiveTabBorder' : 'border-leftPageInActiveTabBorder'
+            activeTab === 'MyFavoriteList' ? 'font-semibold border-b-8 border-leftPage_ActiveTab_Border' : 'border-leftPage_InActiveTab_Border'
           }`}
           onClick={() => handleTabClick('MyFavoriteList')}
         >
