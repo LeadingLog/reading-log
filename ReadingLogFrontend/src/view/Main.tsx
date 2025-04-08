@@ -1,7 +1,6 @@
 import Header from "../components/layout/Header.tsx";
 import LeftPage from "../components/layout/LeftPage.tsx";
 import RightPage from "../components/layout/RightPage.tsx";
-import ModalManager from "../components/modal/ModalManager.tsx";
 
 export default function Main() {
 
@@ -12,7 +11,6 @@ export default function Main() {
         <LeftPage />
         <RightPage/>
       </article>
-      <ModalManager />
     </section>
   );
 }

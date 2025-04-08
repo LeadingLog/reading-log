@@ -3,7 +3,6 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import axios from "axios";
 import {useModalStore} from "../../store/modalStore";
 import {useUserStore} from "../../store/userStore";
-import ModalManager from "../../components/modal/ModalManager";
 
 interface CallbackTemplateProps {
   provider: "naver" | "kakao";
@@ -108,7 +107,6 @@ export default function OAuthCallbackHandler({
         {/* 로딩 */}
         <div className="w-10 h-10 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></div>
       </div>
-      <ModalManager/>
     </>
   );
 };
