@@ -3,7 +3,6 @@ import { useModalStore } from '../../store/modalStore';
 
 const ModalNotice: React.FC = () => {
   const {activeModal, modalData, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
-
   if (activeModal !== 'ModalNotice') return null; // activeModal이 ModalNotice가 아니면 렌더링하지 않음
 
   return (

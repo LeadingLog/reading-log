@@ -158,6 +158,10 @@ export default {
         favorite_Icon_Color: "#FDFAF3", // 관심도서 아이콘 색
         favorite_Icon_Bg   : "#96B2C8", // 관심도서 아이콘 배경 색
         unFavorite_Icon_Bg : "#D9D9D9", // 관심도서 아닐 때 아이콘 배경 색
+
+        /* 로딩 관련 색 */
+        loadingBg : "#D9D9D9", // 로딩 중일 때 배경 색
+        loadingSpinner : "#96B2C8", // 로딩 스피너 색
         
         /* 스크롤바 관련 */
         scrollbar_bg   : "#FDFAF3", // 스크롤바 전체 라인 배경색

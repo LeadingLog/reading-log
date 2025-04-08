@@ -8,6 +8,7 @@ type ModalType =
   | 'ModalMyPage'           // 마이페이지 모달
   | 'ModalNotice'           // 공통 모달
   | 'ModalTrackingPlan'     // 독서 타임 트래킹 모달
+  | 'ModalAlert'            // 공통 모달 (확인 버튼만 있는 모달)
 
 // 확장된 ModalData 타입 정의
 type ModalData = {
