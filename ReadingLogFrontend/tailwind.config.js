@@ -149,7 +149,7 @@ export default {
         main_SearchBar_SearchResult_Book_Title_Text   : "#000000", // 상단 검색 바 - 책 타이틀 텍스트 색
         main_SearchBar_SearchResult_Book_SubTitle_Text: "#000000", // 상단 검색 바 - 책 저자 텍스트 색
         main_SearchBar_SearchIcon_Default_Color       : "#FDFAF3", // 상단 검색 바 - 검색 아이콘 검색안할 때 색
-        main_SearchBar_Searching_SearchIcon_Color     : "#000000", // 상단 검색 바 - 검색 시 아이콘 색
+        main_SearchBar_Searching_SearchIcon_Color     : "#96B2C8", // 상단 검색 바 - 검색 시 아이콘 색
         main_SearchBar_Back_Default_Bg                : "#96B2C8", // 상단 검색 바 - 검색안할 때 아이콘 배경 색
         main_SearchBar_Searching_Back_Bg              : "transparent", // 상단 검색 바 - 검색 시 아이콘 배경 색
         main_SearchBar_ClearText_Color                : "#FDFAF3", // 상단 검색 바 - 검색 텍스트 삭제 버튼 색
@@ -163,15 +163,17 @@ export default {
         favorite_Icon_Color: "#FDFAF3", // 관심도서 아이콘 색
         favorite_Icon_Bg   : "#96B2C8", // 관심도서 아이콘 배경 색
         unFavorite_Icon_Bg : "#D9D9D9", // 관심도서 아닐 때 아이콘 배경 색
-
+        
         /* 로딩 관련 색 */
-        loadingBg : "#D9D9D9", // 로딩 중일 때 배경 색
-        loadingSpinner : "#96B2C8", // 로딩 스피너 색
+        loadingBg     : "#D9D9D9", // 로딩 중일 때 배경 색
+        loadingSpinner: "#96B2C8", // 로딩 스피너 색
         
         /* 스크롤바 관련 */
-        scrollbar_bg         : "#FDFAF3", // 스크롤바 전체 라인 배경색
-        scrollbar_Color      : "#E5CEC8", // 스크롤 되는 바 색상
-        scrollbar_Hover_Color: "#C9A89F", // 책 리스트 영역 호버 시 스크롤 되는 바 색상
+        scrollbar_bg                               : "#FDFAF3", // 스크롤바 전체 라인 배경색
+        scrollbar_Color                            : "#E5CEC8", // 스크롤 되는 바 색상
+        scrollbar_Main_SearchBar_Result_Color      : "#CAE1F3", // 스크롤 되는 바 색상
+        scrollbar_Hover_Color                      : "#C9A89F", // 책 리스트 영역 호버 시 스크롤 되는 바 색상
+        scrollbar_Main_SearchBar_Result_Hover_Color: "#96B2C8", // 책 리스트 영역 호버 시 스크롤 되는 바 색상
         
         /* 타이틀 왼족 표시 마커 */
         title_Marker: "#E5CEC8",  // 타이틀 왼쪽 마커색

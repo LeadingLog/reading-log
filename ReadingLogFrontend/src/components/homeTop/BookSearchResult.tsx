@@ -119,7 +119,132 @@ const BookSearchResult: React.FC = () => {
           </div>
         </div>
       </li>
-
+      <li className="flex gap-3 basis-[calc(50%-12px)] items-center">
+        <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl">
+          책 사진
+        </div>
+        <div className="flex-1">
+          <p className="text-lg">책 이름이름이름책 이름이름이름책 이름이름이름책 이름이름이름</p>
+          <p className="text-base">책 저자</p>
+        </div>
+        <div className="w-12 aspect-square relative">
+          <div
+            className={`${isOn ? "bg-favorite_Icon_Bg" : "bg-unFavorite_Icon_Bg"}
+            absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+            onClick={() => FavoriteToggle()}
+          >
+            <IconFavorite width="100%" height="100%"/>
+          </div>
+        </div>
+      </li>
+      <li className="flex gap-3 basis-[calc(50%-12px)] items-center">
+        <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl">
+          책 사진
+        </div>
+        <div className="flex-1">
+          <p className="text-lg">책 이름이름이름책 이름이름이름책 이름이름이름책 이름이름이름</p>
+          <p className="text-base">책 저자</p>
+        </div>
+        <div className="w-12 aspect-square relative">
+          <div
+            className={`${isOn ? "bg-favorite_Icon_Bg" : "bg-unFavorite_Icon_Bg"}
+            absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+            onClick={() => FavoriteToggle()}
+          >
+            <IconFavorite width="100%" height="100%"/>
+          </div>
+        </div>
+      </li>
+      <li className="flex gap-3 basis-[calc(50%-12px)] items-center">
+        <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl">
+          책 사진
+        </div>
+        <div className="flex-1">
+          <p className="text-lg">책 이름이름이름책 이름이름이름책 이름이름이름책 이름이름이름</p>
+          <p className="text-base">책 저자</p>
+        </div>
+        <div className="w-12 aspect-square relative">
+          <div
+            className={`${isOn ? "bg-favorite_Icon_Bg" : "bg-unFavorite_Icon_Bg"}
+            absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+            onClick={() => FavoriteToggle()}
+          >
+            <IconFavorite width="100%" height="100%"/>
+          </div>
+        </div>
+      </li>
+      <li className="flex gap-3 basis-[calc(50%-12px)] items-center">
+        <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl">
+          책 사진
+        </div>
+        <div className="flex-1">
+          <p className="text-lg">책 이름이름이름책 이름이름이름책 이름이름이름책 이름이름이름</p>
+          <p className="text-base">책 저자</p>
+        </div>
+        <div className="w-12 aspect-square relative">
+          <div
+            className={`${isOn ? "bg-favorite_Icon_Bg" : "bg-unFavorite_Icon_Bg"}
+            absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+            onClick={() => FavoriteToggle()}
+          >
+            <IconFavorite width="100%" height="100%"/>
+          </div>
+        </div>
+      </li>
+      <li className="flex gap-3 basis-[calc(50%-12px)] items-center">
+        <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl">
+          책 사진
+        </div>
+        <div className="flex-1">
+          <p className="text-lg">책 이름이름이름책 이름이름이름책 이름이름이름책 이름이름이름</p>
+          <p className="text-base">책 저자</p>
+        </div>
+        <div className="w-12 aspect-square relative">
+          <div
+            className={`${isOn ? "bg-favorite_Icon_Bg" : "bg-unFavorite_Icon_Bg"}
+            absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+            onClick={() => FavoriteToggle()}
+          >
+            <IconFavorite width="100%" height="100%"/>
+          </div>
+        </div>
+      </li>
+      <li className="flex gap-3 basis-[calc(50%-12px)] items-center">
+        <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl">
+          책 사진
+        </div>
+        <div className="flex-1">
+          <p className="text-lg">책 이름이름이름책 이름이름이름책 이름이름이름책 이름이름이름</p>
+          <p className="text-base">책 저자</p>
+        </div>
+        <div className="w-12 aspect-square relative">
+          <div
+            className={`${isOn ? "bg-favorite_Icon_Bg" : "bg-unFavorite_Icon_Bg"}
+            absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+            onClick={() => FavoriteToggle()}
+          >
+            <IconFavorite width="100%" height="100%"/>
+          </div>
+        </div>
+      </li>
+      <li className="flex gap-3 basis-[calc(50%-12px)] items-center">
+        <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl">
+          책 사진
+        </div>
+        <div className="flex-1">
+          <p className="text-lg">책 이름이름이름책 이름이름이름책 이름이름이름책 이름이름이름</p>
+          <p className="text-base">책 저자</p>
+        </div>
+        <div className="w-12 aspect-square relative">
+          <div
+            className={`${isOn ? "bg-favorite_Icon_Bg" : "bg-unFavorite_Icon_Bg"}
+            absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+            onClick={() => FavoriteToggle()}
+          >
+            <IconFavorite width="100%" height="100%"/>
+          </div>
+        </div>
+      </li>
     </>
   );
 };

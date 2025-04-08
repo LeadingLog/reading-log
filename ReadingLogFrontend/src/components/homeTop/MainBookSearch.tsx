@@ -1,5 +1,5 @@
 import IconSearch from "../../assets/Icon-search.svg?react";
-import BookSearchResult from "./BookSearchResult.tsx";
+import BookSearchResult from "./BookSearchResult";
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import CustomScrollbar from "../common/CustomScrollbar.tsx"; // Framer Motion import
@@ -33,13 +33,15 @@ export default function MainBookSearch() {
     <>
       {/* 검색창 */}
       <section
-        className={`${focusSearch ? "flex-1" : ""} 
+        className={`
+        ${searchValue ? "after:content-[''] after:absolute after:right-2 after:left-2 after:top-8 after:h-0.5 after:bg-main_SearchBar_Border" : ""}
+        ${focusSearch ? "flex-1" : ""} 
         relative flex flex-col w-80 bg-main_SearchBar_Back_Bg rounded-[25px] bg-main_SearchBar_Bg border-main_SearchBar_Border border-8 transition-all duration-200 ease-in-out`}
       >
         {/* 검색 아이콘 */}
         <span
           className={`
-          absolute -top-2 flex flex-1 w-[50px] aspect-square justify-center items-center
+          absolute z-[1] -top-2 flex flex-1 w-[50px] aspect-square justify-center items-center
           transition-all duration-300 ease-in-out rounded-full
           ${searchIcon ? "searching_Icon" : "unSearching_Icon"}
         `}
@@ -65,7 +67,7 @@ export default function MainBookSearch() {
               setSearchValue("");
               inputRef.current?.focus(); // ✅ 클릭 시 input에 포커스!
             }}
-            className="absolute flex justify-center pb-0.5 items-center w-6 h-6 aspect-square right-3 top-2 bg-main_SearchBar_ClearText_Bg z-[1] font-black text-main_SearchBar_ClearText_Color hover:text-gray-600 rounded-full"
+            className="absolute flex justify-center items-center w-[20x] h-[20px] aspect-square right-3 top-1.5 bg-main_SearchBar_ClearText_Bg z-[1] text-xs font-black text-main_SearchBar_ClearText_Color hover:text-gray-600 rounded-full"
           >
             ✕
           </button>
@@ -79,11 +81,11 @@ export default function MainBookSearch() {
             maxHeight: searchValue.trim() !== "" ? 500 : 0,
           }}
           transition={{duration: 0.2, ease: "easeInOut"}}
-          className="overflow-hidden"
+          className="overflow-hidden flex"
         >
           <CustomScrollbar
-            containerClassName="bg-main_SearchBar_Bg flex flex-1 justify-between gap-3 p-4 flex-wrap rounded-b-[20px]"
-            scrollbarClassName=""
+            containerClassName="bg-main_SearchBar_Bg flex flex-1 justify-between gap-3 pl-4 pr-2 py-4 flex-wrap rounded-b-[20px]"
+            scrollbarClassName="right-1.5 w-1.5 scale-y-90 bg-scrollbar_Main_SearchBar_Result_Color transition-[colors] group-hover/scroll:bg-scrollbar_Main_SearchBar_Result_Hover_Color"
             // scrollbarWidth=""
           >
             <BookSearchResult/>
