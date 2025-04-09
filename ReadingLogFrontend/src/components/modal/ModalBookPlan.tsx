@@ -7,7 +7,7 @@ import ModalCalendar from "../homeTop/ModalCalendar.tsx";
 const ModalBookPlan: React.FC = () => {
   const {activeModal, closeModal, modalData} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
   const [openCalendar, setOpenCalendar] = useState<boolean>(false); // 캘릭더 오픈
-  const [startOrEnd, setStartOrEnd] = useState<"start" | "end">("start"); // 시작 달인지 끝나는 달 선택인지 구분용
+  // const [startOrEnd, setStartOrEnd] = useState<"start" | "end">("start"); // 시작 달인지 끝나는 달 선택인지 구분용
   const [pickStartYear, setPickStartYear] = useState<number>(0);
   const [pickStartMonth, setPickStartMonth] = useState<number>(0);
 
@@ -37,7 +37,7 @@ const ModalBookPlan: React.FC = () => {
                 className="flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg"
                 onClick={() => {
                   setOpenCalendar(true);
-                  setStartOrEnd("start")
+                  // setStartOrEnd("start")
                 }}
               >
                 <span className="text-modal_BookPlan_Calendar_Date_Text">{pickStartYear}.{pickStartMonth}</span>
@@ -50,14 +50,14 @@ const ModalBookPlan: React.FC = () => {
                 className="flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg"
                 onClick={() => {
                   setOpenCalendar(true);
-                  setStartOrEnd("end")
+                  // setStartOrEnd("end")
                 }}
               >
                 <span className="text-modal_BookPlan_Calendar_Date_Text">2025.01</span>
                 <span className="w-3 text-modal_BookPlan_Calendar_Icon_Color"><IconCalendar width="100%" height="100%"/></span>
               </button>
             </div>
-            {openCalendar && <ModalCalendar startOrEnd={setStartOrEnd} pickMonth={setPickStartMonth} pickYear={setPickStartYear} />}
+            {openCalendar && <ModalCalendar pickMonth={setPickStartMonth} pickYear={setPickStartYear} />}
           </section>
           <section className="flex gap-4">
             <button

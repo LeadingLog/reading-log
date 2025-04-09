@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 interface ModalCalendarProps {
-  startOrEnd: React.Dispatch<React.SetStateAction<"start" | "end">>;
+  // startOrEnd: React.Dispatch<React.SetStateAction<"start" | "end">>;
   pickMonth: React.Dispatch<React.SetStateAction<number>>;
   pickYear: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const ModalCalendar: React.FC<ModalCalendarProps> = ({ startOrEnd, pickYear, pickMonth }) => {
+const ModalCalendar: React.FC<ModalCalendarProps> = ({ pickYear, pickMonth }) => {
   const [choiceYear, setChoiceYear] = useState<number>(2025); // ✅ number 타입 명시
   const monthList: number[] = Array.from({length: 12}, (_, i) => i + 1); // ✅ 1~12월 생성
 
