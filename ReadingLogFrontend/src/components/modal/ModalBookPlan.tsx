@@ -4,7 +4,7 @@ import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import IconCalendar from "../../assets/Icon-calendar.svg?react"
 
 const ModalBookPlan: React.FC = () => {
-  const {activeModal, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
+  const {activeModal, closeModal, modalData} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
 
   if (activeModal !== 'ModalBookPlan') return null; // activeModal이 ModalBookPlan가  아니면 렌더링하지 않음
 
@@ -21,9 +21,9 @@ const ModalBookPlan: React.FC = () => {
           <div className="relative">
             <span className="text-2xl relative">
               <p className="absolute top-1 bottom-1 left-0 w-1 bg-title_Marker"></p>
-              <span className="text-modal_BookPlan_Book_Title_Text m-2">책 제목</span>
+              <span className="text-modal_BookPlan_Book_Title_Text m-2">{modalData.bookTitle}</span>
             </span>
-            <p className="text-modal_BookPlan_Book_Sub_Title_Text">책 저자</p>
+            <p className="text-modal_BookPlan_Book_Sub_Title_Text">{modalData.bookSubTitle}</p>
           </div>
           <section className="flex gap-4">
             <div className="flex flex-col flex-1">
@@ -49,7 +49,7 @@ const ModalBookPlan: React.FC = () => {
               다음에 읽기
             </button>
             <button
-              onClick={closeModal} // 클릭 시 모달 닫기
+              onClick={modalData.onConfirm} // 클릭 시 모달 닫기
               className="flex-1 min-w-[130px] px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
             >
               독서 계획 추가

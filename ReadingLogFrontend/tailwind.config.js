@@ -154,6 +154,7 @@ export default {
         main_SearchBar_Searching_Back_Bg              : "transparent", // 상단 검색 바 - 검색 시 아이콘 배경 색
         main_SearchBar_ClearText_Color                : "#FDFAF3", // 상단 검색 바 - 검색 텍스트 삭제 버튼 색
         main_SearchBar_ClearText_Bg                   : "#96B2C8", // 상단 검색 바 - 검색 텍스트 삭제 버튼 배경 색
+        main_SearchBar_BookList_Hover_border          : "#96B2C8", // 상단 검색 바 - 검색 텍스트 삭제 버튼 배경 색
         
         /* 내 독서 목록 검색 바 관련 색*/
         myBook_SearchBar_Bg                      : "#FDFAF3", // 내 독서 목록 검색 바 - 내 독서 목록 검색창 배경
