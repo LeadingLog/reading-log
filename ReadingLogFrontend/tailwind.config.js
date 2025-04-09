@@ -125,13 +125,21 @@ export default {
         modal_BookPlan_Calendar_Bg                : "#EEE6E3",   // 모달 - 독서 계획 달력 표시 배경
         modal_BookPlan_Calendar_Icon_Color        : "#000000",   // 모달 - 독서 계획 달력 아이콘 색
         
+        /* 연도 및 월 선택 모달 */
+        modal_Pick_Calendar_Bg               : "#FDFAF3",   // 연도 선택 모달 - 독서 계획 달력 아이콘 색
+        modal_Pick_Calendar_Border           : "#96B2C8",   // 연도 선택 - 독서 계획 달력 아이콘 색
+        modal_Pick_Calendar_Month_Bg         : "#C9A89F",   // 연도 선택 - 독서 계획 달력 아이콘 색
+        modal_Pick_Calendar_Month_Text       : "#000000",   // 연도 선택 - 독서 계획 달력 아이콘 색
+        modal_Pick_Calendar_Year_Text        : "#000000",   // 연도 선택 - 독서 계획 달력 아이콘 색
+        modal_Pick_Calendar_Year_Handler_Text: "#000000",   // 연도 선택 - 독서 계획 달력 아이콘 색
+        
         /* 독서 상태 토글 관련 색 */
+        toggle_Complete_Text_Color  : "#000000", // 독서 상태 토글 - 토글이 완독인 경우 텍스트 색
         toggle_ReadingText_Color    : "#000000", // 독서 상태 토글 - 독서중인 경우 토글 텍스트 색
         toggle_Reading_Circle_Color : "#E5CEC8", // 독서 상태 토글 - 독서중인 경우 토글 버튼 색
         toggle_Reading_Circle_Hover : "#C9A89F", // 독서 상태 토글 - 책 리스트 호버시 토글버튼 색
-        toggle_Complete_Text_Color  : "#000000", // 독서 상태 토글 - 토글이 완독인 경우 토글버튼 색
         toggle_Complete_Circle_Color: "#96B2C8", // 독서 상태 토글 - 토글이 완독인 경우 토글버튼 색
-        toggle_Complete_Circle_Hover: "#7A9BB7", // 독서 상태 토글 - 토글이 완독인 경우 토글버튼 색
+        toggle_Complete_Circle_Hover: "#7A9BB7", // 독서 상태 토글 - 책 리스트 호버시 토글버튼 색
         toggle_NoReading_Bg         : "#D9D9D9", // 독서 상태 토글 - 읽기 전 토글 배경
         toggle_Read_Status_Bg       : "#FDFAF3", // 독서 상태 토글 - 배경
         

@@ -4,7 +4,7 @@ import { useModalStore } from "../../store/modalStore.ts";
 
 const BookSearchResult: React.FC = () => {
 
-  const [isOn, SetIsOn] = useState<boolean>(false);
+  const [isOn, setIsOn] = useState<boolean>(false);
   const {openModal} = useModalStore();
 
   /* 관심도서 토글 */
@@ -23,7 +23,7 @@ const BookSearchResult: React.FC = () => {
             subTitle: "언제든 다시 추가 가능해요!",
             onlyClose: true,
           })
-        SetIsOn(false);
+        setIsOn(false);
         }
       })
     } else {
@@ -38,7 +38,7 @@ const BookSearchResult: React.FC = () => {
             subTitle: "이 책이 마음에 드셨군요!",
             onlyClose: true,
           })
-        SetIsOn(true);
+        setIsOn(true);
         }
       })
     }
