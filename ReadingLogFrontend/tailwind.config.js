@@ -126,12 +126,14 @@ export default {
         modal_BookPlan_Calendar_Icon_Color        : "#000000",   // 모달 - 독서 계획 달력 아이콘 색
         
         /* 연도 및 월 선택 모달 */
-        modal_Pick_Calendar_Bg               : "#FDFAF3",   // 연도 선택 모달 - 독서 계획 달력 아이콘 색
-        modal_Pick_Calendar_Border           : "#96B2C8",   // 연도 선택 - 독서 계획 달력 아이콘 색
-        modal_Pick_Calendar_Month_Bg         : "#C9A89F",   // 연도 선택 - 독서 계획 달력 아이콘 색
-        modal_Pick_Calendar_Month_Text       : "#000000",   // 연도 선택 - 독서 계획 달력 아이콘 색
-        modal_Pick_Calendar_Year_Text        : "#000000",   // 연도 선택 - 독서 계획 달력 아이콘 색
-        modal_Pick_Calendar_Year_Handler_Text: "#000000",   // 연도 선택 - 독서 계획 달력 아이콘 색
+        modal_Pick_Calendar_Back_Bg          : "#96B2C8",   // 연도 선택 모달 - 배경 색
+        modal_Pick_Calendar_Content_Bg       : "#FDFAF3",   // 연도 선택 모달 - 컨텐츠 배경 색
+        modal_Pick_Calendar_Title_Text       : "#000000",   // 연도 선택 모달 - 시작 달 인지 종료달 인지 표시 타이틀 텍스트 색
+        modal_Pick_Calendar_Year_Text        : "#000000",   // 연도 선택 모달 - 년 표시 텍스트 색
+        modal_Pick_Calendar_Year_Handler_Text: "#000000",   // 연도 선택 모달 - 년도 변경 요소 색
+        modal_Pick_Calendar_Month_Bg         : "#E5CEC8",   // 연도 선택 모달 - 월 선택 리스트 배경 색
+        modal_Pick_Calendar_Month_Text       : "#000000",   // 연도 선택 모달 - 월 선택 리스트 텍스트 색
+        modal_Pick_Calendar_Cancel_Text       : "#000000",  // 연도 선택 모달 - 닫기 텍스트 색
         
         /* 독서 상태 토글 관련 색 */
         toggle_Complete_Text_Color  : "#000000", // 독서 상태 토글 - 토글이 완독인 경우 텍스트 색
