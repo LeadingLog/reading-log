@@ -47,7 +47,7 @@ export default function MainBookSearch() {
     if (!query.trim()) return; // 빈 문자열 방지
 
     try {
-      const {data} = await axios.get('http://www.aladin.co.kr/ttb/api/ItemSearch.aspx', {
+      const {data} = await axios.get('https://www.aladin.co.kr/ttb/api/ItemSearch.aspx', {
         params: {
           ttbkey: AladinApi,
           Query: query,
