@@ -3,7 +3,7 @@ import BookSearchResult from "./BookSearchResult";
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import CustomScrollbar from "../common/CustomScrollbar.tsx";
-import axios from "axios";
+import { fetchBooks } from "../../api/aladinApi.ts";
 
 export default function MainBookSearch() {
 
@@ -33,7 +33,6 @@ export default function MainBookSearch() {
   };
 
   /* 책 검색 결과 가져오기 */
-  const AladinApi = import.meta.env.VITE_ALADIN_API;
   const [bookSearchResultList, setBookSearchResultList] = useState([]);
 
   interface AladinApiItem {
@@ -44,21 +43,10 @@ export default function MainBookSearch() {
   }
 
   const searchBooks = async (query: string) => {
-    if (!query.trim()) return; // 빈 문자열 방지
+    if (!query.trim()) return;
 
     try {
-      const {data} = await axios.get('https://www.aladin.co.kr/ttb/api/ItemSearch.aspx', {
-        params: {
-          ttbkey: AladinApi,
-          Query: query,
-          MaxResults: 10,
-          start: 1,
-          Cover: 'Big',
-          SearchTarget: 'Book',
-          output: 'js',
-          Version: '20131101',
-        },
-      });
+      const data = await fetchBooks(query);
 
       if (data && Array.isArray(data.item)) {
         const items = data.item.map((item: AladinApiItem) => ({
