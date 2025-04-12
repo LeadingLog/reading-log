@@ -61,7 +61,6 @@ export default function OAuthCallbackHandler({
 
         useUserStore.getState().setUser({ // 사용자 정보 저장
           token: data.access_token,
-          refreshToken: data.refresh_token,
           expiresAt: data.expires_at,
           user_id: data.user_id,
           nickname: data.nickname,
