@@ -26,7 +26,10 @@ jobs:
       # 3. 의존성 설치 및 빌드
       - name: Install & Build
         working-directory: ReadingLogFrontend
+        env:
+          VITE_ALADIN_API: ${{ secrets.VITE_ALADIN_API }}
         run: |
+          echo "VITE_ALADIN_API=$VITE_ALADIN_API"  
           npm install
           npm run build
 
