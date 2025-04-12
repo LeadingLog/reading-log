@@ -1,9 +1,9 @@
 import React from 'react';
 import { useModalStore } from '../../store/modalStore';
+import { ModalMyPageProps } from "../../types/modal.ts";
 
-const ModalMyPage: React.FC = () => {
-  const {activeModal, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
-  const { openModal } = useModalStore();
+const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
+  const {openModal, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
 
   const handleAccountDeletion = () => {
     console.log('탈퇴 로직 실행'); // 실제 탈퇴 로직 추가
@@ -15,8 +15,6 @@ const ModalMyPage: React.FC = () => {
       onlyClose: true,
     });
   };
-
-  if (activeModal !== 'ModalMyPage') return null; // activeModal이 ModalMyPage가 아니면 렌더링하지 않음
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
@@ -54,7 +52,11 @@ const ModalMyPage: React.FC = () => {
               회원탈퇴
             </button>
             <button
-              onClick={closeModal} // 클릭 시 모달 닫기
+              onClick={() => {
+                if (modalId) { // modalId가 있을 경우에만 closeModal 호출
+                  closeModal(modalId);
+                }
+              }} // 클릭 시 모달 닫기
               className="px-2 py-1 bg-modal_Right_Btn_Bg rounded-lg"
             >
               닫기

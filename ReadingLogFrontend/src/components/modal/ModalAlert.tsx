@@ -1,15 +1,17 @@
 import React from 'react';
-import {useModalStore} from '../../store/modalStore';
+import { useModalStore } from '../../store/modalStore';
+import { ModalAlertProps } from "../../types/modal.ts";
 
-const ModalAlert: React.FC = () => {
-  const {activeModal, modalData, closeModal} = useModalStore();
-  if (activeModal !== 'ModalAlert') return null;
+const ModalAlert: React.FC<ModalAlertProps> = ({ modalId, title, subTitle, confirmText, onConfirm }) => {
+  const { closeModal } = useModalStore();
 
   const handleConfirm = () => {
-    if (modalData.onConfirm) {
-      modalData.onConfirm(); // 함수 실행
+    if (onConfirm) {
+      onConfirm(); // 함수 실행
     }
-    closeModal(); // 모달 닫기
+    if (modalId) { // modalId가 있을 경우에만 closeModal 호출
+      closeModal(modalId);
+    } // 모달 닫기
   };
 
   return (
@@ -18,10 +20,10 @@ const ModalAlert: React.FC = () => {
         <article className="flex flex-col gap-4 flex-1 p-4 min-w-60 bg-modal_Content_Bg rounded-lg">
           <div className="text-center flex flex-col">
             <span className="text-lg text-modal_Title_Text font-semibold">
-              {modalData.title || "전달할 메세지를 작성 안했어요"}
+              {title || "전달할 메세지를 작성 안했어요"}
             </span>
-            {modalData.subTitle && (
-              <span className="text-modal_Sub_Title text-sm">{modalData.subTitle}</span>
+            {subTitle && (
+              <span className="text-modal_Sub_Title text-sm">{subTitle}</span>
             )}
           </div>
           <div className="flex justify-center">
@@ -29,7 +31,7 @@ const ModalAlert: React.FC = () => {
               className="bg-modal_Right_Btn_Bg text-white px-4 py-2 rounded-lg"
               onClick={handleConfirm}
             >
-              {modalData.confirmText || "확인"}
+              {confirmText || "확인"}
             </button>
           </div>
         </article>
