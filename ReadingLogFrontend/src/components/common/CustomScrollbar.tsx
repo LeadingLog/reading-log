@@ -83,7 +83,7 @@ const CustomScrollbar = ({
   }, []);
 
   return (
-    <section className={`relative flex flex-1 overflow-hidden group/scroll ${useScrollbar ? "pr-4" : 'pr-0'}`}>
+    <section className={`relative flex flex-1 overflow-hidden group/scroll ${useScrollbar ? "pr-3" : 'pr-0'}`}>
       {/* 스크롤 가능한 콘텐츠 */}
       <ul
         ref={containerRef}
@@ -96,10 +96,10 @@ const CustomScrollbar = ({
       {/* 커스텀 스크롤바 */}
       {useScrollbar && (
         <div
-          className={`z-[2] w-3 py-2 bg-scrollbar_bg absolute right-0 top-0 h-full ${scrollbarWidth}`}
+          className={`z-[2] w-3 bg-scrollbar_bg absolute right-0 top-0  ${scrollbarWidth}`}
         >
           <div
-            className={`absolute w-[50%] left-1/2 transform -translate-x-1/2 rounded-full bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color ${scrollbarClassName}`}
+            className={`absolute w-1.5 right-0 transform rounded-full ${scrollbarClassName}`}
             style={{
               top: `${scrollPercentage}px`,
               height: `${scrollbarHeight}px`,

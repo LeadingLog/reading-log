@@ -43,7 +43,7 @@ export default function TimeTracking() {
       </AnimatePresence>
       <CustomScrollbar
         containerClassName="flex flex-col flex-1 gap-3"
-        scrollbarClassName=""
+        scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color"
         // scrollbarWidth=""
       >
         <BoxThisMonthReadingList/>
