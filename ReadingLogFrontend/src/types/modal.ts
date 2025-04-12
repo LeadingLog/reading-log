@@ -62,7 +62,7 @@ export interface ModalInstance {
 // Zustand 스토어 타입
 export interface ModalState {
   modals: ModalInstance[];
-  openModal: (type: ModalType, data?: ModalData) => void;
+  openModal: (type: ModalType, data?: ModalData) => string;
   closeModal: (modalId: string) => void;
   closeAllModals: () => void;
 }
