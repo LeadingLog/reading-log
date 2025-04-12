@@ -28,7 +28,6 @@ jobs:
         working-directory: ReadingLogFrontend
         env:
           VITE_ALADIN_API: ${{ secrets.VITE_ALADIN_API }}
-          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
         run: |
           echo "VITE_ALADIN_API=$VITE_ALADIN_API"
           npm install
