@@ -8,7 +8,7 @@ export default function ItemReadStatus() {
   /* 독서중 or 완독 토글*/
   const [reading, setReading] = useState(true) // 타이머 토글 on/off
   const toggleSwitch = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    e.stopPropagation(); // 해당 부분 클릭하면 부모요소 클릭 이벤트가 실행되지 않도록 방지 요소
     if (reading) {
       openModal("ModalNotice", {
         title: "완독한 도서 인가요?",

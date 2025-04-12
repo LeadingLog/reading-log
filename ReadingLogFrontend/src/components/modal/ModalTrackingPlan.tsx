@@ -3,11 +3,12 @@ import { useModalStore } from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { motion } from "framer-motion";
 import { usePageStore } from "../../store/pageStore.ts";
+import { ModalTrackingPlanProps } from "../../types/modal.ts";
 
 
-const ModalTrackingPlan: React.FC = () => {
-  const {activeModal, closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
-  const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
+const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({ modalId }) => {
+  const { closeModal } = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
+  const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   type TimeChoice = 3 | 30 | 60;
 
   const [timeChoice, setTimeChoice] = useState<TimeChoice | undefined>(undefined);
@@ -36,16 +37,17 @@ const ModalTrackingPlan: React.FC = () => {
     }
   }, [isOn]);
 
-  if (activeModal !== 'ModalTrackingPlan') return null; // activeModal이 ModalTrackingPlan이  아니면 렌더링하지 않음
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
       <section className="flex flex-col gap-3 bg-modal_Default_Bg p-5 rounded-lg">
         {/* 타이틀 */}
-        <span className="bg-modal_Tracking_Title_Bg text-modal_Tracking_Title_Text rounded-lg p-2 text-center font-semibold">독서 타임 트래킹</span>
+        <span
+          className="bg-modal_Tracking_Title_Bg text-modal_Tracking_Title_Text rounded-lg p-2 text-center font-semibold">독서 타임 트래킹</span>
         {/* 책 표지 */}
         <article className="relative h-20 bg-modal_BookImg_Bg rounded-lg">
-          <div className="absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
+          <div
+            className="absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
             <IconFavorite width="100%" height="100%"/>
           </div>
         </article>
@@ -83,12 +85,12 @@ const ModalTrackingPlan: React.FC = () => {
             <p className="text-xs text-modal_Tracking_Timer_Sub_Title_Text">스톱워치가 시작 됩니다.</p>
           </section>
           <motion.div
-            initial={{maxHeight: 0}}
+            initial={{ maxHeight: 0 }}
             // style={{borderEndEndRadius: '20px', borderEndStartRadius: '20px'}}
             animate={{
               maxHeight: isOn ? 36 : 0,
             }}
-            transition={{duration: 0.2, ease: "easeInOut"}}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
             className="relative h-[36px] flex overflow-hidden p-1 bg-modal_Tracking_Time_Bg rounded-lg divide-x divide-modal_Tracking_Time_Divide_Color"
           >
             <button
@@ -96,7 +98,7 @@ const ModalTrackingPlan: React.FC = () => {
               onClick={() => setTimeChoice(3)}
             >
               <span
-                className={`${timeChoice === 3 ? 'text-modal_Tracking_Time_Choice_Text font-semibold':'text-modal_Tracking_Time_NoChoice_Text'} flex-1 absolute inset-0 z-[1]`}
+                className={`${timeChoice === 3 ? 'text-modal_Tracking_Time_Choice_Text font-semibold' : 'text-modal_Tracking_Time_NoChoice_Text'} flex-1 absolute inset-0 z-[1]`}
               >
                 15분
               </span>
@@ -105,7 +107,8 @@ const ModalTrackingPlan: React.FC = () => {
               className="relative flex flex-1 text-xl"
               onClick={() => setTimeChoice(30)}
             >
-              <span className={`${timeChoice === 30 ? 'text-modal_Tracking_Time_Choice_Text font-semibold':'text-modal_Tracking_Time_NoChoice_Text'} flex-1 absolute inset-0 z-[1]`}
+              <span
+                className={`${timeChoice === 30 ? 'text-modal_Tracking_Time_Choice_Text font-semibold' : 'text-modal_Tracking_Time_NoChoice_Text'} flex-1 absolute inset-0 z-[1]`}
               >
                 30분
               </span>
@@ -113,7 +116,8 @@ const ModalTrackingPlan: React.FC = () => {
             <button className="relative flex flex-1 text-xl"
                     onClick={() => setTimeChoice(60)}
             >
-              <span className={`${timeChoice === 60 ? 'text-modal_Tracking_Time_Choice_Text font-semibold':'text-modal_Tracking_Time_NoChoice_Text'} flex-1 absolute inset-0 z-[1]`}
+              <span
+                className={`${timeChoice === 60 ? 'text-modal_Tracking_Time_Choice_Text font-semibold' : 'text-modal_Tracking_Time_NoChoice_Text'} flex-1 absolute inset-0 z-[1]`}
               >
                 60분
               </span>
@@ -132,7 +136,9 @@ const ModalTrackingPlan: React.FC = () => {
             <button
               onClick={() => {
                 setIsOn(false);
-                closeModal()
+                if (modalId) { // modalId가 있을 경우에만 closeModal 호출
+                  closeModal(modalId);
+                }
               }} // 클릭 시 모달 닫기
               className="flex-1 min-w-[120px] px-4 py-1 border-4 border-modal_Left_Btn_Border rounded-lg"
             >
@@ -142,14 +148,16 @@ const ModalTrackingPlan: React.FC = () => {
               onClick={() => {
                 setRightContent(
                   'TimeTracking',
-                  {TimeTracking: {tab: isOn ? 'Timer' : 'StopWatch'}},
+                  { TimeTracking: { tab: isOn ? 'Timer' : 'StopWatch' } },
                   {
                     title: `독서 타임 트래킹 - ${isOn ? '타이머' : '스탑워치'}`,
                     time: timeChoice
                   }
                 );
                 setIsOn(false);
-                closeModal();
+                if (modalId) { // modalId가 있을 경우에만 closeModal 호출
+                  closeModal(modalId);
+                }
               }}
               className="flex-1 min-w-[120px] px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
             >

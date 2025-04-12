@@ -7,7 +7,7 @@ import { usePageStore } from "../../../store/pageStore.ts";
 
 export default function ItemStopWatch() {
 
-  const {openModal, closeModal} = useModalStore();
+  const {openModal,closeModal} = useModalStore();
   const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
 
   /* 시작 & 일시정지 버튼 토글 관련 */
@@ -26,35 +26,43 @@ export default function ItemStopWatch() {
 
   /* 정지 버튼 클릭 시  */
   const stopTimer = () => {
-    openModal("ModalNotice", {
+    const firstModalId = openModal("ModalNotice", {
       title: "독서를 종료하시나요?",
       subTitle: "종료 시 시간이 저장돼요",
       cancelText: "아니요 더 읽을래요!",
       confirmText: "네 종료할게요!",
       reverseBtn: true,
       onConfirm: () => {
-        openModal("ModalNotice", {
+        const secondModalId = openModal("ModalNotice", {
           title: "독서시간 저장 완료!",
           subTitle: "수고하셨어요!",
           onlyConfirm: true,
           confirmText: "닫기",
-          onConfirm: () => { // 스탑워치 사라짐
-            setRightContent(
-              'TimeTracking',
-              {TimeTracking: {tab: 'onlyMonthReadingList'}}, // 파라미터,
-            )
-            closeModal()
+          onConfirm: () => {
+            // 여기서 두 번째 모달 닫기
+            closeModal(secondModalId);
+
+            // 우측 콘텐츠 변경
+            setRightContent('TimeTracking', {
+              TimeTracking: { tab: 'onlyMonthReadingList' },
+            });
+
+            // 초기화
+            setSeconds(0);
+            setMinute(0);
+            setHour(0);
+            setPlay(false);
+            clearInterval(intervalRef.current);
+            intervalRef.current = undefined;
           }
-        })
-        setSeconds(0) // 초 초기화
-        setMinute(0)  // 분 초기화
-        setHour(0)    // 시간 초기화
-        setPlay(false) // 정지 버튼으로 변경
-        clearInterval(intervalRef.current); // 시간 정지
-        intervalRef.current = undefined; // 정지 후 ID 초기화
+        });
+
+        // 첫 번째 모달 닫기
+        closeModal(firstModalId);
       }
-    })
+    });
   }
+
   /* 스탑워치 시간 관련 */
   const [seconds, setSeconds] = useState(0); // 초
   const [minute, setMinute] = useState(0); // 분

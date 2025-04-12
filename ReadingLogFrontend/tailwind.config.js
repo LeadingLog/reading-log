@@ -125,13 +125,23 @@ export default {
         modal_BookPlan_Calendar_Bg                : "#EEE6E3",   // 모달 - 독서 계획 달력 표시 배경
         modal_BookPlan_Calendar_Icon_Color        : "#000000",   // 모달 - 독서 계획 달력 아이콘 색
         
+        /* 연도 및 월 선택 모달 */
+        modal_Pick_Calendar_Back_Bg          : "#96B2C8",   // 연도 선택 모달 - 배경 색
+        modal_Pick_Calendar_Content_Bg       : "#FDFAF3",   // 연도 선택 모달 - 컨텐츠 배경 색
+        modal_Pick_Calendar_Title_Text       : "#000000",   // 연도 선택 모달 - 시작 달 인지 종료달 인지 표시 타이틀 텍스트 색
+        modal_Pick_Calendar_Year_Text        : "#000000",   // 연도 선택 모달 - 년 표시 텍스트 색
+        modal_Pick_Calendar_Year_Handler_Text: "#000000",   // 연도 선택 모달 - 년도 변경 요소 색
+        modal_Pick_Calendar_Month_Bg         : "#E5CEC8",   // 연도 선택 모달 - 월 선택 리스트 배경 색
+        modal_Pick_Calendar_Month_Text       : "#000000",   // 연도 선택 모달 - 월 선택 리스트 텍스트 색
+        modal_Pick_Calendar_Cancel_Text       : "#000000",  // 연도 선택 모달 - 닫기 텍스트 색
+        
         /* 독서 상태 토글 관련 색 */
+        toggle_Complete_Text_Color  : "#000000", // 독서 상태 토글 - 토글이 완독인 경우 텍스트 색
         toggle_ReadingText_Color    : "#000000", // 독서 상태 토글 - 독서중인 경우 토글 텍스트 색
         toggle_Reading_Circle_Color : "#E5CEC8", // 독서 상태 토글 - 독서중인 경우 토글 버튼 색
         toggle_Reading_Circle_Hover : "#C9A89F", // 독서 상태 토글 - 책 리스트 호버시 토글버튼 색
-        toggle_Complete_Text_Color  : "#000000", // 독서 상태 토글 - 토글이 완독인 경우 토글버튼 색
         toggle_Complete_Circle_Color: "#96B2C8", // 독서 상태 토글 - 토글이 완독인 경우 토글버튼 색
-        toggle_Complete_Circle_Hover: "#7A9BB7", // 독서 상태 토글 - 토글이 완독인 경우 토글버튼 색
+        toggle_Complete_Circle_Hover: "#7A9BB7", // 독서 상태 토글 - 책 리스트 호버시 토글버튼 색
         toggle_NoReading_Bg         : "#D9D9D9", // 독서 상태 토글 - 읽기 전 토글 배경
         toggle_Read_Status_Bg       : "#FDFAF3", // 독서 상태 토글 - 배경
         
@@ -149,11 +159,12 @@ export default {
         main_SearchBar_SearchResult_Book_Title_Text   : "#000000", // 상단 검색 바 - 책 타이틀 텍스트 색
         main_SearchBar_SearchResult_Book_SubTitle_Text: "#000000", // 상단 검색 바 - 책 저자 텍스트 색
         main_SearchBar_SearchIcon_Default_Color       : "#FDFAF3", // 상단 검색 바 - 검색 아이콘 검색안할 때 색
-        main_SearchBar_Searching_SearchIcon_Color     : "#000000", // 상단 검색 바 - 검색 시 아이콘 색
+        main_SearchBar_Searching_SearchIcon_Color     : "#96B2C8", // 상단 검색 바 - 검색 시 아이콘 색
         main_SearchBar_Back_Default_Bg                : "#96B2C8", // 상단 검색 바 - 검색안할 때 아이콘 배경 색
         main_SearchBar_Searching_Back_Bg              : "transparent", // 상단 검색 바 - 검색 시 아이콘 배경 색
         main_SearchBar_ClearText_Color                : "#FDFAF3", // 상단 검색 바 - 검색 텍스트 삭제 버튼 색
         main_SearchBar_ClearText_Bg                   : "#96B2C8", // 상단 검색 바 - 검색 텍스트 삭제 버튼 배경 색
+        main_SearchBar_BookList_Hover_border          : "#96B2C8", // 상단 검색 바 - 검색 텍스트 삭제 버튼 배경 색
         
         /* 내 독서 목록 검색 바 관련 색*/
         myBook_SearchBar_Bg                      : "#FDFAF3", // 내 독서 목록 검색 바 - 내 독서 목록 검색창 배경
@@ -163,15 +174,17 @@ export default {
         favorite_Icon_Color: "#FDFAF3", // 관심도서 아이콘 색
         favorite_Icon_Bg   : "#96B2C8", // 관심도서 아이콘 배경 색
         unFavorite_Icon_Bg : "#D9D9D9", // 관심도서 아닐 때 아이콘 배경 색
-
+        
         /* 로딩 관련 색 */
-        loadingBg : "#D9D9D9", // 로딩 중일 때 배경 색
-        loadingSpinner : "#96B2C8", // 로딩 스피너 색
+        loadingBg     : "#D9D9D9", // 로딩 중일 때 배경 색
+        loadingSpinner: "#96B2C8", // 로딩 스피너 색
         
         /* 스크롤바 관련 */
-        scrollbar_bg         : "#FDFAF3", // 스크롤바 전체 라인 배경색
-        scrollbar_Color      : "#E5CEC8", // 스크롤 되는 바 색상
-        scrollbar_Hover_Color: "#C9A89F", // 책 리스트 영역 호버 시 스크롤 되는 바 색상
+        scrollbar_bg                               : "#FDFAF3", // 스크롤바 전체 라인 배경색
+        scrollbar_Color                            : "#E5CEC8", // 스크롤 되는 바 색상
+        scrollbar_Main_SearchBar_Result_Color      : "#CAE1F3", // 스크롤 되는 바 색상
+        scrollbar_Hover_Color                      : "#C9A89F", // 책 리스트 영역 호버 시 스크롤 되는 바 색상
+        scrollbar_Main_SearchBar_Result_Hover_Color: "#96B2C8", // 책 리스트 영역 호버 시 스크롤 되는 바 색상
         
         /* 타이틀 왼족 표시 마커 */
         title_Marker: "#E5CEC8",  // 타이틀 왼쪽 마커색

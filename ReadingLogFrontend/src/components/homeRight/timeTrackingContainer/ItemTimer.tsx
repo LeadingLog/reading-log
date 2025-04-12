@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function ItemTimer() {
 
-  const {openModal, closeModal} = useModalStore();
+  const {openModal, closeAllModals} = useModalStore();
   const {pageData, setRightContent} = usePageStore();
 
   // 독서 종료 모달
@@ -29,7 +29,7 @@ export default function ItemTimer() {
               'TimeTracking',
               {TimeTracking: {tab: 'onlyMonthReadingList'}}, // 파라미터,
             )
-            closeModal()
+            closeAllModals()
           }
         })
       }
