@@ -43,8 +43,8 @@ export default function ItemStopWatch() {
             closeModal(secondModalId);
 
             // 우측 콘텐츠 변경
-            setRightContent('TimeTracking', {
-              TimeTracking: { tab: 'onlyMonthReadingList' },
+            setRightContent("TimeTracking", {
+              TimeTracking: { tab: "onlyMonthReadingList" },
             });
 
             // 초기화

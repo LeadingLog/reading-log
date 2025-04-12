@@ -35,6 +35,7 @@ jobs:
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
+          VITE_ALADIN_API: ${{ secrets.VITE_ALADIN_API }}
         with:
           source-directory: 'ReadingLogFrontend/dist'  # ✅ Vite 기본 빌드 결과물 경로
           destination-github-username: "inging-bo"
