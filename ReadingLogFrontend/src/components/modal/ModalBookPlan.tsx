@@ -2,14 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useModalStore } from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import IconCalendar from "../../assets/Icon-calendar.svg?react"
-import ModalCalendar from "../homeTop/ModalCalendar.tsx";
 import { ModalBookPlanProps } from "../../types/modal.ts";
 
-const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle, bookSubTitle, cover, onConfirm }) => {
-  const { closeModal, openModal } = useModalStore();
-  const [openCalendar, setOpenCalendar] = useState<boolean>(false);
-  const [startOrEnd, setStartOrEnd] = useState<"start" | "end">("start"); // 어떤 버튼을 눌렀는지 구분
+const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle, bookSubTitle, cover, bookLink }) => {
+  const { closeModal, openModal, closeAllModals } = useModalStore();
 
+  /* 시작 달 종료 달 표시용 */
   const [pickStartYear, setPickStartYear] = useState<number>(0);
   const [pickStartMonth, setPickStartMonth] = useState<number>(0);
   const [pickEndYear, setPickEndYear] = useState<number>(0);
@@ -20,7 +18,14 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
     return String(lastDate).padStart(2, '0');
   };
 
-  /* 닫을 때 실행될 함수 */
+  const openCalendar = (startOrEnd: "시작 달" | "종료 달") => {
+    openModal('ModalCalendar', {
+      startOrEnd: startOrEnd,
+
+    })
+  }
+
+  /* 닫을 때 실행될 함수 --------------- */
   const close = () => {
     // 달력 값 초기화
     const today = new Date();
@@ -31,20 +36,15 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
     setPickStartMonth(month);
     setPickEndYear(year);
     setPickEndMonth(month);
-    setOpenCalendar(false)
     if (modalId) { // modalId가 있을 경우에만 closeModal 호출
       closeModal(modalId);
     }
 
   }
-  /* 닫을 때 실행될 함수 END */
+  /* 닫을 때 실행될 함수 END --------------- */
 
   /* 독서 계획 추가 버튼 클릭 시 함수 */
   const completeBookPlan = () => {
-    // 입력 값 초기화
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1;
 
     // 종료 날짜가 시작 날짜보다 앞선 경우 모달 띄우기
     if (
@@ -52,20 +52,32 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
       (pickEndYear === pickStartYear && pickEndMonth < pickStartMonth)
     ) {
       openModal('ModalNotice', {
-        title: "선택한 연/월이 오늘보다 이전이에요!",
-        confirmText: "다시 선택하기",
-        onlyConfirm: true,
+        title: "시작 달 과 종료달을 확인해주세요!",
+        cancelText: "다시 선택하기",
+        onlyClose: true,
       });
       return; // 초기화 방지
     }
+    openModal('ModalNotice', {
+      title: "내 독서 목록에 추가 되었어요!",
+      subTitle: "즐거운 독서시간!",
+      confirmText: "닫기",
+      onlyConfirm: true,
+      onConfirm: () => {
+        // 입력 값 초기화
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1;
 
-    setPickStartYear(year);
-    setPickStartMonth(month);
-    setPickEndYear(year);
-    setPickEndMonth(month);
-    setOpenCalendar(false)
+        setPickStartYear(year);
+        setPickStartMonth(month);
+        setPickEndYear(year);
+        setPickEndMonth(month);
+        closeAllModals()
+      }
+    })
   };
-  /* 독서 계획 추가 버튼 클릭 시 함수 END */
+  /* 독서 계획 추가 버튼 클릭 시 함수 END -----------------*/
 
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 */
   useEffect(() => {
@@ -78,14 +90,10 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
     setPickEndYear(year);
     setPickEndMonth(month);
   }, []);
-  /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 END */
+  /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 END -----------------*/
 
-  /* 오른쪽 독서계획 영역의 높이 값 초기화 */
-
-  /* 오른쪽 독서계획 영역의 높이 값 초기화 END */
-
-  /* 이미지 높이 값을 오른쪽 독서계획 영역의 높이 값을 추적하기 위한 함수 */
-  const parentRef = useRef<HTMLElement | null>(null);
+  /* 유동적인 이미지 높이 값을 설정하기 위해 오른쪽 독서계획 영역의 높이 값을 추적함 수 ----------------*/
+  const parentRef = useRef<HTMLAnchorElement | null>(null);
   const [imageHeight, setImageHeight] = useState<number>(0);
 
   useEffect(() => {
@@ -97,7 +105,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
       for (const entry of entries) {
         const newHeight = entry.contentRect.height;
         setImageHeight(newHeight);
-        console.log("변경된 높이:", newHeight);
       }
     });
 
@@ -109,12 +116,16 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
       setImageHeight(0)
     };
   }, []);
-  /* 이미지 높이 값을 오른쪽 독서계획 영역의 높이 값을 추적하기 위한 함수 END */
+
+  /* 유동적인 이미지 높이 값을 설정하기 위해 오른쪽 독서계획 영역의 높이 값을 추적함 수 END ----------------*/
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
       <section className="flex gap-5 bg-modal_Default_Bg p-5 rounded-lg">
-        <article
+        <a
           ref={parentRef}
+          href={bookLink}
+          target="_blank"
+          rel="noopener noreferrer"
           className="relative min-w-fit bg-modal_BookImg_Bg"
         >
           <img
@@ -127,14 +138,14 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
             className="absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
             <IconFavorite width="100%" height="100%"/>
           </div>
-        </article>
+        </a>
         <article
-          className="flex flex-col gap-4 bg-modal_Content_Bg p-2.5 rounded-lg"
+          className="flex flex-1 justify-between flex-col gap-8 bg-modal_Content_Bg p-2.5 rounded-lg"
         >
-          <div className="relative">
-            <span className="flex relative">
+          <div className="relative max-w-80">
+            <span className="flex  relative">
               <p className="absolute top-1 bottom-1 left-0 w-1 bg-title_Marker"></p>
-              <span className="text-lg font-semibold text-modal_BookPlan_Book_Title_Text m-2">{bookTitle}</span>
+              <span className="text-lg font-semibold text-modal_BookPlan_Book_Title_Text ml-2">{bookTitle}</span>
             </span>
             <p className="text-modal_BookPlan_Book_Sub_Title_Text">{bookSubTitle}</p>
           </div>
@@ -145,8 +156,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
               <button
                 className="flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg"
                 onClick={() => {
-                  setOpenCalendar(true);
-                  setStartOrEnd("start");
+                  openCalendar("시작 달")
                 }}
               >
                 <span className="text-modal_BookPlan_Calendar_Date_Text">
@@ -163,8 +173,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
               <button
                 className="flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg"
                 onClick={() => {
-                  setOpenCalendar(true);
-                  setStartOrEnd("end");
+                  openCalendar("종료 달")
                 }}
               >
                 <span className="text-modal_BookPlan_Calendar_Date_Text">
@@ -175,18 +184,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
                 </span>
               </button>
             </div>
-
-            {/* 어떤 버튼을 눌렀는지에 따라 해당 props 전달 */}
-            {openCalendar && (
-              <ModalCalendar
-                openCalendar={setOpenCalendar}
-                pickYear={startOrEnd === 'start' ? setPickStartYear : setPickEndYear}
-                pickMonth={startOrEnd === 'start' ? setPickStartMonth : setPickEndMonth}
-                mode={startOrEnd}
-                startYear={pickStartYear}
-                startMonth={pickStartMonth}
-              />
-            )}
           </section>
 
           <section className="flex gap-4">
@@ -200,7 +197,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
             </button>
             <button
               onClick={() => {
-                onConfirm?.(); // 원래 넘겨준 confirm 동작 실행
                 completeBookPlan();      // 현재 페이지 관련 초기화 작업
               }}
               className="flex-1 min-w-[130px] px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"

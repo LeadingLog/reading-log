@@ -1,29 +1,14 @@
 import React, { useState } from 'react';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { useModalStore } from "../../store/modalStore.ts";
+import { AladinApiItem, BookSearchResultProps } from "../../types/aladinApi";
 
-
-interface AladinApiItem {
-  title: string;
-  author: string;
-  isbn: string;
-  cover: string;
-  isFavorite?: boolean; // optional로
-}
-
-interface BookSearchResultProps {
-  bookSearchResultList: AladinApiItem[];
-}
-
-const BookSearchResult: React.FC<BookSearchResultProps> = ({bookSearchResultList}) => {
+const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultList, searchValue, isLoading }) => {
 
   const [favoriteMap, setFavoriteMap] = useState<{ [isbn: string]: boolean }>({});
-  const {openModal} = useModalStore();
+  const { openModal } = useModalStore();
 
-  /* 북 정보 관련 */
-
-
-  /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 */
+  /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const FavoriteToggle = (e: React.MouseEvent, isbn: string) => {
     e.stopPropagation(); // 해당 부분 클릭하면 부모요소 클릭 이벤트가 실행되지 않도록 방지 요소
     const isCurrentlyFavorite = favoriteMap[isbn];
@@ -60,56 +45,83 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({bookSearchResultList
       });
     }
   }
+  /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 END ------------- */
 
-  /* 책 리스트를 클릭하면 책 계획 모달이 뜨는 경우 */
-
-  const openModalBookPlan = (item : AladinApiItem) => {
+  /* 책 리스트를 클릭하면 책 계획 모달이 뜨는 경우 ------------- */
+  const openModalBookPlan = (item: AladinApiItem) => {
     openModal("ModalBookPlan", {
       cover: item.cover, // 여기 추가
       bookTitle: item.title,
       bookSubTitle: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
-      onConfirm: () => {
-        openModal("ModalNotice", {
-          title: "내 독서 목록에 추가 되었어요!",
-          subTitle: "즐거운 독서시간!",
-          onlyClose: true,
-        })
-      }
-
+      bookLink: item.link
     })
   }
+  /* 책 리스트를 클릭하면 책 계획 모달이 뜨는 경우 END ------------- */
+
   return (
     <>
-      {/*책 표지 리스트*/}
-      {bookSearchResultList.map((item, idx) => (
-        <li
-          className="cursor-pointer flex gap-2 basis-[calc(50%-8px)] transition-[border] p-1 border-2 border-transparent items-center hover:border-main_SearchBar_Border rounded-lg"
-          onClick={() => openModalBookPlan(item)}
-          key={idx}
-        >
-          <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl overflow-hidden">
-            <img src={item.cover} alt={item.title} className="w-full h-full object-cover"/>
-          </div>
-          <div className="flex-1">
-            <p className="text-lg">{item.title}</p>
-            <p className="text-base">{item.author}</p>
-          </div>
-          <div className="w-12 aspect-square relative">
-            <div
-              className={`${item.isFavorite ? "bg-favorite_Icon_Bg" : "bg-unFavorite_Icon_Bg"}
-          absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
-              onClick={(e) => {
-                e.stopPropagation(); // 모달 열림 방지
-                FavoriteToggle(e, item.isbn)
-              }}
+      {searchValue === "" ? (
+        <li className="text-xl text-main_SearchBar_NotYetFindBook_Text mx-auto">읽고 싶은 책을 검색하세요</li>
+      ) : !isLoading && bookSearchResultList.length === 0 ? (
+        <li className="text-xl text-main_SearchBar_NotFindBook_Text mx-auto">검색 결과가 없어요</li>
+      ) : (
+        <>
+          {isLoading &&
+            <li
+              className={`${bookSearchResultList.length === 0 ? "static p-1" : "absolute top-1 right-1"} flex gap-1 text-sm text-main_SearchBar_searchingBook_Text mx-auto`}>
+              <span>도서 검색 중</span>
+              <span
+                className="w-5 h-5 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
+            </li>
+          }
+          {bookSearchResultList.map((item, idx) => (
+            <li
+              key={idx}
+              className="cursor-pointer flex gap-2 basis-[calc(50%-8px)] transition-[border] p-1 border-2 border-transparent items-center hover:border-main_SearchBar_Border rounded-lg"
+              onClick={() => openModalBookPlan(item)}
             >
-              <IconFavorite width="100%" height="100%"/>
-            </div>
-          </div>
-        </li>
-      ))}
+              <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl overflow-hidden">
+                <img src={item.cover} alt={item.title} className="w-full h-full object-cover"/>
+              </div>
+              <div className="flex flex-col flex-1 self-start">
+                <p
+                  className="text-lg overflow-hidden text-main_SearchBar_SearchResult_Book_Title_Text"
+                  style={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                  }}
+                >
+                  {item.title}
+                </p>
+                <p className="text-base overflow-hidden text-main_SearchBar_SearchResult_Book_SubTitle_Text"
+                   style={{
+                     display: '-webkit-box',
+                     WebkitLineClamp: 2,
+                     WebkitBoxOrient: 'vertical',
+                   }}
+                >
+                  {item.author}
+                </p>
+              </div>
+              <div className="w-12 aspect-square relative">
+                <div
+                  className={`${item.isFavorite ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'}
+                  absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    FavoriteToggle(e, item.isbn);
+                  }}
+                >
+                  <IconFavorite width="100%" height="100%"/>
+                </div>
+              </div>
+            </li>
+          ))}
+        </>
+      )}
     </>
   );
 };

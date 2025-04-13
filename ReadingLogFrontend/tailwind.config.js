@@ -92,38 +92,41 @@ export default {
         imgBook_Icon_Color      : "#FDFAF3",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 상태 표시 아이콘 색
         
         /* 모달 관련 */
-        modal_Container_bg                        : "#00000050", // 모달 - 모달 오픈 시 불투명 검은 색 뒷 배경
-        modal_Default_Bg                          : "#96B2C8",   // 모달 - 모달배경색
-        modal_Logo_Bg                             : "#E5CEC8",   // 모달 - 모달 로고 표시 영역 기본 배경 색
-        modal_BookImg_Bg                          : "#E5CEC8",   // 모달 - 모달 책 표지 표시 배경 색
-        modal_Content_Bg                          : "#FDFAF3",   // 모달 - 모달 컨텐츠 배경 색
-        modal_Title_Text                          : "#000000",   // 모달 - 공통 모달 메인 텍스트 색
-        modal_Sub_Title                           : "#A1A1A1",   // 모달 - 공통 모달 서브 텍스트 색
-        modal_Quit_Bg                             : "#D9D9D950", // 모달 - 마이페이지 회원탈퇴 버튼 배경
-        modal_Quit_Text                           : "#A1A1A1",   // 모달 - 마이페이지 회원탈퇴 버튼 텍스트
-        modal_Right_Btn_Bg                        : "#E5CEC8",   // 모달 - 모달에서 오른쪽 아래 있는 버튼 배경
-        modal_Left_Btn_Border                     : "#E5CEC8",   // 모달 - 모달에서 왼쪽 아래 있는 버튼 보더
-        modal_Tracking_Title_Bg                   : "#FDFAF3",   // 모달 - 독서 타임 트래킹 타이틀 배경
-        modal_Tracking_Title_Text                 : "#000000",   // 모달 - 독서 타임 트래킹 타이틀 텍스트 색
-        modal_Tracking_Book_Title_Text            : "#000000",   // 모달 - 독서 타임 트래킹 책 제목 텍스트
-        modal_Tracking_Book_SubTitle_Text         : "#000000",   // 모달 - 독서 타임 트래킹 저자 텍스트
-        modal_Tracking_Timer_Title_Text           : "#000000",   // 모달 - 독서 타임 트래킹 타이머 텍스트
-        modal_Tracking_Timer_Sub_Title_Text       : "#A1A1A1",   // 모달 - 독서 타임 트래킹 타이머 설명 텍스트
-        modal_Tracking_Timer_Toggle_Active_Color  : "#C9A89F",   // 모달 - 독서 타임 트래킹 타이머 토글 활성화 시 색
-        modal_Tracking_Timer_Toggle_InActive_Color: "#E5CEC8",   // 모달 - 독서 타임 트래킹 타이머 토글 비활성화 시 색
-        modal_Tracking_Timer_Toggle_Active_Bg     : "#E5CEC8",   // 모달 - 독서 타임 트래킹 타이머 활성화 시 배경 색
-        modal_Tracking_Timer_Toggle_InActive_Bg   : "#EEE6E3",   // 모달 - 독서 타임 트래킹 타이머 비활성화 시 배경 색
-        modal_Tracking_Time_Bg                    : "#EEE6E3",   // 모달 - 독서 타임 트래킹 타이머 시간 선택 요소 배경
-        modal_Tracking_Time_Choice_Bg             : "#FDFAF3",   // 모달 - 독서 타임 트래킹 타이머 시간 선택 시 배경
-        modal_Tracking_Time_Divide_Color          : "#000000",   // 모달 - 독서 타임 트래킹 타이머 시간 경계선 색
-        modal_Tracking_Time_Choice_Text           : "#000000",   // 모달 - 독서 타임 트래킹 타이머 시간 선택 시 텍스트 색
-        modal_Tracking_Time_NoChoice_Text         : "#000000",   // 모달 - 독서 타임 트래킹 타이머 시간 미 선택 시 텍스트 색
-        modal_BookPlan_Book_Title_Text            : "#000000",   // 모달 - 독서 계획 책 제목 텍스트 색
-        modal_BookPlan_Book_Sub_Title_Text        : "#A1A1A1",   // 모달 - 독서 계획 책 저자 텍스트 색
-        modal_BookPlan_StartEnd_Month_Text        : "#000000",   // 모달 - 독서 계획 시작 & 종료 타이틀 텍스트 색
-        modal_BookPlan_Calendar_Date_Text         : "#000000",   // 모달 - 독서 계획 달력 표시 날짜 텍스트 색 색
-        modal_BookPlan_Calendar_Bg                : "#EEE6E3",   // 모달 - 독서 계획 달력 표시 배경
-        modal_BookPlan_Calendar_Icon_Color        : "#000000",   // 모달 - 독서 계획 달력 아이콘 색
+        modal_Container_bg   : "#00000050", // 공통 - 모달 오픈 시 불투명 검은 색 뒷 배경
+        modal_Default_Bg     : "#96B2C8",   // 공통 - 모달배경색
+        modal_Logo_Bg        : "#E5CEC8",   // 공통 - 모달 로고 표시 영역 기본 배경 색
+        modal_BookImg_Bg     : "#E5CEC8",   // 공통 - 모달 책 표지 표시 배경 색
+        modal_Content_Bg     : "#FDFAF3",   // 공통 - 모달 컨텐츠 배경 색
+        modal_Title_Text     : "#000000",   // 공통 - 공통 모달 메인 텍스트 색
+        modal_Sub_Title      : "#A1A1A1",   // 공통 - 공통 모달 서브 텍스트 색
+        modal_Right_Btn_Bg   : "#E5CEC8",   // 공통 - 모달에서 오른쪽 아래 있는 버튼 배경
+        modal_Left_Btn_Border: "#E5CEC8",   // 공통 - 모달에서 왼쪽 아래 있는 버튼 보더
+        
+        modal_Quit_Bg  : "#D9D9D950", // 마이페이지 - 회원탈퇴 버튼 배경
+        modal_Quit_Text: "#A1A1A1",   // 마이페이지 - 회원탈퇴 버튼 텍스트
+        
+        modal_Tracking_Title_Bg                   : "#FDFAF3",   // 독서 타임 트래킹 - 타이틀 배경
+        modal_Tracking_Title_Text                 : "#000000",   // 독서 타임 트래킹 - 타이틀 텍스트 색
+        modal_Tracking_Book_Title_Text            : "#000000",   // 독서 타임 트래킹 - 책 제목 텍스트
+        modal_Tracking_Book_SubTitle_Text         : "#000000",   // 독서 타임 트래킹 - 저자 텍스트
+        modal_Tracking_Timer_Title_Text           : "#000000",   // 독서 타임 트래킹 - 타이머 텍스트
+        modal_Tracking_Timer_Sub_Title_Text       : "#A1A1A1",   // 독서 타임 트래킹 - 타이머 설명 텍스트
+        modal_Tracking_Timer_Toggle_Active_Color  : "#C9A89F",   // 독서 타임 트래킹 - 타이머 토글 활성화 시 색
+        modal_Tracking_Timer_Toggle_InActive_Color: "#E5CEC8",   // 독서 타임 트래킹 - 타이머 토글 비활성화 시 색
+        modal_Tracking_Timer_Toggle_Active_Bg     : "#E5CEC8",   // 독서 타임 트래킹 - 타이머 활성화 시 배경 색
+        modal_Tracking_Timer_Toggle_InActive_Bg   : "#EEE6E3",   // 독서 타임 트래킹 - 타이머 비활성화 시 배경 색
+        modal_Tracking_Time_Bg                    : "#EEE6E3",   // 독서 타임 트래킹 - 타이머 시간 선택 요소 배경
+        modal_Tracking_Time_Choice_Bg             : "#FDFAF3",   // 독서 타임 트래킹 - 타이머 시간 선택 시 배경
+        modal_Tracking_Time_Divide_Color          : "#000000",   // 독서 타임 트래킹 - 타이머 시간 경계선 색
+        modal_Tracking_Time_Choice_Text           : "#000000",   // 독서 타임 트래킹 - 타이머 시간 선택 시 텍스트 색
+        modal_Tracking_Time_NoChoice_Text         : "#000000",   // 독서 타임 트래킹 - 타이머 시간 미 선택 시 텍스트 색
+        
+        modal_BookPlan_Book_Title_Text    : "#000000",   // 독서 계획 - 책 제목 텍스트 색
+        modal_BookPlan_Book_Sub_Title_Text: "#A1A1A1",   // 독서 계획 - 책 저자 텍스트 색
+        modal_BookPlan_StartEnd_Month_Text: "#000000",   // 독서 계획 - 시작 & 종료 타이틀 텍스트 색
+        modal_BookPlan_Calendar_Date_Text : "#000000",   // 독서 계획 - 달력 표시 날짜 텍스트 색 색
+        modal_BookPlan_Calendar_Bg        : "#EEE6E3",   // 독서 계획 - 달력 표시 배경
+        modal_BookPlan_Calendar_Icon_Color: "#000000",   // 독서 계획 - 달력 아이콘 색
         
         /* 연도 및 월 선택 모달 */
         modal_Pick_Calendar_Back_Bg          : "#96B2C8",   // 연도 선택 모달 - 배경 색
@@ -133,7 +136,7 @@ export default {
         modal_Pick_Calendar_Year_Handler_Text: "#000000",   // 연도 선택 모달 - 년도 변경 요소 색
         modal_Pick_Calendar_Month_Bg         : "#E5CEC8",   // 연도 선택 모달 - 월 선택 리스트 배경 색
         modal_Pick_Calendar_Month_Text       : "#000000",   // 연도 선택 모달 - 월 선택 리스트 텍스트 색
-        modal_Pick_Calendar_Cancel_Text       : "#000000",  // 연도 선택 모달 - 닫기 텍스트 색
+        modal_Pick_Calendar_Cancel_Text      : "#000000",  // 연도 선택 모달 - 닫기 텍스트 색
         
         /* 독서 상태 토글 관련 색 */
         toggle_Complete_Text_Color  : "#000000", // 독서 상태 토글 - 토글이 완독인 경우 텍스트 색
@@ -157,7 +160,7 @@ export default {
         main_SearchBar_Bg                             : "#FDFAF3", // 상단 검색 바 - 검색창배경
         main_SearchBar_Border                         : "#96B2C8", // 상단 검색 바 - 검색창 보더
         main_SearchBar_SearchResult_Book_Title_Text   : "#000000", // 상단 검색 바 - 책 타이틀 텍스트 색
-        main_SearchBar_SearchResult_Book_SubTitle_Text: "#000000", // 상단 검색 바 - 책 저자 텍스트 색
+        main_SearchBar_SearchResult_Book_SubTitle_Text: "#A1A1A1", // 상단 검색 바 - 책 저자 텍스트 색
         main_SearchBar_SearchIcon_Default_Color       : "#FDFAF3", // 상단 검색 바 - 검색 아이콘 검색안할 때 색
         main_SearchBar_Searching_SearchIcon_Color     : "#96B2C8", // 상단 검색 바 - 검색 시 아이콘 색
         main_SearchBar_Back_Default_Bg                : "#96B2C8", // 상단 검색 바 - 검색안할 때 아이콘 배경 색
@@ -165,6 +168,9 @@ export default {
         main_SearchBar_ClearText_Color                : "#FDFAF3", // 상단 검색 바 - 검색 텍스트 삭제 버튼 색
         main_SearchBar_ClearText_Bg                   : "#96B2C8", // 상단 검색 바 - 검색 텍스트 삭제 버튼 배경 색
         main_SearchBar_BookList_Hover_border          : "#96B2C8", // 상단 검색 바 - 검색 텍스트 삭제 버튼 배경 색
+        main_SearchBar_NotFindBook_Text               : "#A1A1A1", // 상단 검색 바 - 검색 결과 없는 경우 표시 텍스트 색
+        main_SearchBar_searchingBook_Text             : "#000000", // 상단 검색 바 - 검색 중 표시 텍스트 색
+        main_SearchBar_NotYetFindBook_Text            : "#A1A1A1", // 상단 검색 바 - 검색 전 표시 텍스트 색
         
         /* 내 독서 목록 검색 바 관련 색*/
         myBook_SearchBar_Bg                      : "#FDFAF3", // 내 독서 목록 검색 바 - 내 독서 목록 검색창 배경

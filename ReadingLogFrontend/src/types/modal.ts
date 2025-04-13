@@ -1,11 +1,14 @@
 // Modal 타입 정의
+import React from "react";
+
 export type ModalType =
   | 'none'
   | 'ModalBookPlan'
   | 'ModalMyPage'
   | 'ModalNotice'
   | 'ModalTrackingPlan'
-  | 'ModalAlert';
+  | 'ModalAlert'
+  | 'ModalCalendar'
 
 // 공통 모달 데이터 구조
 export type ModalData = {
@@ -21,6 +24,15 @@ export type ModalData = {
   cover?:string // 책 표지
   bookTitle?: string; // 책 제목
   bookSubTitle?: string; // 책 저자
+  bookLink?: string // 알라딘 책 정보 페이지로 가기
+
+  /* 캘린더 관련 */
+  pickMonth?: React.Dispatch<React.SetStateAction<number>>;
+  pickYear?: React.Dispatch<React.SetStateAction<number>>;
+  openCalendar?: React.Dispatch<React.SetStateAction<boolean>>;
+  startOrEnd?: '시작 달' | '종료 달';
+  startYear?: number;
+  startMonth?: number;
 
   onConfirm?: () => void; // 확인 버튼 클릭 시 실행할 함수
 };
@@ -51,7 +63,11 @@ export interface ModalAlertProps extends ModalData {
   // ModalAlert에 필요한 속성 추가 가능
   modalId?: string;
 }
+export interface ModalCalendarProps extends ModalData {
+  // ModalCalendarProps에 필요한 속성 추가 가능
+  modalId?: string;
 
+}
 
 export interface ModalInstance {
   modalId: string;          // 각 모달을 유일하게 식별하기 위한 고유 ID
