@@ -6,7 +6,7 @@ import IconMyPage from "../../assets/Icon-mypage.svg?react";
 
 export default function Account() {
   const navigate = useNavigate();
-  const {openModal, closeModal} = useModalStore(); // Zustand의 openModal 가져오기
+  const {openModal, closeAllModals} = useModalStore(); // Zustand의 openModal 가져오기
 
   //const userId = useUserStore((state) => state.user_id); // ID 가져오기
   //const token = useUserStore((state) => state.token); // token 가져오기
@@ -34,7 +34,7 @@ export default function Account() {
           onlyConfirm: true,
           onConfirm: () => {
             navigate("/login");
-            closeModal();
+            closeAllModals();
           },
         });
       } else {
@@ -54,7 +54,7 @@ export default function Account() {
       onlyConfirm: true,
       onConfirm: () => {
         navigate("/login");
-        closeModal();
+        closeAllModals();
       },
     });
   };

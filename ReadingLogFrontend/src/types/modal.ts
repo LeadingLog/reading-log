@@ -5,7 +5,6 @@ export type ModalType =
   | 'ModalMyPage'
   | 'ModalNotice'
   | 'ModalTrackingPlan'
-  | 'ModalAlert';
 
 // 공통 모달 데이터 구조
 export type ModalData = {
@@ -47,15 +46,9 @@ export interface ModalTrackingPlanProps extends ModalData {
   modalId?: string;
 }
 
-export interface ModalAlertProps extends ModalData {
-  // ModalAlert에 필요한 속성 추가 가능
-  modalId?: string;
-}
-
-
 export interface ModalInstance {
   modalId: string;          // 각 모달을 유일하게 식별하기 위한 고유 ID
-  type: ModalType;     // 어떤 모달인지 구분 (e.g., ModalNotice, ModalAlert 등)
+  type: ModalType;     // 어떤 모달인지 구분 (e.g., ModalNotice)
   data: ModalData;     // 그 모달이 사용하는 데이터 (제목, 서브타이틀, onConfirm 등)
 }
 
