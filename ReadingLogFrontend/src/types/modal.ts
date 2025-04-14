@@ -17,11 +17,14 @@ export type ModalData = {
   reverseBtn?: boolean; // 버튼 순서 반대로 설정할지 여부
 
   /* 책 정보 관련 */
-  cover?:string // 책 표지
+  cover?: string // 책 표지
   bookTitle?: string; // 책 제목
   bookSubTitle?: string; // 책 저자
 
-  onConfirm?: () => void; // 확인 버튼 클릭 시 실행할 함수
+  /* 입력 관련 */
+  showInput?: boolean; // 회원 정보 탈퇴 시 이메일 입력 창 사용할 지 여부
+
+  onConfirm?: (value?: string) => void; // 확인 버튼 클릭 시 실행할 함수
 };
 
 // 모달별 Props 타입 (추후 개별 확장도 가능)
