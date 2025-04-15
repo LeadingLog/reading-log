@@ -15,7 +15,7 @@ export default function OAuthCallbackHandler({
                                            apiEndpoint,
                                            requireState = true,
                                          }: CallbackTemplateProps) {
-  const {openModal} = useModalStore(); // Zustand의 openModal 가져오기
+  const {openModal, closeAllModals} = useModalStore(); // Zustand의 openModal 가져오기
   const navigate = useNavigate();
   const [searchParams] = useSearchParams(); // 네이버 로그인 URL 쿼리 파라미터 가져오기
 
@@ -28,13 +28,14 @@ export default function OAuthCallbackHandler({
   const handleLoginFail = useCallback(
     (message?: string, title?: string) => {
       localStorage.removeItem("state");
-      console.log("handleLoginFail 실행됨!");
 
-      openModal("ModalAlert", {
+      openModal("ModalNotice", {
         title: title || "로그인 실패",
         subTitle: message || "로그인에 실패하였습니다. 다시 시도해주세요.",
+        onlyConfirm: true,
         confirmText: "확인",
         onConfirm: () => {
+          closeAllModals();
           navigate("/login");
         },
       });
@@ -61,7 +62,6 @@ export default function OAuthCallbackHandler({
 
         useUserStore.getState().setUser({ // 사용자 정보 저장
           token: data.access_token,
-          refreshToken: data.refresh_token,
           expiresAt: data.expires_at,
           user_id: data.user_id,
           nickname: data.nickname,
