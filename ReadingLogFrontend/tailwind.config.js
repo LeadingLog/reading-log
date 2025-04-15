@@ -149,13 +149,19 @@ export default {
         toggle_Read_Status_Bg       : "#FDFAF3", // 독서 상태 토글 - 배경
         
         /* 헤더 상단 오른쪽 닉네임 & 마이페이지 & (로그인 & 로그아웃) 관련 색 */
-        header_Right_Bg               : "#FDFAF3", // 닉네임표시배경색
-        header_Right_Border           : "#96B2C8", // 닉네임표시배경색
-        myPage_LogOut_Bg              : "#96B2C8", // 마이페이지 & 로그아웃 아이콘 배경
-        myPage_Icon_Color             : "#FDFAF3", // 마이페이지 아이콘 색
-        LogOut_Icon_Color             : "#FDFAF3", // 로그아웃 아이콘 색
-        header_Right_Icon_Divide_Color: "#FDFAF3", // 마이페이지 & 로그아웃 경계선 색
-        
+        header_Right_Bg                       : "#FDFAF3", // 닉네임표시배경색
+        header_Right_Border                   : "#96B2C8", // 닉네임표시배경색
+        myPage_LogOut_Bg                      : "#96B2C8", // 마이페이지 & 로그아웃 아이콘 배경
+        myPage_Icon_Color                     : "#FDFAF3", // 마이페이지 아이콘 색
+        myPage_Update_Complete_Text           : "#000000", // 마이페이지 수정 및 완료 버튼 색
+        myPage_Update_Complete_Text_Hover     : "#7A7A7A", // 마이페이지 수정 및 완료 버튼 hover 색
+        myPage_Update_Text                    : "#7A7A7A", // 마이페이지 수정시 input 글자색
+        myPage_Update_Text_Focus              : "#000000", // 마이페이지 수정 input 글자 focus 색
+        myPage_Update_Line_Focus              : "#C9A89F", // 마이페이지 수정시 input 밑줄 focus 색
+        myPage_Update_Line                    : "#E5CEC8", // 마이페이지 수정시 input 밑줄 색
+        LogOut_Icon_Color                     : "#FDFAF3", // 로그아웃 아이콘 색
+        header_Right_Icon_Divide_Color        : "#FDFAF3", // 마이페이지 & 로그아웃 경계선 색
+
         /* 상단 검색 관련 색 */
         main_SearchBar_Bg                             : "#FDFAF3", // 상단 검색 바 - 검색창배경
         main_SearchBar_Border                         : "#96B2C8", // 상단 검색 바 - 검색창 보더
@@ -194,8 +200,10 @@ export default {
         
         /* 타이틀 왼족 표시 마커 */
         title_Marker: "#E5CEC8",  // 타이틀 왼쪽 마커색
-        // 소셜 버튼 배경색
+
+        /* 소셜 버튼 배경색 */
         social_Bg: "#FDFAF3",
+
       },
     },
   },

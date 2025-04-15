@@ -1,6 +1,6 @@
-import React from 'react';
-import { useModalStore } from '../../store/modalStore';
-import { ModalNoticeProps } from "../../types/modal.ts";
+import React, {useState} from 'react';
+import {useModalStore} from '../../store/modalStore';
+import {ModalNoticeProps} from "../../types/modal.ts";
 
 const ModalNotice: React.FC<ModalNoticeProps> = ({
                                                    modalId,
@@ -12,8 +12,10 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
                                                    onlyConfirm,
                                                    reverseBtn,
                                                    onConfirm,
+                                                   showInput
                                                  }) => {
-  const { closeModal } = useModalStore(); // 모달 닫기 함수
+  const {closeModal} = useModalStore(); // 모달 닫기 함수
+  const [inputValue, setInputValue] = useState(''); // input 입력 값
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
@@ -27,6 +29,17 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
               <span className="text-modal_Sub_Title text-sm">{subTitle}</span>
             )}
           </div>
+
+          {/* 조건부 input 렌더링 */}
+          {showInput && (
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="bg-modal_Content_Bg border-0 border-b-2 border-myPage_Update_Line focus:outline-none focus:border-b-2 focus:border-myPage_Update_Line_Focus "
+              placeholder="입력하세요"
+            />
+          )}
 
           <div className={`${reverseBtn ? 'flex-row-reverse' : ''} flex justify-between gap-10`}>
             {!onlyConfirm && (
@@ -44,7 +57,14 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
             {!onlyClose && (
               <button
                 className={`${reverseBtn ? 'text-modal_Quit_Text' : 'bg-modal_Right_Btn_Bg'} flex flex-1 justify-center items-center min-w-fit px-2 py-1 rounded-lg`}
-                onClick={onConfirm}
+                onClick={() => {
+                  if (showInput) {
+                    onConfirm?.(inputValue);
+                  } else {
+                    onConfirm?.();
+                  }
+                }
+                }
               >
                 {confirmText || "실행"}
               </button>

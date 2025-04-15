@@ -2,7 +2,6 @@ import React from "react";
 import ModalBookPlan from './ModalBookPlan';
 import ModalMyPage from './ModalMyPage';
 import ModalNotice from './ModalNotice';
-import ModalAlert from './ModalAlert';
 import ModalTrackingPlan from './ModalTrackingPlan';
 import ModalCalendar from './ModalCalendar';
 
@@ -14,7 +13,6 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<ModalData & { modalId: string
   ModalBookPlan,    // ModalBookPlan 컴포넌트
   ModalMyPage,      // ModalMyPage 컴포넌트
   ModalNotice,      // ModalNotice 컴포넌트
-  ModalAlert,       // ModalAlert 컴포넌트
   ModalTrackingPlan, // ModalTrackingPlan 컴포넌트
   ModalCalendar, // ModalCalendar 컴포넌트
   none: () => null,  // 모달이 없는 경우 (null 반환)
