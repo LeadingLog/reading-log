@@ -26,9 +26,10 @@ export type ModalData = {
   bookLink?: string // 알라딘 책 정보 페이지로 가기
 
   /* 캘린더 관련 */
-  pickMonth?: React.Dispatch<React.SetStateAction<number>>;
   pickYear?: React.Dispatch<React.SetStateAction<number>>;
-  openCalendar?: React.Dispatch<React.SetStateAction<boolean>>;
+  pickMonth?: React.Dispatch<React.SetStateAction<number>>;
+  month?: number;
+  year?: number;
   startOrEnd?: '시작 달' | '종료 달';
   startYear?: number;
   startMonth?: number;

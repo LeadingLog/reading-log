@@ -13,15 +13,20 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
   const [pickEndYear, setPickEndYear] = useState<number>(0);
   const [pickEndMonth, setPickEndMonth] = useState<number>(0);
 
+  /* 종료 달 부분에 그 달의 마지막 날을 표시 하기 위한 것 */
   const getLastDateOfMonth = (year: number, month: number): string => {
     const lastDate = new Date(year, month, 0).getDate(); // month는 1-12로 받아서 그대로 사용
     return String(lastDate).padStart(2, '0');
   };
 
+  /* 시작달 or 종료달 캘릭터 뛰우기 */
   const openCalendar = (startOrEnd: "시작 달" | "종료 달") => {
+    const isStart = startOrEnd === "시작 달";
     openModal('ModalCalendar', {
       startOrEnd: startOrEnd,
-
+      year: isStart ? pickStartYear : pickEndYear,
+      pickYear: isStart ? setPickStartYear : setPickEndYear,
+      pickMonth: isStart ? setPickStartMonth : setPickEndMonth
     })
   }
 
@@ -32,10 +37,10 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
 
-    setPickStartYear(year);
-    setPickStartMonth(month);
-    setPickEndYear(year);
-    setPickEndMonth(month);
+    setPickStartYear(year)
+    setPickStartMonth(month)
+    setPickEndYear(year)
+    setPickEndMonth(month)
     if (modalId) { // modalId가 있을 경우에만 closeModal 호출
       closeModal(modalId);
     }
@@ -45,7 +50,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
 
   /* 독서 계획 추가 버튼 클릭 시 함수 */
   const completeBookPlan = () => {
-
     // 종료 날짜가 시작 날짜보다 앞선 경우 모달 띄우기
     if (
       pickEndYear < pickStartYear ||
@@ -69,11 +73,10 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
         const year = today.getFullYear();
         const month = today.getMonth() + 1;
 
-        setPickStartYear(year);
-        setPickStartMonth(month);
-        setPickEndYear(year);
-        setPickEndMonth(month);
-        closeAllModals()
+        setPickStartYear(year)
+        setPickStartMonth(month)
+        setPickEndYear(year)
+        setPickEndMonth(month)
       }
     })
   };
@@ -85,10 +88,11 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
 
-    setPickStartYear(year);
-    setPickStartMonth(month);
-    setPickEndYear(year);
-    setPickEndMonth(month);
+    setPickStartYear(year)
+    setPickStartMonth(month)
+    setPickEndYear(year)
+    setPickEndMonth(month)
+
   }, []);
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 END -----------------*/
 

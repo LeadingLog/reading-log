@@ -6,56 +6,21 @@ import { motion, AnimatePresence } from "framer-motion";
 const ModalCalendar: React.FC<ModalCalendarProps> = ({
                                                        modalId,
                                                        startOrEnd,
-                                                       // openCalendar,
-                                                       // pickYear,
-                                                       // pickMonth,
-                                                       startYear,
-                                                       startMonth,
+                                                       pickYear,
+                                                       pickMonth,
+                                                       year,
                                                      }) => {
-  const { openModal, closeModal } = useModalStore()
-
+  const { closeModal } = useModalStore()
+  const [modalYear, setModalYear] = useState<number>(year ?? new Date().getFullYear());
   const [isVisible, setIsVisible] = useState(true);
 
-  const [choiceYear, setChoiceYear] = useState<number>(new Date().getFullYear());
   const monthList: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
 
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
-
-  const handleMonthClick = (month: number) => {
-    if (startOrEnd === '시작 달') {
-      if (
-        choiceYear < currentYear ||
-        (choiceYear === currentYear && month < currentMonth)
-      ) {
-        openModal('ModalNotice', {
-          title: "선택한 연/월이 오늘보다 이전이에요!",
-          cancelText: "다시 선택하기",
-          onlyClose: true,
-        });
-        return;
-      }
+  const handleMonthClick = (monthItem: number) => {
+    if (pickYear && pickMonth) {
+      pickYear(modalYear)
+      pickMonth(monthItem)
     }
-
-    if (startOrEnd === '시작 달') {
-      if (
-        startYear !== undefined &&
-        startMonth !== undefined &&
-        (choiceYear < startYear ||
-          (choiceYear === startYear && month < startMonth))
-      ) {
-        openModal('ModalNotice', {
-          title: "종료 날짜는 시작 날짜보다 빠를 수 없어요!",
-          confirmText: "다시 선택하기",
-          onlyConfirm: true,
-        });
-        return;
-      }
-    }
-    // pickYear(choiceYear);
-    // pickMonth(month);
-    // openCalendar(false);
   };
 
   const handleClose = () => {
@@ -87,30 +52,37 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
             <div className="flex justify-center items-center gap-5 ">
               <button
                 className="flex-1 text-modal_Pick_Calendar_Year_Handler_Text"
-                onClick={() => setChoiceYear((prev) => prev - 1)}
+                onClick={() => {
+                  if (modalYear !== undefined) {
+                    setModalYear((prev) => prev - 1)
+                  }
+                }}
               >
                 &lt;
               </button>
               <span
-                className="flex-1 text-modal_Pick_Calendar_Year_Text text-xl text-center">
-            {choiceYear}
-          </span>
+                className="flex-1 text-modal_Pick_Calendar_Year_Text text-xl text-center"
+              >
+                {modalYear}
+              </span>
               <button
                 className="flex-1 text-modal_Pick_Calendar_Year_Handler_Text"
-                onClick={() => setChoiceYear((next) => next + 1)}
+                onClick={() => {
+                  setModalYear((prev) => prev + 1)
+                }}
               >
                 &gt;
               </button>
             </div>
             <ul
               className="grid grid-cols-[repeat(3,_minmax(70px,_1fr))] grid-rows-[repeat(4,_minmax(0px,_1fr))] gap-4 ">
-              {monthList.map((month, i) => (
+              {monthList.map((monthItem, i) => (
                 <li
                   key={i}
                   className="flex cursor-pointer justify-center items-center bg-modal_Pick_Calendar_Month_Bg p-2 rounded-lg"
-                  onClick={() => handleMonthClick(month)}
+                  onClick={() => handleMonthClick(monthItem)}
                 >
-                  {month}월
+                  {monthItem}월
                 </li>
               ))}
             </ul>
