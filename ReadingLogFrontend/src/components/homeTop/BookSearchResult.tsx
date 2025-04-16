@@ -6,7 +6,7 @@ import { AladinApiItem, BookSearchResultProps } from "../../types/aladinApi";
 const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultList, searchValue, isLoading }) => {
 
   const [favoriteMap, setFavoriteMap] = useState<{ [isbn: string]: boolean }>({});
-  const { openModal } = useModalStore();
+  const { openModal, closeAllModals } = useModalStore();
 
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const FavoriteToggle = (e: React.MouseEvent, isbn: string) => {
@@ -23,7 +23,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultLis
           openModal("ModalNotice", {
             title: "제거되었습니다.",
             subTitle: "언제든 다시 추가 가능해요!",
-            onlyClose: true,
+            onlyConfirm: true,
+            withMotion: true,
+            onConfirm: () => closeAllModals()
           });
           setFavoriteMap(prev => ({ ...prev, [isbn]: false }));
         },
@@ -38,7 +40,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultLis
           openModal("ModalNotice", {
             title: "관심도서에 추가되었어요!",
             subTitle: "이 책이 마음에 드셨군요!",
-            onlyClose: true,
+            onlyConfirm: true,
+            withMotion: true,
+            onConfirm: () => closeAllModals()
           });
           setFavoriteMap(prev => ({ ...prev, [isbn]: true }));
         },
@@ -108,11 +112,13 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultLis
               </div>
               <div className="w-12 aspect-square relative">
                 <div
-                  className={`${item.isFavorite ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'}
-                  absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+                  key={item.isbn}
+                  className={`${
+                    favoriteMap[item.isbn] ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
+                  } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    FavoriteToggle(e, item.isbn);
+                    FavoriteToggle(e, item.isbn); // 상태 변경
                   }}
                 >
                   <IconFavorite width="100%" height="100%"/>

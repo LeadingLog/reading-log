@@ -4,7 +4,7 @@ import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import IconCalendar from "../../assets/Icon-calendar.svg?react"
 import { ModalBookPlanProps } from "../../types/modal.ts";
 
-const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle, bookSubTitle, cover, bookLink }) => {
+const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSubTitle, cover, bookLink }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
 
   /* 시작 달 종료 달 표시용 */
@@ -13,70 +13,101 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
   const [pickEndYear, setPickEndYear] = useState<number>(0);
   const [pickEndMonth, setPickEndMonth] = useState<number>(0);
 
+  /* 현재 날로 초기화 하기 용*/
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+
   /* 종료 달 부분에 그 달의 마지막 날을 표시 하기 위한 것 */
-  const getLastDateOfMonth = (year: number, month: number): string => {
-    const lastDate = new Date(year, month, 0).getDate(); // month는 1-12로 받아서 그대로 사용
+  const getLastDateOfMonth = (currentYear: number, currentMonth: number): string => {
+    const lastDate = new Date(currentYear, currentMonth, 0).getDate(); // month는 1-12로 받아서 그대로 사용
     return String(lastDate).padStart(2, '0');
   };
 
   /* 시작달 or 종료달 캘릭터 뛰우기 */
   const openCalendar = (startOrEnd: "시작 달" | "종료 달") => {
     const isStart = startOrEnd === "시작 달";
+    const { modals } = useModalStore.getState();
+    // 이미 같은 종류의 모달이 열려 있다면 아무것도 하지 않음
+    const sameModal = modals.find(
+      (modal) =>
+        modal.type === "ModalCalendar" &&
+        modal.data?.startOrEnd === startOrEnd
+    );
+    if (sameModal) return;
+
+    // 다른 종류의 ModalCalendar가 열려 있으면 먼저 닫기
+    const otherModal = modals.find(
+      (modal) =>
+        modal.type === "ModalCalendar" &&
+        modal.data?.startOrEnd !== startOrEnd
+    );
+    if (otherModal) {
+      closeModal(otherModal.modalId);
+    }
+    // 모달 열기
     openModal('ModalCalendar', {
-      startOrEnd: startOrEnd,
+      startOrEnd,
       year: isStart ? pickStartYear : pickEndYear,
       pickYear: isStart ? setPickStartYear : setPickEndYear,
       pickMonth: isStart ? setPickStartMonth : setPickEndMonth
-    })
-  }
+    });
+  };
 
   /* 닫을 때 실행될 함수 --------------- */
   const close = () => {
-    // 달력 값 초기화
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1;
 
-    setPickStartYear(year)
-    setPickStartMonth(month)
-    setPickEndYear(year)
-    setPickEndMonth(month)
-    if (modalId) { // modalId가 있을 경우에만 closeModal 호출
-      closeModal(modalId);
-    }
+    setPickStartYear(currentYear)
+    setPickStartMonth(currentMonth)
+    setPickEndYear(currentYear)
+    setPickEndMonth(currentMonth)
+
+    closeAllModals()
 
   }
   /* 닫을 때 실행될 함수 END --------------- */
 
   /* 독서 계획 추가 버튼 클릭 시 함수 */
   const completeBookPlan = () => {
-    // 종료 날짜가 시작 날짜보다 앞선 경우 모달 띄우기
-    if (
-      pickEndYear < pickStartYear ||
-      (pickEndYear === pickStartYear && pickEndMonth < pickStartMonth)
-    ) {
+    const alertModal = (alertMessage: string) => {
       openModal('ModalNotice', {
-        title: "시작 달 과 종료달을 확인해주세요!",
+        title: alertMessage,
         cancelText: "다시 선택하기",
         onlyClose: true,
+        withMotion: true
       });
-      return; // 초기화 방지
     }
+    // 종료일이 시작일보다 앞선 경우
+    const isEndBeforeStart =
+      pickEndYear < pickStartYear ||
+      (pickEndYear === pickStartYear && pickEndMonth < pickStartMonth);
+
+    // 시작일이 오늘 이전인 경우
+    const isStartBeforeToday =
+      pickStartYear < currentYear ||
+      (pickStartYear === currentYear && pickStartMonth < currentMonth);
+
+    if (isEndBeforeStart) {
+      alertModal("종료일이 시작일보다 빠를 수 없어요!"); // 경고 모달 또는 alert
+      return;
+    } else if (isStartBeforeToday) {
+      alertModal("시작일이 오늘 보다 이전 일 순 없어요!"); // 경고 모달 또는 alert
+      return;
+    }
+
     openModal('ModalNotice', {
       title: "내 독서 목록에 추가 되었어요!",
       subTitle: "즐거운 독서시간!",
       confirmText: "닫기",
       onlyConfirm: true,
       onConfirm: () => {
-        // 입력 값 초기화
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1;
 
-        setPickStartYear(year)
-        setPickStartMonth(month)
-        setPickEndYear(year)
-        setPickEndMonth(month)
+        setPickStartYear(currentYear)
+        setPickStartMonth(currentMonth)
+        setPickEndYear(currentYear)
+        setPickEndMonth(currentMonth)
+
+        closeAllModals()
       }
     })
   };
@@ -84,14 +115,10 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ modalId, title, bookTitle
 
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 */
   useEffect(() => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1;
-
-    setPickStartYear(year)
-    setPickStartMonth(month)
-    setPickEndYear(year)
-    setPickEndMonth(month)
+    setPickStartYear(currentYear)
+    setPickStartMonth(currentMonth)
+    setPickEndYear(currentYear)
+    setPickEndMonth(currentMonth)
 
   }, []);
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 END -----------------*/

@@ -16,6 +16,7 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
 
   const monthList: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
 
+  /* 월 클릭 시 독서 계획 모달 시작 달 or 종료달 날이 변경 됨*/
   const handleMonthClick = (monthItem: number) => {
     if (pickYear && pickMonth) {
       pickYear(modalYear)
@@ -23,6 +24,7 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
     }
   };
 
+  /* 닫히는 모션까지 구현을 위해 닫기를 누른 뒤 시간차를 둠 */
   const handleClose = () => {
     setIsVisible(false); // 애니메이션 시작
     setTimeout(() => {

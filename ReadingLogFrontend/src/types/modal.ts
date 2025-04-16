@@ -34,6 +34,9 @@ export type ModalData = {
   startYear?: number;
   startMonth?: number;
 
+  /* 동적 효과 적용할 지 */
+  withMotion?: boolean;
+
   /* 입력 관련 */
   showInput?: boolean; // 회원 정보 탈퇴 시 이메일 입력 창 사용할 지 여부
 
@@ -61,15 +64,9 @@ export interface ModalTrackingPlanProps extends ModalData {
   // ModalTrackingPlan에 필요한 속성 추가 가능
   modalId?: string;
 }
-
-export interface ModalAlertProps extends ModalData {
-  // ModalAlert에 필요한 속성 추가 가능
-  modalId?: string;
-}
 export interface ModalCalendarProps extends ModalData {
   // ModalCalendarProps에 필요한 속성 추가 가능
   modalId?: string;
-
 }
 
 export interface ModalInstance {
