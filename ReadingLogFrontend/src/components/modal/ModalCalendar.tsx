@@ -81,7 +81,9 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
               {monthList.map((monthItem, i) => (
                 <li
                   key={i}
-                  className="flex cursor-pointer justify-center items-center bg-modal_Pick_Calendar_Month_Bg p-2 rounded-lg"
+                  className="flex cursor-pointer justify-center items-center bg-modal_Pick_Calendar_Month_Bg p-2 rounded-lg
+                  hover:brightness-95
+                  active:brightness-90 active:scale-90 transition-[transform, background] duration-100 ease-in-out"
                   onClick={() => handleMonthClick(monthItem)}
                 >
                   {monthItem}월

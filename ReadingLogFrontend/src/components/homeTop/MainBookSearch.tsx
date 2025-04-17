@@ -39,7 +39,7 @@ export default function MainBookSearch() {
     if (!query.trim()) return;
 
     try {
-      const data = await fetchBooks(query);
+      const data = await fetchBooks(query, 1);
       if (data && Array.isArray(data.item)) {
         const items = data.item.map((item: AladinApiItem) => ({
           title: item.title,

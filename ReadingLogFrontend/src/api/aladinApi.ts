@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 알라딘 API 호출 함수
-export const fetchBooks = async (query: string) => {
+export const fetchBooks = async (query: string, order? : number) => {
   if (!query.trim()) return null; // 빈 문자열 방지
 
   try {
@@ -10,7 +10,7 @@ export const fetchBooks = async (query: string) => {
         ttbkey: import.meta.env.VITE_ALADIN_API, // 환경변수에서 API 키 가져오기
         Query: query,
         MaxResults: 10,
-        start: 1,
+        start: order,
         Cover: 'Big',
         SearchTarget: 'Book',
         output: 'js',
