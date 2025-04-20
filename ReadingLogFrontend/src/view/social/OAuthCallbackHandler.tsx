@@ -40,7 +40,7 @@ export default function OAuthCallbackHandler({
         },
       });
     },
-    [navigate, openModal]
+    [navigate, openModal, closeAllModals]
   );
 
   // 로그인 요청
@@ -48,10 +48,15 @@ export default function OAuthCallbackHandler({
     const serverUrl = import.meta.env.VITE_SERVER_URL;
 
     try {
-      const response = await axios.post(`${serverUrl}${apiEndpoint}`, {
-        code,
-        state,
+      const loginData = new URLSearchParams({
+        code: code || "",
+        state: state || ""
       });
+
+      const response = await axios.post(`${serverUrl}${apiEndpoint}`, loginData, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      });
+
       const data = response.data;
 
       if (data.success) {
