@@ -33,6 +33,7 @@ export default function MainBookSearch() {
   };
   /* 책 검색 결과 가져오기 */
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+  const [totalResults, setTotalResults] = useState<number>(0)
   const [bookSearchResultList, setBookSearchResultList] = useState([]);
 
   const searchBooks = async (query: string) => {
@@ -44,11 +45,12 @@ export default function MainBookSearch() {
         const items = data.item.map((item: AladinApiItem) => ({
           title: item.title,
           author: item.author,
-          isbn: item.isbn,
+          isbn13: item.isbn13,
           cover: item.cover,
           link: item.link
         }));
         setBookSearchResultList(items);
+        setTotalResults(data.totalResults)
       } else {
         setBookSearchResultList([]);
         console.warn('No items in response:', data);
@@ -66,6 +68,8 @@ export default function MainBookSearch() {
     const timeout = setTimeout(() => {
       if (searchValue !== "") {
         (async () => {
+          inputRef.current?.blur();
+          inputRef.current?.focus();
           await searchBooks(searchValue);
         })();
       } else {
@@ -78,13 +82,6 @@ export default function MainBookSearch() {
 
   return (
     <>
-      {/* 검색창 */}
-      {/*<button*/}
-      {/*  className="absolute top-[15px] left-[800px] z-20 p-1 border-4 bg-main_SearchBar_Bg border-main_SearchBar_Border rounded-lg"*/}
-      {/*  onClick={() => searchBooks(searchValue)}*/}
-      {/*>*/}
-      {/*  검색 요청 테스트*/}
-      {/*</button>*/}
       <section
         className={`
         ${focusSearch ? "flex-1 after:content-[''] after:absolute after:right-2 after:left-2 after:top-8 after:h-0.5 after:bg-main_SearchBar_Border" : ""} 
@@ -142,7 +139,7 @@ export default function MainBookSearch() {
                 scrollbarClassName="right-1.5 w-1.5 scale-y-90 bg-scrollbar_Main_SearchBar_Result_Color transition-[colors] group-hover/scroll:bg-scrollbar_Main_SearchBar_Result_Hover_Color"
                 // scrollbarWidth=""
               >
-                <BookSearchResult isLoading={isLoading} searchValue={searchValue} bookSearchResultList={bookSearchResultList}/>
+                <BookSearchResult isLoading={isLoading} searchValue={searchValue} bookSearchResultList={bookSearchResultList} totalResults={totalResults}/>
               </CustomScrollbar>
             </motion.div>
           </>

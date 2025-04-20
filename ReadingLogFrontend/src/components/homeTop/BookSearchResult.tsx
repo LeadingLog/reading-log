@@ -4,54 +4,59 @@ import { useModalStore } from "../../store/modalStore.ts";
 import { AladinApiItem, BookSearchResultProps } from "../../types/aladinApi";
 import { fetchBooks } from "../../api/aladinApi.ts";
 
-const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultList, searchValue, isLoading }) => {
+const BookSearchResult: React.FC<BookSearchResultProps> = ({
+                                                             totalResults,
+                                                             bookSearchResultList,
+                                                             searchValue,
+                                                             isLoading
+                                                           }) => {
 
-  const [favoriteMap, setFavoriteMap] = useState<{ [isbn: string]: boolean }>({});
+  const [favoriteMap, setFavoriteMap] = useState<{ [isbn13: string]: boolean }>({});
   const { openModal, closeAllModals } = useModalStore();
-
-  // console.log(bookSearchResultList)
   /* 무한 스크롤 관련 */
-
+  const [moreTotalResults, setMoreTotalResults] = useState<number>(totalResults)
   const containerRef = useRef<HTMLLIElement>(null);
-  const [searchPage, setSearchPage] = useState<number>(1)
+  const [searchPage, setSearchPage] = useState<number>(2)
   const [moreBookList, setMoreBookList] = useState<AladinApiItem[]>([]);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
   const searchBooks = async (query: string, page: number) => {
     if (!query.trim()) return;
-
+    if (isFetching) return;
+    setIsFetching(true);
+    if (totalResults === moreBookList.length) return;
     try {
       const data = await fetchBooks(query, page); // 페이지 번호로 요청
       if (data && Array.isArray(data.item)) {
         const items = data.item.map((item: AladinApiItem) => ({
           title: item.title,
           author: item.author,
-          isbn: item.isbn,
+          isbn13: item.isbn13,
           cover: item.cover,
           link: item.link
         }));
         setMoreBookList(prev => [...prev, ...items]);
         setSearchPage(prev => prev + 1); // 페이지 증가!!
+        setIsFetching(false);
       }
     } catch (error) {
       console.error('도서 검색 중 오류 발생:', error);
     }
   };
 
-  /* 검색어가 변경되면 list 초기화*/
-  useEffect(() => {
-    setMoreBookList([]); // 리스트 초기화 (객체 X, 배열 O)
-  }, [searchValue]);
-
   /* 첫 검색 결과 가져오기 */
   useEffect(() => {
     setMoreBookList(bookSearchResultList)
-    console.log("gdgd")
-  }, [bookSearchResultList]);
+    console.log(bookSearchResultList)
+    setMoreTotalResults(totalResults)
+    setSearchPage(2); // ✅ 검색어 바뀔 때 page도 초기화
+    console.log('gg')
+  }, [bookSearchResultList, searchValue]);
+
   // ✅ IntersectionObserver 적용
   useEffect(() => {
-    const target = containerRef.current;
-    console.log('실행')
-    if (!target) return;
-    console.log('실행')
+    if (isLoading) return;
+    if (moreTotalResults === moreBookList.length) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
@@ -66,18 +71,21 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultLis
       }
     );
 
-    observer.observe(target);
+    const target = containerRef.current;
+    if (target) {
+      observer.observe(target);
+    }
 
     return () => {
+      if (target) observer.unobserve(target);
       observer.disconnect();
     };
-  }, [searchPage, bookSearchResultList]);
-
-
+  }, [searchPage, searchValue, moreBookList.length, isLoading]);
+  console.log(moreBookList)
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
-  const FavoriteToggle = (e: React.MouseEvent, isbn: string) => {
+  const FavoriteToggle = (e: React.MouseEvent, isbn13: string) => {
     e.stopPropagation(); // 해당 부분 클릭하면 부모요소 클릭 이벤트가 실행되지 않도록 방지 요소
-    const isCurrentlyFavorite = favoriteMap[isbn];
+    const isCurrentlyFavorite = favoriteMap[isbn13];
     if (isCurrentlyFavorite) {
       openModal("ModalNotice", {
         title: "관심도서에서 제거 하시겠어요?",
@@ -93,7 +101,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultLis
             withMotion: true,
             onConfirm: () => closeAllModals()
           });
-          setFavoriteMap(prev => ({ ...prev, [isbn]: false }));
+          setFavoriteMap(prev => ({ ...prev, [isbn13]: false }));
         },
       });
     } else {
@@ -110,7 +118,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultLis
             withMotion: true,
             onConfirm: () => closeAllModals()
           });
-          setFavoriteMap(prev => ({ ...prev, [isbn]: true }));
+          setFavoriteMap(prev => ({ ...prev, [isbn13]: true }));
         },
       });
     }
@@ -129,7 +137,6 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultLis
     })
   }
   /* 책 리스트를 클릭하면 책 계획 모달이 뜨는 경우 END ------------- */
-
 
 
   return (
@@ -180,13 +187,13 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultLis
               </div>
               <div className="w-12 aspect-square relative">
                 <div
-                  key={item.isbn}
+                  key={item.isbn13}
                   className={`${
-                    favoriteMap[item.isbn] ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
+                    favoriteMap[item.isbn13] ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
                   } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    FavoriteToggle(e, item.isbn); // 상태 변경
+                    FavoriteToggle(e, item.isbn13); // 상태 변경
                   }}
                 >
                   <IconFavorite width="100%" height="100%"/>
@@ -194,13 +201,20 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({ bookSearchResultLis
               </div>
             </li>
           ))}
-          <li
-            ref={containerRef}
-            className="flex gap-1 text-sm text-main_SearchBar_searchingBook_Text mx-auto">
-            <span>도서를 불러 오는 중입니다.</span>
-            <span
-              className="w-5 h-5 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
-          </li>
+          {!isLoading && moreTotalResults - moreBookList.length !== 0 ? (
+            <li
+              ref={containerRef}
+              className="py-2 basis-full justify-center flex gap-1 text-sm text-main_SearchBar_searchingBook_Text">
+              <span>도서를 불러 오는 중입니다.</span>
+              <span
+                className="w-5 h-5 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
+            </li>
+          ) : !isLoading && moreTotalResults - moreBookList.length === 0 &&
+            <li
+              className="py-2 basis-full justify-center flex gap-1 text-sm text-main_SearchBar_searchingBook_Text">
+              <span>검색어와 관련된 모든 도서를 불러왔습니다.</span>
+            </li>
+          }
         </>
       )}
     </>
