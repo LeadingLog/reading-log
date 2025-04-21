@@ -10,7 +10,7 @@ export default defineConfig({
       '/api/aladin': {
         target: 'https://www.aladin.co.kr',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/aladin/, ''),
+        rewrite: (path) => path.replace(/^\/api\/aladin/, '/ttb/api'),
       },
       '/user': {
         target: 'http://localhost:8080',
