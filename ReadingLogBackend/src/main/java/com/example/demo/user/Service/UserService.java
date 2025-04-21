@@ -162,9 +162,14 @@ public class UserService {
 
     // 회원 조회
     @Transactional
-    public ArrayList<User> getUser(String userUUID) {
+    public ArrayList<User> getUserByUUID(String userUUID) {
         ArrayList<User> uuid = userRepository.getIdByUserUUID(userUUID);
         return uuid;
+    }
+
+    public User getUserById(Integer userId) {
+        User user = userRepository.getReferenceById(userId);
+        return user;
     }
 
     // 회원 로그인
@@ -174,15 +179,15 @@ public class UserService {
 
         // 회원 여부 조회
 //        ArrayList<User> uuid = userRepository.getIdByUserUUID(userUUID);
-        ArrayList<User> uuid = getUser(userUUID);
+        ArrayList<User> uuid = getUserByUUID(userUUID);
         Integer userId = uuid.get(0).getUserId();
 //        String token = String.valueOf(tokenRepository.findByUserIdAndProvider(userId, "NAVER"));
 
         if (uuid.size() == 1) { // 회원일 경우
             session = request.getSession();
-            session.setMaxInactiveInterval(604800);
+            session.setMaxInactiveInterval(604800); // 7일
             session.setAttribute("loginUserId", userId);
-            session.setAttribute("loginSessionTime", session.getMaxInactiveInterval());   // 7일
+            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
         } else {
             return 0;
         }
@@ -190,10 +195,6 @@ public class UserService {
         return userId;
     }
 
-    // TODO 로그인 세션 연장
-    /*
-
-     */
 
     // 회원 로그아웃제
     public void logoutUser(HttpServletRequest request) {
@@ -218,12 +219,27 @@ public class UserService {
 
     }
 
-    // 회원 세션 조회
-    public Integer getUserSession(HttpServletRequest request) {
+    // 회원 세션 남은 시간 조회
+    public Map<String, Object> getUserSession(HttpServletRequest request) {
         HttpSession session = null;
         session = request.getSession();
-        return (Integer) session.getAttribute("loginUserId");
+        Map<String, Object> rtn = null;
+        rtn.put("sessionLoginUserId", (Integer) session.getAttribute("loginUserId"));
+        rtn.put("sessionLoginValidTime", (Integer) session.getAttribute("loginSessionValidTime"));
+
+        return rtn;
     }
+
+
+//    //  로그인 세션 연장
+//    /*
+//     - 사용자가 요청을 할때마다 세션의 비활성 시간이 초기화되어 자동 연장됨.
+//     - 설정한 GETMAXintervaltime 으로 연장됨
+//     */
+//    public String renewUserSession(HttpServletRequest request) {
+//        HttpSession session = request.getSession();
+//
+//    }
 
 
 
