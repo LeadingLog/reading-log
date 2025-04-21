@@ -46,10 +46,8 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   /* 첫 검색 결과 가져오기 */
   useEffect(() => {
     setMoreBookList(bookSearchResultList)
-    console.log(bookSearchResultList)
     setMoreTotalResults(totalResults)
     setSearchPage(2); // ✅ 검색어 바뀔 때 page도 초기화
-    console.log('gg')
   }, [bookSearchResultList, searchValue]);
 
   // ✅ IntersectionObserver 적용
@@ -81,7 +79,6 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
       observer.disconnect();
     };
   }, [searchPage, searchValue, moreBookList.length, isLoading]);
-  console.log(moreBookList)
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const FavoriteToggle = (e: React.MouseEvent, isbn13: string) => {
     e.stopPropagation(); // 해당 부분 클릭하면 부모요소 클릭 이벤트가 실행되지 않도록 방지 요소
