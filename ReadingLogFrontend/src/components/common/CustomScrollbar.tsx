@@ -22,23 +22,33 @@ const CustomScrollbar = ({
 
   // 스크롤바 높이 계산 함수
   const calculateScrollbarHeight = () => {
-    if (containerRef.current) {
-      const container = containerRef.current;
-      const contentHeight = container.scrollHeight; // 내부 요소의 전체 높이
-      const containerHeight = container.clientHeight; // 화면에 보이는 높이
+    const container = containerRef.current;
+    if (!container) return;
 
-      if (contentHeight === containerHeight) { // 스크롤 보이지 않게 하기
-        setUseScrollbar(false);
-        return
-      } else {
-        setUseScrollbar(true);
-        const scrollbarHeightCalc = Math.max(
-          (containerHeight / contentHeight) * containerHeight,
-          20
-        );
-        setScrollbarHeight(scrollbarHeightCalc);
-      }
+    const contentHeight = container.scrollHeight;
+    const containerHeight = container.clientHeight;
+
+    if (contentHeight <= containerHeight) {
+      setUseScrollbar(false);
+      return;
     }
+
+    setUseScrollbar(true);
+
+    const scrollbarHeightCalc = Math.max(
+      (containerHeight / contentHeight) * containerHeight,
+      20
+    );
+    setScrollbarHeight(scrollbarHeightCalc);
+
+    // 스크롤 위치 기반으로 위치도 다시 계산
+    const scrollTop = container.scrollTop;
+    const maxScrollTop = contentHeight - containerHeight;
+    const scrollPercentageCalc =
+      maxScrollTop > 0
+        ? (scrollTop / maxScrollTop) * (containerHeight - scrollbarHeightCalc)
+        : 0;
+    setScrollPercentage(scrollPercentageCalc);
   };
 
   // 스크롤 시 thumb 위치만 업데이트
@@ -71,15 +81,27 @@ const CustomScrollbar = ({
 
   // ResizeObserver로 container 크기 변화를 감지
   useEffect(() => {
-    const observer = new ResizeObserver(() => {
+    const resizeObserver = new ResizeObserver(() => {
       calculateScrollbarHeight();
     });
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    const mutationObserver = new MutationObserver(() => {
+      calculateScrollbarHeight();
+    });
+
+    const container = containerRef.current;
+    if (container) {
+      resizeObserver.observe(container);
+      mutationObserver.observe(container, {
+        childList: true,
+        subtree: true,
+      });
     }
 
-    return () => observer.disconnect();
+    return () => {
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
+    };
   }, []);
 
   return (

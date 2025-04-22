@@ -43,8 +43,8 @@ export default function ItemStopWatch() {
             closeModal(secondModalId);
 
             // 우측 콘텐츠 변경
-            setRightContent('TimeTracking', {
-              TimeTracking: { tab: 'onlyMonthReadingList' },
+            setRightContent("TimeTracking", {
+              TimeTracking: { tab: "onlyMonthReadingList" },
             });
 
             // 초기화
@@ -67,7 +67,7 @@ export default function ItemStopWatch() {
   const [seconds, setSeconds] = useState(0); // 초
   const [minute, setMinute] = useState(0); // 분
   const [hour, setHour] = useState(0); // 시간
-  const intervalRef = useRef<number | undefined>(undefined);  // 1️⃣ interval ID 저장용
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);  // 1️⃣ interval ID 저장용
 
   if (seconds === 5) { // 60초가 되면 분 요소 1 올리기
     setSeconds(0)
