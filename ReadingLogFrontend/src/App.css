@@ -8,48 +8,53 @@
   }
 }
 
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
+* {
+  caret-color: transparent;
+}
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  vertical-align: baseline;
+input, textarea, [contenteditable="true"] {
+  caret-color: auto;
 }
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-  display: block;
-}
+
 body {
-  line-height: 1;
+  background-image: url("./assets/backgroundImage.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  position: relative;
+  min-width: 1325px;
 }
-ol, ul {
-  list-style: none;
+
+/* Chrome, Safari, Edge */
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
 }
-blockquote, q {
-  quotes: none;
+
+/* Firefox */
+input[type="search"]::-moz-search-clear-button {
+  display: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
+
+
+/* 타이머 토글 css */
+
+.modalTrackingTimerToggleOnBg { /* 타이머 토글 on 인 경우 배경 색 */
+  @apply flex w-10 p-1 bg-modal_Tracking_Timer_Toggle_Active_Bg rounded-full;
 }
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+.modalTrackingTimerToggleOffBg { /* 타이머 토글 off 인 경우 배경 색 */
+  @apply flex w-10 p-1 bg-modal_Tracking_Timer_Toggle_InActive_Bg rounded-full;
+}
+.modalTrackingTimerToggleOnCircle { /* 타이머 토글 on 인 경우 배경 색 */
+  @apply w-1/2 aspect-square bg-modal_Tracking_Timer_Toggle_Active_Color rounded-full
+}
+.modalTrackingTimerToggleOffCircle { /* 타이머 토글 off 인 경우 배경 색 */
+  @apply w-1/2 aspect-square bg-modal_Tracking_Timer_Toggle_InActive_Color rounded-full;
+}
+
+/* 메인 페이지 검색 시 아이콘 트랜지션 관련 */
+.searching_Icon {
+  @apply -left-1 scale-75 text-main_SearchBar_Searching_SearchIcon_Color bg-main_SearchBar_Searching_Back_Bg
+}
+.unSearching_Icon {
+  @apply -left-2 text-main_SearchBar_SearchIcon_Default_Color bg-main_SearchBar_Back_Default_Bg
 }
