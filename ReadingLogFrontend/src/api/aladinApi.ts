@@ -1,12 +1,14 @@
 import axios from 'axios';
 
+const isProd = import.meta.env.MODE === 'production';
+const endpoint = isProd ? '/api/proxy' : '/api/aladin/ItemSearch.aspx';
+
 // 알라딘 API 호출 함수
-// 알라딘 API 직접 호출 함수 (로컬 fallback 용)
 export const fetchBooks = async (query: string, order?: number) => {
   if (!query.trim()) return null; // 빈 문자열 방지
 
   try {
-    const { data } = await axios.get('/api/aladin/ItemSearch.aspx', {
+    const { data } = await axios.get(endpoint, {
       params: {
         ttbkey: import.meta.env.VITE_ALADIN_API, // 환경변수에서 API 키 가져오기
         Query: query,
@@ -25,7 +27,31 @@ export const fetchBooks = async (query: string, order?: number) => {
     throw error; // 오류를 던져서 호출한 곳에서 처리하도록 함
   }
 };
-// // 알라딘 API 호출 함수 (백엔드 우선, 실패 시 로컬 호출)
+
+// export const fetchBooks = async (query: string, order?: number) => {
+//   if (!query.trim()) return null; // 빈 문자열 방지
+//
+//   try {
+//     const { data } = await axios.get('/api/aladin/ItemSearch.aspx', {
+//       params: {
+//         ttbkey: import.meta.env.VITE_ALADIN_API, // 환경변수에서 API 키 가져오기
+//         Query: query,
+//         MaxResults: 10,
+//         start: order,
+//         Cover: 'Big',
+//         SearchTarget: 'Book',
+//         output: 'js',
+//         Version: '20131101',
+//       },
+//     });
+//
+//     return data; // API 응답 반환
+//   } catch (error) {
+//     console.error('API 호출 중 오류 발생:', error);
+//     throw error; // 오류를 던져서 호출한 곳에서 처리하도록 함
+//   }
+// };
+// // 알라딘 API 호출 함수 (백엔드 우선, 실패 시 로컬 호출)await axios.get(`/api/search?query=${encodeURIComponent(query)}`);
 // export const fetchBooks = async (query: string, order?: number) => {
 //   if (!query.trim()) return null;
 //
