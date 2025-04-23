@@ -11,6 +11,7 @@ import com.example.demo.user.Entity.User;
 import com.example.demo.user.Service.ApiKeyService;
 import com.example.demo.user.Service.RefreshTokenService;
 import com.example.demo.user.Service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +58,7 @@ public class UserController {
 
 
     // 네이버 회원가입 및 로그인
-    // callback 이후 접근 토큰 발급 요청 
+    // callback 이후 접근 토큰 발급 요청
     @ResponseBody
     @PostMapping("/naverlogin")
     public ResponseEntity<?> naverLogin(String code, String state, HttpServletRequest request) throws IOException, URISyntaxException {
@@ -77,10 +78,10 @@ public class UserController {
         }
 
         // accessToken 만료 시 재발급
-        int expires_in = Integer.parseInt(accessTokenResult.getExpiresIn());
-        if ( expires_in <= 0) {
-            accessTokenResult = tokenService.getAccessTokenByRefreshToken();
-        }
+//        int expires_in = Integer.parseInt(accessTokenResult.getExpiresIn());
+//        if ( expires_in <= 0) {
+//            accessTokenResult = tokenService.getAccessTokenByRefreshToken(String );
+//        }
 
 
         // 2. 네이버 프로필 정보 조회
@@ -144,7 +145,7 @@ public class UserController {
 
     // 회원 탈퇴
     @DeleteMapping("/delete")
-    public void deleteUser(@RequestParam("userId") Integer userId, HttpServletRequest request) {
+    public void deleteUser(@RequestParam("userId") Integer userId, HttpServletRequest request) throws JsonProcessingException {
         // Todo 토큰으로 네이버 로그인 연동 해제하기
         userService.deleteUser(userId, request);
     }
