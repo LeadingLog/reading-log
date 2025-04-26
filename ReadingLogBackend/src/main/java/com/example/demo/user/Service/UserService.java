@@ -3,6 +3,8 @@ package com.example.demo.user.Service;
 //import com.example.demo.user.Member;
 //import com.example.demo.repository.MemberRepository;
 
+import com.example.demo.response.ResponseService;
+import com.example.demo.user.Entity.RefreshToken;
 import com.example.demo.user.Repository.RefreshTokenRepository;
 import com.example.demo.user.Entity.NaverProfile;
 import com.example.demo.user.Entity.NaverTokenResponse;
@@ -47,11 +49,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final RefreshTokenRepository tokenRepository;
     private final ApiKeyService apiKey;
+    private final RefreshTokenService refreshTokenService;
+    private final ResponseService responseService;
 
-    public UserService(UserRepository userRepository, RefreshTokenRepository tokenRepository, ApiKeyService apiKey) {
+    public UserService(UserRepository userRepository, RefreshTokenRepository tokenRepository, ApiKeyService apiKey, RefreshTokenService refreshTokenService, ResponseService responseService) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.apiKey = apiKey;
+        this.refreshTokenService = refreshTokenService;
+        this.responseService = responseService;
     }
 
     // 1. callback 이후 접근 신규 토큰 발급 요청
@@ -184,10 +190,12 @@ public class UserService {
 //        String token = String.valueOf(tokenRepository.findByUserIdAndProvider(userId, "NAVER"));
 
         if (uuid.size() == 1) { // 회원일 경우
-            session = request.getSession();
-            session.setMaxInactiveInterval(604800); // 7일
-            session.setAttribute("loginUserId", userId);
-            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
+            extendSession(userId, request);
+
+//            session = request.getSession();
+//            session.setMaxInactiveInterval(604800); // 7일
+//            session.setAttribute("loginUserId", userId);
+//            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
         } else {
             return 0;
         }
@@ -196,7 +204,7 @@ public class UserService {
     }
 
 
-    // 회원 로그아웃제
+    // 회원 로그아웃
     public void logoutUser(HttpServletRequest request) {
         // 로그인 세션 삭제
         HttpSession session = null;
@@ -206,18 +214,64 @@ public class UserService {
 
     }
 
-    // 회원 탈퇴
-    public void deleteUser(Integer userId, HttpServletRequest request) {
-        // 회원 삭제
-        userRepository.deleteById(userId);
+    // 네이버 회원 탈퇴
+    public void deleteUser(Integer userId, HttpServletRequest request) throws JsonProcessingException {
 
-//        if (request.)
+        // 갱신 토큰 조회
+        ArrayList<RefreshToken> refreshTokens = refreshTokenService.getToken(userId, "Naver");
+        String token = String.valueOf(refreshTokens.get(0).getToken());
+
+        // 토큰 재발급
+        NaverTokenResponse naverTokenResponse = refreshTokenService.getAccessTokenByRefreshToken(token);
+        String accessToken = naverTokenResponse.getAccessToken();
+
+        // 접근토큰으로 네이버 회원탈퇴
+        String clientId = apiKey.getNaver_client_id();
+        String clientSecret = apiKey.getNaver_client_secret();
+
+//        try {
+            StringBuilder apiURL = new StringBuilder();
+            apiURL.append("https://nid.naver.com/oauth2.0/token?");
+            apiURL.append("&grant_type=delete");    // 발급
+            apiURL.append("&client_id=").append(clientId);
+            apiURL.append("&client_secret=").append(clientSecret);
+            apiURL.append("&access_token=").append(accessToken);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.exchange(apiURL.toString(), HttpMethod.GET, null, String.class);
+
+            String responseBody = response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            NaverTokenResponse naverDeleteResponse = objectMapper.readValue(responseBody, NaverTokenResponse.class);
+            System.out.println("접근토큰 갱신 : " + responseBody);
+            System.out.println("naverTOkenRefreshResponse : " + naverDeleteResponse);
+//        System.out.println(naver);
+
+//            return null;
+
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
+
+        // Todo 네이버 탈퇴 성공 시
         // 로그인 세션 삭제
         HttpSession session = null;
         session = request.getSession();
         session.removeAttribute("loginUserId");
 
+        // 회원 삭제
+        userRepository.deleteById(userId);
+
+        // todo 갱신토큰 삭제
+
+
     }
+
+    // todo 네이버 로그인 연결 끊기 알림 api 명세
+    // https://developers.naver.com/docs/login/devguide/devguide.md#5-4-%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%97%B0%EA%B2%B0-%EB%81%8A%EA%B8%B0-%EC%95%8C%EB%A6%BC-%EB%B0%9B%EA%B8%B0
+
+
 
     // 회원 세션 남은 시간 조회
     public Map<String, Object> getUserSession(HttpServletRequest request) {
@@ -231,15 +285,23 @@ public class UserService {
     }
 
 
-//    //  로그인 세션 연장
-//    /*
-//     - 사용자가 요청을 할때마다 세션의 비활성 시간이 초기화되어 자동 연장됨.
-//     - 설정한 GETMAXintervaltime 으로 연장됨
-//     */
-//    public String renewUserSession(HttpServletRequest request) {
-//        HttpSession session = request.getSession();
-//
-//    }
+    //  로그인 세션 연장
+    /*
+     - 사용자가 요청을 할때마다 세션의 비활성 시간이 초기화되어 자동 연장됨.
+     - 설정한 GETMAXintervaltime 으로 연장됨
+     */
+    public ResponseEntity<Map<String,Object>> extendSession(Integer userId, HttpServletRequest request) {
+        try {
+            HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(604800); // 7일
+            session.setAttribute("loginUserId", userId);
+            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
+            return responseService.responseData(true, null);
+        } catch (Exception e) {
+            return responseService.responseData(false, "extend session failed");
+        }
+
+    }
 
 
 
