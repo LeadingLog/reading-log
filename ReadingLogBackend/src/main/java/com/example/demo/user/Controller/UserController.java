@@ -152,14 +152,15 @@ public class UserController {
 
     // 세션 유지용 컨트롤러
     @GetMapping("/extend_session")
-    public ResponseEntity<Map<String,Object>> extendSession() {
+    public ResponseEntity<Map<String,Object>> extendSession(HttpServletRequest request, Integer userId) {
         try {
             // 테스트용
             // @RequestParam(required = false) Boolean fail
 //            if (fail != null && fail) {
 //                return responseService.responseData(false, "extend session failed");
 //            }
-            return responseService.responseData(true, null);
+
+            return userService.extendSession(userId, request);
         } catch (Exception e) {
             return responseService.responseData(false, "extend session failed");
         }
