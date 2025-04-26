@@ -87,7 +87,7 @@ public class UserService {
             String responseBody = response.getBody();
             ObjectMapper objectMapper = new ObjectMapper();
             NaverTokenResponse naverTokenResponse = objectMapper.readValue(responseBody, NaverTokenResponse.class);
-            System.out.println("접근 토큰 : " + response.getBody());
+            System.out.println("접근 토큰11 : " + response.getBody());
             System.out.println("naverTokenResponse : "+ naverTokenResponse);
 
 
@@ -114,6 +114,7 @@ public class UserService {
     }
 
     // 접근 토큰으로 프로필 조회 요청
+    @Transactional
     public NaverProfile getUserInfo(String accessToken) throws URISyntaxException, JsonProcessingException {
         StringBuilder apiURL = new StringBuilder();
         apiURL.append("https://openapi.naver.com/v1/nid/me");
@@ -175,6 +176,7 @@ public class UserService {
 
     public User getUserById(Integer userId) {
         User user = userRepository.getReferenceById(userId);
+        System.out.println("getuserby id : " + user.getNickname());
         return user;
     }
 
@@ -205,6 +207,7 @@ public class UserService {
 
 
     // 회원 로그아웃
+    @Transactional
     public void logoutUser(HttpServletRequest request) {
         // 로그인 세션 삭제
         HttpSession session = null;
@@ -215,6 +218,7 @@ public class UserService {
     }
 
     // 네이버 회원 탈퇴
+    @Transactional
     public void deleteUser(Integer userId, HttpServletRequest request) throws JsonProcessingException {
 
         // 갱신 토큰 조회
@@ -264,6 +268,7 @@ public class UserService {
         userRepository.deleteById(userId);
 
         // todo 갱신토큰 삭제
+        tokenRepository.deleteByUserIdAndProvider(userId, "Naver");
 
 
     }
@@ -274,6 +279,7 @@ public class UserService {
 
 
     // 회원 세션 남은 시간 조회
+    @Transactional
     public Map<String, Object> getUserSession(HttpServletRequest request) {
         HttpSession session = null;
         session = request.getSession();
@@ -290,6 +296,7 @@ public class UserService {
      - 사용자가 요청을 할때마다 세션의 비활성 시간이 초기화되어 자동 연장됨.
      - 설정한 GETMAXintervaltime 으로 연장됨
      */
+    @Transactional
     public ResponseEntity<Map<String,Object>> extendSession(Integer userId, HttpServletRequest request) {
         try {
             HttpSession session = request.getSession();
