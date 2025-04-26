@@ -63,18 +63,21 @@ public class UserController {
     @PostMapping("/naverlogin")
     public ResponseEntity<?> naverLogin(String code, String state, HttpServletRequest request) throws IOException, URISyntaxException {
         User users = null;
-
-        // TODO 요청 실패 시 처리 필요
-
+        Map<String, Object> rtn = new HashMap<>();
 
         // 1. 접근 토큰 신규 발급
-        NaverTokenResponse accessTokenResult = userService.getNewAccessToken(code, state, "NAVER");
+        NaverTokenResponse accessTokenResult = userService.getNewAccessToken(code, state, "Naver");
         System.out.println("accessToken="+accessTokenResult);
 
         // 접근 토큰 에러 시 리턴
         if (accessTokenResult.getError() != null) {
-//            rtn.put("error", "accessToken Error");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            rtn = null;
+            rtn.put("success", false);
+            rtn.put("status", HttpStatus.NOT_ACCEPTABLE);
+            rtn.put("error", accessTokenResult.getError());
+            rtn.put("error_description", accessTokenResult.getErrorDescription());
+
+            return ResponseEntity.badRequest().body(rtn);
         }
 
         // accessToken 만료 시 재발급
@@ -115,6 +118,7 @@ public class UserController {
             // 로그인 처리
             Integer loginId = userService.loginUser(naverId, request);
             users = userService.getUserById(loginId);
+
             return new ResponseEntity<>(users, HttpStatus.OK);
 
 //            rtn.put("loginId", loginId);
