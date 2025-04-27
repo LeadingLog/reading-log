@@ -5,7 +5,7 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # 3. 로컬의 jar 파일을 이미지로 복사
-COPY ReadingLogBackend-0.0.1-SNAPSHOT.jar app.jar
+COPY build/libs/ReadingLogBackend-0.0.1-SNAPSHOT.jar app.jar
 
 # 4. 외부 포트 열기 (Spring Boot 설정에서 server.port=9091 기준)
 EXPOSE 9091
