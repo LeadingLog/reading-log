@@ -9,7 +9,6 @@ permissions:
 
 jobs:
   spring-build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -44,13 +43,14 @@ jobs:
 
     - name: Build Docker image
       run: |
+        cd ReadingLogBackend
         docker build -t ${{ secrets.DOCKERHUB_ID }}/readinglog-app .
 
     - name: Push Docker image to Docker Hub
-      run: docker push ${{ secrets.DOCKERHUB_ID }}/readinglog-app
+      run: |
+        docker push ${{ secrets.DOCKERHUB_ID }}/readinglog-app
 
   dependency-submission:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -63,7 +63,9 @@ jobs:
         distribution: 'temurin'
 
     - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@v4
+      run: |
+        cd ReadingLogBackend
+        ./gradlew dependencySubmission
 
   deploy:
     runs-on: ubuntu-latest
