@@ -15,7 +15,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   app:
-    image: hennie0115/readinglog-app:latest  
+    build: .
     container_name: readinglog-backend
     restart: always
     ports:
