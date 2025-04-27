@@ -32,6 +32,7 @@ jobs:
 
     - name: Grant Execute Permission & Build with Gradle (skip tests)
       run: |
+        cd ReadingLogBackend
         chmod +x gradlew
         ./gradlew build -x test
 
