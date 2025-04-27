@@ -67,6 +67,10 @@ jobs:
         echo "KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}" >> .env
         echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env
 
+    - name: Verify .env file exists
+      run: |
+        ls -l .env
+    
     - name: Copy .env and docker-compose.yml to GCP instance
       uses: appleboy/scp-action@v0.1.7
       with:
