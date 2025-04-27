@@ -70,7 +70,6 @@ jobs:
     - name: Verify .env file exists
       run: |
         ls -l .env
-        ls -l docker-compose.yml
     
     - name: Copy .env and docker-compose.yml to GCP instance
       uses: appleboy/scp-action@v0.1.7
