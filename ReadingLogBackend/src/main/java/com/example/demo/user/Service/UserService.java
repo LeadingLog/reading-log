@@ -268,7 +268,7 @@ public class UserService {
         userRepository.deleteById(userId);
 
         // todo 갱신토큰 삭제
-        tokenRepository.deleteByUserIdAndProvider(userId, "Naver");
+        refreshTokenService.deleteToken(userId, "Naver");
 
 
     }
