@@ -3,6 +3,7 @@ package com.example.demo.user.Controller;
 //import com.example.demo.user.Member;
 //import com.example.demo.service.MemberService;
 
+import com.example.demo.response.ResponseService;
 import com.example.demo.user.Entity.NaverProfile;
 import com.example.demo.user.Entity.NaverTokenResponse;
 import com.example.demo.user.Entity.RefreshToken;
@@ -10,7 +11,10 @@ import com.example.demo.user.Entity.User;
 import com.example.demo.user.Service.ApiKeyService;
 import com.example.demo.user.Service.RefreshTokenService;
 import com.example.demo.user.Service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -36,15 +40,17 @@ public class UserController {
 
     private final UserService userService;
     private final RefreshTokenService tokenService;
+    private final ResponseService responseService;
 
-    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService) {
+    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService, ResponseService responseService) {
         this.userService = userService;
         this.tokenService = tokenService;
+        this.responseService = responseService;
     }
 
-    // TODO 회원 세션 시간 조회
+    // 회원 세션 시간 조회
     @GetMapping("/getUserSession")
-    public Integer getUserSession(HttpServletRequest request) {
+    public Map<String, Object> getUserSession(HttpServletRequest request) {
         return userService.getUserSession(request);
     }
 
@@ -52,29 +58,33 @@ public class UserController {
 
 
     // 네이버 회원가입 및 로그인
-    // callback 이후 접근 토큰 발급 요청 TODO return 값 users
+    // callback 이후 접근 토큰 발급 요청
     @ResponseBody
     @PostMapping("/naverlogin")
-    public Map<String,Object> naverLogin(String code, String state, HttpServletRequest request) throws IOException, URISyntaxException {
-        Map<String,Object> rtn = null;
-
-        // TODO 요청 실패 시 처리 필요
-
+    public ResponseEntity<?> naverLogin(String code, String state, HttpServletRequest request) throws IOException, URISyntaxException {
+        User users = null;
+        Map<String, Object> rtn = new HashMap<>();
 
         // 1. 접근 토큰 신규 발급
-        NaverTokenResponse accessTokenResult = userService.getNewAccessToken(code, state, "NAVER");
+        NaverTokenResponse accessTokenResult = userService.getNewAccessToken(code, state, "Naver");
         System.out.println("accessToken="+accessTokenResult);
 
         // 접근 토큰 에러 시 리턴
         if (accessTokenResult.getError() != null) {
-            rtn.put("error", "accessToken Error");
+            rtn = null;
+            rtn.put("success", false);
+            rtn.put("status", HttpStatus.NOT_ACCEPTABLE);
+            rtn.put("error", accessTokenResult.getError());
+            rtn.put("error_description", accessTokenResult.getErrorDescription());
+
+            return ResponseEntity.badRequest().body(rtn);
         }
 
         // accessToken 만료 시 재발급
-        int expires_in = Integer.parseInt(accessTokenResult.getExpiresIn());
-        if ( expires_in <= 0) {
-            accessTokenResult = tokenService.getAccessTokenByRefreshToken();
-        }
+//        int expires_in = Integer.parseInt(accessTokenResult.getExpiresIn());
+//        if ( expires_in <= 0) {
+//            accessTokenResult = tokenService.getAccessTokenByRefreshToken(String );
+//        }
 
 
         // 2. 네이버 프로필 정보 조회
@@ -83,7 +93,7 @@ public class UserController {
 
         // 3. 사이트 가입 여부 조회 (미가입 : 회원가입/ 가입 : 로그인)
         String naverId = userInfo.getId();
-        ArrayList<User> uuid = userService.getUser(naverId);
+        ArrayList<User> uuid = userService.getUserByUUID(naverId);
 
         if (uuid.isEmpty()) {   // 회원 가입
             // 회원 추가
@@ -95,22 +105,35 @@ public class UserController {
             // 토큰 저장 불가 에러 발생 시 회원 삭제
             if (result == null) {
                 userService.deleteUser(userId, request);
-                rtn.put("error", "회원가입 중 토큰 저장 에러 발생. 재가입 필요");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
+//                rtn.put("error", "회원가입 중 토큰 저장 에러 발생. 재가입 필요");
             }
-            rtn.put("success", "회원가입 성공");
+//            rtn.put("success", "회원가입 성공");
+            // 회원가입한 회원 조회
+            users = userService.getUserById(userId);
+            return new ResponseEntity<>(users, HttpStatus.OK);
+
 
         } else if (uuid.size() == 1) {  // 로그인
             // 로그인 처리
             Integer loginId = userService.loginUser(naverId, request);
-            rtn.put("loginId", loginId);
-            rtn.put("success", "로그인 성공");
+            users = userService.getUserById(loginId);
+
+            return new ResponseEntity<>(users, HttpStatus.OK);
+
+//            rtn.put("loginId", loginId);
+//            rtn.put("success", "로그인 성공");
 
         } else {
-            rtn.put("error", "오류: [ " + uuid.size() + " ] 개의 아이디가 조회됩니다.");
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//            rtn.put("error", "오류: [ " + uuid.size() + " ] 개의 아이디가 조회됩니다.");
         }
-        return rtn;
-        // TODO session 유효시간
+//        return rtn;
     }
+
+
+
+
 
     // 카카오 회원가입 및 로그인
 
@@ -126,9 +149,25 @@ public class UserController {
 
     // 회원 탈퇴
     @DeleteMapping("/delete")
-    public void deleteUser(@RequestParam("userId") Integer userId, HttpServletRequest request) {
+    public void deleteUser(@RequestParam("userId") Integer userId, HttpServletRequest request) throws JsonProcessingException {
         // Todo 토큰으로 네이버 로그인 연동 해제하기
         userService.deleteUser(userId, request);
+    }
+
+    // 세션 유지용 컨트롤러
+    @GetMapping("/extend_session")
+    public ResponseEntity<Map<String,Object>> extendSession(HttpServletRequest request, Integer userId) {
+        try {
+            // 테스트용
+            // @RequestParam(required = false) Boolean fail
+//            if (fail != null && fail) {
+//                return responseService.responseData(false, "extend session failed");
+//            }
+
+            return userService.extendSession(userId, request);
+        } catch (Exception e) {
+            return responseService.responseData(false, "extend session failed");
+        }
     }
 
 
