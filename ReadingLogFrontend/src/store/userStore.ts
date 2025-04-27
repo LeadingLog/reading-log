@@ -4,7 +4,7 @@ import {persist} from "zustand/middleware";
 interface UserState {
   token: string | null;
   expiresAt: number | null;
-  user_id: string | null;
+  user_id: number | null;
   nickname: string | null;
   email: string | null;
   provider: string | null;
@@ -18,7 +18,7 @@ export const useUserStore = create<UserState>()(
     (set) => ({
       token: null,
       expiresAt: 0,
-      user_id: null,
+      user_id: 0,
       nickname: null,
       email: null,
       provider: null,
@@ -33,7 +33,7 @@ export const useUserStore = create<UserState>()(
         set({
           token: null,
           expiresAt: 0,
-          user_id: null,
+          user_id: 0,
           nickname: null,
           email: null,
           provider: null,
