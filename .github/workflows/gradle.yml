@@ -70,12 +70,6 @@ jobs:
     - name: Verify .env file exists
       run: |
         ls -l .env
-
-    - name: Set up SSH key for authentication
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.GCP_PRIVATEKEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
     
     - name: Copy .env and docker-compose.yml to GCP instance
       uses: appleboy/scp-action@v0.1.7
