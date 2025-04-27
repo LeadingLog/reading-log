@@ -81,7 +81,7 @@ jobs:
         debug: true
 
     - name: Deploy to GCP instance
-      uses: appleboy/ssh-action@v1.0.0
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.GCP_HOST }}
         username: ${{ secrets.GCP_USERNAME }}
