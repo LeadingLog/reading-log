@@ -80,7 +80,7 @@ jobs:
         strip_components: 3
         debug: true
 
-    - name: Deploy to GCP instance
+    - name: GCP에 배포
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.GCP_HOST }}
