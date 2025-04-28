@@ -77,7 +77,7 @@ jobs:
         source: ".env,ReadingLogBackend/docker-compose.yml"
         target: "/home/readingLog"
         overwrite: true
-        strip_components: 3
+        strip_components: 1
         debug: true
 
     - name: GCP에 배포
