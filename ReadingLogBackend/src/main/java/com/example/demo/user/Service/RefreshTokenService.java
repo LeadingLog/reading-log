@@ -83,5 +83,10 @@ public class RefreshTokenService {
         tokenRepository.deleteByUserIdAndProvider(userId, provider);
     }
 
+    // 연동 소셜 로그인 사이트 조회
+    public String findProviderByUserId(Integer userId) {
+        RefreshToken refreshToken = tokenRepository.findByUserId(userId);
+        return refreshToken.getProvider();
+    }
 
 }
