@@ -6,7 +6,7 @@ on:
       # 설정한 브랜치를 푸시할때만 배포됩니다.
       - 'F-ModalTrackingPlan_Dev'
       - 'F-MainBookSearching_Dev'
-      - 'F-User'
+      # - 'F-User'
       - 'frontdev'
       # - 'main'
 
