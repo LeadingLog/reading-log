@@ -77,6 +77,11 @@ jobs:
             echo ".env file does not exist."
           fi
 
+      - name: Check if .env and docker-compose.yml exist
+        run: |
+          ls -la ./reading-log/.env
+          ls -la ./ReadingLogBackend/docker-compose.yml
+
       - name: Copy .env and docker-compose.yml to GCP instance
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -91,6 +96,7 @@ jobs:
           overwrite: true
           strip_components: 1
           debug: true
+
 
       - name: GCP에 배포
         uses: appleboy/ssh-action@v1.0.3
