@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 @Getter
 @Service
 public class ApiKeyService {
+
     //    @Value("${naver-client-id}")
     @Value("${NAVER_CLIENT_ID}")
     private String naver_client_id;
@@ -17,6 +18,7 @@ public class ApiKeyService {
     //    @Value("${naver-redirect-uri}")
     @Value("${NAVER_REDIRECT_URI}")
     private String naver_redirect_uri;
+
 
 
     //    @Value("${kakao-api-key}")
