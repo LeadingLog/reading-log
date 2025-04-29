@@ -77,7 +77,7 @@ jobs:
         port: 22
         source: | 
           .env
-          ReadingLogBackend/docker-compose.yml"
+          ReadingLogBackend/docker-compose.yml
         target: "/home/readingLog"
         overwrite: true
         strip_components: 1
