@@ -1,10 +1,21 @@
 import IconTriangle from "../../assets/Icon-triangle.svg?react";
 import YearSlideBar from "../common/YearSlideBar.tsx";
 import { usePageStore } from "../../store/pageStore.ts";
+import IconReading from "../../assets/Icon-reading.svg?react";
+import IconReadComplete from "../../assets/Icon-readcomplete.svg?react"
 // import { useModalStore } from "../../store/modalStore.ts"; // Zustand 스토어 import
 
 export default function TimeLine() {
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
+
+  const statsMonth = () => {
+    setRightContent(
+      'StatsPage',
+      {StatsPage: {tab: 'StatsMonth'}}, // 파라미터
+      {title: '나의 리딩로그 - 월별통계'}        // pageData (타이틀)
+    )
+  }
+
   // const { openModal } = useModalStore();
   return (
     <section className="flex flex-col gap-4 rounded-xl flex-1">
@@ -35,37 +46,37 @@ export default function TimeLine() {
         </span>
       </button>
 
-      {/*/!* 월별 통계 버튼 *!/*/}
-      {/*<button*/}
-      {/*  className="flex gap-2 justify-end items-center group"*/}
-      {/*  onClick={() =>*/}
-      {/*    setRightContent(*/}
-      {/*      'StatsPage',*/}
-      {/*      {StatsPage: {tab: 'StatsMonth'}}, // 파라미터*/}
-      {/*      {title: '나의 리딩로그 - 월별통계'}        // pageData (타이틀)*/}
-      {/*    )*/}
-      {/*  }*/}
-      {/*>*/}
-      {/*  월별 통계 화면 보기 (임시 버튼)*/}
-      {/*  <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">*/}
-      {/*    <IconTriangle/>*/}
-      {/*  </span>*/}
-      {/*</button>*/}
-      {/*/!* 월별 통계 버튼 *!/*/}
-      {/*<button*/}
-      {/*  className="flex gap-2 justify-end items-center group"*/}
-      {/*  onClick={() =>*/}
-      {/*    setRightContent(*/}
-      {/*      'TimeTracking', {},*/}
-      {/*      {title: '이번 달 독서 리스트'},*/}
-      {/*    )*/}
-      {/*  }*/}
-      {/*>*/}
-      {/*  이번 달 독서 리스트 보기 (임시 버튼)*/}
-      {/*  <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">*/}
-      {/*    <IconTriangle/>*/}
-      {/*  </span>*/}
-      {/*</button>*/}
+      {/*월별 통계 버튼*/}
+      <button
+        className="flex gap-2 justify-end items-center group"
+        onClick={() =>
+          setRightContent(
+            'StatsPage',
+            {StatsPage: {tab: 'StatsMonth'}}, // 파라미터
+            {title: '나의 리딩로그 - 월별통계'}        // pageData (타이틀)
+          )
+        }
+      >
+        월별 통계 화면 보기 (임시 버튼)
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+          <IconTriangle/>
+        </span>
+      </button>
+      {/* 월별 통계 버튼 */}
+      <button
+        className="flex gap-2 justify-end items-center group"
+        onClick={() =>
+          setRightContent(
+            'TimeTracking', {},
+            {title: '이번 달 독서 리스트'},
+          )
+        }
+      >
+        이번 달 독서 리스트 보기 (임시 버튼)
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+          <IconTriangle/>
+        </span>
+      </button>
       {/*<button*/}
       {/*  className="flex gap-2 justify-end items-center group"*/}
       {/*  onClick={() =>*/}
@@ -122,21 +133,136 @@ export default function TimeLine() {
       {/*</button>*/}
 
       {/* 이번 년도 타임라인 표시 */}
-      <article className="flex flex-1 py-4">
+      <article className="flex flex-1 p-2 text-timeLineMonthText text-sm">
         <div className="relative flex w-[25%]">
-          <div className="absolute top-[calc(33.3333%-10px)] bottom-[calc(33.3333%-10px)] border-r-0 rounded-l-full border-[10px] border-timeLineBorder w-full"></div>
+          <div
+            className="absolute top-[calc(33.3333%-10px)] bottom-[calc(33.3333%-10px)] border-r-0 rounded-l-full border-[10px] border-timeLineBorder w-full">
+            {/* 7월 */}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 -left-1.5 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              7
+            </div>
+          </div>
         </div>
         <div className="relative flex flex-col justify-between w-[50%]">
-          <div className="absolute top-0 h-2.5 w-full bg-timeLineBorder rounded-l-full"></div>
-          <div className="absolute bottom-2/3 h-2.5 w-full bg-timeLineBorder"></div>
-          <div className="absolute top-2/3 h-2.5 w-full bg-timeLineBorder"></div>
-          <div className="absolute bottom-0 h-2.5 w-full bg-timeLineBorder rounded-l-full"></div>
-          {/*<div className="absolute top-0 bottom-2/3 w-full border-t-8 border-b-8 border-timeLineBorder"></div>*/}
-          {/*<div className="absolute top-2/3 bottom-0 w-full border-t-8 border-b-8 border-timeLineBorder"></div>*/}
+          <div className="absolute top-0 h-2.5 w-full right-0 bg-timeLineBorder rounded-l-full">
+            {/* 1월 */}
+            <div
+              className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[25%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              1
+              <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">
+                <span className=" group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">
+                  <p className="group-hover:opacity-100 opacity-0 text-xs">5</p>
+                </span>
+                <span className=" group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">
+                  <p className="group-hover:opacity-100 opacity-0 text-xs">5</p>
+                </span>
+                <span className=" group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">
+                  <p className="group-hover:opacity-100 opacity-0 text-xs">5</p>
+                </span>
+              </div>
+            </div>
+            {/* 2월 */}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[75%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              2
+            </div>
+          </div>
+          <div className="absolute bottom-2/3 h-2.5 w-full bg-timeLineBorder">
+            {/* 4월*/}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-full top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              4
+            </div>
+            {/* 5월 */}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              5
+            </div>
+            {/* 6월 */}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              6
+            </div>
+          </div>
+          <div className="absolute top-2/3 h-2.5 w-full bg-timeLineBorder">
+            {/* 8월*/}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[25%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              8
+            </div>
+            {/* 9월 */}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[75%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              9
+            </div>
+          </div>
+          <div className="absolute bottom-0 h-2.5 w-full bg-timeLineBorder rounded-l-full">
+            {/* 11월*/}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-full top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              11
+            </div>
+            {/* 12월 */}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              12
+            </div>
+          </div>
         </div>
         <div className="relative flex w-[25%]">
-          <div className="absolute top-0 bottom-2/3 border-l-0 border-timeLineBorder rounded-r-full border-[10px] w-full"></div>
-          <div className="absolute top-2/3 bottom-0 border-l-0 border-timeLineBorder rounded-r-full border-[10px] w-full"></div>
+          <div
+            className="absolute top-0 bottom-2/3 border-l-0 border-timeLineBorder rounded-r-full border-[10px] w-full">
+            {/* 3월 */}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[103%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              3
+            </div>
+          </div>
+          <div
+            className="absolute top-2/3 bottom-0 border-l-0 border-timeLineBorder rounded-r-full border-[10px] w-full">
+            {/* 10월 */}
+            <div
+              className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
+              cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[103%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
+              onClick={() => statsMonth()}
+            >
+              10
+            </div>
+          </div>
         </div>
       </article>
     </section>
