@@ -85,8 +85,8 @@ jobs:
           key: ${{ secrets.GCP_PRIVATEKEY }}
           port: 22
           source: |
-            .env
-            ReadingLogBackend/docker-compose.yml
+            ./reading-log/.env
+            ./ReadingLogBackend/docker-compose.yml
           target: "/home/readingLog"
           overwrite: true
           strip_components: 1
