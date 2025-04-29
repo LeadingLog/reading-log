@@ -12,6 +12,7 @@ import com.example.demo.user.Entity.User;
 import com.example.demo.user.Repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpEntity;
@@ -28,6 +29,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -167,18 +169,45 @@ public class UserService {
         return userId;
     }
 
-    // 회원 조회
+    // 회원 조회 (userUUID)
     @Transactional
     public ArrayList<User> getUserByUUID(String userUUID) {
         ArrayList<User> uuid = userRepository.getIdByUserUUID(userUUID);
         return uuid;
     }
 
-    public User getUserById(Integer userId) {
-        User user = userRepository.getReferenceById(userId);
-        System.out.println("getuserby id : " + user.getNickname());
-        return user;
+    // 회원 상세 조회 (userId)
+    @Transactional
+    public User findUserById(Integer userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            System.out.println("findUserById id : " + user.getNickname());
+            return user;
+        } else {
+            System.out.println("error " + userId);
+            return null;
+        }
     }
+
+    // 회원 정보 수정 (userId) - 마이페이지 수정
+    // TODO upd_date 도 업데이트
+    @Transactional
+    public User updateUser(User user) {
+        User newuser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("user not found"));
+        // 이메일 수정
+        if (user.getUserEmail() != null) {
+            newuser.setUserEmail(user.getUserEmail());
+        }
+
+        // 닉네임 수정
+        if (user.getNickname() != null) {
+            newuser.setNickname(user.getNickname());
+        }
+        return userRepository.save(newuser);
+    }
+
 
     // 회원 로그인
     @Transactional
@@ -268,7 +297,7 @@ public class UserService {
         userRepository.deleteById(userId);
 
         // todo 갱신토큰 삭제
-        tokenRepository.deleteByUserIdAndProvider(userId, "Naver");
+        refreshTokenService.deleteToken(userId, "Naver");
 
 
     }
@@ -283,7 +312,7 @@ public class UserService {
     public Map<String, Object> getUserSession(HttpServletRequest request) {
         HttpSession session = null;
         session = request.getSession();
-        Map<String, Object> rtn = null;
+        Map<String, Object> rtn = new HashMap<>();
         rtn.put("sessionLoginUserId", (Integer) session.getAttribute("loginUserId"));
         rtn.put("sessionLoginValidTime", (Integer) session.getAttribute("loginSessionValidTime"));
 
@@ -309,6 +338,8 @@ public class UserService {
         }
 
     }
+
+    // 회원 정보 수정 (userId)
 
 
 
