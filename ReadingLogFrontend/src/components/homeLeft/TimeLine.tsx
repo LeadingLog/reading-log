@@ -1,8 +1,6 @@
 import IconTriangle from "../../assets/Icon-triangle.svg?react";
 import YearSlideBar from "../common/YearSlideBar.tsx";
 import { usePageStore } from "../../store/pageStore.ts";
-import IconReading from "../../assets/Icon-reading.svg?react";
-import IconReadComplete from "../../assets/Icon-readcomplete.svg?react"
 // import { useModalStore } from "../../store/modalStore.ts"; // Zustand 스토어 import
 
 export default function TimeLine() {
