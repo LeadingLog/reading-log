@@ -21,4 +21,6 @@ public class NaverTokenResponse {
     private String error;
     @JsonProperty("error_description")
     private String errorDescription;
+    @JsonProperty("result")
+    private String result;
 }

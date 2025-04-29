@@ -2,7 +2,8 @@ name: Java CI/CD with Gradle and Docker
 
 on:
   push:
-    branches: [ "backdev" ]
+
+    branches: ["backdev"]
 
 permissions:
   contents: read
