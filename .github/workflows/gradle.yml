@@ -52,14 +52,13 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: spring-build  
+    needs: spring-build
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Create .env file
-        working-directory: .
         run: |
           echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> .env
           echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> .env
@@ -77,26 +76,30 @@ jobs:
             echo ".env file does not exist."
           fi
 
-      - name: Check if .env and docker-compose.yml exist
-        run: |
-          ls -la ./reading-log/.env
-          ls -la ./ReadingLogBackend/docker-compose.yml
-
-      - name: Copy .env and docker-compose.yml to GCP instance
+      - name: Copy .env to GCP instance
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.GCP_HOST }}
           username: ${{ secrets.GCP_USERNAME }}
           key: ${{ secrets.GCP_PRIVATEKEY }}
           port: 22
-          source: |
-            ./reading-log/.env
-            ./ReadingLogBackend/docker-compose.yml
+          source: ".env"
+          target: "/home/readingLog"
+          overwrite: true
+          debug: true
+
+      - name: Copy docker-compose.yml to GCP instance
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.GCP_USERNAME }}
+          key: ${{ secrets.GCP_PRIVATEKEY }}
+          port: 22
+          source: "ReadingLogBackend/docker-compose.yml"
           target: "/home/readingLog"
           overwrite: true
           strip_components: 1
           debug: true
-
 
       - name: GCP에 배포
         uses: appleboy/ssh-action@v1.0.3
