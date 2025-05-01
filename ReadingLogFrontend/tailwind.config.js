@@ -42,6 +42,19 @@ export default {
         /* 타임라인 -> 총 독서 시간 관련 */
         allReadingTime_Bg  : "#E5CEC8", // 총 독서 시간 표시 배경
         allReadingTime_Text: "#000000", // 총 독서 시간 표시 폰트
+        
+        /* 타임라인 화면 */
+        timeLineBorder          : "#96B2C8", // 타임라인 경로 색
+        timeLineMonthCircle     : "#C9A89F", // 월 표시 원
+        timeLineMonthHoverCircle: "#E5CEC8", // 월 표시 호버서 시 색
+        timeLineMonthText       : "#FFFFFF", // 월 표시 텍스트 색
+        timeLineNoReadText      : "#FFFFFF", // 읽기전 텍스트 색
+        timeLineNoReadBg        : "#D9D9D9", // 읽기전 텍스트 색
+        timeLineReadingText     : "#FFFFFF", // 독서중 텍스트 색
+        timeLineReadingBg       : "#C9A89F", // 독서중 텍스트 색
+        timeLineCompleteText    : "#FFFFFF", // 완독 텍스트 색
+        timeLineCompleteBg      : "#96B2C8", // 완독 텍스트 색
+        
         /* 년도 슬라이드 관련 */
         yearSlide_Bg           : "#E5CEC8", // 년도 슬라이드 - 배경
         yearSlide_Border       : "#E5CEC8", // 년도 슬라이드 - 보더

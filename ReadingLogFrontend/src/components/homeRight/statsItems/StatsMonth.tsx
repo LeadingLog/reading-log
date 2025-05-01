@@ -1,15 +1,19 @@
 import IconReading from "../../../assets/Icon-reading.svg?react";
 import IconReadComplete from "../../../assets/Icon-readcomplete.svg?react"
 import BookImgList from "../../common/BookImgList.tsx";
+import { usePageStore } from "../../../store/pageStore.ts";
 
 export default function StatsMonth() {
+
+  const { pageData } = usePageStore();
+
   return (
     /* 월별 통계  */
     <section className="flex flex-col gap-4 overflow-hidden">
       <article className="flex flex-col text-center">
           <span className="text-2xl font-semibold text-stats_Info_Text">오늘 <span
             className="text-stats_Info_Text_Highlight">1시간 11분</span> 동안 책을 읽으셨어요</span>
-        <span className="text-2xl font-semibold text-stats_Info_Text">3월에는 <span className="text-stats_Info_Text_Highlight">총 14시간 34분</span> 책을 읽었어요</span>
+        <span className="text-2xl font-semibold text-stats_Info_Text"><span>{(pageData.title ?? '').slice(17)}</span>에는 <span className="text-stats_Info_Text_Highlight">총 14시간 34분</span> 책을 읽었어요</span>
       </article>
       {/* 독서 현황 시각화 그래프 영역 */}
       <article className="flex flex-1 flex-col gap-4">

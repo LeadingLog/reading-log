@@ -1,8 +1,6 @@
 // store/modalStore.ts
 import { create } from 'zustand';
 import type { ModalState } from "../types/modal.ts";
-
-// Zustand 스토어 생성
 // Zustand 스토어 생성
 export const useModalStore = create<ModalState>((set) => ({
   modals: [],
