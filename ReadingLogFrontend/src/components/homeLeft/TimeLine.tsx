@@ -6,11 +6,11 @@ import { usePageStore } from "../../store/pageStore.ts";
 export default function TimeLine() {
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
 
-  const statsMonth = () => {
+  const statsMonth = (month:string) => {
     setRightContent(
       'StatsPage',
       {StatsPage: {tab: 'StatsMonth'}}, // 파라미터
-      {title: '나의 리딩로그 - 월별통계'}        // pageData (타이틀)
+      {title: `나의 리딩로그 - 월별통계 - ${month}월`}        // pageData (타이틀)
     )
   }
 
@@ -45,21 +45,21 @@ export default function TimeLine() {
       </button>
 
       {/*월별 통계 버튼*/}
-      <button
-        className="flex gap-2 justify-end items-center group"
-        onClick={() =>
-          setRightContent(
-            'StatsPage',
-            {StatsPage: {tab: 'StatsMonth'}}, // 파라미터
-            {title: '나의 리딩로그 - 월별통계'}        // pageData (타이틀)
-          )
-        }
-      >
-        월별 통계 화면 보기 (임시 버튼)
-        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
-          <IconTriangle/>
-        </span>
-      </button>
+      {/*<button*/}
+      {/*  className="flex gap-2 justify-end items-center group"*/}
+      {/*  onClick={() =>*/}
+      {/*    setRightContent(*/}
+      {/*      'StatsPage',*/}
+      {/*      {StatsPage: {tab: 'StatsMonth'}}, // 파라미터*/}
+      {/*      {title: '나의 리딩로그 - 월별통계'}        // pageData (타이틀)*/}
+      {/*    )*/}
+      {/*  }*/}
+      {/*>*/}
+      {/*  월별 통계 화면 보기 (임시 버튼)*/}
+      {/*  <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">*/}
+      {/*    <IconTriangle/>*/}
+      {/*  </span>*/}
+      {/*</button>*/}
       {/* 월별 통계 버튼 */}
       <button
         className="flex gap-2 justify-end items-center group"
@@ -70,7 +70,7 @@ export default function TimeLine() {
           )
         }
       >
-        이번 달 독서 리스트 보기 (임시 버튼)
+        이번 달 독서 리스트 보기
         <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>
@@ -139,7 +139,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 -left-1.5 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('7')}
             >
               7
             </div>
@@ -151,7 +151,7 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[25%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('1')}
             >
               1
               <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">
@@ -170,7 +170,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[75%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('2')}
             >
               2
             </div>
@@ -180,7 +180,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-full top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('4')}
             >
               4
             </div>
@@ -188,7 +188,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('5')}
             >
               5
             </div>
@@ -196,7 +196,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('6')}
             >
               6
             </div>
@@ -206,7 +206,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[25%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('8')}
             >
               8
             </div>
@@ -214,7 +214,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[75%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('9')}
             >
               9
             </div>
@@ -224,7 +224,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-full top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('11')}
             >
               11
             </div>
@@ -232,7 +232,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('12')}
             >
               12
             </div>
@@ -245,7 +245,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[103%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('3')}
             >
               3
             </div>
@@ -256,7 +256,7 @@ export default function TimeLine() {
             <div
               className="hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[103%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth()}
+              onClick={() => statsMonth('10')}
             >
               10
             </div>
