@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 type CustomScrollbarProps = {
   children: React.ReactNode;
@@ -6,6 +6,8 @@ type CustomScrollbarProps = {
   scrollbarClassName?: string;
   hideScrollbar?: boolean;
   scrollbarWidth?: string;
+  direction?: 'vertical' | 'horizontal'; // ➕ 방향 지정
+  className?: string;
 };
 
 const CustomScrollbar = ({
@@ -13,6 +15,8 @@ const CustomScrollbar = ({
                            containerClassName = '',
                            scrollbarClassName = '',
                            scrollbarWidth = 'w-2',
+                           className = '',
+                           direction = 'vertical', // ➕ 기본값 세로
                          }: CustomScrollbarProps) => {
   const [scrollPercentage, setScrollPercentage] = useState(0);
   const [scrollbarHeight, setScrollbarHeight] = useState(0);
@@ -20,58 +24,96 @@ const CustomScrollbar = ({
   const containerRef = useRef<HTMLUListElement>(null);
   const [useScrollbar, setUseScrollbar] = useState<boolean>(false);// 스크롤바 표시 여부
 
+  /* 스크롤 드래그 */
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartPos = useRef(0); // 클릭한 위치 (Y 또는 X)
+  const initialScroll = useRef(0); // 클릭 시 스크롤 위치
+
   // 스크롤바 높이 계산 함수
   const calculateScrollbarHeight = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    const contentHeight = container.scrollHeight;
-    const containerHeight = container.clientHeight;
+    const isVertical = direction === 'vertical';
 
-    if (contentHeight <= containerHeight) {
+    const contentSize = isVertical ? container.scrollHeight : container.scrollWidth;
+    const containerSize = isVertical ? container.clientHeight : container.clientWidth;
+    const scrollPos = isVertical ? container.scrollTop : container.scrollLeft;
+
+    if (contentSize <= containerSize) {
       setUseScrollbar(false);
       return;
     }
 
     setUseScrollbar(true);
 
-    const scrollbarHeightCalc = Math.max(
-      (containerHeight / contentHeight) * containerHeight,
-      20
-    );
-    setScrollbarHeight(scrollbarHeightCalc);
+    const thumbSize = Math.max((containerSize / contentSize) * containerSize, 20);
+    setScrollbarHeight(thumbSize);
 
-    // 스크롤 위치 기반으로 위치도 다시 계산
-    const scrollTop = container.scrollTop;
-    const maxScrollTop = contentHeight - containerHeight;
-    const scrollPercentageCalc =
-      maxScrollTop > 0
-        ? (scrollTop / maxScrollTop) * (containerHeight - scrollbarHeightCalc)
-        : 0;
-    setScrollPercentage(scrollPercentageCalc);
+    const maxScroll = contentSize - containerSize;
+    const percentage = maxScroll > 0
+      ? (scrollPos / maxScroll) * (containerSize - thumbSize)
+      : 0;
+
+    setScrollPercentage(percentage);
   };
+
 
   // 스크롤 시 thumb 위치만 업데이트
   const handleScroll = () => {
     if (containerRef.current) {
       const container = containerRef.current;
-      const contentHeight = container.scrollHeight;
-      const containerHeight = container.clientHeight;
 
-      const scrollbarHeightCalc = Math.max(
-        (containerHeight / contentHeight) * containerHeight,
-        20
-      );
+      const isVertical = direction === 'vertical';
 
-      const scrollTop = container.scrollTop;
-      const maxScrollTop = contentHeight - containerHeight;
-      const scrollPercentageCalc =
-        maxScrollTop > 0
-          ? (scrollTop / maxScrollTop) * (containerHeight - scrollbarHeightCalc)
-          : 0;
+      const contentSize = isVertical ? container.scrollHeight : container.scrollWidth;
+      const containerSize = isVertical ? container.clientHeight : container.clientWidth;
+      const scrollPos = isVertical ? container.scrollTop : container.scrollLeft;
 
-      setScrollPercentage(scrollPercentageCalc);
+      const thumbSize = Math.max((containerSize / contentSize) * containerSize, 20);
+
+      const maxScroll = contentSize - containerSize;
+      const percentage = maxScroll > 0
+        ? (scrollPos / maxScroll) * (containerSize - thumbSize)
+        : 0;
+
+      setScrollPercentage(percentage);
     }
+  };
+
+  const handleDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+    dragStartPos.current = direction === 'vertical' ? e.clientY : e.clientX;
+    initialScroll.current = direction === 'vertical'
+      ? containerRef.current?.scrollTop || 0
+      : containerRef.current?.scrollLeft || 0;
+
+    // 👉 grabbing 상태 및 선택 방지
+    document.body.style.cursor = 'grabbing';
+    document.body.style.userSelect = 'none';
+  };
+
+  const handleDragMove = (e: MouseEvent) => {
+    if (!isDragging || !containerRef.current) return;
+
+    const currentPos = direction === 'vertical' ? e.clientY : e.clientX;
+    const delta = currentPos - dragStartPos.current;
+
+    if (direction === 'vertical') {
+      containerRef.current.scrollTop = initialScroll.current + (delta * (containerRef.current.scrollHeight / containerRef.current.clientHeight));
+    } else {
+      containerRef.current.scrollLeft = initialScroll.current + (delta * (containerRef.current.scrollWidth / containerRef.current.clientWidth));
+    }
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+
+    // 👉 원상복구
+
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
   };
 
   // 초기 마운트 시 높이 계산
@@ -104,13 +146,44 @@ const CustomScrollbar = ({
     };
   }, []);
 
+  // 가로 스크롤 가능하도록
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || direction !== "horizontal") return;
+
+    const handleWheel = (e: WheelEvent) => {
+      // 세로 스크롤 값을 가로로 이동
+      e.preventDefault(); // 기본 세로 스크롤 막기
+      container.scrollLeft = container.scrollLeft + e.deltaY;
+    };
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+    };
+  }, [direction]);
+
+  // 스크롤 잡고 이동 관련
+  useEffect(() => {
+    window.addEventListener("mousemove", handleDragMove);
+    window.addEventListener("mouseup", handleDragEnd);
+    return () => {
+      window.removeEventListener("mousemove", handleDragMove);
+      window.removeEventListener("mouseup", handleDragEnd);
+    };
+  }, [isDragging]);
+
   return (
-    <section className={`relative flex flex-1 overflow-hidden group/scroll ${useScrollbar ? "pr-3" : 'pr-0'}`}>
+    <section
+      className={`relative flex flex-1 overflow-hidden group/scroll ${className} ${direction === 'horizontal' ? "pb-3" : 'pr-3'}`}>
       {/* 스크롤 가능한 콘텐츠 */}
       <ul
         ref={containerRef}
         onScroll={handleScroll}
-        className={`${containerClassName} overflow-auto scrollbar-hide`}
+        className={`${containerClassName} scrollbar-hide ${
+          direction === 'vertical' ? 'overflow-y-auto' : 'overflow-x-auto'
+        }`}
       >
         {children}
       </ul>
@@ -118,14 +191,20 @@ const CustomScrollbar = ({
       {/* 커스텀 스크롤바 */}
       {useScrollbar && (
         <div
-          className={`z-[2] w-3 bg-scrollbar_bg absolute right-0 top-0  ${scrollbarWidth}`}
+          className={`z-[2] ${direction === 'vertical' ? 'w-3 right-0 top-0 h-full' : 'h-3 bottom-0 left-0 w-full'} 
+                bg-scrollbar_bg absolute ${scrollbarWidth}`}
         >
           <div
-            className={`absolute w-1.5 right-0 transform rounded-full ${scrollbarClassName}`}
+            className={`absolute ${direction === 'vertical' ? 'w-1.5 right-0' : 'h-1.5 bottom-0'} 
+                  transform rounded-full ${scrollbarClassName}`}
             style={{
-              top: `${scrollPercentage}px`,
-              height: `${scrollbarHeight}px`,
+              top: direction === 'vertical' ? `${scrollPercentage}px` : undefined,
+              left: direction === 'horizontal' ? `${scrollPercentage}px` : undefined,
+              height: direction === 'vertical' ? `${scrollbarHeight}px` : undefined,
+              width: direction === 'horizontal' ? `${scrollbarHeight}px` : undefined,
+              cursor: isDragging ? 'grabbing' : 'grab',
             }}
+            onMouseDown={handleDragStart}
           />
         </div>
       )}

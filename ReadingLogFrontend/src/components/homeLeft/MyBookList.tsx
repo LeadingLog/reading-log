@@ -1,7 +1,17 @@
 import IconSearch from "../../assets/Icon-search.svg?react";
 import BookImgList from "../common/BookImgList.tsx";
+import { useState } from "react";
+import CustomScrollbar from "../common/CustomScrollbar.tsx";
 
 export default function MyBookList() {
+
+  type TabType = "all" | "reading" | "complete" | "noRead";
+
+  const [isActive, setIsActive] = useState<string>("all")
+
+  const changeType = (type:TabType) => {
+    setIsActive(type)
+  }
 
   return (
     /* 내 독서 목록 */
@@ -9,16 +19,24 @@ export default function MyBookList() {
       {/* 전체, 독서중, 완독, 읽기전 탭 리스트 */}
       <ul className="flex gap-5">
         <li
-          className="flex-1 text-xl font-semibold text-myBookList_ActiveTab_Text px-2 py-1 text-center rounded-full bg-myBookList_ActiveTab_Bg">전체
+          onClick={() => changeType("all")}
+          className={`${isActive === "all" ? 'font-semibold text-myBookList_ActiveTab_Text bg-myBookList_ActiveTab_Bg' : 'text-myBookList_InActiveTab_Text bg-myBookList_InActiveTab_Bg' }
+            flex-1 text-xl cursor-pointer px-2 py-1 text-center rounded-full`}>전체
         </li>
         <li
-          className="flex-1 text-xl text-myBookList_InActiveTab_Text px-2 py-1 text-center rounded-full bg-myBookList_InActiveTab_Bg">독서중
+          onClick={() => changeType("reading")}
+          className={`${isActive === "reading" ? 'font-semibold text-myBookList_ActiveTab_Text bg-myBookList_ActiveTab_Bg' : 'text-myBookList_InActiveTab_Text bg-myBookList_InActiveTab_Bg' }
+            flex-1 text-xl cursor-pointer px-2 py-1 text-center rounded-full `}>독서중
         </li>
         <li
-          className="flex-1 text-xl text-myBookList_InActiveTab_Text px-2 py-1 text-center rounded-full bg-myBookList_InActiveTab_Bg">완독
+          onClick={() => changeType("complete")}
+          className={`${isActive === "complete" ? 'font-semibold text-myBookList_ActiveTab_Text bg-myBookList_ActiveTab_Bg' : 'text-myBookList_InActiveTab_Text bg-myBookList_InActiveTab_Bg' }
+            flex-1 text-xl cursor-pointer px-2 py-1 text-center rounded-full`}>완독
         </li>
         <li
-          className="flex-1 text-xl text-myBookList_InActiveTab_Text px-2 py-1 text-center rounded-full bg-myBookList_InActiveTab_Bg">읽기전
+          onClick={() => changeType("noRead")}
+          className={`${isActive === "noRead" ? 'font-semibold text-myBookList_ActiveTab_Text bg-myBookList_ActiveTab_Bg' : 'text-myBookList_InActiveTab_Text bg-myBookList_InActiveTab_Bg' }
+            flex-1 text-xl cursor-pointer px-2 py-1 text-center rounded-full`}>읽기전
         </li>
       </ul>
       {/* 검색 바 */}
@@ -31,7 +49,13 @@ export default function MyBookList() {
         <input type="search" className="w-full h-full p-1 bg-myBook_SearchBar_Bg rounded-e-full" placeholder="어떤 책을 찾으시나요?"/>
       </article>
       {/* 책 썸네일 아이콘 리스트 */}
-      <BookImgList/>
+      <CustomScrollbar
+        containerClassName="grid grid-cols-3 gap-6 content-start flex-1"
+        scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color"
+        // scrollbarWidth=""
+      >
+        <BookImgList/>
+      </CustomScrollbar>
     </section>
   )
 }

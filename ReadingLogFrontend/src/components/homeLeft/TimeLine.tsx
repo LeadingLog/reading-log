@@ -4,6 +4,7 @@ import { usePageStore } from "../../store/pageStore.ts";
 // import { useModalStore } from "../../store/modalStore.ts"; // Zustand 스토어 import
 
 export default function TimeLine() {
+
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
 
   const statsMonth = (month:string) => {
@@ -37,8 +38,7 @@ export default function TimeLine() {
           )
         }
       >
-        <span>2025</span>
-        년 리딩로그 보러가기
+        <span>2025</span>년 리딩로그 보러가기
         <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>

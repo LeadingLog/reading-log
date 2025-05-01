@@ -83,15 +83,20 @@ export default {
         readingList_Bg   : "#E5CEC8", // 이번 달 독서 리스트 배경색
         readingList_Hover: "#C9A89F", // 이번 달 독서 리스트 배경색
         
-        /* 월별 & 연별 통계 그래프 관련 */
-        stats_Info_Text                   : "#96B2C8",   // 월별 & 연별 통계 - 통계 설명 텍스트
-        stats_Info_Text_Highlight         : "#C9A89F",   // 월별 & 연별 통계 - 통계 설명 강조 텍스트
-        stats_Month_Graph_Bottom_Border   : "#C9A89F",   // 월별 & 연별 통계 - 그래프 바닥 보더 색
-        stats_Month_Graph_Book_Bg         : "#E5CEC850", // 월별 통계 - 책 배경 색
-        stats_Month_Graph_Book_Border     : "#C9A89F",   // 월별 통계 - 책 보더 색
-        stats_Month_Graph_Reading_Icon_Bg : "#C9A89F",   // 월별 통계 - 독서 중 아이콘 배경
-        stats_Month_Graph_Complete_Icon_Bg: "#96B2C8",   // 월별 통계 - 완독 책 아이콘 배경
-        stats_Month_Graph_Icon_Color      : "#FDFAF3",   // 월별 통계 - 독서 중 & 완독 아이콘 색
+        /* 월별 & 년별 통계 그래프 관련 */
+        stats_Info_Text                         : "#96B2C8",   // 월별 & 년별 통계 - 통계 설명 텍스트
+        stats_Info_Text_Highlight               : "#C9A89F",   // 월별 & 년별 통계 - 통계 설명 강조 텍스트
+        stats_Month_Graph_Bottom_Border         : "#C9A89F",   // 월별 & 년별 통계 - 그래프 바닥 보더 색
+        stats_Month_Graph_Book_Bg               : "#E5CEC850", // 월별 통계 - 책 배경 색
+        stats_Month_Graph_Book_Border           : "#C9A89F",   // 월별 통계 - 책 보더 색
+        stats_Month_Graph_Reading_Icon_Bg       : "#C9A89F",   // 월별 통계 - 독서 중 아이콘 배경
+        stats_Month_Graph_Complete_Icon_Bg      : "#96B2C8",   // 월별 통계 - 완독 책 아이콘 배경
+        stats_Month_Graph_Icon_Color            : "#FDFAF3",   // 월별 통계 - 독서 중 & 완독 아이콘 색
+        stats_Year_Graph_Count_Text             : "#C9A89F",   // 년별 통계 - 도서 수 텍스트 색
+        stats_Year_Graph_MonthItem_Circle       : "#E5CEC8",   // 년별 통계 - 각 월 표시 원 색
+        stats_Year_Graph_MonthItem_Circle_Border: "#96B2C8",   // 년별 통계 - 각 월 표시 원 보더 색
+        stats_Year_Graph_Month_Text             : "#C9A89F",   // 년별 통계 - 월 표시 텍스트 색
+        stats_Year_Graph_Bottom_Border          : "#C9A89F",   // 년별 통계 - 그래프 바닥 보더 색
         
         // 중앙 컴포넌트 뒷배경
         book_Bg: "#96B2C8", // LeftPage, rightPage 컨텐츠 뒤에 감싸는 배경
