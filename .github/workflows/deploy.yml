@@ -7,6 +7,7 @@ on:
       - 'F-ModalTrackingPlan_Dev'
       - 'F-MainBookSearching_Dev'
       - 'F-TimeLine_Dev'
+      - 'F-MyReadingList_Dev'
       - 'F-User'
       - 'frontdev'
       # - 'main'
