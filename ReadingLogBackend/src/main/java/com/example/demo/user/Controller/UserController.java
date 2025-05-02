@@ -11,6 +11,7 @@ import com.example.demo.user.Entity.User;
 import com.example.demo.user.Service.ApiKeyService;
 import com.example.demo.user.Service.RefreshTokenService;
 import com.example.demo.user.Service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,34 +54,116 @@ public class UserController {
         return userService.getUserSession(request);
     }
 
-    // TODO 회원 세션 시간 연장
+
+    // 회원 세션 유지용 컨트롤러
+    @GetMapping("/extend_session")
+    public ResponseEntity<Map<String,Object>> extendSession(HttpServletRequest request, Integer userId) {
+        try {
+            // 테스트용
+            // @RequestParam(required = false) Boolean fail
+//            if (fail != null && fail) {
+//                return responseService.responseData(false, "extend session failed");
+//            }
+
+            return userService.extendSession(userId, request);
+        } catch (Exception e) {
+            return responseService.responseData(false, "extend session failed");
+        }
+    }
+
+
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public void logoutUser(HttpServletRequest request) {
+        userService.logoutUser(request);
+    }
+
+
+    // 회원 탈퇴
+    @DeleteMapping("/delete")
+    public void deleteUser(@RequestParam("userId") Integer userId, HttpServletRequest request) throws JsonProcessingException {
+        // Todo 토큰으로 네이버 로그인 연동 해제하기
+        userService.deleteUser(userId, request);
+    }
+
+
+    // 회원 상세 조회 (userId) - 마이페이지 조회
+    @GetMapping("/{userId}")
+    public ResponseEntity<Map<String, Object>> findUserById(@PathVariable("userId") Integer userId) {
+        Map<String, Object> rtn = new HashMap<>();
+        User user = userService.findUserById(userId);
+        String socialInfo = tokenService.findProviderByUserId(userId);
+        if (!user.getNickname().isEmpty()) {
+            rtn.put("success", true);
+            rtn.put("user", user);
+            rtn.put("provider", socialInfo);
+            return ResponseEntity.ok().body(rtn);
+        } else {
+            rtn.put("success", false);
+            return ResponseEntity.badRequest().body(rtn);
+        }
+
+    }
+
+
+
+    // 회원 정보 수정 (userId) - 마이페이지 수정
+    @PostMapping("/{userId}/modified")
+    public ResponseEntity<Map<String, Object>> updateUser (@PathVariable Integer userId, User user) {
+        Map<String, Object> rtn = new HashMap<>();
+        if (userId != user.getUserId()) {
+            rtn.put("success", false);
+            return ResponseEntity.badRequest().body(rtn);
+        }
+
+        User savedUser = userService.updateUser(user);
+
+        if (savedUser == null) {
+            rtn.put("success", false);
+            return ResponseEntity.badRequest().body(rtn);
+        }
+
+        rtn.put("success", true);
+        rtn.put("user", savedUser);
+
+        return ResponseEntity.ok().body(rtn);
+    }
+
+
+
+
+
+
 
 
     // 네이버 회원가입 및 로그인
-    // callback 이후 접근 토큰 발급 요청 
+    // callback 이후 접근 토큰 발급 요청
     @ResponseBody
     @PostMapping("/naverlogin")
     public ResponseEntity<?> naverLogin(String code, String state, HttpServletRequest request) throws IOException, URISyntaxException {
         User users = null;
-
-        // TODO 요청 실패 시 처리 필요
-
+        Map<String, Object> rtn = new HashMap<>();
 
         // 1. 접근 토큰 신규 발급
-        NaverTokenResponse accessTokenResult = userService.getNewAccessToken(code, state, "NAVER");
+        NaverTokenResponse accessTokenResult = userService.getNewAccessToken(code, state, "Naver");
         System.out.println("accessToken="+accessTokenResult);
 
         // 접근 토큰 에러 시 리턴
         if (accessTokenResult.getError() != null) {
-//            rtn.put("error", "accessToken Error");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            rtn.put("success", false);
+            rtn.put("status", HttpStatus.NOT_ACCEPTABLE);
+            rtn.put("error", accessTokenResult.getError());
+            rtn.put("error_description", accessTokenResult.getErrorDescription());
+
+            return ResponseEntity.badRequest().body(rtn);
         }
 
         // accessToken 만료 시 재발급
-        int expires_in = Integer.parseInt(accessTokenResult.getExpiresIn());
-        if ( expires_in <= 0) {
-            accessTokenResult = tokenService.getAccessTokenByRefreshToken();
-        }
+//        int expires_in = Integer.parseInt(accessTokenResult.getExpiresIn());
+//        if ( expires_in <= 0) {
+//            accessTokenResult = tokenService.getAccessTokenByRefreshToken(String );
+//        }
 
 
         // 2. 네이버 프로필 정보 조회
@@ -106,14 +189,15 @@ public class UserController {
             }
 //            rtn.put("success", "회원가입 성공");
             // 회원가입한 회원 조회
-            users = userService.getUserById(userId);
+            users = userService.findUserById(userId);
             return new ResponseEntity<>(users, HttpStatus.OK);
 
 
         } else if (uuid.size() == 1) {  // 로그인
             // 로그인 처리
             Integer loginId = userService.loginUser(naverId, request);
-            users = userService.getUserById(loginId);
+            users = userService.findUserById(loginId);
+
             return new ResponseEntity<>(users, HttpStatus.OK);
 
 //            rtn.put("loginId", loginId);
@@ -135,34 +219,18 @@ public class UserController {
 
 
 
-    // 로그아웃
-    @PostMapping("/logout")
-    public void logoutUser(HttpServletRequest request) {
-        userService.logoutUser(request);
-    }
 
 
-    // 회원 탈퇴
-    @DeleteMapping("/delete")
-    public void deleteUser(@RequestParam("userId") Integer userId, HttpServletRequest request) {
-        // Todo 토큰으로 네이버 로그인 연동 해제하기
-        userService.deleteUser(userId, request);
-    }
 
-    // 세션 유지용 컨트롤러
-    @GetMapping("/extend_session")
-    public ResponseEntity<Map<String,Object>> extendSession() {
-        try {
-            // 테스트용
-            // @RequestParam(required = false) Boolean fail
-//            if (fail != null && fail) {
-//                return responseService.responseData(false, "extend session failed");
-//            }
-            return responseService.responseData(true, null);
-        } catch (Exception e) {
-            return responseService.responseData(false, "extend session failed");
-        }
-    }
+
+
+
+
+
+
+
+
+
 
 
 
