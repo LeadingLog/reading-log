@@ -6,6 +6,18 @@ import { useModalStore } from "../../store/modalStore.ts"; // Zustand 스토어 
 export default function TimeLine() {
   const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   const {openModal} = useModalStore();
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
+  const handleMswTestClick = async () => {
+    try {
+      const response = await fetch(`${serverUrl}/test`);
+      const data = await response.json();
+      console.log('MSW 응답 데이터:', data);
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
+
   return (
     <section className="flex flex-col gap-4 rounded-xl">
       {/* 총 독서 시간 표시 */}
@@ -116,6 +128,16 @@ export default function TimeLine() {
         }
       >
         독서 계획 모달 (임시 버튼)
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+          <IconTriangle/>
+        </span>
+      </button>
+
+      <button
+        className="flex gap-2 justify-end items-center group"
+        onClick={handleMswTestClick}
+      >
+        msw 테스트 (임시 버튼)
         <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>
