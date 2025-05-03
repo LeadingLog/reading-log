@@ -6,6 +6,7 @@ import { usePageStore } from "../../store/pageStore.ts";
 export default function TimeLine() {
 
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
 
   const statsMonth = (month:string) => {
     setRightContent(
@@ -14,6 +15,38 @@ export default function TimeLine() {
       {title: `나의 리딩로그 - 월별통계 - ${month}월`}        // pageData (타이틀)
     )
   }
+
+  // GET - 쿼리 파라미터 테스트
+  const handleQueryTestClick = async () => {
+    try {
+      const response = await fetch(`${serverUrl}/test/query?name=은지&age=25`);
+      const data = await response.json();
+      console.log('쿼리 응답:', data);
+    } catch (error) {
+      console.error('쿼리 테스트 에러:', error);
+    }
+  };
+
+  // POST - 바디 테스트
+  const handleBodyTestClick = async () => {
+    try {
+      const response = await fetch(`${serverUrl}/test/body`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          hobby: '헬스',
+          level: '중급',
+        }),
+      });
+      const data = await response.json();
+      console.log('바디 응답:', data);
+    } catch (error) {
+      console.error('바디 테스트 에러:', error);
+    }
+  };
+
 
   // const { openModal } = useModalStore();
   return (
@@ -129,6 +162,26 @@ export default function TimeLine() {
       {/*    <IconTriangle/>*/}
       {/*  </span>*/}
       {/*</button>*/}
+
+      <button
+        className="flex gap-2 justify-end items-center group"
+        onClick={handleQueryTestClick}
+      >
+        msw 쿼리 테스트 (임시 버튼)
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+          <IconTriangle/>
+        </span>
+      </button>
+
+      <button
+        className="flex gap-2 justify-end items-center group"
+        onClick={handleBodyTestClick}
+      >
+        msw 바디 테스트 (임시 버튼)
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+          <IconTriangle/>
+        </span>
+      </button>
 
       {/* 이번 년도 타임라인 표시 */}
       <article className="flex flex-1 p-2 text-timeLineMonthText text-sm">
