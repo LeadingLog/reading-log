@@ -8,6 +8,7 @@ on:
       - 'F-MainBookSearching_Dev'
       - 'F-TimeLine_Dev'
       - 'F-MyReadingList_Dev'
+      - 'F-MyFavoriteList_Dev'
       - 'F-User'
       - 'frontdev'
       # - 'main'
