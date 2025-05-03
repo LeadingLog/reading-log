@@ -8,13 +8,34 @@ export default function TimeLine() {
   const {openModal} = useModalStore();
   const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-  const handleMswTestClick = async () => {
+  // GET - 쿼리 파라미터 테스트
+  const handleQueryTestClick = async () => {
     try {
-      const response = await fetch(`${serverUrl}/test`);
+      const response = await fetch(`${serverUrl}/test/query?name=은지&age=25`);
       const data = await response.json();
-      console.log('MSW 응답 데이터:', data);
+      console.log('쿼리 응답:', data);
     } catch (error) {
-      console.error('에러 발생:', error);
+      console.error('쿼리 테스트 에러:', error);
+    }
+  };
+
+  // POST - 바디 테스트
+  const handleBodyTestClick = async () => {
+    try {
+      const response = await fetch(`${serverUrl}/test/body`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          hobby: '헬스',
+          level: '중급',
+        }),
+      });
+      const data = await response.json();
+      console.log('바디 응답:', data);
+    } catch (error) {
+      console.error('바디 테스트 에러:', error);
     }
   };
 
@@ -135,9 +156,19 @@ export default function TimeLine() {
 
       <button
         className="flex gap-2 justify-end items-center group"
-        onClick={handleMswTestClick}
+        onClick={handleQueryTestClick}
       >
-        msw 테스트 (임시 버튼)
+        msw 쿼리 테스트 (임시 버튼)
+        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+          <IconTriangle/>
+        </span>
+      </button>
+
+      <button
+        className="flex gap-2 justify-end items-center group"
+        onClick={handleBodyTestClick}
+      >
+        msw 바디 테스트 (임시 버튼)
         <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </span>

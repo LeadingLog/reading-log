@@ -1,8 +1,17 @@
-import { http, HttpResponse } from 'msw';
+import {http, HttpResponse} from 'msw';
+
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const userHandlers = [
-  http.post(`${serverUrl}/user/kakaologin`, async () => {
+
+  // 소셜 로그인/회원가입 -카카오 (application/x-www-form-urlencoded)
+  http.post(`${serverUrl}/user/kakaologin`, async ({request}) => {
+    const text = await request.text();
+    const params = new URLSearchParams(text); // form 데이터 파싱
+    const code = params.get('code');
+    const state = params.get('state');
+    console.log(`code: ${code}, state: ${state}`);
+
     return HttpResponse.json({
       users: {
         userId: 'mocked-kakao-id',
@@ -12,7 +21,14 @@ export const userHandlers = [
     });
   }),
 
-  http.post(`${serverUrl}/user/naverlogin`, async () => {
+  // 소셜 로그인/회원가입 -네이버 (application/x-www-form-urlencoded)
+  http.post(`${serverUrl}/user/naverlogin`, async ({request}) => {
+    const text = await request.text();
+    const params = new URLSearchParams(text); // form 데이터 파싱
+    const code = params.get('code');
+    const state = params.get('state');
+    console.log(`code: ${code}, state: ${state}`);
+
     return HttpResponse.json({
       users: {
         userId: 'mocked-naver-id',
@@ -22,11 +38,80 @@ export const userHandlers = [
     });
   }),
 
-  http.get(`${serverUrl}/test`, () => {
+  // 회원 정보 수정
+  http.post(`${serverUrl}/user/user_id/modified`, async ({request}) => {
+    const url = new URL(request.url);
+    const userId = url.searchParams.get('user_id');
+    const nickname = url.searchParams.get('nickname');
+    const email = url.searchParams.get('email');
+    console.log(`userId: ${userId}, nickname: ${nickname}, email: ${email}`);
+
     return HttpResponse.json({
-      id: 'c7b3d8e0-5e0b-4b0f-8b3a-3b9f4b3d3b3d',
-      firstName: 'John',
-      lastName: 'Maverick',
+      success: true,
+      data : {
+        nickname: "새로운 닉네임",
+        email: "new@example.com"
+      }
+    });
+  }),
+
+  // 로그아웃
+  http.post(`${serverUrl}/user/logout`, async ({request}) => {
+    const url = new URL(request.url);
+    const provider = url.searchParams.get('provider');
+    const userId = url.searchParams.get('user_id');
+    console.log(`userId: ${userId}, provider: ${provider}`);
+
+    return HttpResponse.json({
+      success: true,
+    });
+  }),
+
+  // 탈퇴
+  http.delete(`${serverUrl}/user/user_id/delete`, async ({request}) => {
+    const url = new URL(request.url);
+    const provider = url.searchParams.get('provider');
+    const userId = url.searchParams.get('user_id');
+    console.log(`userId: ${userId}, provider: ${provider}`);
+
+    return HttpResponse.json({
+      success: true,
+    });
+  }),
+
+  // 세션 연장
+  http.get(`${serverUrl}/user/extend_session`, async ({request}) => {
+    const url = new URL(request.url);
+    const userId = url.searchParams.get('user_id');
+    console.log(`userId: ${userId}`);
+
+    return HttpResponse.json({
+      success: true,
+    });
+  }),
+
+  // GET - 쿼리 파라미터 테스트
+  http.get(`${serverUrl}/test/query`, ({request}) => {
+    const url = new URL(request.url);
+    const name = url.searchParams.get('name');
+    const age = url.searchParams.get('age');
+
+    return HttpResponse.json({
+      message: '쿼리 파라미터 받음',
+      name,
+      age,
+    });
+  }),
+
+  // POST - 바디 테스트
+  http.post(`${serverUrl}/test/body`, async ({request}) => {
+    const body = await request.json();
+    console.log(body);
+
+    return HttpResponse.json({
+      message: '바디 데이터 받음',
+      hobby: "취미",
+      level: "레벨",
     });
   }),
 ];
