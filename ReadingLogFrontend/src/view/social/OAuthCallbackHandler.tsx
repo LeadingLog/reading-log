@@ -58,18 +58,15 @@ export default function OAuthCallbackHandler({
       });
 
       const data = response.data;
+      // TODO. API에 맞게 수정하기
 
-      if (data.success) {
-        const { accessToken } = response.data.token;
-
-        // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
+      if (response.status === 200) {
         useUserStore.getState().setUser({ // 사용자 정보 저장
-          token: data.access_token,
-          expiresAt: data.expires_at,
-          user_id: data.user_id,
-          nickname: data.nickname,
+          token: 'temporary-token',
+          expiresAt: 0,
+          user_id: data.users.userId,
+          nickname: data.users.nickname,
+          email: data.users.email,
           provider,
         });
 
