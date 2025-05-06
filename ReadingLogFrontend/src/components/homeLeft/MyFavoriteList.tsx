@@ -48,6 +48,7 @@ export default function MyFavoriteList({ activeTab }: Props) {
       setHasMore(!isLastPage);
     } catch (error) {
       console.error("쿼리 테스트 에러:", error);
+      setHasMore(false); // 더 이상 시도하지 않도록 설정
     } finally {
       setIsLoading(false);
     }
