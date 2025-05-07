@@ -32,6 +32,11 @@ jobs:
         working-directory: ReadingLogFrontend
         env:
           VITE_ALADIN_API: ${{ secrets.VITE_ALADIN_API }}
+          VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
+          VITE_NAVER_CLIENT_ID: ${{ secrets.VITE_NAVER_CLIENT_ID }}
+          VITE_NAVER_REDIRECT_URI: ${{ secrets.VITE_NAVER_REDIRECT_URI }}
+          VITE_KAKAO_CLIENT_ID: ${{ secrets.VITE_KAKAO_CLIENT_ID }}
+          VITE_KAKAO_REDIRECT_URI: ${{ secrets.VITE_KAKAO_REDIRECT_URI }}
         run: |
           echo "VITE_ALADIN_API=$VITE_ALADIN_API"
           npm install
