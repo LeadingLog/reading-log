@@ -1,6 +1,8 @@
 import {http, HttpResponse} from 'msw';
 import favoriteListData from '../dummyData/favoriteListData/favoriteListData.json';
 import favoriteListData2 from '../dummyData/favoriteListData/favoriteListData2.json';
+import readingList_2024 from '../dummyData/timeLineReadingListData/ReadingList-2024';
+import readingList_2025 from '../dummyData/timeLineReadingListData/ReadingList-2025';
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -22,39 +24,28 @@ export const readingListHandlers = [
   }),
 
   // 타임라인에 보여 질 년&월 도서 수
-  http.get(`${serverUrl}/readinglist/timeline/yymm`, async ({request}) => {
-    const body = await request.json();
-    console.log(body);
+  http.get(`${serverUrl}/readinglist/timeline/yymm`, async ({ request }) => {
+    const authHeader = request.headers.get('Authorization');
+    const url = new URL(request.url);
+    const userId = parseInt(url.searchParams.get('userId') || '1', 10);
+    const year = parseInt(url.searchParams.get('year') || '2025', 10);
 
-    return HttpResponse.json({
-      success: true,
-      timeLineReadingList: [
-        {
-          month: 2, // 월
-          noRead: 0, // 읽기 전 도서 수
-          reading: 0, // 독서 중 도서 수
-          complete: 0 // 완독 한 도서 수
-        },
-        {
-          month: 3,
-          noRead: 0,
-          reading: 0,
-          complete: 0
-        },
-        {
-          month: 4,
-          noRead: 0,
-          reading: 0,
-          complete: 0
-        },
-        {
-          month: 5,
-          noRead: 0,
-          reading: 0,
-          complete: 0
-        },
-      ]
-    });
+    console.log(`✅ [Mock API] userId: ${userId}, year: ${year}`);
+    console.log(`🔐 Authorization: ${authHeader}`);
+
+    if (!authHeader || !authHeader.startsWith('Bearer')) {
+      return HttpResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (year === 2025) {
+      return HttpResponse.json(readingList_2025);
+    } else if (year === 2024) {
+      return HttpResponse.json(readingList_2024);
+    } else {
+      return HttpResponse.json({
+        timeLineReadingList: [],
+      });
+    }
   }),
 
   // 이번 달 독서 리스트
