@@ -1,8 +1,8 @@
 import {http, HttpResponse} from 'msw';
 import favoriteListData from '../dummyData/favoriteListData/favoriteListData.json';
 import favoriteListData2 from '../dummyData/favoriteListData/favoriteListData2.json';
-import readingList_2024 from '../dummyData/timeLineReadingListData/ReadingList-2024';
-import readingList_2025 from '../dummyData/timeLineReadingListData/ReadingList-2025';
+import readingList_2024 from '../dummyData/timeLineReadingListData/ReadingList-2024.json';
+import readingList_2025 from '../dummyData/timeLineReadingListData/ReadingList-2025.json';
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
