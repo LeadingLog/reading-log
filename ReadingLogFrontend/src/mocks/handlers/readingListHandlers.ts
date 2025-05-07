@@ -1,45 +1,24 @@
 import {http, HttpResponse} from 'msw';
+import favoriteListData from '../dummyData/favoriteListData/favoriteListData.json';
+import favoriteListData2 from '../dummyData/favoriteListData/favoriteListData2.json';
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const readingListHandlers = [
 
   // 사용자의 관심 도서 목록 (즐겨찾기) 조회
-  http.get(`${serverUrl}/readinglist/fvrts`, async ({request}) => {
+  http.get(`${serverUrl}/readinglist/fvrts`, async ({ request }) => {
     const url = new URL(request.url);
-    const page = url.searchParams.get('page');
-    const size = url.searchParams.get('size');
+    const page = parseInt(url.searchParams.get('page') || '0', 10);
+    const size = parseInt(url.searchParams.get('size') || '21', 10);
+
     console.log(`page: ${page}, size: ${size}`);
 
-    return HttpResponse.json({
-      success: true,
-      favoriteList: [
-        {
-          title: "책 제목",
-          author: "지은이",
-          isbn13: "9791169663618",
-          cover: "https://image.aladin.co.kr/product/35709/18/cover200/k632036125_1.jpg", // 알라딘에서 책 검색 시 가져온커버
-        },
-        {
-          title: "책 제목",
-          author: "지은이",
-          isbn13: "9791169663618",
-          cover: "https://image.aladin.co.kr/product/35709/18/cover200/k632036125_1.jpg", // 알라딘에서 책 검색 시 가져온커버
-        },
-        {
-          title: "책 제목",
-          author: "지은이",
-          isbn13: "9791169663618",
-          cover: "https://image.aladin.co.kr/product/35709/18/cover200/k632036125_1.jpg", // 알라딘에서 책 검색 시 가져온커버
-        },
-      ],
-      page: {
-        size: 20, // 한 페이지에 포함된 항목 수
-        number: 0, // 현재 페이지번호 0부터 시작
-        totalElements: 58, // 전체 데이터의 총 개수
-        totalPages: 3 // 전체 페이지 수
-      }
-    });
+    if (page === 0) {
+      return HttpResponse.json(favoriteListData); // 0페이지 데이터
+    } else {
+      return HttpResponse.json(favoriteListData2); // 그 외 페이지 데이터
+    }
   }),
 
   // 타임라인에 보여 질 년&월 도서 수

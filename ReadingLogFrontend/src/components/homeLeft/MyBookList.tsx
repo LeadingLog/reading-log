@@ -3,9 +3,9 @@ import BookImgList from "../common/BookImgList.tsx";
 import { useState } from "react";
 import CustomScrollbar from "../common/CustomScrollbar.tsx";
 
-export default function MyBookList() {
+type TabType = "all" | "reading" | "complete" | "noRead";
 
-  type TabType = "all" | "reading" | "complete" | "noRead";
+export default function MyBookList() {
 
   const [isActive, setIsActive] = useState<string>("all")
 
