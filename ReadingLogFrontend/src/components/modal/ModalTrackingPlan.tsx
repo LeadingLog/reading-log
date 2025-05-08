@@ -6,7 +6,13 @@ import { usePageStore } from "../../store/pageStore.ts";
 import { ModalTrackingPlanProps } from "../../types/modal.ts";
 
 
-const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({ modalId }) => {
+const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
+                                                               modalId,
+                                                               bookTitle,
+                                                               bookSubTitle,
+                                                               cancelText,
+                                                               confirmText,
+                                                             }) => {
   const { closeModal } = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   type TimeChoice = 3 | 30 | 60;
@@ -56,9 +62,9 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({ modalId }) => {
           <div className="relative">
             <span className="text-2xl relative">
               <p className="absolute top-1 bottom-1 left-0 w-1 bg-title_Marker"></p>
-              <span className="m-2 text-modal_Tracking_Book_Title_Text">책 제목</span>
+              <span className="m-2 text-modal_Tracking_Book_Title_Text">{bookTitle}</span>
             </span>
-            <p className="text-modal_Tracking_Book_SubTitle_Text">책 저자</p>
+            <p className="text-modal_Tracking_Book_SubTitle_Text">{bookSubTitle}</p>
           </div>
           <section>
             <div className="flex justify-between items-center">
@@ -142,7 +148,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({ modalId }) => {
               }} // 클릭 시 모달 닫기
               className="flex-1 min-w-[120px] px-4 py-1 border-4 border-modal_Left_Btn_Border rounded-lg"
             >
-              다음에 읽기
+              {cancelText || "다음에 읽기"}
             </button>
             <button
               onClick={() => {
@@ -161,7 +167,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({ modalId }) => {
               }}
               className="flex-1 min-w-[120px] px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
             >
-              독서 시작
+              {confirmText || "독서 시작"}
             </button>
           </section>
         </article>
