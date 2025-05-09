@@ -8,6 +8,8 @@ import { ModalTrackingPlanProps } from "../../types/modal.ts";
 
 const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
                                                                modalId,
+                                                               cover,
+                                                               bookLink,
                                                                bookTitle,
                                                                bookSubTitle,
                                                                cancelText,
@@ -43,28 +45,29 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
     }
   }, [isOn]);
 
-
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
-      <section className="flex flex-col gap-3 bg-modal_Default_Bg p-5 rounded-lg">
+      <section className="flex max-w-96 flex-col gap-3 bg-modal_Default_Bg p-5 rounded-lg">
         {/* 타이틀 */}
         <span
           className="bg-modal_Tracking_Title_Bg text-modal_Tracking_Title_Text rounded-lg p-2 text-center font-semibold">독서 타임 트래킹</span>
         {/* 책 표지 */}
-        <article className="relative h-20 bg-modal_BookImg_Bg rounded-lg">
+        <article className="flex justify-center items-center max-h-96 relative aspect-square overflow-hidden rounded-lg">
           <div
-            className="absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
+            className="z-10 absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
             <IconFavorite width="100%" height="100%"/>
           </div>
+          <img src={cover} alt={bookTitle} className="relative drop-shadow-[2px_4px_6px_#00000080] z-10 h-[90%] object-contain"/>
+          <img src={cover} alt={bookTitle} className="absolute inset-0 w-full h-full object-cover opacity-90 blur-sm"/>
         </article>
         {/* 타이머 기능 관련 */}
         <article className="flex flex-col gap-2 bg-modal_Content_Bg p-2.5 rounded-lg">
-          <div className="relative">
-            <span className="text-2xl relative">
-              <p className="absolute top-1 bottom-1 left-0 w-1 bg-title_Marker"></p>
-              <span className="m-2 text-modal_Tracking_Book_Title_Text">{bookTitle}</span>
+          <div className="flex flex-col gap-1 relative">
+            <span className="flex items-center relative">
+              <p className="absolute top-0 bottom-0 left-0 w-1 bg-title_Marker"></p>
+              <span className="ml-2 text-modal_Tracking_Book_Title_Text">{bookTitle}</span>
             </span>
-            <p className="text-modal_Tracking_Book_SubTitle_Text">{bookSubTitle}</p>
+            <p className="text-sm text-modal_Tracking_Book_SubTitle_Text">{bookSubTitle}</p>
           </div>
           <section>
             <div className="flex justify-between items-center">
