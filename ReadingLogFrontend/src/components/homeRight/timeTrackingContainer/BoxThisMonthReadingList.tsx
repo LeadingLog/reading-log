@@ -21,6 +21,7 @@ export default function BoxThisMonthReadingList() {
       bookTitle: item.title,
       bookSubTitle: item.author,
       cover: item.cover,
+      bookLink: item.link,
       cancelText: '닫기',
       confirmText: '로그아웃',
     })
