@@ -5,6 +5,6 @@ export interface monthReadingListItem {
   cover: string;
   link?: string;
   isFavorite?: boolean; // optional
-  readStatus?: string;
+  readStatus: 'reading' | 'complete' | 'noRead';
   createdAt?: number;
 }

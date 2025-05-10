@@ -7,7 +7,7 @@
       "isbn13": "9791198545527",
       "cover": "https://image.aladin.co.kr/product/33646/5/cover200/k782939419_1.jpg",
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
-      "readStatus": "noRead",
+      "readStatus": "reading",
       "isFavorite": true,
       "createdAt": "2025-01-01 11:11:11"
     },
@@ -17,7 +17,7 @@
       "isbn13": "9791191311396",
       "cover": "https://image.aladin.co.kr/product/33323/52/cover200/k852938682_1.jpg",
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
-      "readStatus": "noRead",
+      "readStatus": "reading",
       "isFavorite": true,
       "createdAt": "2025-01-01 11:11:11"
     },
@@ -27,7 +27,7 @@
       "isbn13": "9791193207376",
       "cover": "https://image.aladin.co.kr/product/33628/56/cover200/k172939217_2.jpg",
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
-      "readStatus": "noRead",
+      "readStatus": "reading",
       "isFavorite": true,
       "createdAt": "2025-01-01 11:11:11"
     },
@@ -37,7 +37,7 @@
       "isbn13": "9791198769800",
       "cover": "https://image.aladin.co.kr/product/34253/92/cover200/k652932762_1.jpg",
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
-      "readStatus": "noRead",
+      "readStatus": "reading",
       "isFavorite": true,
       "createdAt": "2025-01-01 11:11:11"
     },
@@ -47,7 +47,7 @@
       "isbn13": "9791160406832",
       "cover": "https://image.aladin.co.kr/product/28668/44/cover200/k882836860_1.jpg",
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
-      "readStatus": "noRead",
+      "readStatus": "reading",
       "isFavorite": true,
       "createdAt": "2025-01-01 11:11:11"
     },
