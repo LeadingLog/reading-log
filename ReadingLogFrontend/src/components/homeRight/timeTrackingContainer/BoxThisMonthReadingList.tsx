@@ -81,7 +81,6 @@ export default function BoxThisMonthReadingList() {
     [isLoading, hasMore] // 이 값들이 변경되면 `lastItemRef`가 새로 정의됨
   );
 
-  console.log(page)
   return (
     /* 이번 달 독서 리스트 */
     <>
