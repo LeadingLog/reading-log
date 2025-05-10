@@ -61,15 +61,15 @@ export default function MyFavoriteList({ activeTab }: Props) {
   }, [page, activeTab]);
 
   // Intersection Observer 설정
-  const observer = useRef<IntersectionObserver | null>(null);
+  const myFavoriteListObserver = useRef<IntersectionObserver | null>(null);
   const lastItemRef = useCallback(
     (node: HTMLLIElement | null) => {
       if (isLoading || !hasMore) return; // 로딩 중이거나 더 이상 불러올 데이터가 없으면 종료
 
-      if (observer.current) observer.current.disconnect(); // 기존 옵저버를 종료
+      if (myFavoriteListObserver.current) myFavoriteListObserver.current.disconnect(); // 기존 옵저버를 종료
 
       // 새로운 IntersectionObserver 생성
-      observer.current = new IntersectionObserver((entries) => {
+      myFavoriteListObserver.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           // 마지막 아이템이 화면에 보이면 페이지 번호 증가
           setPage((prev) => prev + 1);
@@ -77,7 +77,7 @@ export default function MyFavoriteList({ activeTab }: Props) {
       });
 
       // `node`가 있으면 해당 노드를 관찰하기 시작
-      if (node) observer.current.observe(node);
+      if (node) myFavoriteListObserver.current.observe(node);
     },
     [isLoading, hasMore] // 이 값들이 변경되면 `lastItemRef`가 새로 정의됨
   );
