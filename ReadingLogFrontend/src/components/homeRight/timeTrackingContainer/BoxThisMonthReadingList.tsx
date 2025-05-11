@@ -1,7 +1,7 @@
 import ItemReadStatus from "./ItemReadStatus.tsx";
 import { useModalStore } from "../../../store/modalStore.ts";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { monthReadingListItem } from "../../../types/monthReadingList.ts";
+import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../../types/monthReadingList.ts";
 import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
 import { useDateStore } from "../../../store/useDateStore.ts";
 
@@ -27,18 +27,11 @@ export default function BoxThisMonthReadingList() {
     })
   }
 
-  // 독서 상태별로 정렬용
-  const readOrder = {
-    reading: 0,    // 읽는 중
-    noRead: 1,     // 아직 읽지 않음
-    complete: 2        // 다 읽음
-  };
-
-  const searchThisMonthReadingList = async (userId: number, yearMonth?: number, page?: number, size?: number) => {
+  const searchThisMonthReadingList = async ({ userId, yearMonth, page, size }: fetchThisMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
     try {
       setIsLoading(true);
-      const data = await fetchThisMonthReadingList(userId, yearMonth, page, size);
+      const data = await fetchThisMonthReadingList({ userId, yearMonth, page, size });
       // 받아온 독서상태별로 데이터 순서 정렬
       const sortedList = data.monthlyReadingList.sort((a : monthReadingListItem, b : monthReadingListItem) => {
         return readOrder[a.readStatus] - readOrder[b.readStatus];
@@ -57,7 +50,7 @@ export default function BoxThisMonthReadingList() {
   const yearMonth = parseInt(`${year}${String(month).padStart(2, '0')}`);
 
   useEffect(() => {
-    searchThisMonthReadingList(1, yearMonth, page, 20)
+    searchThisMonthReadingList({ userId: 1, yearMonth, page, size: 20 });
   }, [page]);
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>(null);

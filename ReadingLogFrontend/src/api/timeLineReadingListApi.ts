@@ -1,19 +1,17 @@
 import axios from 'axios';
-import { fetchThisMonthReadingListParams } from "../types/monthReadingList.ts";
+import { fetchTimeLineReadingListParams } from "../types/timeLine.ts";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-export const fetchThisMonthReadingList = async ({ userId, yearMonth, page, size }: fetchThisMonthReadingListParams) => {
+export const fetchTimeLineReadingList = async ({ userId, year } : fetchTimeLineReadingListParams) => {
 
   try {
     const { data } = await axios.get(
-      `${serverUrl}/readinglist/yymm`,
+      `${serverUrl}/readinglist/timeline/yymm`,
       {
         params: {
           userId: userId, // 실제 로그인 유저 ID로 교체 필요
-          yearMonth: yearMonth,
-          page: page,
-          size: size
+          year: year,
         },
       }
     );

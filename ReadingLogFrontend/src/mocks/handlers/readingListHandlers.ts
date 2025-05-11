@@ -31,17 +31,11 @@ export const readingListHandlers = [
 
   // 타임라인에 보여 질 년&월 도서 수
   http.get(`${serverUrl}/readinglist/timeline/yymm`, async ({ request }) => {
-    const authHeader = request.headers.get('Authorization');
     const url = new URL(request.url);
     const userId = parseInt(url.searchParams.get('userId') || '1', 10);
     const year = parseInt(url.searchParams.get('year') || '2025', 10);
 
     console.log(`✅ [Mock API] 타임라인에 보여 질 년&월 도서 수 : userId: ${userId}, year: ${year}`);
-    console.log(`✅ [Mock API] 타임라인에 보여 질 년&월 도서 수 : 🔐 Authorization: ${authHeader}`);
-
-    if (!authHeader || !authHeader.startsWith('Bearer')) {
-      return HttpResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
 
     if (year === 2025) {
       return HttpResponse.json(readingList_2025);
@@ -56,7 +50,6 @@ export const readingListHandlers = [
 
   // 이번 달 독서 리스트
   http.get(`${serverUrl}/readinglist/yymm`, async ({request}) => {
-    const authHeader = request.headers.get('Authorization');
     const url = new URL(request.url);
     const userId = parseInt(url.searchParams.get('userId') || '1', 10);
     const yearMonth = parseInt(url.searchParams.get('yearMonth') || '2025.05', 10);
@@ -64,11 +57,6 @@ export const readingListHandlers = [
     const size = parseInt(url.searchParams.get('size') || '20', 10);
 
     console.log(`✅ [Mock API] 이번 달 독서 리스트 : userId: ${userId}, yearMonth: ${yearMonth} page: ${page}, size: ${size}`);
-    console.log(`✅ [Mock API] 이번 달 독서 리스트 : 🔐 Authorization: ${authHeader}`);
-
-    if (!authHeader || !authHeader.startsWith('Bearer')) {
-      return HttpResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
 
     if (page === 0) {
       return HttpResponse.json(thisMonthReadingList); // 0페이지 데이터

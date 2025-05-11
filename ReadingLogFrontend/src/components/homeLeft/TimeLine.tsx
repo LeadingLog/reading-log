@@ -3,21 +3,13 @@ import YearSlideBar from "../common/YearSlideBar.tsx";
 import { usePageStore } from "../../store/pageStore.ts";
 import { useDateStore } from "../../store/useDateStore.ts";
 import { useEffect, useState } from "react";
-import axios from "axios";
-
-type TimelineEntry = {
-  month: number;
-  noRead: number;
-  reading: number;
-  complete: number;
-};
+import { fetchTimeLineReadingList } from "../../api/timeLineReadingListApi.ts";
+import { fetchTimeLineReadingListParams, TimelineEntry } from "../../types/timeLine.ts";
 
 export default function TimeLine() {
 
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   const { year } = useDateStore(); // Zustand에서 년도 정보 가져오기
-
-  const serverUrl = import.meta.env.VITE_SERVER_URL;
 
   const statsMonth = (month: string) => {
     setRightContent(
@@ -28,29 +20,17 @@ export default function TimeLine() {
   }
   const [timelineData, setTimelineData] = useState<TimelineEntry[]>([]);
 
+  const searchTimeLineReadingList = async ({ userId, year }: fetchTimeLineReadingListParams) => {
+    try {
+      const data = await fetchTimeLineReadingList({ userId, year });
+      setTimelineData(data.timeLineReadingList);
+    } catch (error) {
+      console.error("쿼리 테스트 에러:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchTimelineData = async () => {
-      try {
-        const response = await axios.get(
-          `${serverUrl}/readinglist/timeline/yymm`,
-          {
-            headers: {
-              Authorization: 'Bearer mock-access-token', // 🔐 임시 헤더
-            },
-            params: {
-              userId: 1, // 실제 로그인 유저 ID로 교체 필요
-              year: year,
-            },
-          }
-        );
-
-        setTimelineData(response.data.timeLineReadingList);
-      } catch (error) {
-        console.error('데이터 불러오기 실패:', error);
-      }
-    };
-
-    fetchTimelineData();
+    searchTimeLineReadingList({ userId : 1, year });
   }, [year]);
   return (
     <section className="flex flex-col gap-4 rounded-xl flex-1">
