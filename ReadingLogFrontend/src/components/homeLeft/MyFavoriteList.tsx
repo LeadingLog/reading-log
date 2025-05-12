@@ -2,20 +2,15 @@ import CustomScrollbar from "../common/CustomScrollbar.tsx";
 import { AladinApiItem } from "../../types/aladinApi.ts";
 import { useModalStore } from "../../store/modalStore.ts";
 import { useEffect, useRef, useState, useCallback } from "react";
-import axios from "axios";
 import { TabName } from "../../types/tabName.ts";
+import { fetchMyFavoriteListParams } from "../../types/myFavoriteList.ts";
+import { fetchMyFavoriteList } from "../../api/myFavoriteListApi.ts";
 
 interface Props {
   activeTab: TabName;
 }
 
-type FetchFavoritesParams = {
-  page?: number;
-  size?: number;
-};
-
 export default function MyFavoriteList({ activeTab }: Props) {
-  const serverUrl = import.meta.env.VITE_SERVER_URL;
   const [page, setPage] = useState<number>(0);
   const [favoriteList, setFavoriteList] = useState<AladinApiItem[]>([]);
   const [hasMore, setHasMore] = useState(true); // 더 불러올 데이터가 있는지 여부
@@ -34,13 +29,11 @@ export default function MyFavoriteList({ activeTab }: Props) {
     });
   };
 
-  const fetchFavorites = async ({ page }: FetchFavoritesParams) => {
+  const searchMyFavoriteList = async ({ userId, page, size }: fetchMyFavoriteListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
     try {
       setIsLoading(true);
-      const { data } = await axios.get(`${serverUrl}/readinglist/fvrts`, {
-        params: { page },
-      });
+      const data = await fetchMyFavoriteList({ userId, page, size });
 
       setFavoriteList((prev) => [...prev, ...data.favoriteList]);
 
@@ -56,7 +49,7 @@ export default function MyFavoriteList({ activeTab }: Props) {
 
   useEffect(() => {
     if (activeTab === "관심 도서") {
-      fetchFavorites({ page });
+      searchMyFavoriteList({ userId: 1, page, size : 21 });
     }
   }, [page, activeTab]);
 
