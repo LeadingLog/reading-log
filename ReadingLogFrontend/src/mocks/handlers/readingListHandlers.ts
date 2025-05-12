@@ -13,10 +13,11 @@ export const readingListHandlers = [
   // 사용자의 관심 도서 목록 (즐겨찾기) 조회
   http.get(`${serverUrl}/readinglist/fvrts`, async ({ request }) => {
     const url = new URL(request.url);
+    const userId = parseInt(url.searchParams.get('userId') || '1', 10);
     const page = parseInt(url.searchParams.get('page') || '0', 10);
     const size = parseInt(url.searchParams.get('size') || '21', 10);
 
-    console.log(`✅ [Mock API] 사용자의 관심 도서 목록 (즐겨찾기) 조회 page: ${page}, size: ${size}`);
+    console.log(`✅ [Mock API] 사용자의 관심 도서 목록 (즐겨찾기) 조회 userId: ${userId}, page: ${page}, size: ${size}`);
 
     if (page === 0) {
       return HttpResponse.json(favoriteListData); // 0페이지 데이터
