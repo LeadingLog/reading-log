@@ -4,11 +4,8 @@ package com.example.demo.user.Service;
 //import com.example.demo.repository.MemberRepository;
 
 import com.example.demo.response.ResponseService;
-import com.example.demo.user.Entity.RefreshToken;
+import com.example.demo.user.Entity.*;
 import com.example.demo.user.Repository.RefreshTokenRepository;
-import com.example.demo.user.Entity.NaverProfile;
-import com.example.demo.user.Entity.NaverTokenResponse;
-import com.example.demo.user.Entity.User;
 import com.example.demo.user.Repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,7 +61,7 @@ public class UserService {
 
     // 1. callback 이후 접근 신규 토큰 발급 요청
     @Transactional
-    public NaverTokenResponse getNewAccessToken(String code, String state, String platform) {
+    public NaverTokenResponse getNewNaverAccessToken(String code, String state, String platform) {
         Map<String, Object> result = new HashMap<>();
 
 //        if (platform.equals("NAVER")) {
@@ -117,7 +114,7 @@ public class UserService {
 
     // 접근 토큰으로 프로필 조회 요청
     @Transactional
-    public NaverProfile getUserInfo(String accessToken) throws URISyntaxException, JsonProcessingException {
+    public NaverProfile getNaverUserInfo(String accessToken) throws URISyntaxException, JsonProcessingException {
         StringBuilder apiURL = new StringBuilder();
         apiURL.append("https://openapi.naver.com/v1/nid/me");
 
@@ -151,17 +148,29 @@ public class UserService {
 
     // 회원 추가
     @Transactional
-    public Integer joinUser(NaverProfile userInfo) {
-        if (userInfo == null) {
+    public Integer joinUser(NaverProfile naverUserInfo, KakaoProfile kakaoUserInfo) {
+        if (naverUserInfo == null && kakaoUserInfo == null) {
             throw new IllegalArgumentException("회원정보가 없습니다.");
         }
-        System.out.println(userInfo);
-        System.out.println(userInfo.getId());
 
         User user = new User();
-        user.setUserUUID(userInfo.getId());
-        user.setNickname(userInfo.getNickname());
-        user.setUserEmail(userInfo.getEmail());
+
+        if (naverUserInfo != null){
+            System.out.println("네이버 회원 정보 처리");
+
+            user.setUserUUID(naverUserInfo.getId());
+            user.setNickname(naverUserInfo.getNickname());
+            user.setUserEmail(naverUserInfo.getEmail());
+
+        } else if (kakaoUserInfo != null) {
+            System.out.println("카카오 회원 정보 처리");
+
+            user.setUserUUID(kakaoUserInfo.getId());
+            user.setNickname(kakaoUserInfo.getNickname());
+            user.setUserEmail(kakaoUserInfo.getEmail());
+        } else {
+            throw new IllegalArgumentException("유저 두개 입력 오류.");
+        }
 
         User joinedUser = userRepository.save(user);
         Integer userId = joinedUser.getUserId();
