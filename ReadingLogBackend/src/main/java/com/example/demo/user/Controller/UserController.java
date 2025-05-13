@@ -4,11 +4,9 @@ package com.example.demo.user.Controller;
 //import com.example.demo.service.MemberService;
 
 import com.example.demo.response.ResponseService;
-import com.example.demo.user.Entity.NaverProfile;
-import com.example.demo.user.Entity.NaverTokenResponse;
-import com.example.demo.user.Entity.RefreshToken;
-import com.example.demo.user.Entity.User;
+import com.example.demo.user.Entity.*;
 import com.example.demo.user.Service.ApiKeyService;
+import com.example.demo.user.Service.KakaoService;
 import com.example.demo.user.Service.RefreshTokenService;
 import com.example.demo.user.Service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,11 +39,13 @@ public class UserController {
     private final UserService userService;
     private final RefreshTokenService tokenService;
     private final ResponseService responseService;
+    private final KakaoService kakaoService;
 
-    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService, ResponseService responseService) {
+    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService, ResponseService responseService, KakaoService kakaoService) {
         this.userService = userService;
         this.tokenService = tokenService;
         this.responseService = responseService;
+        this.kakaoService = kakaoService;
     }
 
     // 회원 세션 시간 조회
@@ -146,7 +146,7 @@ public class UserController {
         Map<String, Object> rtn = new HashMap<>();
 
         // 1. 접근 토큰 신규 발급
-        NaverTokenResponse accessTokenResult = userService.getNewAccessToken(code, state, "Naver");
+        NaverTokenResponse accessTokenResult = userService.getNewNaverAccessToken(code, state, "Naver");
         System.out.println("accessToken="+accessTokenResult);
 
         // 접근 토큰 에러 시 리턴
@@ -168,15 +168,15 @@ public class UserController {
 
         // 2. 네이버 프로필 정보 조회
         String accessToken = accessTokenResult.getAccessToken();
-        NaverProfile userInfo = userService.getUserInfo(accessToken);
+        NaverProfile naverUserInfo = userService.getNaverUserInfo(accessToken);
 
         // 3. 사이트 가입 여부 조회 (미가입 : 회원가입/ 가입 : 로그인)
-        String naverId = userInfo.getId();
+        String naverId = naverUserInfo.getId();
         ArrayList<User> uuid = userService.getUserByUUID(naverId);
 
         if (uuid.isEmpty()) {   // 회원 가입
             // 회원 추가
-            Integer userId = userService.joinUser(userInfo);
+            Integer userId = userService.joinUser(naverUserInfo, null);
             // 갱신 토큰 저장
             RefreshToken refreshToken = new RefreshToken(null, userId, "Naver", accessTokenResult.getRefreshToken());
             RefreshToken result = tokenService.addToken(refreshToken);
@@ -185,9 +185,7 @@ public class UserController {
             if (result == null) {
                 userService.deleteUser(userId, request);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
-//                rtn.put("error", "회원가입 중 토큰 저장 에러 발생. 재가입 필요");
             }
-//            rtn.put("success", "회원가입 성공");
             // 회원가입한 회원 조회
             users = userService.findUserById(userId);
             return new ResponseEntity<>(users, HttpStatus.OK);
@@ -199,23 +197,62 @@ public class UserController {
             users = userService.findUserById(loginId);
 
             return new ResponseEntity<>(users, HttpStatus.OK);
-
-//            rtn.put("loginId", loginId);
-//            rtn.put("success", "로그인 성공");
-
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//            rtn.put("error", "오류: [ " + uuid.size() + " ] 개의 아이디가 조회됩니다.");
         }
-//        return rtn;
     }
 
 
 
 
-
+    @ResponseBody
+    @PostMapping("/kakaologin")
     // 카카오 회원가입 및 로그인
+    public ResponseEntity<?> kakaoLogin(String code, HttpServletRequest request) throws IOException, URISyntaxException {
+        User users = null;
+        Map<String, Object> rtn = new HashMap<>();
 
+        // 1. 토큰 받기
+        KakaoTokenResponse accessTokenResult = kakaoService.getNewKakaoAccessToken(code);
+
+        // 토큰 유효성 검증
+        
+        
+        // 카카오 프로필 정보 조회
+        String accessToken = accessTokenResult.getAccessToken();
+        KakaoProfile kakaoUserInfo = kakaoService.getKakaoUserInfo(accessToken);
+
+
+        // 사이트 가입 여부 조회
+        String kakaoId = kakaoUserInfo.getId();
+        ArrayList<User> uuid = userService.getUserByUUID(kakaoId);
+
+        // 회원가입
+        if (uuid.isEmpty()) {
+            // 회원 추가
+            Integer userId = userService.joinUser(null, kakaoUserInfo);
+            // 갱신 토큰 저장
+            RefreshToken refreshToken = new RefreshToken(null, userId, "Kakao", accessTokenResult.getRefreshToken());
+            RefreshToken result = tokenService.addToken(refreshToken);
+
+            if (result == null) {
+                userService.deleteUser(userId, request);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
+            }
+
+            users = userService.findUserById(userId);
+            return new ResponseEntity<>(users, HttpStatus.OK);
+
+        } else if (uuid.size() == 1) {  // 로그인
+            Integer loginId = userService.loginUser(kakaoId, request);
+            users = userService.findUserById(loginId);
+
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+    }
 
 
 
