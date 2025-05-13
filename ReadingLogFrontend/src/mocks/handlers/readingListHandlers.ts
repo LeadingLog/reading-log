@@ -11,8 +11,8 @@ import myReadingList_complete from '../dummyData/myReadingListData/myReadingList
 import myReadingList_complete2 from '../dummyData/myReadingListData/myReadingList_complete2.json';
 import myReadingList_noRead from '../dummyData/myReadingListData/myReadingList_noRead.json';
 import myReadingList_noRead2 from '../dummyData/myReadingListData/myReadingList_noRead2.json';
-import myReadingList_reading from '../dummyData/myReadingListData/myReadingList_Reading.json';
-import myReadingList_reading2 from '../dummyData/myReadingListData/myReadingList_Reading2.json';
+import myReadingList_reading from '../dummyData/myReadingListData/myReadingList_reading.json';
+import myReadingList_reading2 from '../dummyData/myReadingListData/myReadingList_reading2.json';
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
