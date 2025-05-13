@@ -34,7 +34,7 @@ public class User {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "user_email", nullable = false)
+    @Column(name = "user_email", nullable = true)
     private String userEmail;
 
     @CreationTimestamp
