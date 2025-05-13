@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useModalStore } from "../../../store/modalStore.ts";
+import { ReadStatus } from "../../../types/readStatus.ts";
 
 // 1. props 타입 정의
 interface ModalTrackingPlanProps {
-  readStatus: 'reading' | 'complete' | 'noRead';
+  readStatus: ReadStatus;
 }
 
 // 2. 컴포넌트 정의

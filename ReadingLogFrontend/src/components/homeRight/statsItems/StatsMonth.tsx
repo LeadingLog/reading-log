@@ -6,6 +6,8 @@ import CustomScrollbar from "../../common/CustomScrollbar.tsx";
 
 export default function StatsMonth() {
 
+  const isActive = 0
+
   const { pageData } = usePageStore();
 
   return (
@@ -197,7 +199,7 @@ export default function StatsMonth() {
         scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color"
         // scrollbarWidth=""
       >
-        <BookImgList/>
+        <BookImgList isActive={isActive}/>
       </CustomScrollbar>
     </section>
   )
