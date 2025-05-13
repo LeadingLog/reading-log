@@ -8,13 +8,18 @@ import { AladinApiItem } from "../../types/aladinApi.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
 
-export default function BookImgList({ isActive }: { isActive: TabType }) {
+interface BookImgListProps {
+  isActive: TabType;
+  query?: string;
+}
+
+export default function BookImgList({ isActive, query = '' }: BookImgListProps) {
   const [page, setPage] = useState<number>(0);
   const [myReadingList, setMyReadingList] = useState<AladinApiItem[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { openModal } = useModalStore();
-
+  console.log(query)
   const openModalBookPlan = (item: AladinApiItem) => {
     openModal("ModalBookPlan", {
       cover: item.cover,
@@ -37,7 +42,7 @@ export default function BookImgList({ isActive }: { isActive: TabType }) {
   useEffect(() => {
     if (!hasMore) return;
 
-    const searchMyReadingList = async () => {
+    const loadMyReadingList = async () => {
       setIsLoading(true);
       try {
         const data = await fetchMyReadingList({
@@ -61,7 +66,7 @@ export default function BookImgList({ isActive }: { isActive: TabType }) {
       }
     };
 
-    searchMyReadingList();
+    loadMyReadingList();
   }, [page, isActive]);
 
   // Intersection Observer 설정

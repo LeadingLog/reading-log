@@ -109,6 +109,25 @@ export const readingListHandlers = [
     }
   }),
 
+  // 내 독서 목록 내부 검색 (제목 + 저자)
+  http.get(`${serverUrl}/readinglist/search`, async ({request}) => {
+    const url = new URL(request.url);
+    const userId = parseInt(url.searchParams.get('userId') || '1', 10);
+    const tabType = parseInt(url.searchParams.get('tabType') || '0', 10);
+    const query = url.searchParams.get('query') || '0';
+    console.log(`✅ [Mock API] 내 도서 목록 리스트 userId: ${userId}, tabType: ${tabType} query: ${query}`);
+    // if (page === 0 && tabType === 0) {
+    //   return HttpResponse.json(myReadingList_all)
+    // } else if (page === 1 && tabType === 0) {
+    //   return HttpResponse.json(myReadingList_all2)
+    // } else {
+    //   return HttpResponse.json({
+    //     readingList: [],
+    //   });
+    // }
+  }),
+
+
   // 도서 상태값 변경(독서 중/완독)
   http.post(`${serverUrl}/readinglist/change_status`, async ({request}) => {
     const body = await request.json();
