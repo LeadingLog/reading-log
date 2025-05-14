@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useModalStore } from "../../../store/modalStore.ts";
+import { ReadStatus } from "../../../types/readStatus.ts";
 
-export default function ItemReadStatus() {
+// 1. props 타입 정의
+interface ModalTrackingPlanProps {
+  readStatus: ReadStatus;
+}
+
+// 2. 컴포넌트 정의
+export default function ItemReadStatus({ readStatus }: ModalTrackingPlanProps) {
 
   const {openModal} = useModalStore()
 
@@ -40,16 +47,11 @@ export default function ItemReadStatus() {
     }
 
   }
-  const [noRead, setNoRead] = useState(true) // 읽기 전인지 읽는 중 & 완독 인지 구별 하기 위한 것
-
-  useEffect(() => {
-    setNoRead(true)
-  }, [])
 
   return (
     /* 이번 달 독서 리스트 */
     <>
-      {noRead ? (
+      {readStatus !== "noRead" ? (
         <button
           onClick={toggleSwitch}
           className="relative flex items-center w-[70px] h-full rounded-full px-1 bg-toggle_Read_Status_Bg overflow-hidden"
@@ -69,7 +71,7 @@ export default function ItemReadStatus() {
         </button>
       ) :
         <button
-          className="relative flex justify-end items-center h-full bg-toggleNoReadingBg py-0.5 px-2 rounded-full">
+          className="relative flex justify-end items-center h-full bg-toggle_NoReading_Bg py-0.5 px-2 rounded-full">
           <span className="text-xs text-noReadingBg contrast-0">읽기전</span>
         </button>
       }

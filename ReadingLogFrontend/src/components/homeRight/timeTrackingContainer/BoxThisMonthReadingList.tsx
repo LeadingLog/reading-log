@@ -1,145 +1,117 @@
 import ItemReadStatus from "./ItemReadStatus.tsx";
 import { useModalStore } from "../../../store/modalStore.ts";
-// import CustomScrollbar from "../../common/CustomScrollbar.tsx";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../../types/monthReadingList.ts";
+import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
+import { useDateStore } from "../../../store/useDateStore.ts";
 
 export default function BoxThisMonthReadingList() {
 
-  const {openModal} = useModalStore();
+  const { openModal } = useModalStore();
+  const { year, month } = useDateStore(); // Zustand에서 년도 정보 가져오기
+
+  const [page, setPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState(true); // 더 불러올 데이터가 있는지 여부
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+  const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>([])
 
   /* 독서 타임 트래킹 모달 오픈 */
-  const openModaTrackingPlan = () => {
+  const openModaTrackingPlan = (item: monthReadingListItem) => {
     openModal('ModalTrackingPlan', {
-      title: '로그아웃 하시겠어요?',
+      bookTitle: item.title,
+      bookSubTitle: item.author,
+      cover: item.cover,
+      bookLink: item.link,
       cancelText: '닫기',
-      confirmText: '로그아웃',
+      confirmText: '독서 시작',
     })
   }
 
+  const searchThisMonthReadingList = async ({ userId, yearMonth, page, size }: fetchThisMonthReadingListParams) => {
+    if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
+    try {
+      setIsLoading(true);
+      const data = await fetchThisMonthReadingList({ userId, yearMonth, page, size });
+      // 받아온 독서상태별로 데이터 순서 정렬
+      const sortedList = data.monthlyReadingList.sort((a : monthReadingListItem, b : monthReadingListItem) => {
+        return readOrder[a.readStatus] - readOrder[b.readStatus];
+      });
+      setThisMonthReadingList((prev) => [...prev, ...sortedList])
+      const isLastPage = data.page.number + 1 >= data.page.totalPages;
+      setHasMore(!isLastPage);
+    } catch (error) {
+      console.error("쿼리 테스트 에러:", error);
+      setHasMore(false); // 더 이상 시도하지 않도록 설정
+    } finally {
+      setIsLoading(false); // 검색 완료 후 로딩 상태 해제
+    }
+  };
+
+  const yearMonth = parseInt(`${year}${String(month).padStart(2, '0')}`);
+
+  useEffect(() => {
+    searchThisMonthReadingList({ userId: 1, yearMonth, page, size: 20 });
+  }, [page]);
+  // Intersection Observer 설정
+  const thisMonthReadingListObserver = useRef<IntersectionObserver | null>(null);
+  const lastItemRef = useCallback(
+    (node: HTMLLIElement | null) => {
+      if (isLoading || !hasMore) return; // 로딩 중이거나 더 이상 불러올 데이터가 없으면 종료
+
+      if (thisMonthReadingListObserver.current) thisMonthReadingListObserver.current.disconnect(); // 기존 옵저버를 종료
+
+      // 새로운 IntersectionObserver 생성
+      thisMonthReadingListObserver.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          // 마지막 아이템이 화면에 보이면 페이지 번호 증가
+          setPage((prev) => prev + 1);
+        }
+      });
+
+      // `node`가 있으면 해당 노드를 관찰하기 시작
+      if (node) thisMonthReadingListObserver.current.observe(node);
+    },
+    [isLoading, hasMore] // 이 값들이 변경되면 `lastItemRef`가 새로 정의됨
+  );
 
   return (
     /* 이번 달 독서 리스트 */
     <>
       {/* 책 리스트 */}
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <button
-          className="relative flex justify-end items-center h-full bg-toggle_NoReading_Bg py-0.5 px-2 rounded-full">
-          <span className="text-xs text-noReadingBg contrast-0">읽기전</span>
-        </button>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <button
-          className="relative flex justify-end items-center h-full bg-toggle_NoReading_Bg py-0.5 px-2 rounded-full">
-          <span className="text-xs text-noReadingBg contrast-0">읽기전</span>
-        </button>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <button
-          className="relative flex justify-end items-center h-full bg-toggle_NoReading_Bg py-0.5 px-2 rounded-full">
-          <span className="text-xs text-noReadingBg contrast-0">읽기전</span>
-        </button>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <button
-          className="relative flex justify-end items-center h-full bg-toggle_NoReading_Bg py-0.5 px-2 rounded-full">
-          <span className="text-xs text-noReadingBg contrast-0">읽기전</span>
-        </button>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <button
-          className="relative flex justify-end items-center h-full bg-toggle_NoReading_Bg py-0.5 px-2 rounded-full">
-          <span className="text-xs text-noReadingBg contrast-0">읽기전</span>
-        </button>
-      </li>
-      <li
-        className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-        onClick={() => openModaTrackingPlan()}
-      >
-        <span className="text-xl">책이름</span>
-        <ItemReadStatus/>
-      </li>
+      {thisMonthReadingList.length === 0 ? (
+        <li
+          className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
+        >
+          <span className="text-xl">리스트가 비었어요</span>
+        </li>
+      ) : thisMonthReadingList.map((item, idx) => (
+        <li
+          key={idx}
+          className="cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
+          onClick={() => openModaTrackingPlan(item)}
+        >
+          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.title}</span>
+          <ItemReadStatus readStatus={item.readStatus}/>
+        </li>
+      ))}
+      {isLoading && (
+        <li className="py-2 justify-center flex gap-1 text-sm text-favoriteList_Searching_Text">
+          <span>도서를 불러 오는 중입니다.</span>
+          <span className="w-5 h-5 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
+        </li>
+      )}
+      {/* 이 요소가 화면에 보이면 다음 페이지를 불러옴 */}
+      {hasMore && (
+        <li
+          ref={lastItemRef}
+          className="invisible h-1 p-3" // 실제 표시되진 않지만 관찰용
+        ></li>
+      )}
+      {!hasMore && thisMonthReadingList.length > 0 && (
+        <li className="py-2 justify-center flex gap-1 text-sm text-favoriteList_Searching_End_Text">
+          <span>이번 달 독서 리스트를 모두 불러왔습니다.</span>
+        </li>
+      )}
     </>
   );
 }

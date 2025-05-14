@@ -1,3 +1,5 @@
+import { ReadStatus } from "./readStatus.ts";
+
 export interface AladinApiItem {
   title: string;
   author: string;
@@ -5,6 +7,7 @@ export interface AladinApiItem {
   cover: string;
   isFavorite?: boolean; // optional
   link?: string;
+  readStatus?: ReadStatus
 }
 
 export interface BookSearchResultProps {

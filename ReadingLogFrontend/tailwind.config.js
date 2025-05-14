@@ -42,6 +42,19 @@ export default {
         /* 타임라인 -> 총 독서 시간 관련 */
         allReadingTime_Bg  : "#E5CEC8", // 총 독서 시간 표시 배경
         allReadingTime_Text: "#000000", // 총 독서 시간 표시 폰트
+        
+        /* 타임라인 화면 */
+        timeLineBorder          : "#96B2C8", // 타임라인 경로 색
+        timeLineMonthCircle     : "#C9A89F", // 월 표시 원
+        timeLineMonthHoverCircle: "#E5CEC8", // 월 표시 호버서 시 색
+        timeLineMonthText       : "#FFFFFF", // 월 표시 텍스트 색
+        timeLineNoReadText      : "#FFFFFF", // 읽기전 텍스트 색
+        timeLineNoReadBg        : "#D9D9D9", // 읽기전 텍스트 색
+        timeLineReadingText     : "#FFFFFF", // 독서중 텍스트 색
+        timeLineReadingBg       : "#C9A89F", // 독서중 텍스트 색
+        timeLineCompleteText    : "#FFFFFF", // 완독 텍스트 색
+        timeLineCompleteBg      : "#96B2C8", // 완독 텍스트 색
+        
         /* 년도 슬라이드 관련 */
         yearSlide_Bg           : "#E5CEC8", // 년도 슬라이드 - 배경
         yearSlide_Border       : "#E5CEC8", // 년도 슬라이드 - 보더
@@ -70,15 +83,20 @@ export default {
         readingList_Bg   : "#E5CEC8", // 이번 달 독서 리스트 배경색
         readingList_Hover: "#C9A89F", // 이번 달 독서 리스트 배경색
         
-        /* 월별 & 연별 통계 그래프 관련 */
-        stats_Info_Text                   : "#96B2C8",   // 월별 & 연별 통계 - 통계 설명 텍스트
-        stats_Info_Text_Highlight         : "#C9A89F",   // 월별 & 연별 통계 - 통계 설명 강조 텍스트
-        stats_Month_Graph_Bottom_Border   : "#C9A89F",   // 월별 & 연별 통계 - 그래프 바닥 보더 색
-        stats_Month_Graph_Book_Bg         : "#E5CEC850", // 월별 통계 - 책 배경 색
-        stats_Month_Graph_Book_Border     : "#C9A89F",   // 월별 통계 - 책 보더 색
-        stats_Month_Graph_Reading_Icon_Bg : "#C9A89F",   // 월별 통계 - 독서 중 아이콘 배경
-        stats_Month_Graph_Complete_Icon_Bg: "#96B2C8",   // 월별 통계 - 완독 책 아이콘 배경
-        stats_Month_Graph_Icon_Color      : "#FDFAF3",   // 월별 통계 - 독서 중 & 완독 아이콘 색
+        /* 월별 & 년별 통계 그래프 관련 */
+        stats_Info_Text                         : "#96B2C8",   // 월별 & 년별 통계 - 통계 설명 텍스트
+        stats_Info_Text_Highlight               : "#C9A89F",   // 월별 & 년별 통계 - 통계 설명 강조 텍스트
+        stats_Month_Graph_Bottom_Border         : "#C9A89F",   // 월별 & 년별 통계 - 그래프 바닥 보더 색
+        stats_Month_Graph_Book_Bg               : "#E5CEC850", // 월별 통계 - 책 배경 색
+        stats_Month_Graph_Book_Border           : "#C9A89F",   // 월별 통계 - 책 보더 색
+        stats_Month_Graph_Reading_Icon_Bg       : "#C9A89F",   // 월별 통계 - 독서 중 아이콘 배경
+        stats_Month_Graph_Complete_Icon_Bg      : "#96B2C8",   // 월별 통계 - 완독 책 아이콘 배경
+        stats_Month_Graph_Icon_Color            : "#FDFAF3",   // 월별 통계 - 독서 중 & 완독 아이콘 색
+        stats_Year_Graph_Count_Text             : "#C9A89F",   // 년별 통계 - 도서 수 텍스트 색
+        stats_Year_Graph_MonthItem_Circle       : "#E5CEC8",   // 년별 통계 - 각 월 표시 원 색
+        stats_Year_Graph_MonthItem_Circle_Border: "#96B2C8",   // 년별 통계 - 각 월 표시 원 보더 색
+        stats_Year_Graph_Month_Text             : "#C9A89F",   // 년별 통계 - 월 표시 텍스트 색
+        stats_Year_Graph_Bottom_Border          : "#C9A89F",   // 년별 통계 - 그래프 바닥 보더 색
         
         // 중앙 컴포넌트 뒷배경
         book_Bg: "#96B2C8", // LeftPage, rightPage 컨텐츠 뒤에 감싸는 배경
@@ -184,10 +202,15 @@ export default {
         myBook_SearchBar_Bg                      : "#FDFAF3", // 내 독서 목록 검색 바 - 내 독서 목록 검색창 배경
         myBook_SearchBar_Border                  : "#C9A89F", // 내 독서 목록 검색 바 - 검색창 보더
         myBook_SearchBar_SearchIcon_Default_Color: "#C9A89F", // 내 독서 목록 검색 바 - 검색 아이콘 검색안할 때 색
+        
         /* 관심도서 아이콘 관련 색 */
         favorite_Icon_Color: "#FDFAF3", // 관심도서 아이콘 색
         favorite_Icon_Bg   : "#96B2C8", // 관심도서 아이콘 배경 색
         unFavorite_Icon_Bg : "#D9D9D9", // 관심도서 아닐 때 아이콘 배경 색
+        /* 관심도서 리스트 설명 텍스트 관련 색 */
+        favoriteList_Searching_Text : "#000000", // 관심 도서 요청시 표시 텍스트 색
+        favoriteList_Empty_Text : "#96B2C8", // 관심 도서 요청시 표시 텍스트 색
+        favoriteList_Searching_End_Text : "#000000", // 관심 도서 요청시 표시 텍스트 색
         
         /* 로딩 관련 색 */
         loadingBg     : "#D9D9D9", // 로딩 중일 때 배경 색

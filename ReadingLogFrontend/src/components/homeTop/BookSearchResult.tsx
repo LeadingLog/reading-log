@@ -209,7 +209,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
           ) : !isLoading && moreTotalResults - moreBookList.length === 0 &&
             <li
               className="py-2 basis-full justify-center flex gap-1 text-sm text-main_SearchBar_searchingBook_Text">
-              <span>검색어와 관련된 모든 도서를 불러왔습니다.</span>
+              <span>관심 도서를 모두 불러왔습니다.</span>
             </li>
           }
         </>
