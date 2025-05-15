@@ -30,6 +30,7 @@ services:
       NAVER_REDIRECT_URI: ${NAVER_REDIRECT_URI}
       KAKAO_API_KEY: ${KAKAO_API_KEY}
       KAKAO_REDIRECT_URI: ${KAKAO_REDIRECT_URI}
+      VITE_ALADIN_API: ${VITE_ALADIN_API}
     depends_on:
       - db
 
