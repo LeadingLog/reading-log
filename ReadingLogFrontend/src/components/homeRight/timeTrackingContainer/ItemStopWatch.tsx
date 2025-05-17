@@ -4,21 +4,24 @@ import IconStop from "../../../assets/Icon-stop.svg?react"
 import { useModalStore } from "../../../store/modalStore.ts";
 import { useEffect, useRef, useState } from "react";
 import { usePageStore } from "../../../store/pageStore.ts";
+import axios from "axios";
 
 export default function ItemStopWatch() {
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
 
   const {openModal,closeModal} = useModalStore();
   const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
 
   /* 시작 & 일시정지 버튼 토글 관련 */
-  const [play, setPlay] = useState<boolean>(true)
+  const [play, setPlay] = useState<boolean>(true);
 
+  /* 스탑워치 시작 & 일시정지 */
   const playOrPause = () => {
     if (intervalRef.current === undefined) {  // 이미 실행 중이 아니라면
-      setPlay(true)
+      setPlay(true);
       intervalRef.current = setInterval(plusSecond, 1000); // 2️⃣ interval ID 저장
     } else {
-      setPlay(false)
+      setPlay(false);
       clearInterval(intervalRef.current); // 3️⃣ 일시정지
       intervalRef.current = undefined; // 정지 후 ID 초기화
     }
@@ -70,15 +73,15 @@ export default function ItemStopWatch() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);  // 1️⃣ interval ID 저장용
 
   if (seconds === 5) { // 60초가 되면 분 요소 1 올리기
-    setSeconds(0)
-    setMinute(minute + 1)
+    setSeconds(0);
+    setMinute(minute + 1);
   }
   if (minute === 2) { // 60분이 되면 1시간 올리기
-    setMinute(0)
-    setHour(hour + 1)
+    setMinute(0);
+    setHour(hour + 1);
   }
   const plusSecond = () => { // 1초씩 올림
-    setSeconds(prev => prev + 1)
+    setSeconds(prev => prev + 1);
   }
   const startTime = () => {
     if (!intervalRef.current) { // 이미 실행 중이 아니라면
@@ -86,9 +89,34 @@ export default function ItemStopWatch() {
     }
   };
   useEffect(() => {
-    startTime()
+    startTime();
     console.log('독서 시작!');
   }, []);
+
+  // 시간 경과 시 세션 연장 요청
+  useEffect(() => {
+    if (hour > 0) {
+      console.log(`스톱워치 :${hour}시간으로 바뀜 → 세션 연장 요청`);
+
+      const extendSession = async () => {
+        try {
+          const response = await axios.get(`${serverUrl}/user/extend_session`);
+
+          if(response.data.success){
+            console.log(`${response.data.success}, 세션 연장 성공`);
+          } else {
+            console.log(`${response.data.success}, 세션 연장 실패`);
+          }
+        } catch (err) {
+          console.error('세션 연장 실패:', err);
+        }
+      };
+
+      extendSession().catch((e) =>
+        console.error('extendSession 실행 중 에러 발생:', e)
+      );
+    }
+  }, [hour]);
 
   return (
     // 독서 타임 트랙킹 - 스탑워치 인 경우
