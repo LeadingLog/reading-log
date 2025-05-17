@@ -101,12 +101,52 @@ public class KakaoService {
 
         ObjectMapper obm = new ObjectMapper();
         Map<String, Object> responseMap = obm.readValue(responseBody, Map.class);
-        Map<String, Object> userProfile = (Map<String, Object>) responseMap.get("response");
+//        Map<String, Object> userProfile = (Map<String, Object>) responseMap.get("response");
 
         KakaoProfile kakaoProfile = new KakaoProfile();
-        kakaoProfile.setId((String) userProfile.get("id"));
-        kakaoProfile.setNickname((String) userProfile.get("nickname"));
-        kakaoProfile.setEmail((String) userProfile.get("email"));
+
+        // uuid 가져오기
+        Object uuidobj = responseMap.get("id");
+        if (uuidobj != null) {
+            kakaoProfile.setId(String.valueOf(uuidobj));
+        } else {
+            return null;
+        }
+
+        // nickname 가져오기
+        Map<String, Object> properties = (Map<String, Object>) responseMap.get("properties");
+        if (properties != null) {
+            String nickname = (String) properties.get("nickname");
+            if (nickname != null) {
+                kakaoProfile.setNickname(nickname);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+
+        // email 가져오기
+        Map<String, Object> kakaoAccount = (Map<String, Object>) responseMap.get("kakao_account");
+        if (kakaoAccount != null) {
+            String email = (String) kakaoAccount.get("email");
+            if (email != null) {
+                kakaoProfile.setEmail(email);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+
+
+        System.out.println("KakaoProfile ID: " + kakaoProfile.getId());
+        System.out.println("KakaoProfile Nickname: " + kakaoProfile.getNickname());
+        System.out.println("KakaoProfile Email: " + kakaoProfile.getEmail());
+
+//        kakaoProfile.setId((String) userProfile.get("id"));
+//        kakaoProfile.setNickname((String) userProfile.get("nickname"));
+//        kakaoProfile.setEmail((String) userProfile.get("email"));
 
         return kakaoProfile;
     }
