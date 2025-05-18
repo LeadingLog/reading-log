@@ -8,7 +8,7 @@ export default function StatsPage() {
 
   return (
     /* 통계 페이지 */
-    <section className="flex flex-col gap-4 overflow-hidden">
+    <section className="flex flex-1 flex-col gap-4 overflow-hidden">
       {/* 작년 이번년 내년 선택 슬라이드 */}
       <YearSlideBar />
       {/* 조건부 렌더링 */}
