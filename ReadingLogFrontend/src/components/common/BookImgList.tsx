@@ -12,7 +12,7 @@ import { fetchMyReadingListSearch } from "../../api/myReadingListSearchQueryApi.
 interface BookImgListProps {
   isActive: TabType;
   query?: string;
-  inputRef: React.RefObject<HTMLInputElement | null>;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 }
 
 export default function BookImgList({ isActive, query = '', inputRef }: BookImgListProps) {
