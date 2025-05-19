@@ -116,15 +116,10 @@ export const readingListHandlers = [
     const tabType = parseInt(url.searchParams.get('tabType') || '0', 10);
     const query = url.searchParams.get('query') || '0';
     console.log(`✅ [Mock API] 내 도서 목록 리스트 userId: ${userId}, tabType: ${tabType} query: ${query}`);
-    // if (page === 0 && tabType === 0) {
-    //   return HttpResponse.json(myReadingList_all)
-    // } else if (page === 1 && tabType === 0) {
-    //   return HttpResponse.json(myReadingList_all2)
-    // } else {
-    //   return HttpResponse.json({
-    //     readingList: [],
-    //   });
-    // }
+
+    if (query !== '') {
+      return HttpResponse.json(myReadingList_all)
+    }
   }),
 
 
