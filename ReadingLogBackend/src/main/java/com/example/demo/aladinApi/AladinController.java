@@ -19,7 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/books")
 public class AladinController {
 
-	@Value("${VITE_ALADIN_API}")
+	@Value("${AlADIN_KEY}")
 	private String ttbkey;
 
     @GetMapping("/search")
