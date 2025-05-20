@@ -24,4 +24,5 @@ export interface fetchMyReadingListParams {
   tabType: TabType;
   size?: number;
   page?: number;
+  query? : string;
 }
