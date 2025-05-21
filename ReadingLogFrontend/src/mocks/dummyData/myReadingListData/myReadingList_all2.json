@@ -1,0 +1,110 @@
+{
+  "success": true,
+  "readingList": [
+    {
+      "title": "나만 죽고 싶은 줄 알았지",
+      "author": "단무지(Danmuzi) (지은이)",
+      "isbn13": "9791198545527",
+      "cover": "https://image.aladin.co.kr/product/33646/5/cover200/k782939419_1.jpg",
+      "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
+      "tabType":0,
+      "readStatus": "reading",
+      "isFavorite": true,
+      "createdAt": "2025-01-01 11:11:11"
+    },
+    {
+      "title": "생태시민을 위한 동물지리와 환경 이야기",
+      "author": "한준호, 배동하, 이건, 서태동, 김하나, 이태우 (지은이)",
+      "isbn13": "9791191311396",
+      "cover": "https://image.aladin.co.kr/product/33323/52/cover200/k852938682_1.jpg",
+      "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
+      "tabType": 0,
+      "readStatus": "reading",
+      "isFavorite": true,
+      "createdAt": "2025-01-01 11:11:11"
+    },
+    {
+      "title": "오후에는 출근합니다",
+      "author": "김선희, 범유진, 정해연, 박하령, 허진희 (지은이)",
+      "isbn13": "9791193207376",
+      "cover": "https://image.aladin.co.kr/product/33628/56/cover200/k172939217_2.jpg",
+      "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
+      "tabType": 0,
+      "readStatus": "reading",
+      "isFavorite": true,
+      "createdAt": "2025-01-01 11:11:11"
+    },
+    {
+      "title": "파리 골목마다 백년 가게",
+      "author": "쑨이멍 (지은이), 박지민 (옮긴이)",
+      "isbn13": "9791198769800",
+      "cover": "https://image.aladin.co.kr/product/34253/92/cover200/k652932762_1.jpg",
+      "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
+      "tabType": 0,
+      "readStatus": "reading",
+      "isFavorite": true,
+      "createdAt": "2025-01-01 11:11:11"
+    },
+    {
+      "title": "당신 옆을 스쳐간 그 소녀의 이름은",
+      "author": "최진영 (지은이)",
+      "isbn13": "9791160406832",
+      "cover": "https://image.aladin.co.kr/product/28668/44/cover200/k882836860_1.jpg",
+      "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
+      "tabType": 0,
+      "readStatus": "reading",
+      "isFavorite": true,
+      "createdAt": "2025-01-01 11:11:11"
+    },
+    {
+      "title": "비가 오면 열리는 상점",
+      "author": "유영광 (지은이)",
+      "isbn13": "9791198173898",
+      "cover": "https://image.aladin.co.kr/product/31867/71/cover200/s732939448_2.jpg",
+      "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
+      "tabType": 0,
+      "readStatus": "noRead",
+      "isFavorite": true,
+      "createdAt": "2025-01-01 11:11:11"
+    },
+    {
+      "title": "현명한 사람은 삶의 무게를 분산한다 - 휘청이는 삶을 다잡아 주는 공자와 장자의 지혜",
+      "author": "제갈건 (지은이)",
+      "isbn13": "9791193941065",
+      "cover": "https://image.aladin.co.kr/product/34130/15/cover200/k302931290_1.jpg",
+      "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
+      "tabType": 0,
+      "readStatus": "noRead",
+      "isFavorite": true,
+      "createdAt": "2025-01-01 11:11:11"
+    },
+    {
+      "title": "관계력 - 오롯이 혼자 설 수 있을 때 비로소 가질 수 있는 것",
+      "author": "김단 (지은이)",
+      "isbn13": "9791193235010",
+      "cover": "https://image.aladin.co.kr/product/32144/66/cover200/k412834113_1.jpg",
+      "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
+      "tabType": 0,
+      "readStatus": "noRead",
+      "isFavorite": true,
+      "createdAt": "2025-01-01 11:11:11"
+    },
+    {
+      "title": "아직도 정신과 앞에서 머뭇거리는 당신에게 - 마음의 병, 정신질환에 대한 이해와 공감의 지침서",
+      "author": "허찬희 (지은이)",
+      "isbn13": "9791192410302",
+      "cover": "https://image.aladin.co.kr/product/33801/63/cover200/k572930576_1.jpg",
+      "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
+      "tabType": 0,
+      "readStatus": "noRead",
+      "isFavorite": true,
+      "createdAt": "2025-01-01 11:11:11"
+    }
+  ],
+  "page": {
+    "size": 10,
+    "number": 1,
+    "totalElements": 30,
+    "totalPages": 2
+  }
+}
