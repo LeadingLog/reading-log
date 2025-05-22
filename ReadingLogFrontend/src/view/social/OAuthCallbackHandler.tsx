@@ -53,20 +53,23 @@ export default function OAuthCallbackHandler({
         state: state || ""
       });
 
+      console.log(`요청 url : ${serverUrl}${apiEndpoint}`);
+
       const response = await axios.post(`${serverUrl}${apiEndpoint}`, loginData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
 
       const data = response.data;
       // TODO. API에 맞게 수정하기
+      console.log(response.data);
 
       if (response.status === 200) {
         useUserStore.getState().setUser({ // 사용자 정보 저장
           token: 'temporary-token',
           expiresAt: 0,
-          user_id: data.users.userId,
-          nickname: data.users.nickname,
-          email: data.users.email,
+          user_id: data.userId,
+          nickname: data.nickname,
+          email: data.email,
           provider,
         });
 
