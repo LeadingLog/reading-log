@@ -40,9 +40,9 @@ export default function MainBookSearch() {
     if (!query.trim()) return;
     const userId = 1
     try {
-      const data = await fetchBooks( userId ,query, 1);
-      if (data && Array.isArray(data.item)) {
-        const items = data.item.map((item: AladinApiItem) => ({
+      const response = await fetchBooks( userId ,query, 1);
+      if (response.data && Array.isArray(response.data.item)) {
+        const items = response.data.item.map((item: AladinApiItem) => ({
           title: item.title,
           author: item.author,
           isbn13: item.isbn13,
@@ -50,10 +50,10 @@ export default function MainBookSearch() {
           link: item.link
         }));
         setBookSearchResultList(items);
-        setTotalResults(data.totalResults)
+        setTotalResults(response.data.totalResults)
       } else {
         setBookSearchResultList([]);
-        console.warn('No items in response:', data);
+        console.warn('No items in response:', response.data);
       }
     } catch (error) {
       console.error('도서 검색 중 오류 발생:', error);
