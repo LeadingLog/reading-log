@@ -12,6 +12,7 @@ export default function MainBookSearch() {
   const [searchValue, setSearchValue] = useState(""); // 검색어 값
   const searchIconVisible = focusSearch || searchValue.trim() !== "";
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
 
   // 검색바를 클릭하면 실행
@@ -38,7 +39,9 @@ export default function MainBookSearch() {
 
   const searchBooks = async (query: string) => {
     if (!query.trim()) return;
+    if (isFetching) return;
     const userId = 1
+    setIsFetching(true);
     try {
       const response = await fetchBooks( userId ,query, 1);
       if (response.data && Array.isArray(response.data.item)) {
@@ -51,6 +54,7 @@ export default function MainBookSearch() {
         }));
         setBookSearchResultList(items);
         setTotalResults(response.data.totalResults)
+        setIsFetching(false);
       } else {
         setBookSearchResultList([]);
         console.warn('No items in response:', response.data);
@@ -75,7 +79,7 @@ export default function MainBookSearch() {
       } else {
         setBookSearchResultList([]);
       }
-    }, 300);
+    }, 500);
 
     return () => clearTimeout(timeout);
   }, [searchValue]);
