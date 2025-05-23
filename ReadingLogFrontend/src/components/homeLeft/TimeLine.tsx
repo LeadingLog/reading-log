@@ -11,27 +11,56 @@ export default function TimeLine() {
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   const { year } = useDateStore(); // Zustand에서 년도 정보 가져오기
 
-  const statsMonth = (month: string) => {
+  const statsMonth = (month: number) => {
     setRightContent(
       'StatsPage',
       { StatsPage: { tab: 'StatsMonth' } }, // 파라미터
       { title: `나의 리딩로그 - 월별통계 - ${month}월` }        // pageData (타이틀)
     )
   }
-  const [timelineData, setTimelineData] = useState<TimelineEntry[]>([]);
+  const [monthArr, setMonthArr] = useState<TimelineEntry[]>([
+    { name: '1월', month: 1, col: 3, row: 1, noRead: 0, reading: 0, complete: 0 },
+    { name: '2월', month: 2, col: 5, row: 1, noRead: 0, reading: 0, complete: 0 },
+    { name: '3월', month: 3, col: 7, row: 2, noRead: 0, reading: 0, complete: 0 },
+    { name: '4월', month: 4, col: 6, row: 3, noRead: 0, reading: 0, complete: 0 },
+    { name: '5월', month: 5, col: 4, row: 3, noRead: 0, reading: 0, complete: 0 },
+    { name: '6월', month: 6, col: 2, row: 3, noRead: 0, reading: 0, complete: 0 },
+    { name: '7월', month: 7, col: 1, row: 4, noRead: 0, reading: 0, complete: 0 },
+    { name: '8월', month: 8, col: 3, row: 5, noRead: 0, reading: 0, complete: 0 },
+    { name: '9월', month: 9, col: 5, row: 5, noRead: 0, reading: 0, complete: 0 },
+    { name: '10월', month: 10, col: 7, row: 6, noRead: 0, reading: 0, complete: 0 },
+    { name: '11월', month: 11, col: 6, row: 7, noRead: 0, reading: 0, complete: 0 },
+    { name: '12월', month: 12, col: 4, row: 7, noRead: 0, reading: 0, complete: 0 },
+  ]);
+
+  /* 년도 변경시 추가 되고 있음 이거 수정하기 */
 
   const searchTimeLineReadingList = async ({ userId, year }: fetchTimeLineReadingListParams) => {
     try {
       const data = await fetchTimeLineReadingList({ userId, year });
-      setTimelineData(data.timeLineReadingList);
+
+      const updated: TimelineEntry[] = monthArr.map((month) => {
+        const found = data.timeLineReadingList.find((item: TimelineEntry) => item.month === month.month);
+        return found
+          ? {
+            ...month,
+            noRead: found.noRead,
+            reading: found.reading,
+            complete: found.complete,
+          }
+          : month;
+      });
+
+      setMonthArr(updated);
     } catch (error) {
       console.error("쿼리 테스트 에러:", error);
     }
   };
 
   useEffect(() => {
-    searchTimeLineReadingList({ userId : 1, year });
+    searchTimeLineReadingList({ userId: 1, year });
   }, [year]);
+
   return (
     <section className="flex flex-col gap-4 rounded-xl flex-1">
       {/* 총 독서 시간 표시 */}
@@ -78,6 +107,22 @@ export default function TimeLine() {
 
       {/* 이번 년도 타임라인 표시 */}
       <article className="flex flex-1 p-2 text-timeLineMonthText text-sm">
+        {/*<ul className="grid grid-cols-7 grid-rows-7 w-full">*/}
+        {/*  {monthArr.map((item, idx) => (*/}
+        {/*    <li*/}
+        {/*      key={idx}*/}
+        {/*      className={`relative`}*/}
+        {/*      style={{ gridColumnStart: `${item.col}`, gridRowStart: `${item.row}` }}*/}
+        {/*    >*/}
+        {/*      <button*/}
+        {/*        onClick={() => statsMonth(idx)}*/}
+        {/*        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-timeLineMonthCircle"*/}
+        {/*      >*/}
+        {/*        {item.month}*/}
+        {/*      </button>*/}
+        {/*    </li>*/}
+        {/*  ))}*/}
+        {/*</ul>*/}
         <div className="relative flex w-[25%]">
           <div
             className="absolute top-[calc(33.3333%-10px)] bottom-[calc(33.3333%-10px)] border-r-0 rounded-l-full border-[10px] border-timeLineBorder w-full">
@@ -85,11 +130,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 -left-1.5 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('7')}
+              onClick={() => statsMonth(7)}
             >
               7
               {(() => {
-                const data = timelineData.find((d) => d.month === 7);
+                const data = monthArr.find((d) => d.month === 7);
                 return data ? (
                   <div className="group-hover:left-[120%] absolute flex flex-col gap-1 left-[110%]">
                     {data?.noRead > 0 && (
@@ -122,11 +167,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[25%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('1')}
+              onClick={() => statsMonth(1)}
             >
               1
               {(() => {
-                const data = timelineData.find((d) => d.month === 1);
+                const data = monthArr.find((d) => d.month === 1);
                 return data ? (
                   <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">
                     {data?.noRead > 0 && (
@@ -155,11 +200,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[75%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('2')}
+              onClick={() => statsMonth(2)}
             >
               2
               {(() => {
-                const data = timelineData.find((d) => d.month === 2);
+                const data = monthArr.find((d) => d.month === 2);
                 return data ? (
                   <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">
                     {data?.noRead > 0 && (
@@ -190,11 +235,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-full top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('4')}
+              onClick={() => statsMonth(4)}
             >
               4
               {(() => {
-                const data = timelineData.find((d) => d.month === 4);
+                const data = monthArr.find((d) => d.month === 4);
                 return data ? (
                   <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">
                     {data?.noRead > 0 && (
@@ -223,11 +268,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('5')}
+              onClick={() => statsMonth(5)}
             >
               5
               {(() => {
-                const data = timelineData.find((d) => d.month === 5);
+                const data = monthArr.find((d) => d.month === 5);
                 return data ? (
                   <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">
                     {data?.noRead > 0 && (
@@ -256,11 +301,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('6')}
+              onClick={() => statsMonth(6)}
             >
               6
               {(() => {
-                const data = timelineData.find((d) => d.month === 6);
+                const data = monthArr.find((d) => d.month === 6);
                 return data ? (
                   <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">
                     {data?.noRead > 0 && (
@@ -291,11 +336,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[25%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('8')}
+              onClick={() => statsMonth(8)}
             >
               8
               {(() => {
-                const data = timelineData.find((d) => d.month === 8);
+                const data = monthArr.find((d) => d.month === 8);
                 return data ? (
                   <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">
                     {data?.noRead > 0 && (
@@ -324,11 +369,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[75%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('9')}
+              onClick={() => statsMonth(9)}
             >
               9
               {(() => {
-                const data = timelineData.find((d) => d.month === 9);
+                const data = monthArr.find((d) => d.month === 9);
                 return data ? (
                   <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">
                     {data?.noRead > 0 && (
@@ -359,11 +404,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-full top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('11')}
+              onClick={() => statsMonth(11)}
             >
               11
               {(() => {
-                const data = timelineData.find((d) => d.month === 11);
+                const data = monthArr.find((d) => d.month === 11);
                 return data ? (
                   <div className="group-hover:bottom-[120%] absolute flex gap-1 bottom-[110%]">
                     {data?.noRead > 0 && (
@@ -392,11 +437,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('12')}
+              onClick={() => statsMonth(12)}
             >
               12
               {(() => {
-                const data = timelineData.find((d) => d.month === 12);
+                const data = monthArr.find((d) => d.month === 12);
                 return data ? (
                   <div className="group-hover:bottom-[120%] absolute flex gap-1 bottom-[110%]">
                     {data?.noRead > 0 && (
@@ -430,11 +475,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[103%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('3')}
+              onClick={() => statsMonth(3)}
             >
               3
               {(() => {
-                const data = timelineData.find((d) => d.month === 3);
+                const data = monthArr.find((d) => d.month === 3);
                 return data ? (
                   <div className="group-hover:right-[120%] absolute flex flex-col gap-1 right-[110%]">
                     {data?.noRead > 0 && (
@@ -466,11 +511,11 @@ export default function TimeLine() {
             <div
               className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
               cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[103%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"
-              onClick={() => statsMonth('10')}
+              onClick={() => statsMonth(10)}
             >
               10
               {(() => {
-                const data = timelineData.find((d) => d.month === 10);
+                const data = monthArr.find((d) => d.month === 10);
                 return data ? (
                   <div className="group-hover:right-[120%] absolute flex flex-col gap-1 right-[110%]">
                     {data?.noRead > 0 && (

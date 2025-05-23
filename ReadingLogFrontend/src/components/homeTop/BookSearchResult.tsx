@@ -27,9 +27,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     setIsFetching(true);
     if (totalResults === moreBookList.length) return;
     try {
-      const data = await fetchBooks(userId, query, page); // 페이지 번호로 요청
-      if (data && Array.isArray(data.item)) {
-        const items = data.item.map((item: AladinApiItem) => ({
+      const response = await fetchBooks(userId, query, page); // 페이지 번호로 요청
+      if (response.data && Array.isArray(response.data.item)) {
+        const items = response.data.item.map((item: AladinApiItem) => ({
           title: item.title,
           author: item.author,
           isbn13: item.isbn13,
