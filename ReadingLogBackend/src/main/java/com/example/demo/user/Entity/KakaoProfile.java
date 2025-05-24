@@ -23,6 +23,6 @@ public class KakaoProfile {
     private String email;
 //    private KakaoPartner for_partner;
 
-    public KakaoProfile(String body) {
+    public KakaoProfile(String body) { 
     }
 }
