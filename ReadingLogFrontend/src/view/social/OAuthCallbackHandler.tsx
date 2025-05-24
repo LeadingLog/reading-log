@@ -2,6 +2,9 @@ import {useEffect, useCallback} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 // import axios from "axios";
 import {useModalStore} from "../../store/modalStore";
+import axios from "axios";
+import {useUserStore} from "../../store/userStore.ts";
+
 // import {useUserStore} from "../../store/userStore";
 
 interface CallbackTemplateProps {
@@ -11,10 +14,10 @@ interface CallbackTemplateProps {
 }
 
 export default function OAuthCallbackHandler({
-                                           provider,
-                                           apiEndpoint,
-                                           requireState = true,
-                                         }: CallbackTemplateProps) {
+                                               provider,
+                                               apiEndpoint,
+                                               requireState = true,
+                                             }: CallbackTemplateProps) {
   const {openModal, closeAllModals} = useModalStore(); // Zustand의 openModal 가져오기
   const navigate = useNavigate();
   const [searchParams] = useSearchParams(); // 네이버 로그인 URL 쿼리 파라미터 가져오기
@@ -47,42 +50,63 @@ export default function OAuthCallbackHandler({
   const requestLogin = useCallback(async (): Promise<void> => {
     const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-    //try {
+    try {
       const loginData = new URLSearchParams({
         code: code || "",
         state: state || ""
       });
-    console.log("loginData.toString():", loginData.toString());
-    console.log("loginData as object:", Object.fromEntries(loginData));
+      console.log("loginData as object:", Object.fromEntries(loginData));
       console.log(`요청 url : ${serverUrl}${apiEndpoint}`);
-    //
-    //   const response = await axios.post(`${serverUrl}${apiEndpoint}`, loginData, {
-    //     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    //   });
-    //
-    //   const data = response.data;
-    //   // TODO. API에 맞게 수정하기
-    //   console.log(response.data);
-    //
-    //   if (response.status === 200) {
-    //     useUserStore.getState().setUser({ // 사용자 정보 저장
-    //       token: 'temporary-token',
-    //       expiresAt: 0,
-    //       user_id: data.userId,
-    //       nickname: data.nickname,
-    //       email: data.email,
-    //       provider,
-    //     });
-    //
-    //     navigate("/");
-    //   } else {
-    //     console.warn("로그인 실패 응답:", data);
-    //     handleLoginFail("유효하지 않은 로그인 정보입니다. 다시 시도해주세요.");
-    //   }
-    // } catch (err) {
-    //   console.error("로그인 실패:", err);
-    //   handleLoginFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
-    // }
+
+      const result = confirm("서버로 로그인 요청을 진행할까요?");
+
+      if (result) {
+        const response = await axios.post(`${serverUrl}${apiEndpoint}`, loginData, {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        });
+
+        const data = response.data;
+        // TODO. API에 맞게 수정하기
+        console.log("요청 결과")
+        console.log(response.data);
+
+        if (response.status === 200) {
+          useUserStore.getState().setUser({ // 사용자 정보 저장
+            token: 'temporary-token',
+            expiresAt: 0,
+            user_id: data.userId,
+            nickname: data.nickname,
+            email: data.email,
+            provider,
+          });
+
+          navigate("/");
+        } else {
+          console.warn("로그인 실패 응답:", data);
+          handleLoginFail("유효하지 않은 로그인 정보입니다. 다시 시도해주세요.");
+        }
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        // error는 AxiosError 타입으로 좁혀짐
+        if (error.response) {
+          console.error("서버 응답 에러:", {
+            status: error.response.status,
+            headers: error.response.headers,
+            data: error.response.data,
+          });
+        } else if (error.request) {
+          console.error("응답 없음, 요청 정보:", error.request);
+        } else {
+          console.error("요청 설정 에러:", error.message);
+        }
+      } else {
+        // axios 에러가 아닌 일반 에러
+        console.error("알 수 없는 에러:", error);
+      }
+      handleLoginFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    }
+
   }, [code, state, navigate, handleLoginFail, apiEndpoint, provider]);
 
   useEffect(() => {
