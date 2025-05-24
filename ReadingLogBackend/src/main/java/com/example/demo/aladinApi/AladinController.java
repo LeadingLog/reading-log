@@ -28,7 +28,6 @@ public class AladinController {
     	
         Map<String, Object> responseMap = new HashMap<>();
 
-        int maxResults = 10;
         String cover = "Big";
         String searchTarget = "Book";
         String output = "js";
