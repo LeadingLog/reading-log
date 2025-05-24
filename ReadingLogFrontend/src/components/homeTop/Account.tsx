@@ -3,29 +3,20 @@ import {useUserStore} from "../../store/userStore.ts";
 import {useModalStore} from "../../store/modalStore.ts";
 import IconLogOut from "../../assets/Icon-logout.svg?react";
 import IconMyPage from "../../assets/Icon-mypage.svg?react";
+import axios from "axios";
 
 export default function Account() {
   const navigate = useNavigate();
   const {openModal, closeAllModals} = useModalStore(); // Zustand의 openModal 가져오기
-
-  //const userId = useUserStore((state) => state.user_id); // ID 가져오기
-  //const token = useUserStore((state) => state.token); // token 가져오기
+  const resetUser =  useUserStore((state) => state.resetUser); // 로그아웃을 위한 reset
   const nickname = useUserStore((state) => state.nickname); // 닉네임 가져오기
-  //const provider = useUserStore((state) => state.provider); // 닉네임 가져오기
 
   // 로그아웃 처리
   const handleLogout = async () => {
-    /*
     const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
 
     try {
-      // TODO: 백엔드 API 명세 확인 후 key 이름 수정하기
-
-      const response = await axios.post(`${serverUrl}/user/logout`, {
-        user_id: userId,
-        token,
-        provider
-      });
+      const response = await axios.post(`${serverUrl}/user/logout`);
       if (response.data.success) {
         openModal("ModalNotice", { // 로그아웃 성공 시 모달 표시
           title: "로그아웃 완료!",
@@ -33,6 +24,7 @@ export default function Account() {
           confirmText: "확인",
           onlyConfirm: true,
           onConfirm: () => {
+            resetUser(); // localStorage 초기화
             navigate("/login");
             closeAllModals();
           },
@@ -45,22 +37,9 @@ export default function Account() {
       console.error("로그아웃 실패:", err);
       handleLogoutFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
-     */
-
-    openModal("ModalNotice", { // 로그아웃 성공 시 모달 표시 (임시)
-      title: "로그아웃 완료!",
-      subTitle: "다음에 또 봐요!",
-      confirmText: "확인",
-      onlyConfirm: true,
-      onConfirm: () => {
-        navigate("/login");
-        closeAllModals();
-      },
-    });
   };
 
   // 로그아웃 실패 시 모달 표시
-  /*
   const handleLogoutFail = (message?: string, title?: string) => {
     openModal("ModalNotice", {
       title: title || "로그아웃 실패",
@@ -69,7 +48,6 @@ export default function Account() {
       cancelText: "확인",
     });
   };
-  */
 
   return (
     <>

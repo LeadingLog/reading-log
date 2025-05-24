@@ -1,11 +1,8 @@
 import {useEffect, useCallback} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
-// import axios from "axios";
 import {useModalStore} from "../../store/modalStore";
 import axios from "axios";
 import {useUserStore} from "../../store/userStore.ts";
-
-// import {useUserStore} from "../../store/userStore";
 
 interface CallbackTemplateProps {
   provider: "naver" | "kakao";
@@ -14,9 +11,9 @@ interface CallbackTemplateProps {
 }
 
 export default function OAuthCallbackHandler({
-                                               provider,
-                                               apiEndpoint,
-                                               requireState = true,
+                                               provider,            // ex) kakao
+                                               apiEndpoint,         // ex) /user/kakaologin
+                                               requireState = true, // ex) state 값 여부
                                              }: CallbackTemplateProps) {
   const {openModal, closeAllModals} = useModalStore(); // Zustand의 openModal 가져오기
   const navigate = useNavigate();
@@ -30,7 +27,7 @@ export default function OAuthCallbackHandler({
   // 로그인 실패 시 모달 표시
   const handleLoginFail = useCallback(
     (message?: string, title?: string) => {
-      localStorage.removeItem("state");
+      localStorage.removeItem("state"); // 요청시 생성했던 state를 지운다.
 
       openModal("ModalNotice", {
         title: title || "로그인 실패",
@@ -66,17 +63,11 @@ export default function OAuthCallbackHandler({
         });
 
         const data = response.data;
-        // TODO. API에 맞게 수정하기
-        console.log("요청 결과")
-        console.log(response.data);
-
-        if (response.status === 200) {
-          useUserStore.getState().setUser({ // 사용자 정보 저장
-            token: 'temporary-token',
-            expiresAt: 0,
+        if (response.status === 200) { // 로그인에 성공하면 사용자 정보를 저장한다.
+          useUserStore.getState().setUser({
             user_id: data.userId,
             nickname: data.nickname,
-            email: data.email,
+            email: data.userEmail,
             provider,
           });
 
@@ -106,7 +97,6 @@ export default function OAuthCallbackHandler({
       }
       handleLoginFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
-
   }, [code, state, navigate, handleLoginFail, apiEndpoint, provider]);
 
   useEffect(() => {
