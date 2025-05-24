@@ -5,38 +5,38 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
 export const userHandlers = [
 
   // 소셜 로그인/회원가입 -카카오 (application/x-www-form-urlencoded)
-  http.post(`${serverUrl}/user/kakaologin`, async ({request}) => {
-    const text = await request.text();
-    const params = new URLSearchParams(text); // form 데이터 파싱
-    const code = params.get('code');
-    const state = params.get('state');
-    console.log(`code: ${code}, state: ${state}`);
-
-    return HttpResponse.json({
-      users: {
-        userId: 'mocked-kakao-id',
-        nickname: 'MockKakaoUser',
-        email: 'mocKakao@example.com',
-      },
-    });
-  }),
+  // http.post(`${serverUrl}/user/kakaologin`, async ({request}) => {
+  //   const text = await request.text();
+  //   const params = new URLSearchParams(text); // form 데이터 파싱
+  //   const code = pargit mams.get('code');
+  //   const state = params.get('state');
+  //   console.log(`code: ${code}, state: ${state}`);
+  //
+  //   return HttpResponse.json({
+  //     users: {
+  //       userId: 'mocked-kakao-id',
+  //       nickname: 'MockKakaoUser',
+  //       email: 'mocKakao@example.com',
+  //     },
+  //   });
+  // }),
 
   // 소셜 로그인/회원가입 -네이버 (application/x-www-form-urlencoded)
-  http.post(`${serverUrl}/user/naverlogin`, async ({request}) => {
-    const text = await request.text();
-    const params = new URLSearchParams(text); // form 데이터 파싱
-    const code = params.get('code');
-    const state = params.get('state');
-    console.log(`code: ${code}, state: ${state}`);
-
-    return HttpResponse.json({
-      users: {
-        userId: 'mocked-naver-id',
-        nickname: 'MockNaverUser',
-        email: 'mockNaver@example.com',
-      },
-    });
-  }),
+  // http.post(`${serverUrl}/user/naverlogin`, async ({request}) => {
+  //   const text = await request.text();
+  //   const params = new URLSearchParams(text); // form 데이터 파싱
+  //   const code = params.get('code');
+  //   const state = params.get('state');
+  //   console.log(`code: ${code}, state: ${state}`);
+  //
+  //   return HttpResponse.json({
+  //     users: {
+  //       userId: 'mocked-naver-id',
+  //       nickname: 'MockNaverUser',
+  //       email: 'mockNaver@example.com',
+  //     },
+  //   });
+  // }),
 
   // 회원 정보 수정
   http.post(`${serverUrl}/user/user_id/modified`, async ({request}) => {
