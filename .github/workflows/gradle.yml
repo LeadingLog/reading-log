@@ -26,8 +26,9 @@ jobs:
 
       - name: Create application.properties
         run: |
-          mkdir -p src/main/resources
-          echo "${{ secrets.APPLICATION_PROPERTIES }}" | base64 --decode > src/main/resources/application.properties
+          mkdir -p ReadingLogBackend/src/main/resources
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" | base64 --decode > ReadingLogBackend/src/main/resources/application.properties
+
 
       - name: Grant Execute Permission & Build with Gradle (skip tests)
         run: |
