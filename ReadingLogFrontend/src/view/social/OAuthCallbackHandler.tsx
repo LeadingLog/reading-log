@@ -55,28 +55,26 @@ export default function OAuthCallbackHandler({
       console.log("loginData as object:", Object.fromEntries(loginData));
       console.log(`요청 url : ${serverUrl}${apiEndpoint}`);
 
-      const result = confirm("서버로 로그인 요청을 진행할까요?");
 
-      if (result) {
-        const response = await axios.post(`${serverUrl}${apiEndpoint}`, loginData, {
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      const response = await axios.post(`${serverUrl}${apiEndpoint}`, loginData, {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      });
+
+      const data = response.data;
+      if (response.status === 200) { // 로그인에 성공하면 사용자 정보를 저장한다.
+        useUserStore.getState().setUser({
+          user_id: data.userId,
+          nickname: data.nickname,
+          email: data.userEmail,
+          provider,
         });
-
-        const data = response.data;
-        if (response.status === 200) { // 로그인에 성공하면 사용자 정보를 저장한다.
-          useUserStore.getState().setUser({
-            user_id: data.userId,
-            nickname: data.nickname,
-            email: data.userEmail,
-            provider,
-          });
-
-          navigate("/");
-        } else {
-          console.warn("로그인 실패 응답:", data);
-          handleLoginFail("유효하지 않은 로그인 정보입니다. 다시 시도해주세요.");
-        }
+        localStorage.removeItem("state"); // 요청시 생성했던 state를 지운다.
+        navigate("/");
+      } else {
+        console.warn("로그인 실패 응답:", data);
+        handleLoginFail("유효하지 않은 로그인 정보입니다. 다시 시도해주세요.");
       }
+
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         // error는 AxiosError 타입으로 좁혀짐
