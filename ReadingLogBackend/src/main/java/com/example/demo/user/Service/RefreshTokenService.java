@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class RefreshTokenService {
@@ -87,6 +88,19 @@ public class RefreshTokenService {
     public String findProviderByUserId(Integer userId) {
         RefreshToken refreshToken = tokenRepository.findByUserId(userId);
         return refreshToken.getProvider();
+    }
+
+    // 토큰 수정
+    public RefreshToken updateToken(Integer userId, String provider, String newToken) {
+        RefreshToken refreshToken = tokenRepository.getReferenceById(userId);
+
+        // refershToken 이 새 토큰과 다를 경우
+        if (Objects.equals(provider, refreshToken.getProvider()) && !Objects.equals(newToken, refreshToken.getToken())) {
+            refreshToken.setToken(newToken);
+            System.out.println(userId + " 회원 " + provider +" 토큰 값 변경");
+            tokenRepository.save(refreshToken);
+        }
+        return refreshToken;
     }
 
 }

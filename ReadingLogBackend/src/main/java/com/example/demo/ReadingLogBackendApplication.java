@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ReadingLogBackendApplication {
 
+    
     @RequestMapping("/")
     String home() {
         return "배포테트스트";

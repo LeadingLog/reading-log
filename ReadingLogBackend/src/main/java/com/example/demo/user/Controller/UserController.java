@@ -222,6 +222,10 @@ public class UserController {
         String accessToken = accessTokenResult.getAccessToken();
         KakaoProfile kakaoUserInfo = kakaoService.getKakaoUserInfo(accessToken);
 
+        // 오류 체크
+        if (kakaoUserInfo == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보 연동 오류.");
+        }
 
         // 사이트 가입 여부 조회
         String kakaoId = kakaoUserInfo.getId();
