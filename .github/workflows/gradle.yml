@@ -29,7 +29,7 @@ jobs:
           echo "${{ secrets.APPLICATION_PROPERTIES }}" | base64 --decode > ReadingLogBackend/src/main/resources/application.properties
 
       - name: Check application.properties content
-        run: cat src/main/resources/application.properties
+        run: cat ReadingLogBackend/src/main/resources/application.properties
 
 
       - name: Grant Execute Permission & Build with Gradle (skip tests)
