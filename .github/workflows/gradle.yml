@@ -24,9 +24,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Create application.properties
+      - name: application.properties 최신화
         run: |
-          mkdir -p ReadingLogBackend/src/main/resources
           echo "${{ secrets.APPLICATION_PROPERTIES }}" | base64 --decode > ReadingLogBackend/src/main/resources/application.properties
 
 
