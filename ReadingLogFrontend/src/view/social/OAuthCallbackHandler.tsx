@@ -1,8 +1,8 @@
 import {useEffect, useCallback} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import {useModalStore} from "../../store/modalStore";
-import {useUserStore} from "../../store/userStore";
+// import {useUserStore} from "../../store/userStore";
 
 interface CallbackTemplateProps {
   provider: "naver" | "kakao";
@@ -47,41 +47,42 @@ export default function OAuthCallbackHandler({
   const requestLogin = useCallback(async (): Promise<void> => {
     const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-    try {
+    //try {
       const loginData = new URLSearchParams({
         code: code || "",
         state: state || ""
       });
-
+    console.log("loginData.toString():", loginData.toString());
+    console.log("loginData as object:", Object.fromEntries(loginData));
       console.log(`요청 url : ${serverUrl}${apiEndpoint}`);
-
-      const response = await axios.post(`${serverUrl}${apiEndpoint}`, loginData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      });
-
-      const data = response.data;
-      // TODO. API에 맞게 수정하기
-      console.log(response.data);
-
-      if (response.status === 200) {
-        useUserStore.getState().setUser({ // 사용자 정보 저장
-          token: 'temporary-token',
-          expiresAt: 0,
-          user_id: data.userId,
-          nickname: data.nickname,
-          email: data.email,
-          provider,
-        });
-
-        navigate("/");
-      } else {
-        console.warn("로그인 실패 응답:", data);
-        handleLoginFail("유효하지 않은 로그인 정보입니다. 다시 시도해주세요.");
-      }
-    } catch (err) {
-      console.error("로그인 실패:", err);
-      handleLoginFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
-    }
+    //
+    //   const response = await axios.post(`${serverUrl}${apiEndpoint}`, loginData, {
+    //     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    //   });
+    //
+    //   const data = response.data;
+    //   // TODO. API에 맞게 수정하기
+    //   console.log(response.data);
+    //
+    //   if (response.status === 200) {
+    //     useUserStore.getState().setUser({ // 사용자 정보 저장
+    //       token: 'temporary-token',
+    //       expiresAt: 0,
+    //       user_id: data.userId,
+    //       nickname: data.nickname,
+    //       email: data.email,
+    //       provider,
+    //     });
+    //
+    //     navigate("/");
+    //   } else {
+    //     console.warn("로그인 실패 응답:", data);
+    //     handleLoginFail("유효하지 않은 로그인 정보입니다. 다시 시도해주세요.");
+    //   }
+    // } catch (err) {
+    //   console.error("로그인 실패:", err);
+    //   handleLoginFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    // }
   }, [code, state, navigate, handleLoginFail, apiEndpoint, provider]);
 
   useEffect(() => {
