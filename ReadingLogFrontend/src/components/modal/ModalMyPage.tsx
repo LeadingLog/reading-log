@@ -3,14 +3,14 @@ import {useModalStore} from "../../store/modalStore";
 import {ModalMyPageProps} from "../../types/modal.ts";
 import {useNavigate} from "react-router-dom";
 import {useUserStore} from "../../store/userStore.ts";
-// import axios from "axios";
+ import axios from "axios";
 
 const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
   const {openModal, closeModal, closeAllModals} = useModalStore();
   const navigate = useNavigate();
-  // const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
+   const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
   const nickname = useUserStore((state) => state.nickname); // 닉네임 가져오기
-  // const userId = useUserStore((state) => state.user_id); // ID 가져오기
+  const userId = useUserStore((state) => state.user_id); // ID 가져오기
   const email = useUserStore((state) => state.email); // email 가져오기
 
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 여부 (true: 수정 중, false: 완료)
@@ -28,23 +28,25 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
   };
 
   // 회원 정보 수정 요청
-  /*
   const handleEditAccount = async () => {
     try {
-      const response = await axios.post(`${serverUrl}/user/user_id/modified`, {
-        user_id: userId,
+      const response = await axios.post(`${serverUrl}/user/${userId}/modified`, {
+        userId: userId,
         nickname: tempNickname,
-        email: tempEmail,
+        userEmail: tempEmail,
       });
+
+      console.log(response.data);
       if (response.data.success) {
+
         setIsEditing((prev) => !prev);
 
         useUserStore.getState().setUser({
-          nickname: response.data.nickname,
-          email: response.data.email
+          nickname: response.data.user.nickname,
+          email: response.data.user.userEmail
         });
         setTempNickname(response.data.nickname);
-        setTeMpEmail(email);
+        setTempEmail(response.data.email);
       } else {
         console.warn("회원 정보 수정 실패 응답:", response.data);
         handleEditFail("회원 정보 수정에 실패하였습니다. 다시 시도해주세요.");
@@ -54,12 +56,11 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
       handleEditFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
   }
-  */
 
   // 수정 버튼 or 완료 버튼 클릭
   const toggleEditMode = async () => {
     if (isEditing) { // 완료 버튼 클릭 시 회원 수정 진행
-      // await handleEditAccount();
+       await handleEditAccount();
     }
     setIsEditing((prev) => !prev);
   }
@@ -128,7 +129,6 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
   }
 
   // 회원 정보 수정 실패 시 공통 모달 표시
-  /*
   const handleEditFail = (message?: string, title?: string) => {
     const editFailModal = openModal("ModalNotice", {
       title: title || "회원 정보 수정 실패",
@@ -142,7 +142,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
       },
     });
   };
-   */
+
 
   const handleDeleteFail = (message?: string, title?: string) => {
     const deleteFailModal = openModal("ModalNotice", {
@@ -177,7 +177,8 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
               <input
                 type="text"
                 className="text-myPage_Update_Text bg-modal_Content_Bg border-0 border-b-2 border-myPage_Update_Line focus:outline-none focus:border-b-2 focus:border-myPage_Update_Line_Focus focus:text-myPage_Update_Text_Focus"
-                value={tempNickname || "사용자"}
+                value={tempNickname ?? ""}
+                placeholder="닉네임을 입력하세요"
                 onChange={(e) => setTempNickname(e.target.value)}
               />
             ) : (
@@ -191,7 +192,8 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
               <input
                 type="text"
                 className="text-myPage_Update_Text bg-modal_Content_Bg border-0 border-b-2 border-myPage_Update_Line focus:outline-none focus:border-b-2 focus:border-myPage_Update_Line_Focus focus:text-myPage_Update_Text_Focus"
-                value={tempEmail || "example@gmail.com"}
+                value={tempEmail || ""}
+                placeholder="이메일을 입력하세요"
                 onChange={(e) => setTempEmail(e.target.value)}
               />
             ) : (
