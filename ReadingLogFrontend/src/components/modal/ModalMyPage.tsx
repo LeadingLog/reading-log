@@ -3,12 +3,12 @@ import {useModalStore} from "../../store/modalStore";
 import {ModalMyPageProps} from "../../types/modal.ts";
 import {useNavigate} from "react-router-dom";
 import {useUserStore} from "../../store/userStore.ts";
- import axios from "axios";
+import axios from "axios";
 
 const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
   const {openModal, closeModal, closeAllModals} = useModalStore();
   const navigate = useNavigate();
-   const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
+  const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
   const nickname = useUserStore((state) => state.nickname); // 닉네임 가져오기
   const userId = useUserStore((state) => state.user_id); // ID 가져오기
   const email = useUserStore((state) => state.email); // email 가져오기
@@ -29,24 +29,29 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
 
   // 회원 정보 수정 요청
   const handleEditAccount = async () => {
+    const formData = new FormData();
+    formData.append("userId", userId !== null ? String(userId) : "0");
+    formData.append("nickname", tempNickname ?? "");
+    formData.append("userEmail", tempEmail ?? "");
+
+    // TODO. 빈 값 검사하기
+
     try {
-      const response = await axios.post(`${serverUrl}/user/${userId}/modified`, {
-        userId: userId,
-        nickname: tempNickname,
-        userEmail: tempEmail,
+      const response = await axios.post(`${serverUrl}/user/${userId}/modified`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      console.log(response.data);
       if (response.data.success) {
-
         setIsEditing((prev) => !prev);
 
         useUserStore.getState().setUser({
           nickname: response.data.user.nickname,
           email: response.data.user.userEmail
         });
-        setTempNickname(response.data.nickname);
-        setTempEmail(response.data.email);
+        setTempNickname(response.data.user.nickname);
+        setTempEmail(response.data.user.userEmail);
       } else {
         console.warn("회원 정보 수정 실패 응답:", response.data);
         handleEditFail("회원 정보 수정에 실패하였습니다. 다시 시도해주세요.");
@@ -60,7 +65,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
   // 수정 버튼 or 완료 버튼 클릭
   const toggleEditMode = async () => {
     if (isEditing) { // 완료 버튼 클릭 시 회원 수정 진행
-       await handleEditAccount();
+      await handleEditAccount();
     }
     setIsEditing((prev) => !prev);
   }
