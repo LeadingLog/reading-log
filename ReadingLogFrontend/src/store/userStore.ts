@@ -2,8 +2,6 @@ import {create} from "zustand";
 import {persist} from "zustand/middleware";
 
 interface UserState {
-  token: string | null;
-  expiresAt: number | null;
   user_id: number | null;
   nickname: string | null;
   email: string | null;
@@ -16,8 +14,6 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      token: null,
-      expiresAt: 0,
       user_id: 0,
       nickname: null,
       email: null,
@@ -31,8 +27,6 @@ export const useUserStore = create<UserState>()(
 
       resetUser: () =>
         set({
-          token: null,
-          expiresAt: 0,
           user_id: 0,
           nickname: null,
           email: null,
