@@ -18,9 +18,10 @@ export const bookHandlers = [
   // 키워드로 검색(제목+저자)
   http.get(`${serverUrl}/books/search`, async ({request}) => {
     const url = new URL(request.url);
+    const userId = url.searchParams.get('userId');
     const query = url.searchParams.get('query');
     const start = url.searchParams.get('start');
-    console.log(`query: ${query}, start: ${start}`);
+    console.log(`userId: ${userId}`, `query: ${query}, start: ${start}`);
 
     // TODO. 응답 결과 작성하기
     return HttpResponse.json({

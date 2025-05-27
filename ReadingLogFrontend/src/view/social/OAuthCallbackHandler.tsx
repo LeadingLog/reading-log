@@ -1,8 +1,8 @@
 import {useEffect, useCallback} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import axios from "axios";
 import {useModalStore} from "../../store/modalStore";
-import {useUserStore} from "../../store/userStore";
+import axios from "axios";
+import {useUserStore} from "../../store/userStore.ts";
 
 interface CallbackTemplateProps {
   provider: "naver" | "kakao";
@@ -11,10 +11,10 @@ interface CallbackTemplateProps {
 }
 
 export default function OAuthCallbackHandler({
-                                           provider,
-                                           apiEndpoint,
-                                           requireState = true,
-                                         }: CallbackTemplateProps) {
+                                               provider,            // ex) kakao
+                                               apiEndpoint,         // ex) /user/kakaologin
+                                               requireState = true, // ex) state 값 여부
+                                             }: CallbackTemplateProps) {
   const {openModal, closeAllModals} = useModalStore(); // Zustand의 openModal 가져오기
   const navigate = useNavigate();
   const [searchParams] = useSearchParams(); // 네이버 로그인 URL 쿼리 파라미터 가져오기
@@ -27,7 +27,7 @@ export default function OAuthCallbackHandler({
   // 로그인 실패 시 모달 표시
   const handleLoginFail = useCallback(
     (message?: string, title?: string) => {
-      localStorage.removeItem("state");
+      localStorage.removeItem("state"); // 요청시 생성했던 state를 지운다.
 
       openModal("ModalNotice", {
         title: title || "로그인 실패",
@@ -52,31 +52,47 @@ export default function OAuthCallbackHandler({
         code: code || "",
         state: state || ""
       });
+      console.log("loginData as object:", Object.fromEntries(loginData));
+      console.log(`요청 url : ${serverUrl}${apiEndpoint}`);
+
 
       const response = await axios.post(`${serverUrl}${apiEndpoint}`, loginData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       });
 
       const data = response.data;
-      // TODO. API에 맞게 수정하기
-
-      if (response.status === 200) {
-        useUserStore.getState().setUser({ // 사용자 정보 저장
-          token: 'temporary-token',
-          expiresAt: 0,
-          user_id: data.users.userId,
-          nickname: data.users.nickname,
-          email: data.users.email,
+      if (response.status === 200) { // 로그인에 성공하면 사용자 정보를 저장한다.
+        useUserStore.getState().setUser({
+          user_id: data.userId,
+          nickname: data.nickname,
+          email: data.userEmail,
           provider,
         });
-
+        localStorage.removeItem("state"); // 요청시 생성했던 state를 지운다.
         navigate("/");
       } else {
         console.warn("로그인 실패 응답:", data);
         handleLoginFail("유효하지 않은 로그인 정보입니다. 다시 시도해주세요.");
       }
-    } catch (err) {
-      console.error("로그인 실패:", err);
+
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        // error는 AxiosError 타입으로 좁혀짐
+        if (error.response) {
+          console.error("서버 응답 에러:", {
+            status: error.response.status,
+            headers: error.response.headers,
+            data: error.response.data,
+          });
+        } else if (error.request) {
+          console.error("응답 없음, 요청 정보:", error.request);
+        } else {
+          console.error("요청 설정 에러:", error.message);
+        }
+      } else {
+        // axios 에러가 아닌 일반 에러
+        console.error("알 수 없는 에러:", error);
+      }
       handleLoginFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
   }, [code, state, navigate, handleLoginFail, apiEndpoint, provider]);
