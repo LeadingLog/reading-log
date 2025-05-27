@@ -11,24 +11,50 @@ export default function StatsYear() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const circles = containerRef.current.querySelectorAll('.month-circle');
-    const newPoints: { x: number; y: number }[] = [];
+    const container = containerRef.current;
 
-    circles.forEach((circle) => {
-      const rect = circle.getBoundingClientRect();
-      const containerRect = containerRef.current!.getBoundingClientRect();
-      newPoints.push({
-        x: rect.left + rect.width / 2 - containerRect.left,
-        y: rect.top + rect.height / 2 - containerRect.top,
+    const getNewPoints = () => {
+      const circles = container.querySelectorAll('.month-circle');
+      const newPoints: { x: number; y: number }[] = [];
+
+      const containerRect = container.getBoundingClientRect();
+      circles.forEach((circle) => {
+        const rect = circle.getBoundingClientRect();
+        newPoints.push({
+          x: rect.left + rect.width / 2 - containerRect.left,
+          y: rect.top + rect.height / 2 - containerRect.top,
+        });
       });
+
+      setPoints((prev) => {
+        const isSame =
+          prev.length === newPoints.length &&
+          prev.every((p, i) => p.x === newPoints[i].x && p.y === newPoints[i].y);
+        return isSame ? prev : newPoints;
+      });
+    };
+
+    getNewPoints(); // 초기 위치 계산
+
+    // 관찰자 등록
+    const resizeObserver = new ResizeObserver(getNewPoints);
+    const mutationObserver = new MutationObserver(getNewPoints);
+
+    const circles = container.querySelectorAll('.month-circle');
+    circles.forEach((circle) => resizeObserver.observe(circle));
+    resizeObserver.observe(container);
+
+    mutationObserver.observe(container, {
+      attributes: true,
+      childList: true,
+      subtree: true,
     });
 
-    // ⚠️ 이전 값과 비교 후 다를 때만 setState
-    setPoints((prev) => {
-      const isSame = prev.length === newPoints.length &&
-        prev.every((p, i) => p.x === newPoints[i].x && p.y === newPoints[i].y);
-      return isSame ? prev : newPoints;
-    });
+    return () => {
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
+      window.removeEventListener('scroll', getNewPoints, true);
+    };
   }, [monthList]);
 
   console.log(points)
