@@ -13,4 +13,9 @@ export interface TimelineEntry {
   noRead: number;
   reading: number;
   complete: number;
+  top: string;
+  left: string;
+  right: string;
+  bottom: string;
+  transform: string;
 }
