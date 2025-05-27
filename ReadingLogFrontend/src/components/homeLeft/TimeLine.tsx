@@ -18,28 +18,189 @@ export default function TimeLine() {
       { title: `나의 리딩로그 - 월별통계 - ${month}월` }        // pageData (타이틀)
     )
   }
-  const [monthArr, setMonthArr] = useState<TimelineEntry[]>([
-    { name: '1월', month: 1, col: 3, row: 1, noRead: 0, reading: 0, complete: 0, top: '-11px', left:'50%', right:'unset', bottom:'unset', transform: "translateX(-50%)"  },
-    { name: '2월', month: 2, col: 5, row: 1, noRead: 0, reading: 0, complete: 0, top: '-11px', left:'50%', right:'unset', bottom:'unset', transform: "translateX(-50%)"  },
-    { name: '3월', month: 3, col: 7, row: 2, noRead: 0, reading: 0, complete: 0, top: '50%', left:'unset', right:'-10px', bottom:'unset', transform: "translateY(-50%)"  },
-    { name: '4월', month: 4, col: 6, row: 3, noRead: 0, reading: 0, complete: 0, top: 'unset', left:'50%', right:'unset', bottom:'-21px', transform: "translateX(-50%)"  },
-    { name: '5월', month: 5, col: 4, row: 3, noRead: 0, reading: 0, complete: 0, top: 'unset', left:'50%', right:'unset', bottom:'-21px', transform: "translateX(-50%)"  },
-    { name: '6월', month: 6, col: 2, row: 3, noRead: 0, reading: 0, complete: 0, top: 'unset', left:'50%', right:'unset', bottom:'-21px', transform: "translateX(-50%)"  },
-    { name: '7월', month: 7, col: 1, row: 5, noRead: 0, reading: 0, complete: 0, top: '50%', left:'-10px', right:'unset', bottom:'unset', transform: "translateY(-50%)"  },
-    { name: '8월', month: 8, col: 3, row: 6, noRead: 0, reading: 0, complete: 0, top: 'unset', left:'50%', right:'unset', bottom:'-21px', transform: "translateX(-50%)"  },
-    { name: '9월', month: 9, col: 5, row: 6, noRead: 0, reading: 0, complete: 0, top: 'unset', left:'50%', right:'unset', bottom:'-21px', transform: "translateX(-50%)"  },
-    { name: '10월', month: 10, col: 7, row: 8, noRead: 0, reading: 0, complete: 0, top: '50%', left:'unset', right:'-10px', bottom:'unset', transform: "translateY(-50%)"  },
-    { name: '11월', month: 11, col: 6, row: 10, noRead: 0, reading: 0, complete: 0, top: 'unset', left:'50%', right:'unset', bottom:'-21px', transform: "translateX(-50%)"  },
-    { name: '12월', month: 12, col: 4, row: 10, noRead: 0, reading: 0, complete: 0, top: 'unset', left:'50%', right:'unset', bottom:'-21px', transform: "translateX(-50%)"  },
-  ]);
 
-  /* 년도 변경시 추가 되고 있음 이거 수정하기 */
+  /* 월 표시 위치 및 년도 변경 시 도서권수 초기화용 */
+  const getInitialMonthArr = (): TimelineEntry[] => [
+    {
+      name: '1월',
+      month: 1,
+      col: 3,
+      row: 1,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: '-11px',
+      left: '50%',
+      right: 'unset',
+      bottom: '11px',
+      transform: 'translateX(-50%)'
+    },
+    {
+      name: '2월',
+      month: 2,
+      col: 5,
+      row: 1,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: '-11px',
+      left: '50%',
+      right: 'unset',
+      bottom: 'unset',
+      transform: 'translateX(-50%)'
+    },
+    {
+      name: '3월',
+      month: 3,
+      col: 7,
+      row: 2,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: '50%',
+      left: 'unset',
+      right: '-10px',
+      bottom: 'unset',
+      transform: 'translateY(-50%)'
+    },
+    {
+      name: '4월',
+      month: 4,
+      col: 6,
+      row: 3,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: 'unset',
+      left: '50%',
+      right: 'unset',
+      bottom: '-21px',
+      transform: 'translateX(-50%)'
+    },
+    {
+      name: '5월',
+      month: 5,
+      col: 4,
+      row: 3,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: 'unset',
+      left: '50%',
+      right: 'unset',
+      bottom: '-21px',
+      transform: 'translateX(-50%)'
+    },
+    {
+      name: '6월',
+      month: 6,
+      col: 2,
+      row: 3,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: 'unset',
+      left: '50%',
+      right: 'unset',
+      bottom: '-21px',
+      transform: 'translateX(-50%)'
+    },
+    {
+      name: '7월',
+      month: 7,
+      col: 1,
+      row: 5,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: '50%',
+      left: '-10px',
+      right: 'unset',
+      bottom: 'unset',
+      transform: 'translateY(-50%)'
+    },
+    {
+      name: '8월',
+      month: 8,
+      col: 3,
+      row: 6,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: 'unset',
+      left: '50%',
+      right: 'unset',
+      bottom: '-21px',
+      transform: 'translateX(-50%)'
+    },
+    {
+      name: '9월',
+      month: 9,
+      col: 5,
+      row: 6,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: 'unset',
+      left: '50%',
+      right: 'unset',
+      bottom: '-21px',
+      transform: 'translateX(-50%)'
+    },
+    {
+      name: '10월',
+      month: 10,
+      col: 7,
+      row: 8,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: '50%',
+      left: 'unset',
+      right: '-10px',
+      bottom: 'unset',
+      transform: 'translateY(-50%)'
+    },
+    {
+      name: '11월',
+      month: 11,
+      col: 6,
+      row: 10,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: 'unset',
+      left: '50%',
+      right: 'unset',
+      bottom: '-21px',
+      transform: 'translateX(-50%)'
+    },
+    {
+      name: '12월',
+      month: 12,
+      col: 4,
+      row: 10,
+      noRead: 0,
+      reading: 0,
+      complete: 0,
+      top: 'unset',
+      left: '50%',
+      right: 'unset',
+      bottom: '-21px',
+      transform: 'translateX(-50%)'
+    }
+  ];
 
+  const [monthArr, setMonthArr] = useState<TimelineEntry[]>(getInitialMonthArr);
+
+  /* 년도 변경 시 도서 권 수 변경 */
   const searchTimeLineReadingList = async ({ userId, year }: fetchTimeLineReadingListParams) => {
     try {
       const data = await fetchTimeLineReadingList({ userId, year });
 
-      const updated: TimelineEntry[] = monthArr.map((month) => {
+      const freshArr = getInitialMonthArr();
+
+      const updated: TimelineEntry[] = freshArr.map((month) => {
         const found = data.timeLineReadingList.find((item: TimelineEntry) => item.month === month.month);
         return found
           ? {
@@ -107,41 +268,43 @@ export default function TimeLine() {
 
       {/* 이번 년도 타임라인 표시 */}
       <article className="relative flex flex-1 m-2 text-timeLineMonthText text-sm">
+        {/* 라인 */}
         <div className="absolute inset-0 grid grid-cols-7 grid-rows-9 w-full">
           {/* 첫 줄 라인 */}
           <div
             className="relative
             before:absolute before:top-0 before:right-0 before:w-[130%] before:h-3 before:bg-timeLineBorder before:rounded-l-full"
-            style={{ gridColumnStart: '3', gridRowStart: '1'}}
+            style={{ gridColumnStart: '3', gridRowStart: '1' }}
           >
           </div>
           {/* 오른쪽 첫번째 둥근 라인 */}
           <div
             className="relative
             before:absolute before:top-0 before:bottom-[-12px] before:left-0 before:right-0 before:border-[12px] before:border-l-0 before:border-timeLineBorder before:rounded-r-full"
-            style={{ gridColumnStart: '4',gridColumnEnd: '8', gridRowStart: '1', gridRowEnd: '4'}}
+            style={{ gridColumnStart: '4', gridColumnEnd: '8', gridRowStart: '1', gridRowEnd: '4' }}
           ></div>
           {/* 왼쪽 둥근 라인 */}
           <div
             className="relative
             before:absolute before:top-0 before:bottom-[-12px] before:left-0 before:right-0 before:border-[12px] before:border-r-0 before:border-timeLineBorder before:rounded-l-full"
-            style={{ gridColumnStart: '1',gridColumnEnd: '4', gridRowStart: '4', gridRowEnd: '7'}}
+            style={{ gridColumnStart: '1', gridColumnEnd: '4', gridRowStart: '4', gridRowEnd: '7' }}
           >
           </div>
           {/* 오른쪽 두번째 둥근 라인 */}
           <div
             className="relative
             before:absolute before:top-0 before:bottom-[-12px] before:left-0 before:right-0 before:border-[12px] before:border-l-0 before:border-timeLineBorder before:rounded-r-full"
-            style={{ gridColumnStart: '4',gridColumnEnd: '8', gridRowStart: '7', gridRowEnd: '10'}}
+            style={{ gridColumnStart: '4', gridColumnEnd: '8', gridRowStart: '7', gridRowEnd: '10' }}
           ></div>
           {/* 마지막 줄 라인 */}
           <div
             className="relative
             before:absolute before:top-full before:right-0 before:w-[30%] before:h-3 before:bg-timeLineBorder before:rounded-l-full"
-            style={{ gridColumnStart: '3', gridRowStart: '9'}}
+            style={{ gridColumnStart: '3', gridRowStart: '9' }}
           >
           </div>
         </div>
+        {/* 월 표시 버튼 */}
         <ul className="grid grid-cols-7 grid-rows-9 w-full">
           {monthArr.map((item, idx) => (
             <li
@@ -151,433 +314,51 @@ export default function TimeLine() {
             >
               <button
                 onClick={() => statsMonth(item.month)}
-                style={{ top: item.top, left: item.left, right: item.right, bottom: item.bottom, transform: item.transform }}
-                className="absolute w-8 h-8 rounded-full bg-timeLineMonthCircle"
+                style={{
+                  top: item.top,
+                  left: item.left,
+                  right: item.right,
+                  bottom: item.bottom,
+                  transform: item.transform
+                }}
+                className="hover:before:-inset-1.5 hover:before:opacity-100 hover:border-timeLineMonthHoverCircle
+                before:absolute before:inset-1 before:opacity-0 before:border-timeLineMonthHoverCircle before:border-[6px] before:rounded-[inherit] before:transition-all before:duration-200 before:ease-in-out
+                group absolute w-8 h-8 rounded-full bg-timeLineMonthCircle transition-all duration-200 ease-in-out"
               >
                 {item.month}
+                <div className={`
+                  ${item.month === 3 && 'flex-col top-[50%] -translate-y-1/2 left-[-50%] group-hover:left-[-70%] group-hover:top-[50%]'}
+                  ${item.month === 7 && 'flex-col top-[50%] -translate-y-1/2 left-[130%] group-hover:left-[160%] group-hover:top-[50%]'}
+                  ${item.month === 10 && 'flex-col top-[50%] -translate-y-1/2 left-[-50%] group-hover:left-[-70%] group-hover:top-[50%]'}
+                  ${item.month === 11 && 'top-[-70%] group-hover:top-[-100%]'}
+                  ${item.month === 12 && 'top-[-70%] group-hover:top-[-100%]'}
+                  group-hover:top-[130%] absolute flex gap-1 top-[110%] left-1/2 transform -translate-x-1/2 transition-all duration-200 ease-in-out`}>
+                  {item.noRead > 0 && (
+                    <span
+                      className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full"
+                    >
+                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.noRead}</p>
+                    </span>
+                  )}
+                  {item.reading > 0 && (
+                    <span
+                      className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full"
+                    >
+                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.reading}</p>
+                    </span>
+                  )}
+                  {item.complete > 0 && (
+                    <span
+                      className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full"
+                    >
+                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.complete}</p>
+                    </span>
+                  )}
+                </div>
               </button>
             </li>
           ))}
         </ul>
-        {/*<div className="relative flex w-[25%]">*/}
-        {/*  <div*/}
-        {/*    className="absolute top-[calc(33.3333%-10px)] bottom-[calc(33.3333%-10px)] border-r-0 rounded-l-full border-[10px] border-timeLineBorder w-full">*/}
-        {/*    /!* 7월 *!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 -left-1.5 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(7)}*/}
-        {/*    >*/}
-        {/*      7*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 7);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:left-[120%] absolute flex flex-col gap-1 left-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
-        {/*<div className="relative flex flex-col justify-between w-[50%]">*/}
-        {/*  <div className="absolute top-0 h-2.5 w-full right-0 bg-timeLineBorder rounded-l-full">*/}
-        {/*    /!* 1월 *!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[25%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(1)}*/}
-        {/*    >*/}
-        {/*      1*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 1);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*    /!* 2월 *!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[75%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(2)}*/}
-        {/*    >*/}
-        {/*      2*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 2);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*  <div className="absolute bottom-2/3 h-2.5 w-full bg-timeLineBorder">*/}
-        {/*    /!* 4월*!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-full top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(4)}*/}
-        {/*    >*/}
-        {/*      4*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 4);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*    /!* 5월 *!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(5)}*/}
-        {/*    >*/}
-        {/*      5*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 5);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*    /!* 6월 *!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(6)}*/}
-        {/*    >*/}
-        {/*      6*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 6);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*  <div className="absolute top-2/3 h-2.5 w-full bg-timeLineBorder">*/}
-        {/*    /!* 8월*!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[25%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(8)}*/}
-        {/*    >*/}
-        {/*      8*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 8);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*    /!* 9월 *!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[75%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(9)}*/}
-        {/*    >*/}
-        {/*      9*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 9);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:top-[120%] absolute flex gap-1 top-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*  <div className="absolute bottom-0 h-2.5 w-full bg-timeLineBorder rounded-l-full">*/}
-        {/*    /!* 11월*!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-full top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(11)}*/}
-        {/*    >*/}
-        {/*      11*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 11);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:bottom-[120%] absolute flex gap-1 bottom-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*    /!* 12월 *!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(12)}*/}
-        {/*    >*/}
-        {/*      12*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 12);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:bottom-[120%] absolute flex gap-1 bottom-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
-        {/*<div className="relative flex w-[25%]">*/}
-        {/*  <div*/}
-        {/*    className="absolute top-0 bottom-2/3 border-l-0 border-timeLineBorder rounded-r-full border-[10px] w-full">*/}
-        {/*    /!* 3월 *!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[103%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(3)}*/}
-        {/*    >*/}
-        {/*      3*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 3);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:right-[120%] absolute flex flex-col gap-1 right-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*  <div*/}
-        {/*    className="absolute top-2/3 bottom-0 border-l-0 border-timeLineBorder rounded-r-full border-[10px] w-full">*/}
-        {/*    /!* 10월 *!/*/}
-        {/*    <div*/}
-        {/*      className="group hover:border-[6px] hover:w-12 hover:border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out*/}
-        {/*      cursor-pointer flex justify-center items-center z-[1] absolute w-8 left-[103%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-timeLineMonthCircle rounded-full aspect-square"*/}
-        {/*      onClick={() => statsMonth(10)}*/}
-        {/*    >*/}
-        {/*      10*/}
-        {/*      {(() => {*/}
-        {/*        const data = monthArr.find((d) => d.month === 10);*/}
-        {/*        return data ? (*/}
-        {/*          <div className="group-hover:right-[120%] absolute flex flex-col gap-1 right-[110%]">*/}
-        {/*            {data?.noRead > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.noRead}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.reading > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.reading}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*            {data?.complete > 0 && (*/}
-        {/*              <span*/}
-        {/*                className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full">*/}
-        {/*                <p className="group-hover:opacity-100 opacity-0 text-xs">{data.complete}</p>*/}
-        {/*              </span>*/}
-        {/*            )}*/}
-        {/*          </div>*/}
-        {/*        ) : null;*/}
-        {/*      })()}*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
       </article>
     </section>
   );
