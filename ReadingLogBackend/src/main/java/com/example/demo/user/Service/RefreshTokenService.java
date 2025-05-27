@@ -1,5 +1,6 @@
 package com.example.demo.user.Service;
 
+import com.example.demo.user.Entity.KakaoTokenResponse;
 import com.example.demo.user.Entity.NaverTokenResponse;
 import com.example.demo.user.Entity.RefreshToken;
 import com.example.demo.user.Repository.RefreshTokenRepository;
@@ -7,10 +8,10 @@ import com.example.demo.user.Repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -44,8 +45,12 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
+    public RefreshToken findByUserId(Integer userId) {
+        return tokenRepository.findByUserId(userId);
+    }
+
     // 갱신 토큰으로 접근 토큰 재발급 요청
-    public NaverTokenResponse getAccessTokenByRefreshToken(String refreshToken){
+    public NaverTokenResponse getNaverAccessTokenByRefreshToken(String refreshToken){
 
         // apiKey 값 전달받기
         String clientId = apiKey.getNaver_client_id();
@@ -75,6 +80,39 @@ public class RefreshTokenService {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public KakaoTokenResponse getKakaoAccessTokenByRefreshToken(String refreshToken) throws JsonProcessingException {
+        String kakaoApiKey = apiKey.getKakao_api_key();
+        String redirectUri = apiKey.getKakao_redirect_uri();
+        String clientSecret = apiKey.getNaver_client_secret();
+
+        String kakaoTokenUrl = "https://kauth.kakao.com/oauth/token";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "refresh_token"); // 발급
+        params.add("client_id", kakaoApiKey);
+        params.add("redirect_uri", redirectUri);
+        params.add("refresh_token", refreshToken);
+        params.add("client_secret", clientSecret);
+
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        // TODO 경로 requestentity 로 옮겨주기
+        ResponseEntity<String> response = restTemplate
+                .exchange(kakaoTokenUrl, HttpMethod.POST, kakaoTokenRequest, String.class);
+        // JSON 결과값 반환
+        String responseBody = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        KakaoTokenResponse kakaoTokenResponse = objectMapper.readValue(responseBody, KakaoTokenResponse.class);
+        System.out.println("접근 토큰22 by refreshToken : " + response.getBody());
+        System.out.println("kakaoTokenResponse : " + kakaoTokenResponse);
+
+        return kakaoTokenResponse;
     }
 
 
