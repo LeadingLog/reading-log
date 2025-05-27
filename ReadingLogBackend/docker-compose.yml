@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: readinglog-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: readinglog
+      POSTGRES_USER: readinglog
+      POSTGRES_PASSWORD: readinglog
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    image: hennie0115/readinglog-app:latest
+    container_name: readinglog-backend
+    restart: always
+    ports:
+      - "9091:9091"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/readinglog
+      SPRING_DATASOURCE_USERNAME: readinglog
+      SPRING_DATASOURCE_PASSWORD: readinglog
+      SERVER_PORT: 9091
+      NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
+      NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
+      NAVER_REDIRECT_URI: ${NAVER_REDIRECT_URI}
+      KAKAO_API_KEY: ${KAKAO_API_KEY}
+      KAKAO_REDIRECT_URI: ${KAKAO_REDIRECT_URI}
+      VITE_ALADIN_API: ${VITE_ALADIN_API}
+    depends_on:
+      - db
+
+volumes:
+  pgdata: {}

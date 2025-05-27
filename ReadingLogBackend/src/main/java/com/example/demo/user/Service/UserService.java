@@ -3,13 +3,13 @@ package com.example.demo.user.Service;
 //import com.example.demo.user.Member;
 //import com.example.demo.repository.MemberRepository;
 
+import com.example.demo.response.ResponseService;
+import com.example.demo.user.Entity.*;
 import com.example.demo.user.Repository.RefreshTokenRepository;
-import com.example.demo.user.Entity.NaverProfile;
-import com.example.demo.user.Entity.NaverTokenResponse;
-import com.example.demo.user.Entity.User;
 import com.example.demo.user.Repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpEntity;
@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -47,16 +48,20 @@ public class UserService {
     private final UserRepository userRepository;
     private final RefreshTokenRepository tokenRepository;
     private final ApiKeyService apiKey;
+    private final RefreshTokenService refreshTokenService;
+    private final ResponseService responseService;
 
-    public UserService(UserRepository userRepository, RefreshTokenRepository tokenRepository, ApiKeyService apiKey) {
+    public UserService(UserRepository userRepository, RefreshTokenRepository tokenRepository, ApiKeyService apiKey, RefreshTokenService refreshTokenService, ResponseService responseService) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.apiKey = apiKey;
+        this.refreshTokenService = refreshTokenService;
+        this.responseService = responseService;
     }
 
     // 1. callback 이후 접근 신규 토큰 발급 요청
     @Transactional
-    public NaverTokenResponse getNewAccessToken(String code, String state, String platform) {
+    public NaverTokenResponse getNewNaverAccessToken(String code, String state, String platform) {
         Map<String, Object> result = new HashMap<>();
 
 //        if (platform.equals("NAVER")) {
@@ -81,7 +86,7 @@ public class UserService {
             String responseBody = response.getBody();
             ObjectMapper objectMapper = new ObjectMapper();
             NaverTokenResponse naverTokenResponse = objectMapper.readValue(responseBody, NaverTokenResponse.class);
-            System.out.println("접근 토큰 : " + response.getBody());
+            System.out.println("접근 토큰11 : " + response.getBody());
             System.out.println("naverTokenResponse : "+ naverTokenResponse);
 
 
@@ -108,7 +113,8 @@ public class UserService {
     }
 
     // 접근 토큰으로 프로필 조회 요청
-    public NaverProfile getUserInfo(String accessToken) throws URISyntaxException, JsonProcessingException {
+    @Transactional
+    public NaverProfile getNaverUserInfo(String accessToken) throws URISyntaxException, JsonProcessingException {
         StringBuilder apiURL = new StringBuilder();
         apiURL.append("https://openapi.naver.com/v1/nid/me");
 
@@ -142,17 +148,29 @@ public class UserService {
 
     // 회원 추가
     @Transactional
-    public Integer joinUser(NaverProfile userInfo) {
-        if (userInfo == null) {
+    public Integer joinUser(NaverProfile naverUserInfo, KakaoProfile kakaoUserInfo) {
+        if (naverUserInfo == null && kakaoUserInfo == null) {
             throw new IllegalArgumentException("회원정보가 없습니다.");
         }
-        System.out.println(userInfo);
-        System.out.println(userInfo.getId());
 
         User user = new User();
-        user.setUserUUID(userInfo.getId());
-        user.setNickname(userInfo.getNickname());
-        user.setUserEmail(userInfo.getEmail());
+
+        if (naverUserInfo != null){
+            System.out.println("네이버 회원 정보 처리");
+
+            user.setUserUUID(naverUserInfo.getId());
+            user.setNickname(naverUserInfo.getNickname());
+            user.setUserEmail(naverUserInfo.getEmail());
+
+        } else if (kakaoUserInfo != null) {
+            System.out.println("카카오 회원 정보 처리");
+
+            user.setUserUUID(kakaoUserInfo.getId());
+            user.setNickname(kakaoUserInfo.getNickname());
+            user.setUserEmail(kakaoUserInfo.getEmail());
+        } else {
+            throw new IllegalArgumentException("유저 두개 입력 오류.");
+        }
 
         User joinedUser = userRepository.save(user);
         Integer userId = joinedUser.getUserId();
@@ -160,17 +178,45 @@ public class UserService {
         return userId;
     }
 
-    // 회원 조회
+    // 회원 조회 (userUUID)
     @Transactional
     public ArrayList<User> getUserByUUID(String userUUID) {
         ArrayList<User> uuid = userRepository.getIdByUserUUID(userUUID);
         return uuid;
     }
 
-    public User getUserById(Integer userId) {
-        User user = userRepository.getReferenceById(userId);
-        return user;
+    // 회원 상세 조회 (userId)
+    @Transactional
+    public User findUserById(Integer userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            System.out.println("findUserById id : " + user.getNickname());
+            return user;
+        } else {
+            System.out.println("error " + userId);
+            return null;
+        }
     }
+
+    // 회원 정보 수정 (userId) - 마이페이지 수정
+    // TODO upd_date 도 업데이트
+    @Transactional
+    public User updateUser(User user) {
+        User newuser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("user not found"));
+        // 이메일 수정
+        if (user.getUserEmail() != null) {
+            newuser.setUserEmail(user.getUserEmail());
+        }
+
+        // 닉네임 수정
+        if (user.getNickname() != null) {
+            newuser.setNickname(user.getNickname());
+        }
+        return userRepository.save(newuser);
+    }
+
 
     // 회원 로그인
     @Transactional
@@ -184,10 +230,12 @@ public class UserService {
 //        String token = String.valueOf(tokenRepository.findByUserIdAndProvider(userId, "NAVER"));
 
         if (uuid.size() == 1) { // 회원일 경우
-            session = request.getSession();
-            session.setMaxInactiveInterval(604800); // 7일
-            session.setAttribute("loginUserId", userId);
-            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
+            extendSession(userId, request);
+
+//            session = request.getSession();
+//            session.setMaxInactiveInterval(604800); // 7일
+//            session.setAttribute("loginUserId", userId);
+//            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
         } else {
             return 0;
         }
@@ -196,7 +244,8 @@ public class UserService {
     }
 
 
-    // 회원 로그아웃제
+    // 회원 로그아웃
+    @Transactional
     public void logoutUser(HttpServletRequest request) {
         // 로그인 세션 삭제
         HttpSession session = null;
@@ -206,24 +255,73 @@ public class UserService {
 
     }
 
-    // 회원 탈퇴
-    public void deleteUser(Integer userId, HttpServletRequest request) {
-        // 회원 삭제
-        userRepository.deleteById(userId);
+    // 네이버 회원 탈퇴
+    @Transactional
+    public void deleteUser(Integer userId, HttpServletRequest request) throws JsonProcessingException {
 
-//        if (request.)
+        // 갱신 토큰 조회
+        ArrayList<RefreshToken> refreshTokens = refreshTokenService.getToken(userId, "Naver");
+        String token = String.valueOf(refreshTokens.get(0).getToken());
+
+        // 토큰 재발급
+        NaverTokenResponse naverTokenResponse = refreshTokenService.getAccessTokenByRefreshToken(token);
+        String accessToken = naverTokenResponse.getAccessToken();
+
+        // 접근토큰으로 네이버 회원탈퇴
+        String clientId = apiKey.getNaver_client_id();
+        String clientSecret = apiKey.getNaver_client_secret();
+
+//        try {
+            StringBuilder apiURL = new StringBuilder();
+            apiURL.append("https://nid.naver.com/oauth2.0/token?");
+            apiURL.append("&grant_type=delete");    // 발급
+            apiURL.append("&client_id=").append(clientId);
+            apiURL.append("&client_secret=").append(clientSecret);
+            apiURL.append("&access_token=").append(accessToken);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.exchange(apiURL.toString(), HttpMethod.GET, null, String.class);
+
+            String responseBody = response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            NaverTokenResponse naverDeleteResponse = objectMapper.readValue(responseBody, NaverTokenResponse.class);
+            System.out.println("접근토큰 갱신 : " + responseBody);
+            System.out.println("naverTOkenRefreshResponse : " + naverDeleteResponse);
+//        System.out.println(naver);
+
+//            return null;
+
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
+
+        // Todo 네이버 탈퇴 성공 시
         // 로그인 세션 삭제
         HttpSession session = null;
         session = request.getSession();
         session.removeAttribute("loginUserId");
 
+        // 회원 삭제
+        userRepository.deleteById(userId);
+
+        // todo 갱신토큰 삭제
+        refreshTokenService.deleteToken(userId, "Naver");
+
+
     }
 
+    // todo 네이버 로그인 연결 끊기 알림 api 명세
+    // https://developers.naver.com/docs/login/devguide/devguide.md#5-4-%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%97%B0%EA%B2%B0-%EB%81%8A%EA%B8%B0-%EC%95%8C%EB%A6%BC-%EB%B0%9B%EA%B8%B0
+
+
+
     // 회원 세션 남은 시간 조회
+    @Transactional
     public Map<String, Object> getUserSession(HttpServletRequest request) {
         HttpSession session = null;
         session = request.getSession();
-        Map<String, Object> rtn = null;
+        Map<String, Object> rtn = new HashMap<>();
         rtn.put("sessionLoginUserId", (Integer) session.getAttribute("loginUserId"));
         rtn.put("sessionLoginValidTime", (Integer) session.getAttribute("loginSessionValidTime"));
 
@@ -231,15 +329,26 @@ public class UserService {
     }
 
 
-//    //  로그인 세션 연장
-//    /*
-//     - 사용자가 요청을 할때마다 세션의 비활성 시간이 초기화되어 자동 연장됨.
-//     - 설정한 GETMAXintervaltime 으로 연장됨
-//     */
-//    public String renewUserSession(HttpServletRequest request) {
-//        HttpSession session = request.getSession();
-//
-//    }
+    //  로그인 세션 연장
+    /*
+     - 사용자가 요청을 할때마다 세션의 비활성 시간이 초기화되어 자동 연장됨.
+     - 설정한 GETMAXintervaltime 으로 연장됨
+     */
+    @Transactional
+    public ResponseEntity<Map<String,Object>> extendSession(Integer userId, HttpServletRequest request) {
+        try {
+            HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(604800); // 7일
+            session.setAttribute("loginUserId", userId);
+            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
+            return responseService.responseData(true, null);
+        } catch (Exception e) {
+            return responseService.responseData(false, "extend session failed");
+        }
+
+    }
+
+    // 회원 정보 수정 (userId)
 
 
 
