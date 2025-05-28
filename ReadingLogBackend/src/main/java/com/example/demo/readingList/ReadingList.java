@@ -52,4 +52,25 @@ public class ReadingList {
 
     @Column(name = "upd_date")
     private LocalDate updDate;
+    
+ // INTERESTED 상태로 바꿀 때 
+    public void changeStatusToInterested() {
+        this.bookStatus = BookStatus.INTERESTED;
+        this.readStartDt = null;
+        this.readEndDt = null;
+        this.updDate = LocalDate.now();
+    }
+
+    // 다른 상태로 바꿀 때 
+    public void changeStatus(BookStatus newStatus) {
+        this.bookStatus = newStatus;
+        this.updDate = LocalDate.now();
+    }
+    
+    public void changeStatusToStart(LocalDate readStartDt, LocalDate readEndDt) {
+        this.bookStatus = BookStatus.NOT_STARTED;  
+        this.readStartDt = readStartDt;
+        this.readEndDt = readEndDt;
+        this.updDate = LocalDate.now();
+    }
 }
