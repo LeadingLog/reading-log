@@ -3,7 +3,7 @@ import { fetchAllReadingTimeParams } from "../types/timeLine.ts";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-export const fetchAllReadingTime = async (userId: fetchAllReadingTimeParams) => {
+export const fetchAllReadingTime = async ({ userId }: fetchAllReadingTimeParams) => {
 
   try {
     const response = await axios.get(`${serverUrl}/api/readingrecord/stats/time`, {

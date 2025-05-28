@@ -260,7 +260,8 @@ export default function TimeLine() {
       {/* 총 독서 시간 표시 */}
       <article
         className="flex gap-2 justify-center items-center text-allReadingTime_Text text-2xl bg-allReadingTime_Bg rounded-xl p-3.5">
-        총 독서 시간<span>{String(allReadingTimeHour).padStart(2, '0')}:{String(allReadingTimeMin).padStart(2, '0')}:{String(allReadingTimeSec).padStart(2, '0')}</span>
+        총 독서 시간
+        <span>{String(allReadingTimeHour).padStart(2, '0')}:{String(allReadingTimeMin).padStart(2, '0')}:{String(allReadingTimeSec).padStart(2, '0')}</span>
       </article>
 
       {/* 작년 이번년 내년 선택 슬라이드 */}
