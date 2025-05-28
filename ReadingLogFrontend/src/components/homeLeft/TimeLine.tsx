@@ -232,39 +232,48 @@ export default function TimeLine() {
 
       {/* 작년 이번년 내년 선택 슬라이드 */}
       <YearSlideBar/>
+      <article className="flex justify-between">
+        <article className="flex flex-col">
+          <div className="flex items-center gap-1 text-sm"><span className="w-3 h-3 bg-timeLineNoReadBg rounded-full"></span>- 읽기전</div>
+          <div className="flex items-center gap-1 text-sm"><span className="w-3 h-3 bg-timeLineReadingBg rounded-full"></span>- 독서중</div>
+          <div className="flex items-center gap-1 text-sm"><span className="w-3 h-3 bg-timeLineCompleteBg rounded-full"></span>- 완독</div>
+        </article>
+        <article className="flex flex-col gap-1 justify-center ">
+          {/* 연별 통계 보러가는 버튼 */}
+          <button
+            className="flex gap-2 justify-end items-center group"
+            onClick={() =>
+              setRightContent(
+                'StatsPage',
+                { StatsPage: { tab: 'StatsYear' } }, // 파라미터
+                { title: '나의 리딩로그 - 연별통계' }        // pageData (타이틀)
+              )
+            }
+          >
+            <span>{year}</span>
+            <span>년 리딩로그 보러가기</span>
+            <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+            <IconTriangle/>
+          </span>
+          </button>
 
-      {/* 연별 통계 보러가는 버튼 */}
-      <button
-        className="flex gap-2 justify-end items-center group"
-        onClick={() =>
-          setRightContent(
-            'StatsPage',
-            { StatsPage: { tab: 'StatsYear' } }, // 파라미터
-            { title: '나의 리딩로그 - 연별통계' }        // pageData (타이틀)
-          )
-        }
-      >
-        <span>{year}</span>
-        <span>년 리딩로그 보러가기</span>
-        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
-          <IconTriangle/>
-        </span>
-      </button>
+          <button
+            className="flex gap-2 justify-end items-center group"
+            onClick={() =>
+              setRightContent(
+                'TimeTracking', {},
+                { title: '이번 달 독서 리스트' },
+              )
+            }
+          >
+            이번 달 독서 리스트 보기
+            <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+            <IconTriangle/>
+          </span>
+          </button>
+        </article>
+      </article>
 
-      <button
-        className="flex gap-2 justify-end items-center group"
-        onClick={() =>
-          setRightContent(
-            'TimeTracking', {},
-            { title: '이번 달 독서 리스트' },
-          )
-        }
-      >
-        이번 달 독서 리스트 보기
-        <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
-          <IconTriangle/>
-        </span>
-      </button>
 
       {/* 이번 년도 타임라인 표시 */}
       <article className="relative flex flex-1 m-2 text-timeLineMonthText text-sm">
