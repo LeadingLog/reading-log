@@ -3,7 +3,7 @@ import {useUserStore} from "../../store/userStore.ts";
 import {useModalStore} from "../../store/modalStore.ts";
 import IconLogOut from "../../assets/Icon-logout.svg?react";
 import IconMyPage from "../../assets/Icon-mypage.svg?react";
-// import axios from "axios";
+import axios from "axios";
 
 export default function Account() {
   const navigate = useNavigate();
@@ -13,51 +13,29 @@ export default function Account() {
 
   // 로그아웃 처리
   const handleLogout = async () => {
-    //const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
+    const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
 
-    // TODO. 임시 로그아웃
-    openModal("ModalNotice", { // 로그아웃 성공 시 모달 표시
-      title: "로그아웃 완료!",
-      subTitle: "다음에 또 봐요!",
-      confirmText: "확인",
-      onlyConfirm: true,
-      onConfirm: () => {
-        resetUser(); // localStorage 초기화
-        navigate("/login");
-        closeAllModals();
-      },
-    });
-
-    /*
     try {
-      const response = await axios.post(`${serverUrl}/user/logout`);
+      await axios.post(`${serverUrl}/user/logout`);
 
-      if (response.data.success) {
-        console.log(response.data);
-        openModal("ModalNotice", { // 로그아웃 성공 시 모달 표시
-          title: "로그아웃 완료!",
-          subTitle: "다음에 또 봐요!",
-          confirmText: "확인",
-          onlyConfirm: true,
-          onConfirm: () => {
-            resetUser(); // localStorage 초기화
-            navigate("/login");
-            closeAllModals();
-          },
-        });
-      } else {
-        console.warn("로그아웃 실패 응답:", response.data);
-        handleLogoutFail("로그아웃에 실패했습니다. 다시 시도해주세요.");
-      }
+      openModal("ModalNotice", { // 로그아웃 성공 시 모달 표시
+        title: "로그아웃 완료!",
+        subTitle: "다음에 또 봐요!",
+        confirmText: "확인",
+        onlyConfirm: true,
+        onConfirm: () => {
+          resetUser(); // localStorage 초기화
+          navigate("/login");
+          closeAllModals();
+        },
+      });
     } catch (err) {
       console.error("로그아웃 실패:", err);
       handleLogoutFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
-     */
   };
 
   // 로그아웃 실패 시 모달 표시
-  /*
   const handleLogoutFail = (message?: string, title?: string) => {
     openModal("ModalNotice", {
       title: title || "로그아웃 실패",
@@ -66,7 +44,6 @@ export default function Account() {
       cancelText: "확인",
     });
   };
-   */
 
   return (
     <>
