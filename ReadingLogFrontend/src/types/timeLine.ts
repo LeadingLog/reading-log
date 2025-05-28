@@ -4,6 +4,10 @@ export interface fetchTimeLineReadingListParams {
   year: number
 }
 
+export interface fetchAllReadingTimeParams {
+  userId: number
+}
+
 // 받아온 해당 년도 월별 정보 타입
 export interface TimelineEntry {
   name: string;

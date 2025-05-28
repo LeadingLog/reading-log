@@ -4,7 +4,8 @@ import { usePageStore } from "../../store/pageStore.ts";
 import { useDateStore } from "../../store/useDateStore.ts";
 import { useEffect, useState } from "react";
 import { fetchTimeLineReadingList } from "../../api/timeLineReadingListApi.ts";
-import { fetchTimeLineReadingListParams, TimelineEntry } from "../../types/timeLine.ts";
+import { fetchAllReadingTimeParams, fetchTimeLineReadingListParams, TimelineEntry } from "../../types/timeLine.ts";
+import { fetchAllReadingTime } from "../../api/allReadingTimeApi.ts";
 
 export default function TimeLine() {
 
@@ -218,6 +219,38 @@ export default function TimeLine() {
     }
   };
 
+  /* 총 독서 시간 가져오기 */
+  const [allReadingTimeHour, setAllReadingTimeHour] = useState(0)
+  const [allReadingTimeMin, setAllReadingTimeMin] = useState(0)
+  const [allReadingTimeSec, setAllReadingTimeSec] = useState(0)
+
+  const readingTime = async (userId: fetchAllReadingTimeParams) => {
+    try {
+      const response = await fetchAllReadingTime(userId)
+
+      const totalSeconds = response.data;
+
+      const hour = Math.floor(totalSeconds / 3600);
+      const min = Math.floor((totalSeconds % 3600) / 60);
+      const sec = totalSeconds % 60;
+
+      setAllReadingTimeHour(hour)
+      setAllReadingTimeMin(min)
+      setAllReadingTimeSec(sec)
+
+    } catch (error) {
+      setAllReadingTimeHour(99)
+      setAllReadingTimeMin(99)
+      setAllReadingTimeSec(99)
+      console.error("독서 시간을 가져오지 못함", error)
+    }
+
+  }
+
+  useEffect(() => {
+    readingTime({ userId: 1 })
+  }, []);
+
   useEffect(() => {
     searchTimeLineReadingList({ userId: 1, year });
   }, [year]);
@@ -226,17 +259,23 @@ export default function TimeLine() {
     <section className="flex flex-col gap-4 rounded-xl flex-1">
       {/* 총 독서 시간 표시 */}
       <article
-        className="flex justify-center items-center text-allReadingTime_Text text-2xl bg-allReadingTime_Bg rounded-xl p-3.5">
-        총 독서 시간 : <span>00:00:00</span>
+        className="flex gap-2 justify-center items-center text-allReadingTime_Text text-2xl bg-allReadingTime_Bg rounded-xl p-3.5">
+        총 독서 시간<span>{String(allReadingTimeHour).padStart(2, '0')}:{String(allReadingTimeMin).padStart(2, '0')}:{String(allReadingTimeSec).padStart(2, '0')}</span>
       </article>
 
       {/* 작년 이번년 내년 선택 슬라이드 */}
       <YearSlideBar/>
       <article className="flex justify-between">
         <article className="flex flex-col">
-          <div className="flex items-center gap-1 text-sm"><span className="w-3 h-3 bg-timeLineNoReadBg rounded-full"></span>- 읽기전</div>
-          <div className="flex items-center gap-1 text-sm"><span className="w-3 h-3 bg-timeLineReadingBg rounded-full"></span>- 독서중</div>
-          <div className="flex items-center gap-1 text-sm"><span className="w-3 h-3 bg-timeLineCompleteBg rounded-full"></span>- 완독</div>
+          <div className="flex items-center gap-1 text-sm"><span
+            className="w-3 h-3 bg-timeLineNoReadBg rounded-full"></span>- 읽기전
+          </div>
+          <div className="flex items-center gap-1 text-sm"><span
+            className="w-3 h-3 bg-timeLineReadingBg rounded-full"></span>- 독서중
+          </div>
+          <div className="flex items-center gap-1 text-sm"><span
+            className="w-3 h-3 bg-timeLineCompleteBg rounded-full"></span>- 완독
+          </div>
         </article>
         <article className="flex flex-col gap-1 justify-center ">
           {/* 연별 통계 보러가는 버튼 */}
