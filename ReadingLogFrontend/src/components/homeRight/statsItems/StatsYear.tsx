@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import YearSlideBar from "../../common/YearSlideBar.tsx";
 
 export default function StatsYear() {
 
@@ -61,6 +62,7 @@ export default function StatsYear() {
 
   return (
     <section className="flex flex-1 flex-col gap-4 overflow-hidden">
+      <YearSlideBar />
       <article className="flex flex-col text-center">
         <span className="text-2xl font-semibold text-stats_Info_Text">
           이번년도에
