@@ -68,6 +68,7 @@ jobs:
           echo "NAVER_REDIRECT_URI=${{ secrets.NAVER_REDIRECT_URI }}" >> .env
           echo "KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}" >> .env
           echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env
+          echo "KAKAO_APP_ADMIN_KEY=${{ secrets.KAKAO_APP_ADMIN_KEY }}">> .env
           echo "AlADIN_KEY=${{ secrets.AlADIN_KEY }}" >> .env
 
 
