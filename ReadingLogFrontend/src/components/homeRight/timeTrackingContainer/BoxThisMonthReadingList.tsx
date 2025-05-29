@@ -27,11 +27,11 @@ export default function BoxThisMonthReadingList() {
     })
   }
 
-  const searchThisMonthReadingList = async ({ userId, yearMonth, page, size }: fetchThisMonthReadingListParams) => {
+  const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchThisMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
     try {
       setIsLoading(true);
-      const data = await fetchThisMonthReadingList({ userId, yearMonth, page, size });
+      const data = await fetchThisMonthReadingList({ userId, year, month, page, size });
       // 받아온 독서상태별로 데이터 순서 정렬
       const sortedList = data.monthlyReadingList.sort((a : monthReadingListItem, b : monthReadingListItem) => {
         return readOrder[a.readStatus] - readOrder[b.readStatus];
@@ -47,10 +47,8 @@ export default function BoxThisMonthReadingList() {
     }
   };
 
-  const yearMonth = parseInt(`${year}${String(month).padStart(2, '0')}`);
-
   useEffect(() => {
-    searchThisMonthReadingList({ userId: 1, yearMonth, page, size: 20 });
+    searchThisMonthReadingList({ userId: 1, year, month, page, size: 20 });
   }, [page]);
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>(null);
