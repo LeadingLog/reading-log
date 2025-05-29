@@ -1,4 +1,5 @@
 import {http, HttpResponse} from 'msw';
+import statsMonthList from "../dummyData/statsMonthListData/statsMonthList.json"
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -172,22 +173,26 @@ export const readingRecordHandlers = [
     });
   }),
 
-  // 사용자의 특정 년,월에 읽은 책과 해당 책의 총 독서시간
+  // 월별 통계
   http.get(`${serverUrl}/api/readingrecord/stats/time/yymm/book_id`, async ({request}) => {
     const url = new URL(request.url);
-    const userId = url.searchParams.get('user_id');
+    const userId = url.searchParams.get('userId');
     const year = url.searchParams.get('year');
     const month = url.searchParams.get('month');
     console.log(`userId: ${userId}, year: ${year}, month: ${month}`);
 
+    return HttpResponse.json(statsMonthList)
+  }),
+
+  // 오늘 독서 시간
+  http.get(`${serverUrl}/api/readingrecord/stats/time/yy`, async ({request}) => {
+    const url = new URL(request.url);
+    const userId = url.searchParams.get('userId');
+    console.log(`userId: ${userId}`);
+
     return HttpResponse.json({
       success: true,
-      data: [
-        {"book_001": 110},
-        {"book_002": 100},
-        {"book_003": 35},
-        {"book_004": 25},
-      ]
+      data: 4650
     });
   }),
 ];

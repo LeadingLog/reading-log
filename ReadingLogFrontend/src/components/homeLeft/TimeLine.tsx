@@ -10,14 +10,15 @@ import { fetchAllReadingTime } from "../../api/allReadingTimeApi.ts";
 export default function TimeLine() {
 
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
-  const { year } = useDateStore(); // Zustand에서 년도 정보 가져오기
+  const { year, setMonth } = useDateStore(); // Zustand에서 년도 정보 가져오기
 
   const statsMonth = (month: number) => {
     setRightContent(
       'StatsPage',
       { StatsPage: { tab: 'StatsMonth' } }, // 파라미터
-      { title: `나의 리딩로그 - 월별통계 - ${month}월` }        // pageData (타이틀)
+      { title: `나의 리딩로그 - 월별통계` }
     )
+    setMonth(month)
   }
 
   /* 월 표시 위치 및 년도 변경 시 도서권수 초기화용 */
