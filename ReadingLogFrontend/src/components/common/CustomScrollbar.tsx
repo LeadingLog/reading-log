@@ -176,7 +176,7 @@ const CustomScrollbar = ({
 
   return (
     <section
-      className={`relative flex flex-1 overflow-hidden group/scroll min-h-fit ${className} ${direction === 'horizontal' ? "pb-3" : 'pr-3'}`}>
+      className={`relative flex flex-1 overflow-hidden group/scroll ${className} ${direction === 'horizontal' ? "pb-3" : 'pr-3'}`}>
       {/* 스크롤 가능한 콘텐츠 */}
       <ul
         ref={containerRef}

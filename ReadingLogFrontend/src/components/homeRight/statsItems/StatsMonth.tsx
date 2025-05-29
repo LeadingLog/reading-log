@@ -62,7 +62,7 @@ export default function StatsMonth() {
 
   return (
     /* 월별 통계  */
-    <section className="flex flex-col gap-4 overflow-hidden">
+    <section className="flex flex-1 flex-col gap-4 overflow-hidden">
       <MonthSlideBar/>
       <article className="flex flex-col text-center">
         <span className="text-2xl font-semibold text-stats_Info_Text">
