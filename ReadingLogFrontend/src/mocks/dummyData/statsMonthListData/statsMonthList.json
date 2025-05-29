@@ -5,23 +5,39 @@
     "monthlyReadingList": [
       {
         "booId": 1,
+        "title": "어떻게 죽을 것인가",
         "bookStatus": "NOT_STARTED",
-        "bookTime": 5000
+        "bookTime": 0
       },
       {
         "booId": 2,
+        "title": "30개 도시로 읽는 영국사 1",
         "bookStatus": "IN_PROGRESS",
-        "bookTime": 500
+        "bookTime": 1500
       },
       {
         "booId": 3,
-        "bookStatus": "COMPLETED",
-        "bookTime": 500
+        "title": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 4500
       },
       {
         "booId": 4,
+        "title": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 6500
+      },
+      {
+        "booId": 5,
+        "title": "삶이 흐르는 대로",
+        "bookStatus": "COMPLETED",
+        "bookTime": 4500
+      },
+      {
+        "booId": 6,
+        "title": "인생의 방향은 언제든 바뀔 수 있다",
         "bookStatus": "INTERESTED",
-        "bookTime": 5000
+        "bookTime": 0
       }
     ]
   }

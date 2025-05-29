@@ -119,7 +119,7 @@ export default function BookImgList() {
       )}
       {!isLoading && thisMonthReadingList.length === 0 && (
         <li className="py-2 col-span-3 justify-center flex gap-1 text-sm text-favoriteList_Empty_Text">
-          <span className="text-2xl font-bold">읽고 싶은 도서를 추가해보세요!</span>
+          <span className="text-2xl font-bold">{month}월은 도서 정보가 없어요</span>
         </li>
       )}
       {hasMore && (
@@ -130,7 +130,7 @@ export default function BookImgList() {
       )}
       {!hasMore && thisMonthReadingList.length > 0 && (
         <li className="py-2 col-span-3 justify-center flex gap-1 text-sm text-favoriteList_Searching_End_Text">
-          <span>검색어와 관련된 모든 도서를 불러왔습니다.</span>
+          <span>{month}월달 도서를 모두 불러왔습니다.</span>
         </li>
       )}
     </>

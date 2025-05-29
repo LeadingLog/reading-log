@@ -4,6 +4,7 @@ import { ReadStatus } from "./readStatus.ts";
 // 월별 독서 리스트 타입
 
 export interface monthReadingListItem {
+  bookId: number;
   title: string;
   author: string;
   isbn13: string;

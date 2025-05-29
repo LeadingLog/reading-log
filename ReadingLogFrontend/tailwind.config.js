@@ -91,7 +91,8 @@ export default {
         stats_Month_Graph_Book_Border           : "#C9A89F",   // 월별 통계 - 책 보더 색
         stats_Month_Graph_Reading_Icon_Bg       : "#C9A89F",   // 월별 통계 - 독서 중 아이콘 배경
         stats_Month_Graph_Complete_Icon_Bg      : "#96B2C8",   // 월별 통계 - 완독 책 아이콘 배경
-        stats_Month_Graph_Icon_Color            : "#FDFAF3",   // 월별 통계 - 독서 중 & 완독 아이콘 색
+        stats_Month_Graph_NoRead_Icon_Bg        : "#D9D9D9",   // 월별 통계 - 읽기 전 아이콘 배경
+        stats_Month_Graph_Icon_Color            : "#FDFAF3",   // 월별 통계 - 독서 중 & 완독 & 읽기 전 아이콘 색
         stats_Year_Graph_Count_Text             : "#C9A89F",   // 년별 통계 - 도서 수 텍스트 색
         stats_Year_Graph_MonthItem_Circle       : "#E5CEC8",   // 년별 통계 - 각 월 표시 원 색
         stats_Year_Graph_MonthItem_Circle_Border: "#96B2C8",   // 년별 통계 - 각 월 표시 원 보더 색

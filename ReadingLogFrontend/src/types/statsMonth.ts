@@ -8,6 +8,7 @@ export interface fetchStatsMonthApiParams {
 // 월별 통게 요청 응답 타입
 export interface StatsMonthList {
   bookId: number;
+  title: string;
   bookStatus: string;
   bookTime: number;
 }
