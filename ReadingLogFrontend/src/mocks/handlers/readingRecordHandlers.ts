@@ -40,7 +40,7 @@ export const readingRecordHandlers = [
 
     return HttpResponse.json({
       success: true,
-      data: 465
+      data: 4650
     });
   }),
 

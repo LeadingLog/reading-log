@@ -10,4 +10,8 @@ import java.util.ArrayList;
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Integer> {
 
     ArrayList<RefreshToken> findByUserIdAndProvider(Integer userId, String provider);
+//    RefreshToken findByUserIdAndProvider(Integer userId, String provider);
+    void deleteByUserIdAndProvider(Integer userId, String provider);
+    RefreshToken findByUserId(Integer userId);
+
 }

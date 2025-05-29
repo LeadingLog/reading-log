@@ -193,7 +193,7 @@ export default {
         main_SearchBar_Searching_Back_Bg              : "transparent", // 상단 검색 바 - 검색 시 아이콘 배경 색
         main_SearchBar_ClearText_Color                : "#FDFAF3", // 상단 검색 바 - 검색 텍스트 삭제 버튼 색
         main_SearchBar_ClearText_Bg                   : "#96B2C8", // 상단 검색 바 - 검색 텍스트 삭제 버튼 배경 색
-        main_SearchBar_BookList_Hover_border          : "#96B2C8", // 상단 검색 바 - 검색 텍스트 삭제 버튼 배경 색
+        main_SearchBar_BookList_Hover_border          : "#96B2C8", // 상단 검색 바 -
         main_SearchBar_NotFindBook_Text               : "#A1A1A1", // 상단 검색 바 - 검색 결과 없는 경우 표시 텍스트 색
         main_SearchBar_searchingBook_Text             : "#000000", // 상단 검색 바 - 검색 중 표시 텍스트 색
         main_SearchBar_NotYetFindBook_Text            : "#A1A1A1", // 상단 검색 바 - 검색 전 표시 텍스트 색
@@ -202,15 +202,18 @@ export default {
         myBook_SearchBar_Bg                      : "#FDFAF3", // 내 독서 목록 검색 바 - 내 독서 목록 검색창 배경
         myBook_SearchBar_Border                  : "#C9A89F", // 내 독서 목록 검색 바 - 검색창 보더
         myBook_SearchBar_SearchIcon_Default_Color: "#C9A89F", // 내 독서 목록 검색 바 - 검색 아이콘 검색안할 때 색
+        myBook_SearchBar_ClearText_Bg            : "#C9A89F", // 내 독서 목록 검색 바 - 검색 텍스트 삭제 버튼 배경 색
+        myBook_SearchBar_ClearText_Color         : "#FDFAF3", // 내 독서 목록 검색 바 - 검색 텍스트 삭제 버튼 색
+        
         
         /* 관심도서 아이콘 관련 색 */
         favorite_Icon_Color: "#FDFAF3", // 관심도서 아이콘 색
         favorite_Icon_Bg   : "#96B2C8", // 관심도서 아이콘 배경 색
         unFavorite_Icon_Bg : "#D9D9D9", // 관심도서 아닐 때 아이콘 배경 색
         /* 관심도서 리스트 설명 텍스트 관련 색 */
-        favoriteList_Searching_Text : "#000000", // 관심 도서 요청시 표시 텍스트 색
-        favoriteList_Empty_Text : "#96B2C8", // 관심 도서 요청시 표시 텍스트 색
-        favoriteList_Searching_End_Text : "#000000", // 관심 도서 요청시 표시 텍스트 색
+        favoriteList_Searching_Text    : "#000000", // 관심 도서 요청시 표시 텍스트 색
+        favoriteList_Empty_Text        : "#96B2C8", // 관심 도서 요청시 표시 텍스트 색
+        favoriteList_Searching_End_Text: "#000000", // 관심 도서 요청시 표시 텍스트 색
         
         /* 로딩 관련 색 */
         loadingBg     : "#D9D9D9", // 로딩 중일 때 배경 색

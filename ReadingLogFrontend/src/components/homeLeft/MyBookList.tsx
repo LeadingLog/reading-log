@@ -1,6 +1,6 @@
 import IconSearch from "../../assets/Icon-search.svg?react";
 import BookImgList from "../common/BookImgList.tsx";
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 import CustomScrollbar from "../common/CustomScrollbar.tsx";
 import { tabLabels, TabType } from "../../types/myReadingList.ts";
 
@@ -13,6 +13,14 @@ export default function MyBookList() {
   const changeType = (type: TabType) => {
     setIsActive(type)
   }
+
+  const [searchValue, setSearchValue] = useState<string>("")
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const changeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
 
   return (
     /* 내 독서 목록 */
@@ -37,8 +45,24 @@ export default function MyBookList() {
           className="flex w-8 h-full p-1 justify-center items-center text-myBook_SearchBar_SearchIcon_Default_Color ">
           <IconSearch width="100%" height="100%"/>
         </span>
-        <input type="search" className="w-full h-full p-1 bg-myBook_SearchBar_Bg rounded-e-full"
-               placeholder="어떤 책을 찾으시나요?"/>
+        <input
+          ref={inputRef}
+          type="search"
+          onChange={changeSearchValue}
+          value={searchValue}
+          className="w-full h-full p-1 focus:outline-none bg-myBook_SearchBar_Bg rounded-e-full"
+          placeholder="어떤 책을 찾으시나요?"
+        />
+        {searchValue && (
+          <button
+            onClick={() => {
+              setSearchValue("")
+            }}
+            className="absolute flex justify-center items-center w-[20x] h-[20px] aspect-square right-3 top-1.5 bg-myBook_SearchBar_ClearText_Bg z-[1] text-xs font-black text-myBook_SearchBar_ClearText_Color hover:text-gray-600 rounded-full"
+          >
+            ✕
+          </button>
+        )}
       </article>
       {/* 책 썸네일 아이콘 리스트 */}
       <CustomScrollbar
@@ -46,7 +70,7 @@ export default function MyBookList() {
         scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color"
         // scrollbarWidth=""
       >
-        <BookImgList isActive={isActive}/>
+        <BookImgList isActive={isActive} query={searchValue} inputRef={inputRef}/>
       </CustomScrollbar>
     </section>
   )
