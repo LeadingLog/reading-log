@@ -17,7 +17,8 @@ export interface monthReadingListItem {
 // 독서 리스트 요청 파라미터 타입
 export interface fetchThisMonthReadingListParams {
   userId: number,
-  yearMonth?: number,
+  year?: number,
+  month?: number,
   page?: number,
   size?: number
 }

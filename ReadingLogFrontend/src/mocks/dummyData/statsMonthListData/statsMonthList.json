@@ -1,0 +1,28 @@
+{
+  "success": true,
+  "data": {
+    "todayReadingTime": 5000,
+    "monthlyReadingList": [
+      {
+        "booId": 1,
+        "bookStatus": "NOT_STARTED",
+        "bookTime": 5000
+      },
+      {
+        "booId": 2,
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 500
+      },
+      {
+        "booId": 3,
+        "bookStatus": "COMPLETED",
+        "bookTime": 500
+      },
+      {
+        "booId": 4,
+        "bookStatus": "INTERESTED",
+        "bookTime": 5000
+      }
+    ]
+  }
+}
