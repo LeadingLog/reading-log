@@ -1,19 +1,44 @@
+import axios from "axios";
+import {useEffect, useRef, useState} from "react";
+import {useModalStore} from "../../../store/modalStore.ts";
+import {usePageStore} from "../../../store/pageStore.ts";
 import IconPlay from "../../../assets/Icon-play.svg?react"
 import IconPause from "../../../assets/Icon-pause.svg?react"
 import IconStop from "../../../assets/Icon-stop.svg?react"
-import { useModalStore } from "../../../store/modalStore.ts";
-import { useEffect, useRef, useState } from "react";
-import { usePageStore } from "../../../store/pageStore.ts";
-import axios from "axios";
+import {useUserStore} from "../../../store/userStore.ts";
 
 export default function ItemStopWatch() {
   const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-  const {openModal,closeModal} = useModalStore();
+  const {user_id: userId} = useUserStore();
+  const {openModal, closeModal} = useModalStore();
   const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
 
-  /* 시작 & 일시정지 버튼 토글 관련 */
-  const [play, setPlay] = useState<boolean>(true);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);  // 1️⃣ interval ID 저장용
+  const [time, setTime] = useState({hour: 0, minute: 0, second: 0}); // 타이머 시간 저장
+  const [play, setPlay] = useState<boolean>(true); // 시작 & 일시정지 버튼 토글
+  const [startTimestamp, setStartTimestamp] = useState<Date | null>(null); // 스탑워치 시작 시간
+
+  // 스탑워치 1초마다 시간 증가
+  const plusSecond = () => {
+    setTime(({hour, minute, second}) => {
+      let newSecond = second + 1;
+      let newMinute = minute;
+      let newHour = hour;
+
+      if (newSecond >= 60) {
+        newSecond = 0;
+        newMinute++;
+      }
+
+      if (newMinute >= 60) {
+        newMinute = 0;
+        newHour++;
+      }
+      console.log(`${newHour}, ${newMinute}, ${newSecond}`);
+      return {hour: newHour, minute: newMinute, second: newSecond};
+    })
+  }
 
   /* 스탑워치 시작 & 일시정지 */
   const playOrPause = () => {
@@ -35,59 +60,77 @@ export default function ItemStopWatch() {
       cancelText: "아니요 더 읽을래요!",
       confirmText: "네 종료할게요!",
       reverseBtn: true,
-      onConfirm: () => {
+      onConfirm: async () => {
+        await saveReadingRecord(); // 저장 요청 보내기
+        closeModal(firstModalId); // 첫 번째 모달 닫기
+      }
+    });
+  }
+
+  /* 독서 시간 기록 */
+  const saveReadingRecord = async () => {
+    if (startTimestamp === null) {
+      handleReadingRecordFail("독서 시간 기록에 실패하였습니다. 다시 시도해주세요.===");
+      return;
+    }
+
+    const totalTime = (time.hour * 60) + time.minute; // 90 (90분)
+    const endDateObj = new Date(startTimestamp.getTime() + totalTime * 60000); // 1분 = 60000ms
+
+    const readingRecord = {
+      bookId: '1', // TODO. bookId 인자로 받기
+      userId,
+      readDate: startTimestamp.toISOString().split('T')[0],   // "2025-04-14"
+      totalTime,                                              // 90 (90분)
+      startTime: startTimestamp.toTimeString().split(' ')[0], // "14:00:00"
+      endTime: endDateObj.toTimeString().split(' ')[0]        // "15:30:00"
+    }
+    console.log(readingRecord);
+
+    try {
+      const response = await axios.post(`${serverUrl}//api/readingrecord/add`, readingRecord, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.data.success) {
         const secondModalId = openModal("ModalNotice", {
-          title: "독서시간 저장 완료!",
-          subTitle: "수고하셨어요!",
+          title: "독서시간 저장 완료",
+          subTitle: "수고하셨어요",
           onlyConfirm: true,
           confirmText: "닫기",
           onConfirm: () => {
-            // 여기서 두 번째 모달 닫기
             closeModal(secondModalId);
-
-            // 우측 콘텐츠 변경
-            setRightContent("TimeTracking", {
-              TimeTracking: { tab: "onlyMonthReadingList" },
+            setRightContent("TimeTracking", { // 우측 콘텐츠 변경
+              TimeTracking: {tab: "onlyMonthReadingList"},
             });
-
             // 초기화
-            setSeconds(0);
-            setMinute(0);
-            setHour(0);
+            setTime({hour: 0, minute: 0, second: 0});
             setPlay(false);
             clearInterval(intervalRef.current);
             intervalRef.current = undefined;
           }
         });
-
-        // 첫 번째 모달 닫기
-        closeModal(firstModalId);
+      } else {
+        handleReadingRecordFail("독서 시간 기록에 실패하였습니다. 다시 시도해주세요.");
       }
-    });
+    } catch (err) {
+      console.warn("독서 시간 기록 실패:", err);
+      handleReadingRecordFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    }
   }
 
-  /* 스탑워치 시간 관련 */
-  const [seconds, setSeconds] = useState(0); // 초
-  const [minute, setMinute] = useState(0); // 분
-  const [hour, setHour] = useState(0); // 시간
-  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);  // 1️⃣ interval ID 저장용
-
-  if (seconds === 5) { // 60초가 되면 분 요소 1 올리기
-    setSeconds(0);
-    setMinute(minute + 1);
-  }
-  if (minute === 2) { // 60분이 되면 1시간 올리기
-    setMinute(0);
-    setHour(hour + 1);
-  }
-  const plusSecond = () => { // 1초씩 올림
-    setSeconds(prev => prev + 1);
-  }
   const startTime = () => {
     if (!intervalRef.current) { // 이미 실행 중이 아니라면
       intervalRef.current = setInterval(plusSecond, 1000); // 2️⃣ interval ID 저장
     }
+    const now = new Date();
+    setStartTimestamp(now);
+    console.log("스탑워치 시작 시간:", now);
   };
+
+  // 모달이 열리면서 독서 시작
   useEffect(() => {
     startTime();
     console.log('독서 시작!');
@@ -95,14 +138,14 @@ export default function ItemStopWatch() {
 
   // 시간 경과 시 세션 연장 요청
   useEffect(() => {
-    if (hour > 0) {
-      console.log(`스톱워치 :${hour}시간으로 바뀜 → 세션 연장 요청`);
+    if (time.hour > 0) {
+      console.log(`스톱워치 :${time.hour}시간으로 바뀜 → 세션 연장 요청`);
 
       const extendSession = async () => {
         try {
           const response = await axios.get(`${serverUrl}/user/extend_session`);
 
-          if(response.data.success){
+          if (response.data.success) {
             console.log(`${response.data.success}, 세션 연장 성공`);
           } else {
             console.log(`${response.data.success}, 세션 연장 실패`);
@@ -116,7 +159,20 @@ export default function ItemStopWatch() {
         console.error('extendSession 실행 중 에러 발생:', e)
       );
     }
-  }, [hour]);
+  }, [time.hour]);
+
+  // 회원 탈퇴 실패 시 공통 모달 표시
+  const handleReadingRecordFail = (message?: string, title?: string) => {
+    const readingRecordFailModal = openModal("ModalNotice", {
+      title: title || "독서 시간 저장 실패",
+      subTitle: message || "독서 시간 저장에 실패하였습니다. 다시 시도해주세요.",
+      onlyConfirm: true,
+      confirmText: "닫기",
+      onConfirm: () => {
+        closeModal(readingRecordFailModal);
+      },
+    });
+  };
 
   return (
     // 독서 타임 트랙킹 - 스탑워치 인 경우
@@ -126,19 +182,19 @@ export default function ItemStopWatch() {
           <p className="relative mt-2 text-6xl
                    before:content-['HOUR'] before:text-[10px] before:absolute before:-top-1.5 before:left-1/2 before:transform before:-translate-x-1/2"
           >
-            {String(hour).padStart(2, "0")}
+            {String(time.hour).padStart(2, "0")}
           </p>
           <span className="text-5xl">:</span>
           <p className="relative mt-2 text-6xl
                    before:content-['MINUTE'] before:text-[10px] before:absolute before:-top-1.5 before:left-1/2 before:transform before:-translate-x-1/2"
           >
-            {String(minute).padStart(2, "0")}
+            {String(time.minute).padStart(2, "0")}
           </p>
           <span className="text-5xl">:</span>
           <p className="relative mt-2 text-6xl
                    before:content-['SECOND'] before:text-[10px] before:absolute before:-top-1.5 before:left-1/2 before:transform before:-translate-x-1/2"
           >
-            {String(seconds).padStart(2, '0')}
+            {String(time.second).padStart(2, '0')}
           </p>
         </div>
         <div className="flex gap-5 flex-1 justify-center items-center">
