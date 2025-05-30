@@ -1,5 +1,6 @@
 import {http, HttpResponse} from 'msw';
 import statsMonthList from "../dummyData/statsMonthListData/statsMonthList.json"
+import statsYearList from "../dummyData/statsYearListData/statsYearList.json"
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -45,34 +46,14 @@ export const readingRecordHandlers = [
     });
   }),
 
-  // 사용자의 특정 년도의 월 별 독서 시간 조회
+  // 연별통계
   http.get(`${serverUrl}/api/readingrecord/stats/time/yylist`, async ({request}) => {
     const url = new URL(request.url);
     const userId = url.searchParams.get('user_id');
     const year = url.searchParams.get('year');
     console.log(`userId: ${userId}, year: ${year}`);
 
-    return HttpResponse.json({
-      success: true,
-      data: [
-        {
-          month: 2,
-          totalTime: 25
-        },
-        {
-          month: 4,
-          totalTime: 50
-        },
-        {
-          month: 6,
-          totalTime: 40
-        },
-        {
-          month: 7,
-          totalTime: 30
-        },
-      ]
-    });
+    return HttpResponse.json(statsYearList);
   }),
 
   // 사용자의 전체 년도와 월별 읽은 책 (시간 중심)
