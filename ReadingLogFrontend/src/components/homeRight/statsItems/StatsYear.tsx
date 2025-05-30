@@ -62,7 +62,7 @@ export default function StatsYear() {
 
   const containerRef = useRef<HTMLUListElement>(null);
 
-  const [points, setPoints] = useState<{x: number; y: number}[]>([]);
+  const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -71,7 +71,7 @@ export default function StatsYear() {
 
     const getNewPoints = () => {
       const circles = container.querySelectorAll('.month-circle');
-      const newPoints: {x: number; y: number}[] = [];
+      const newPoints: { x: number; y: number }[] = [];
 
       const containerRect = container.getBoundingClientRect();
       circles.forEach((circle) => {
