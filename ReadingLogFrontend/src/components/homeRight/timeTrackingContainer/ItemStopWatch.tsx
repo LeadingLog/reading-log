@@ -6,6 +6,9 @@ import IconPlay from "../../../assets/Icon-play.svg?react"
 import IconPause from "../../../assets/Icon-pause.svg?react"
 import IconStop from "../../../assets/Icon-stop.svg?react"
 import {useUserStore} from "../../../store/userStore.ts";
+import {createReadingRecord} from "../../../utils/createReadingRecord.ts";
+import {saveReadingRecordApi} from "../../../api/readingRecord.ts";
+
 
 export default function ItemStopWatch() {
   const serverUrl = import.meta.env.VITE_SERVER_URL;
@@ -73,26 +76,23 @@ export default function ItemStopWatch() {
       handleReadingRecordFail("독서 시간 기록에 실패하였습니다. 다시 시도해주세요.===");
       return;
     }
-
-    const totalTime = (time.hour * 60) + time.minute; // 90 (90분)
-    const endDateObj = new Date(startTimestamp.getTime() + totalTime * 60000); // 1분 = 60000ms
-
-    const readingRecord = {
-      bookId: '1', // TODO. bookId 인자로 받기
-      userId,
-      readDate: startTimestamp.toISOString().split('T')[0],   // "2025-04-14"
-      totalTime,                                              // 90 (90분)
-      startTime: startTimestamp.toTimeString().split(' ')[0], // "14:00:00"
-      endTime: endDateObj.toTimeString().split(' ')[0]        // "15:30:00"
+    if (userId === null) {
+      console.warn("User ID가 없습니다.");
+      return;
     }
-    console.log(readingRecord);
+
+    const readingRecord = createReadingRecord({
+      bookId: '1',          // key: value 형식으로 작성
+      userId,
+      startTimestamp,
+      time: {
+        hour: time.hour,
+        minute: time.minute,
+      }
+    });
 
     try {
-      const response = await axios.post(`${serverUrl}//api/readingrecord/add`, readingRecord, {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
+      const response = await saveReadingRecordApi(readingRecord);
 
       if (response.data.success) {
         const secondModalId = openModal("ModalNotice", {
