@@ -108,7 +108,7 @@ export default function StatsYear() {
       mutationObserver.disconnect();
       window.removeEventListener('scroll', getNewPoints, true);
     };
-  }, [monthList, year]);
+  }, [bookGraphList, year]);
 
   return (
     <section className="flex flex-1 flex-col gap-4 overflow-hidden">

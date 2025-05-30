@@ -4,20 +4,15 @@ import { fetchStatsYearApiParams } from "../types/statsYear.ts";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const fetchStatsYearApi = async ({ userId, year }: fetchStatsYearApiParams) => {
-  try {
-    const { data } = await axios.get(
-      `${serverUrl}/api/readingrecord/stats/time/yylist`,
-      {
-        params: {
-          userId: userId, // 실제 로그인 유저 ID로 교체 필요
-          year: year,
-        },
-      }
-    );
+  const { data } = await axios.get(
+    `${serverUrl}/api/readingrecord/stats/time/yylist`,
+    {
+      params: {
+        userId: userId, // 실제 로그인 유저 ID로 교체 필요
+        year: year,
+      },
+    }
+  );
 
-    return data; // API 응답 반환
-  } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
-    throw error; // 오류를 던져서 호출한 곳에서 처리하도록 함
-  }
+  return data; // API 응답 반환
 };
