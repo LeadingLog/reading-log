@@ -4,7 +4,7 @@ import { fetchStatsYearApiParams } from "../types/statsYear.ts";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const fetchStatsYearApi = async ({ userId, year }: fetchStatsYearApiParams) => {
-  const { data } = await axios.get(
+  return await axios.get(
     `${serverUrl}/api/readingrecord/stats/time/yylist`,
     {
       params: {
@@ -13,6 +13,4 @@ export const fetchStatsYearApi = async ({ userId, year }: fetchStatsYearApiParam
       },
     }
   );
-
-  return data; // API 응답 반환
 };

@@ -22,27 +22,30 @@ export default function StatsYear() {
   const searchStatsYear = async ({ userId, year }: fetchStatsYearApiParams) => {
     try {
       const response = await fetchStatsYearApi({ userId, year })
-      const data = response.data
+      const data = response.data.data
+      console.log(data)
+      if (data) {
+        /* 독서 시간 */
+        const totalReadingTime = data.toTalReadingTime
+        const ReadingTimeHour = Math.floor(totalReadingTime / 3600)
+        const ReadingTimeMin = Math.floor((totalReadingTime % 3600) / 60);
+        setTotalReadingTimeHour(ReadingTimeHour)
+        setTotalReadingTimeMin(ReadingTimeMin)
+        /* 총 완독 권수 */
+        const completeCount = data.monthlyReadingList.reduce((arr: number, cur: StatsYearList) => arr + cur.complete, 0)
+        setTotalCompleteBookCount(completeCount)
 
-      /* 독서 시간 */
-      const totalReadingTime = data.toTalReadingTime
-      const ReadingTimeHour = Math.floor(totalReadingTime / 3600)
-      const ReadingTimeMin = Math.floor((totalReadingTime % 3600) / 60);
-      setTotalReadingTimeHour(ReadingTimeHour)
-      setTotalReadingTimeMin(ReadingTimeMin)
-      /* 총 완독 권수 */
-      const completeCount = data.monthlyReadingList.reduce((arr: number, cur: StatsYearList) => arr + cur.complete, 0)
-      setTotalCompleteBookCount(completeCount)
-
-      const maxCompleteCount = Math.max(...data.monthlyReadingList.map((data: StatsYearList) => data.complete))
+        const maxCompleteCount = Math.max(...data.monthlyReadingList.map((data: StatsYearList) => data.complete))
 
 
-      const updatedList = data.monthlyReadingList.map((item: StatsYearList) => ({
-        ...item,
-        height: parseFloat((item.complete / maxCompleteCount).toFixed(2))
-      }));
-      setBookGraphList(updatedList)
-
+        const updatedList = data.monthlyReadingList.map((item: StatsYearList) => ({
+          ...item,
+          height: parseFloat((item.complete / maxCompleteCount).toFixed(2))
+        }));
+        setBookGraphList(updatedList)
+      } else {
+        console.error("연별 통계 데이터 가져오기 성공 하지만 데이터가 없음", response)
+      }
     } catch (error) {
       console.error("연별 통계 데이터 가져오기 실패", error)
     } finally {
