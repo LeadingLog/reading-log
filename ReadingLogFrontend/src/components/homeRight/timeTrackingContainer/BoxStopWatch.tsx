@@ -18,7 +18,7 @@ export default function BoxStopWatch() {
         </section>
         <section className="flex flex-1 gap-6">
           <article className="flex-1 bg-trackingBook_Bg rounded-xl">
-            <img src={bookData?.cover}/>
+            <img src={bookData?.cover} alt={bookData?.bookTitle}/>
           </article>
           <ItemStopWatch/>
         </section>
