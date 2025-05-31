@@ -7,14 +7,15 @@ interface CreateReadingRecordParams {
   time: {
     hour: number;
     minute: number;
+    second: number;
   }
 }
 
 export function createReadingRecord({
                                       bookId, userId, startTimestamp, time
                                     }: CreateReadingRecordParams): ReadingRecord {
-  const totalTime = (time.hour * 60) + time.minute;
-  const endDate = new Date(startTimestamp.getTime() + totalTime * 60000);
+  const totalTime = (time.hour * 60 * 60) + (time.minute * 60) + time.second;
+  const endDate = new Date(startTimestamp.getTime() + totalTime * 1000);
 
   return {
     bookId,

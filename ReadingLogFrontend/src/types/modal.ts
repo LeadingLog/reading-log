@@ -42,6 +42,7 @@ export type ModalData = {
   showInput?: boolean; // 회원 정보 탈퇴 시 이메일 입력 창 사용할 지 여부
 
   onConfirm?: (value?: string) => void; // 확인 버튼 클릭 시 실행할 함수
+  onCancel?: (value?: string) => void; // 취소 버튼 클릭 시 실행할 함수
 };
 
 // 모달별 Props 타입 (추후 개별 확장도 가능)

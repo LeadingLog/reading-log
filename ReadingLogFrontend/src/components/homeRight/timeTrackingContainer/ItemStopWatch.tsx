@@ -40,7 +40,7 @@ export default function ItemStopWatch() {
         newMinute = 0;
         newHour++;
       }
-      console.log(`${newHour}, ${newMinute}, ${newSecond}`);
+      // console.log(`${newHour}, ${newMinute}, ${newSecond}`);
       return {hour: newHour, minute: newMinute, second: newSecond};
     })
   }
@@ -59,6 +59,8 @@ export default function ItemStopWatch() {
 
   /* 정지 버튼 클릭 시  */
   const stopTimer = () => {
+    playOrPause(); // 정지를 클릭하면 시간이 멈춘다.
+
     const firstModalId = openModal("ModalNotice", {
       title: "독서를 종료하시나요?",
       subTitle: "종료 시 시간이 저장돼요",
@@ -68,6 +70,9 @@ export default function ItemStopWatch() {
       onConfirm: async () => {
         await saveReadingRecord(); // 저장 요청 보내기
         closeModal(firstModalId); // 첫 번째 모달 닫기
+      },
+      onCancel:()=>{
+        playOrPause(); // 취소를 클릭하면 시간이 다시 카운트된다.
       }
     });
   }
@@ -90,13 +95,13 @@ export default function ItemStopWatch() {
       time: {
         hour: time.hour,
         minute: time.minute,
+        second: time.second
       }
     });
 
     try {
-      const response = await saveReadingRecordApi(readingRecord);
-
-      if (response.data.success) {
+      const data = await saveReadingRecordApi(readingRecord);
+      if (data.success) {
         const secondModalId = openModal("ModalNotice", {
           title: "독서시간 저장 완료",
           subTitle: "수고하셨어요",
@@ -135,7 +140,7 @@ export default function ItemStopWatch() {
   // 모달이 열리면서 독서 시작
   useEffect(() => {
     startTime();
-    console.log('독서 시작!');
+    console.log('독서 시작');
   }, []);
 
   // 시간 경과 시 세션 연장 요청
@@ -146,7 +151,6 @@ export default function ItemStopWatch() {
       const extendSession = async () => {
         try {
           const response = await axios.get(`${serverUrl}/user/extend_session`);
-
           if (response.data.success) {
             console.log(`${response.data.success}, 세션 연장 성공`);
           } else {
