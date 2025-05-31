@@ -1,7 +1,7 @@
 import {ReadingRecord} from "../types/readingRecord.ts";
 
 interface CreateReadingRecordParams {
-  bookId: string;
+  bookId: number;
   userId: number;
   startTimestamp: Date;
   time: {
@@ -17,8 +17,8 @@ export function createReadingRecord({
   const endDate = new Date(startTimestamp.getTime() + totalTime * 60000);
 
   return {
-    userId,
     bookId,
+    userId,
     readDate: startTimestamp.toISOString().split("T")[0],
     totalTime,
     startTime: startTimestamp.toTimeString().split(" ")[0],

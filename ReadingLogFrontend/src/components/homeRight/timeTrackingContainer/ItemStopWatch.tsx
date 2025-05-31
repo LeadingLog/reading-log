@@ -13,6 +13,8 @@ import {saveReadingRecordApi} from "../../../api/readingRecord.ts";
 export default function ItemStopWatch() {
   const serverUrl = import.meta.env.VITE_SERVER_URL;
 
+  const { params } = usePageStore();
+  const bookData = params.TimeTracking?.bookData;
   const {user_id: userId} = useUserStore();
   const {openModal, closeModal} = useModalStore();
   const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
@@ -82,7 +84,7 @@ export default function ItemStopWatch() {
     }
 
     const readingRecord = createReadingRecord({
-      bookId: '1',          // key: value 형식으로 작성
+      bookId: bookData?.bookId ?? 0,
       userId,
       startTimestamp,
       time: {

@@ -1,5 +1,5 @@
 export interface ReadingRecord {
-  bookId: string;
+  bookId: number;
   userId: number;
   readDate: string;   // YYYY-MM-DD
   totalTime: number;  // 90 (minutes)
