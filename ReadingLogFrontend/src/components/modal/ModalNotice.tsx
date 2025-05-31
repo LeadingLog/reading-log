@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useModalStore } from '../../store/modalStore';
-import { ModalNoticeProps } from "../../types/modal.ts";
-import { AnimatePresence, motion } from "framer-motion";
+import React, {useState} from 'react';
+import {useModalStore} from '../../store/modalStore';
+import {ModalNoticeProps} from "../../types/modal.ts";
+import {AnimatePresence, motion} from "framer-motion";
 
 const ModalNotice: React.FC<ModalNoticeProps> = ({
                                                    modalId,
@@ -13,6 +13,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
                                                    onlyConfirm,
                                                    reverseBtn,
                                                    onConfirm,
+                                                   onCancel,
                                                    showInput,
                                                    withMotion,
                                                  }) => {
@@ -22,6 +23,9 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
 
   /* withMotion 사용 시 모션 표시 위한 부분*/
   const handleClose = () => {
+    if (onCancel) { // 취소 콜백 먼저 실행
+      onCancel();
+    }
     if (withMotion) {
       setIsVisible(false);
       setTimeout(() => {
