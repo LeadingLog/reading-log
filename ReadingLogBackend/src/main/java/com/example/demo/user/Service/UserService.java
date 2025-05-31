@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -155,14 +156,14 @@ public class UserService {
 
         User user = new User();
 
-        if (naverUserInfo != null){
+        if (naverUserInfo != null && kakaoUserInfo == null){
             System.out.println("네이버 회원 정보 처리");
 
             user.setUserUUID(naverUserInfo.getId());
             user.setNickname(naverUserInfo.getNickname());
             user.setUserEmail(naverUserInfo.getEmail());
 
-        } else if (kakaoUserInfo != null) {
+        } else if (naverUserInfo == null && kakaoUserInfo != null) {
             System.out.println("카카오 회원 정보 처리");
 
             user.setUserUUID(kakaoUserInfo.getId());
@@ -257,7 +258,7 @@ public class UserService {
 
     // 회원 탈퇴
     @Transactional
-    public void deleteUser(Integer userId, HttpServletRequest request) throws JsonProcessingException {
+    public Map<String, Object> deleteUser(Integer userId, HttpServletRequest request) throws JsonProcessingException {
 
         // 갱신 토큰 조회
 //        ArrayList<RefreshToken> refreshTokens = refreshTokenService.getToken(userId, "Naver");
@@ -265,6 +266,8 @@ public class UserService {
 //        String token = String.valueOf(refreshTokens.get(0).getToken());
         String token = refreshToken.getToken();
         String provider = refreshToken.getProvider();
+
+        Map<String, Object> result = new HashMap<>();
 
         if (provider.equals("Naver")) {
             // 네이버 토큰 재발급
@@ -290,13 +293,14 @@ public class UserService {
             System.out.println("접근토큰 갱신 : " + responseBody);
             System.out.println("naverTOkenRefreshResponse : " + naverDeleteResponse);
 
-            if (naverDeleteResponse != null) {
-                deleteInternalUser(userId, request);
+            if (naverDeleteResponse != null && "success".equals(naverDeleteResponse.getResult())) {
+                result = deleteInternalUser(userId, request);
+            } else {
+                // 네이버 탈퇴 실패 처리
+                result.put("status", "error");
+                result.put("message", "네이버 연동 해제 실패");
             }
-        }
-
-
-        if (provider.equals("Kakao")) {
+        } else if (provider.equals("Kakao")) {
             // 카카오 토큰 재발급, aminKey 를 이용하는 방식 선택하여 필요없음.
 //            KakaoTokenResponse kakaoTokenResponse = refreshTokenService.getKakaoAccessTokenByRefreshToken(token);
 //            String accessToken = kakaoTokenResponse.getAccessToken();
@@ -333,43 +337,66 @@ public class UserService {
                 userIdFromKakao = idNode.asText(); // 값을 String으로 변환해서 가져옴!
             }
 
+            if (userIdFromKakao != null) {
+                result = deleteInternalUser(userId, request);
+            } else {
+                // 카카오 탈퇴 실패 처리
+                result.put("status", "error");
+                result.put("message", "카카오 연동 해제 실패");
+            }
+
             System.out.println("접근 토큰22 by refreshToken : " + response.getBody());
             System.out.println("kakaoTokenResponse : " + userIdFromKakao);
 
             deleteInternalUser(userId, request);
 
+        } else {
+            // 지원하지 않는 Provider
+            result.put("status", "error");
+            result.put("message", "지원하지 않는 Provider입니다.");
         }
-
-//            return null;
-
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
-
-
-
-
+        return result;
     }
 
 
     // 내부 회원 탈퇴
-    public ResponseEntity<Map<String,Object>> deleteInternalUser(Integer userId, HttpServletRequest request) {
+    public Map<String,Object> deleteInternalUser(Integer userId, HttpServletRequest request) {
 
-        // todo 갱신토큰 삭제
-        refreshTokenService.deleteToken(userId, "Naver");
+        try {
+            // 회원 삭제
+            userRepository.deleteById(userId);
 
-        // Todo 탈퇴 성공 시
-        // 로그인 세션 삭제
-        HttpSession session = null;
-        session = request.getSession();
-        session.removeAttribute("loginUserId");
+            // todo 갱신토큰 삭제
+            refreshTokenService.deleteToken(userId, "Naver");
 
-        // 회원 삭제
-        userRepository.deleteById(userId);
+            // Todo 탈퇴 성공 시
+            // 로그인 세션 삭제
+            HttpSession session = request.getSession();
+            if (session != null) {
+                session.removeAttribute("loginUserId");
+            }
 
-        // todo return 값
-        return null;
+            // 성공 응답 데이터 맵 생성
+            Map<String, Object> successResponse = new HashMap<>();
+            successResponse.put("status", "success"); // 성공 상태 표시
+            successResponse.put("message", "회원 탈퇴 성공");
+            successResponse.put("userId", userId); // 탈퇴한 유저 ID 등 필요한 정보 추가
+
+            return successResponse; // 성공 데이터 맵 반환
+
+        } catch (EmptyResultDataAccessException e) {
+            // 삭제할 유저가 없는 경우 처리
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "해당 유저를 찾을 수 없어 탈퇴 처리에 실패했습니다.");
+            return errorResponse;
+
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "내부 회원 삭제 중 오류 발생");
+            return errorResponse;
+        }
     }
 
 

@@ -81,11 +81,46 @@ public class UserController {
 
 
     // 회원 탈퇴
-    @DeleteMapping("/delete")
-    public void deleteUser(@RequestParam("userId") Integer userId, HttpServletRequest request) throws JsonProcessingException {
-        // Todo 토큰으로 네이버 로그인 연동 해제하기
-        userService.deleteUser(userId, request);
+    @DeleteMapping("/{userId}/delete")
+    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("userId") Integer userId, HttpServletRequest request) throws JsonProcessingException {
+        Map<String, Object> serviceResult;
+        Map<String, Object> finalResult = new HashMap<>();
+        HttpStatus httpStatus;
+
+        try {
+            serviceResult = userService.deleteUser(userId, request);
+
+            if ("success".equals(serviceResult.get("status"))) {
+                httpStatus = HttpStatus.OK;
+                finalResult.put("success", true);
+            } else {
+                finalResult.put("success", false);
+                finalResult.put("message", serviceResult.get("message"));
+                httpStatus = HttpStatus.BAD_REQUEST;
+            }
+        }catch (JsonProcessingException e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            finalResult.put("success", false);
+            finalResult.put("message", "회원 탈퇴 처리 중 데이터 형식 오류 발생");
+//            errorResponse.put("status", "error");
+//            errorResponse.put("message", "회원 탈퇴 처리 중 데이터 형식 오류 발생");
+
+            finalResult = errorResponse;
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+
+
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "회원 탈퇴 중 예상치 못한 오류가 발생했습니다.");
+
+            finalResult = errorResponse;
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<>(finalResult, httpStatus);
     }
+
 
 
     // 회원 상세 조회 (userId) - 마이페이지 조회
