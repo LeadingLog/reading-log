@@ -18,6 +18,7 @@ export default function BoxThisMonthReadingList() {
   /* 독서 타임 트래킹 모달 오픈 */
   const openModaTrackingPlan = (item: monthReadingListItem) => {
     openModal('ModalTrackingPlan', {
+      bookId: item.bookId,
       bookTitle: item.title,
       bookSubTitle: item.author,
       cover: item.cover,

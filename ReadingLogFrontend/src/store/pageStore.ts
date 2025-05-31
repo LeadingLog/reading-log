@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 
 // 오른쪽 페이지 콘텐츠 타입
 type RightContentType =
@@ -22,6 +22,7 @@ type PageParams = {
   };
   TimeTracking?: {
     tab: TimeTrackingType;
+    bookData?: BookData;
   }
 };
 
@@ -31,6 +32,14 @@ type PageData = {
   time?: number;
   // 추가 데이터 필드 확장 가능
 };
+
+type BookData = {
+  bookId?: number; // 책 정보
+  cover?: string;
+  bookTitle?: string;
+  bookSubTitle?: string;
+  // 추가 데이터 필드 확장 가능
+}
 
 // Zustand 상태 타입
 type PageState = {

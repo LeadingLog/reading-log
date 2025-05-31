@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useModalStore } from '../../store/modalStore';
+import React, {useEffect, useState} from 'react';
+import {useModalStore} from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
-import { motion } from "framer-motion";
-import { usePageStore } from "../../store/pageStore.ts";
-import { ModalTrackingPlanProps } from "../../types/modal.ts";
+import {motion} from "framer-motion";
+import {usePageStore} from "../../store/pageStore.ts";
+import {ModalTrackingPlanProps} from "../../types/modal.ts";
 
 
 const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
                                                                modalId,
                                                                cover,
+                                                               bookId,
                                                                bookLink,
                                                                bookTitle,
                                                                bookSubTitle,
                                                                cancelText,
                                                                confirmText,
                                                              }) => {
-  const { closeModal } = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
-  const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
+  const {closeModal} = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
+  const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   type TimeChoice = 3 | 30 | 60;
 
   const [timeChoice, setTimeChoice] = useState<TimeChoice | undefined>(undefined);
@@ -52,12 +53,14 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
         <span
           className="bg-modal_Tracking_Title_Bg text-modal_Tracking_Title_Text rounded-lg p-2 text-center font-semibold">독서 타임 트래킹</span>
         {/* 책 표지 */}
-        <a href={`${bookLink}`} target="_blank" className="flex justify-center items-center max-h-96 relative aspect-square overflow-hidden rounded-lg">
+        <a href={`${bookLink}`} target="_blank"
+           className="flex justify-center items-center max-h-96 relative aspect-square overflow-hidden rounded-lg">
           <div
             className="z-10 absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
             <IconFavorite width="100%" height="100%"/>
           </div>
-          <img src={cover} alt={bookTitle} className="relative drop-shadow-[2px_4px_6px_#00000080] z-10 h-[90%] object-contain"/>
+          <img src={cover} alt={bookTitle}
+               className="relative drop-shadow-[2px_4px_6px_#00000080] z-10 h-[90%] object-contain"/>
           <img src={cover} alt={bookTitle} className="absolute inset-0 w-full h-full object-cover opacity-90 blur-sm"/>
         </a>
         {/* 타이머 기능 관련 */}
@@ -94,12 +97,12 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
             <p className="text-xs text-modal_Tracking_Timer_Sub_Title_Text">스톱워치가 시작 됩니다.</p>
           </section>
           <motion.div
-            initial={{ maxHeight: 0 }}
+            initial={{maxHeight: 0}}
             // style={{borderEndEndRadius: '20px', borderEndStartRadius: '20px'}}
             animate={{
               maxHeight: isOn ? 36 : 0,
             }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
+            transition={{duration: 0.2, ease: "easeInOut"}}
             className="relative h-[36px] flex overflow-hidden p-1 bg-modal_Tracking_Time_Bg rounded-lg divide-x divide-modal_Tracking_Time_Divide_Color"
           >
             <button
@@ -157,12 +160,25 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
               onClick={() => {
                 setRightContent(
                   'TimeTracking',
-                  { TimeTracking: { tab: isOn ? 'Timer' : 'StopWatch' } },
+                  {
+                    TimeTracking: {
+                      tab: isOn ? 'Timer' : 'StopWatch',
+                      bookData:
+                        {
+                          bookId,
+                          cover,
+                          bookTitle,
+                          bookSubTitle
+                        }
+                    }
+                  },
                   {
                     title: `독서 타임 트래킹 - ${isOn ? '타이머' : '스탑워치'}`,
-                    time: timeChoice
+                    time:
+                    timeChoice,
                   }
-                );
+              )
+                ;
                 setIsOn(false);
                 if (modalId) { // modalId가 있을 경우에만 closeModal 호출
                   closeModal(modalId);
