@@ -11,6 +11,7 @@ on:
       - 'F-MyFavoriteList_Dev'
       - 'F-ThisMonthReadingList_Dev'
       - 'F-StatsMonth_Dev'
+      - 'F-StatsYear_Dev'
       - 'F-UserLogin'
       # - 'F-Stopwatch'
       - 'frontdev'

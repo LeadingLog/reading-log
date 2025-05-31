@@ -21,6 +21,14 @@ export default function TimeLine() {
     setMonth(month)
   }
 
+  const statsYear = () => {
+    setRightContent(
+      'StatsPage',
+      { StatsPage: { tab: 'StatsYear' } }, // 파라미터
+      { title: '나의 리딩로그 - 연별통계' }        // pageData (타이틀)
+    )
+  }
+
   /* 월 표시 위치 및 년도 변경 시 도서권수 초기화용 */
   const getInitialMonthArr = (): TimelineEntry[] => [
     {
@@ -283,16 +291,9 @@ export default function TimeLine() {
           {/* 연별 통계 보러가는 버튼 */}
           <button
             className="flex gap-2 justify-end items-center group"
-            onClick={() =>
-              setRightContent(
-                'StatsPage',
-                { StatsPage: { tab: 'StatsYear' } }, // 파라미터
-                { title: '나의 리딩로그 - 연별통계' }        // pageData (타이틀)
-              )
-            }
+            onClick={() => statsYear()}
           >
-            <span>{year}</span>
-            <span>년 리딩로그 보러가기</span>
+            <span><span>{year}</span> 년 리딩로그 보러가기</span>
             <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
             <IconTriangle/>
           </span>
