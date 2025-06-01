@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { fetchTodayReadingTime } from "../../api/todayReadingTimeApi.ts";
 import { fetchTodayReadingTimeApiParams } from "../../types/todayReadingTime.ts";
 import { usePageStore } from "../../store/pageStore.ts";
-import { useDateStore } from "../../store/useDateStore.ts";
 
 export default function TodayReadingTime() {
 
   const { params } = usePageStore()
-  const { year, month, day } = useDateStore()
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
 
   const [todayReadingTimeHour, setTodayReadingTimeHour] = useState(0)
   const [todayReadingTimeMin, setTodayReadingTimeMin] = useState(0)
