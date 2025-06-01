@@ -72,10 +72,10 @@ public class ReadingListController {
     //리스트 가져오기 
     @GetMapping("/readingList")
     public ResponseEntity<?> getReadingList(
-            @RequestParam Integer userId,
-            @RequestParam Integer tabType,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    		   @RequestParam("userId") Integer userId,
+    	       @RequestParam("tabType") Integer tabType,
+    	       @RequestParam(value = "page", defaultValue = "0") int page,
+    	       @RequestParam(value = "size", defaultValue = "10") int size) {
 
         try {
             Page<ReadingList> readingPage = readingListService.getReadingListByFilter(userId, tabType, page, size);
@@ -105,9 +105,9 @@ public class ReadingListController {
     //내 도서 리스트에서 도서 검색 
     @GetMapping("/search")
     public ResponseEntity<?> getSearchedBook(
-    		@RequestParam Integer userId,
-    		@RequestParam Integer tabType, 
-    		@RequestParam String query
+    		 @RequestParam("userId") Integer userId,
+    		 @RequestParam("tabType") Integer tabType,
+    		 @RequestParam("query") String query
     		) {
     	try {
     		 List<ReadingList> bookList = readingListService.getReadingListBySearch(userId, tabType, query); 
@@ -132,9 +132,9 @@ public class ReadingListController {
     //미완독 도서 조회 
     @GetMapping("/incomplete")
     public ResponseEntity<?> getIncompletedBooks(
-            @RequestParam Integer userId,
-            @RequestParam(required = false) Integer year,
-            @RequestParam(required = false) Integer month
+    		@RequestParam("userId") Integer userId,
+            @RequestParam(value = "year", required = false) Integer year,
+            @RequestParam(value = "month", required = false) Integer month
     ) {
         try {
             List<ReadingList> bookList;

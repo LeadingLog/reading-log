@@ -38,7 +38,7 @@ public class ReadingList {
     private String coverImgUrl;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "book_status", length = 3, nullable = false)
+    @Column(name = "book_status", length = 20, nullable = false)
     private BookStatus bookStatus;
 
     @Column(name = "read_startdt")

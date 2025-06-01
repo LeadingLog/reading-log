@@ -23,6 +23,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AladinController {
 
 	private ReadingListRepository readingListRepository;
+	
+	public AladinController(ReadingListRepository readingListRepository) {
+		this.readingListRepository = readingListRepository;
+	}
+
 
 	@Value("${AlADIN_KEY}")
 	private String ttbkey;

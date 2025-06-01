@@ -23,8 +23,8 @@ public interface ReadingRecordRepository extends JpaRepository<ReadingRecord, Lo
 	// 사용자별 연도 필터링된 총 독서 시간
 	@Query(value = "SELECT SUM(r.total_time) FROM reading_record r WHERE r.user_id = :userId AND EXTRACT(YEAR FROM r.read_date) = :year", nativeQuery = true)
 	Integer findTotalReadingTimeByUserIdAndYear(@Param("userId") Integer userId, @Param("year") Integer year);
-
-	// 알라딘 서버 리스트에 넣을 RL 테이블 조인
+	
+	//년/월에 읽은 도서의 독서 조회 
 	@Query(value = """
 			SELECT
 			    rr.book_id,

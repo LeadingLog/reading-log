@@ -21,7 +21,7 @@ public class ReadingRecordService {
 
 	// 추가 하기
 	@Transactional
-	public ReadingRecord addRecord(String bookId, Integer userId, LocalDate readDate, Integer totalTime,
+	public ReadingRecord addRecord(Long bookId, Integer userId, LocalDate readDate, Integer totalTime,
 			LocalTime startTime, LocalTime endTime) {
 
 		ReadingRecord readingRecord = ReadingRecord.builder().bookId(bookId).userId(userId).readDate(readDate)
@@ -82,7 +82,7 @@ public class ReadingRecordService {
 
 		for (Object[] row : rawResults) {
 
-			String bookId = (String) row[0];
+			Long bookId = (long) ((Number) row[3]).intValue();
 			String bookTitle = (String) row[1];
 			String bookStatus = (String) row[2];
 			int bookTime = ((Number) row[3]).intValue();

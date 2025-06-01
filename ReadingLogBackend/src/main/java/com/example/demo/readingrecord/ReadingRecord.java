@@ -28,7 +28,7 @@ public class ReadingRecord {
     private long num;
 
     @Column(name = "book_id")
-    private String bookId;
+    private long bookId;
 
     @Column(name = "user_id")
     private Integer userId;
