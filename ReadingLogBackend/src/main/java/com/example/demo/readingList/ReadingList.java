@@ -30,6 +30,9 @@ public class ReadingList {
 
     @Column(name = "isbn13", length = 17, nullable = false)
     private String isbn13;
+    
+    @Column(name = "Aladin_link", length = 255)
+    private String link;
 
     @Column(name = "cover_img_url", length = 255)
     private String coverImgUrl;
@@ -58,6 +61,7 @@ public class ReadingList {
         this.bookStatus = BookStatus.INTERESTED;
         this.readStartDt = null;
         this.readEndDt = null;
+        this.finishChk = null; 
         this.updDate = LocalDate.now();
     }
 
@@ -65,12 +69,24 @@ public class ReadingList {
     public void changeStatus(BookStatus newStatus) {
         this.bookStatus = newStatus;
         this.updDate = LocalDate.now();
+
+        // 완독 이면 finishChk 해당 월의 1일 추가 
+        if (newStatus == BookStatus.COMPLETED) {
+            LocalDate now = LocalDate.now();
+            this.finishChk = LocalDate.of(now.getYear(), now.getMonth(), 1);
+        } else {
+            this.finishChk = null; 
+        }
     }
+
     
+    
+    //그 어떤 한 상태에서 Interested 상태로 바꿀때 
     public void changeStatusToStart(LocalDate readStartDt, LocalDate readEndDt) {
         this.bookStatus = BookStatus.NOT_STARTED;  
         this.readStartDt = readStartDt;
         this.readEndDt = readEndDt;
+        this.finishChk = null; 
         this.updDate = LocalDate.now();
     }
 }

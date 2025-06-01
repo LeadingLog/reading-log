@@ -37,7 +37,7 @@ public class ReadingRecord {
     private LocalDate readDate;
 
     @Column(name = "total_time", nullable = false)
-    private Integer totalTime;
+    private Integer totalTime;  
 
     @Column(name = "start_time")
     private LocalTime startTime;
