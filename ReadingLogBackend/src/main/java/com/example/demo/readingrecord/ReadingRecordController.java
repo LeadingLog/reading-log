@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.response.ApiResponse;
+
 
 @RestController
 @RequestMapping("/api/readingrecord")
@@ -30,7 +32,7 @@ public class ReadingRecordController {
     
   //시간 추가하기 	
 	@PostMapping("/add")
-	public ResponseEntity<Map<String, Object>> addRecord(@RequestBody ReadingRecord readingRecord) {
+	public ResponseEntity<?> addRecord(@RequestBody ReadingRecord readingRecord) {
 		 Map<String, Object> response = new HashMap<>();
 	    try {
 	    	readingRecordService.addRecord(
@@ -44,33 +46,29 @@ public class ReadingRecordController {
 	    	 response.put("success", true);
 	    	 return ResponseEntity.ok(response);
 	    	 } catch (Exception e) {
-	    		 response.put("success", false);
-	             response.put("message", "조회 실패: " + e.getMessage());
-	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-	    }
+	             return ResponseEntity.internalServerError().body(ApiResponse.failure(e.getMessage()));
+	         }
 	}
 
    
     // 연간 월별 독서 시간 조회
     @GetMapping("/stats/time/yylist")
-    public ResponseEntity<Map<String, Object>> getAnnualMontlyReadingTime(
+    public ResponseEntity<?> getAnnualMontlyReadingTime(
             @RequestParam("userId") Integer userId, @RequestParam("year") Integer year) {
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Map<String, Integer>> data = readingRecordService.getMonthlyTotalTimeByUserAndYear(userId, year);
+            Map<String, Object> data = readingRecordService.getMonthlyTotalTimeByUserAndYear(userId, year);
             response.put("success", true);
             response.put("data", data);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "조회 실패: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.internalServerError().body(ApiResponse.failure(e.getMessage()));
         }
     }
 
-    // 총 읽은 시간 조회
+    // 사용자의 전체 총 읽은 시간 조회
     @GetMapping("/stats/time")
-    public ResponseEntity<Map<String, Object>> getTotalReadingTime(@RequestParam("userId") Integer userId) {
+    public ResponseEntity<?> getTotalReadingTime(@RequestParam("userId") Integer userId) {
         Map<String, Object> response = new HashMap<>();
         try {
             Integer totalTime = readingRecordService.getTotalReadingTimeByUserId(userId);
@@ -78,15 +76,13 @@ public class ReadingRecordController {
             response.put("data", totalTime);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "총 시간 조회 실패: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.internalServerError().body(ApiResponse.failure(e.getMessage()));
         }
     }
 
     // 연간 총 읽은 시간 조회
     @GetMapping("/stats/time/yy")
-    public ResponseEntity<Map<String, Object>> getAnnualReadingTime(
+    public ResponseEntity<?> getAnnualReadingTime(
             @RequestParam("userId") Integer userId, @RequestParam("year") Integer year) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -95,62 +91,58 @@ public class ReadingRecordController {
             response.put("data", totalTime);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "연간 총 시간 조회 실패: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-
-    // 연간 > 월별 > 책 > 읽은 시간 (시간 중심)
-    @GetMapping("/stats/time/book_id")
-    public ResponseEntity<Map<String, Object>> getReadingTimeOrderTime(@RequestParam("userId") Integer userId) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            List<Map<String, Object>> data = readingRecordService.getTimeYearMonthBookStats(userId);
-            response.put("success", true);
-            response.put("data", data);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "시간 기반 통계 조회 실패: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-
-    // 연간 > 월별 > 책 > 읽은 시간 (책 중심)
-    @GetMapping("/stats/book/book_id")
-    public ResponseEntity<Map<String, Object>> getReadingTimeOrderBook(@RequestParam("userId") Integer userId) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            List<Map<String, Object>> data = readingRecordService.getBookTimeByYearMonth(userId);
-            response.put("success", true);
-            response.put("data", data);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "책 중심 통계 조회 실패: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.internalServerError().body(ApiResponse.failure(e.getMessage()));
         }
     }
 
     // 특정 연도 & 월의 책별 독서 시간 조회
     @GetMapping("/stats/time/yymm/book_id")
-    public ResponseEntity<Map<String, Object>> getReadingTimeBookIdWithYymm(
+    public ResponseEntity<?> getReadingTimeBookIdWithYymm(
             @RequestParam("userId") Integer userId,
             @RequestParam("year") Integer year,
             @RequestParam("month") Integer month) {
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Map<String, Object>> data = readingRecordService.getYearMonthBookStats(userId, year, month);
+            Map<String, Object> data = readingRecordService.getYearMonthBookStats(userId, year, month);
             response.put("success", true);
             response.put("data", data);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "연월 기준 통계 조회 실패: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.internalServerError().body(ApiResponse.failure(e.getMessage()));
         }
     }
+    
+//  // 연간 > 월별 > 책 > 읽은 시간 (시간 중심)
+//  @GetMapping("/stats/time/book_id")
+//  public ResponseEntity<Map<String, Object>> getReadingTimeOrderTime(@RequestParam("userId") Integer userId) {
+//      Map<String, Object> response = new HashMap<>();
+//      try {
+//          List<Map<String, Object>> data = readingRecordService.getTimeYearMonthBookStats(userId);
+//          response.put("success", true);
+//          response.put("data", data);
+//          return ResponseEntity.ok(response);
+//      } catch (Exception e) {
+//          response.put("success", false);
+//          response.put("message", "시간 기반 통계 조회 실패: " + e.getMessage());
+//          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//      }
+//  }
+
+//  // 연간 > 월별 > 책 > 읽은 시간 (책 중심)
+//  @GetMapping("/stats/book/book_id")
+//  public ResponseEntity<Map<String, Object>> getReadingTimeOrderBook(@RequestParam("userId") Integer userId) {
+//      Map<String, Object> response = new HashMap<>();
+//      try {
+//          List<Map<String, Object>> data = readingRecordService.getBookTimeByYearMonth(userId);
+//          response.put("success", true);
+//          response.put("data", data);
+//          return ResponseEntity.ok(response);
+//      } catch (Exception e) {
+//          response.put("success", false);
+//          response.put("message", "책 중심 통계 조회 실패: " + e.getMessage());
+//          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//      }
+//  }
 }
 
 
