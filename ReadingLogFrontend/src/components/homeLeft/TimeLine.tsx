@@ -224,7 +224,7 @@ export default function TimeLine() {
 
       setMonthArr(updated);
     } catch (error) {
-      console.error("쿼리 테스트 에러:", error);
+      console.error("타임라인에 보여 질 년&월 도서 수 가져오기 실패:", error);
     }
   };
 
