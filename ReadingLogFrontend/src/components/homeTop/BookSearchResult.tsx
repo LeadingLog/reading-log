@@ -130,6 +130,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
       cover: item.cover, // 여기 추가
       bookTitle: item.title,
       bookSubTitle: item.author,
+      isbn13: item.isbn13,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
       bookLink: item.link

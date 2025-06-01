@@ -8,10 +8,6 @@ export default function TodayReadingTime() {
   const { params } = usePageStore()
   const today = new Date();
 
-  const year = today.getFullYear();
-  const month = today.getMonth() + 1;
-  const day = today.getDate();
-
   const [todayReadingTimeHour, setTodayReadingTimeHour] = useState(0)
   const [todayReadingTimeMin, setTodayReadingTimeMin] = useState(0)
 
@@ -41,7 +37,7 @@ export default function TodayReadingTime() {
 
   return (
     <span className="relative flex items-end pr-2 text-sm">
-      <span className="absolute -top-2 right-2">오늘 날짜 : {year}-{String(month).padStart(2, '0')}-{day}</span>
+      <span className="absolute -top-2 right-2">오늘 날짜 : {today.toISOString().split("T")[0]}</span>
       <span className="-mb-1">오늘 독서 시간 : {String(todayReadingTimeHour).padStart(2, '0')}시간 {String(todayReadingTimeMin).padStart(2, '0')}분<span></span></span>
     </span>
   )

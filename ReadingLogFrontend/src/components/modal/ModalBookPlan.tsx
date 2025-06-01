@@ -3,9 +3,12 @@ import { useModalStore } from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import IconCalendar from "../../assets/Icon-calendar.svg?react"
 import { ModalBookPlanProps } from "../../types/modal.ts";
+import { readingListAddApi } from "../../api/readingListAddAPI.ts";
+import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 
-const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSubTitle, cover, bookLink }) => {
+const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSubTitle, isbn13, cover, bookLink }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
+
 
   /* 시작 달 종료 달 표시용 */
   const [pickStartYear, setPickStartYear] = useState<number>(0);
@@ -67,8 +70,25 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   }
   /* 닫을 때 실행될 함수 END --------------- */
 
+  const ReadingListAdd = async () => {
+    const ReadingListAddBodyList: ReadingListAddBody = {
+      userId: 7,
+      bookTitle: bookTitle,
+      author: bookSubTitle,
+      isbn13: isbn13,
+      link: bookLink,
+      coverImgUrl: cover,
+      bookStatus: 'NOT_STARTED',
+
+      // 문자열 템플릿을 사용해 날짜 포맷 구성
+      readStartDt: `${pickStartYear}-${String(pickStartMonth).padStart(2, '0')}-01`,
+      readEndDt: `${pickEndYear}-${String(pickEndMonth).padStart(2, '0')}-${getLastDateOfMonth(pickEndYear, pickEndMonth)}`
+    };
+    await readingListAddApi(ReadingListAddBodyList)
+  }
+
   /* 독서 계획 추가 버튼 클릭 시 함수 */
-  const completeBookPlan = () => {
+  const completeBookPlan = async () => {
     const alertModal = (alertMessage: string) => {
       openModal('ModalNotice', {
         title: alertMessage,
@@ -93,23 +113,28 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
     } else if (isStartBeforeToday) {
       alertModal("시작일이 오늘 보다 이전 일 순 없어요!"); // 경고 모달 또는 alert
       return;
+    } else {
+
+      await ReadingListAdd()
+
+      openModal('ModalNotice', {
+        title: "내 독서 목록에 추가 되었어요!",
+        subTitle: "즐거운 독서시간!",
+        confirmText: "닫기",
+        onlyConfirm: true,
+        onConfirm: async () => {
+
+
+          setPickStartYear(currentYear)
+          setPickStartMonth(currentMonth)
+          setPickEndYear(currentYear)
+          setPickEndMonth(currentMonth)
+
+          closeAllModals()
+        }
+      })
     }
 
-    openModal('ModalNotice', {
-      title: "내 독서 목록에 추가 되었어요!",
-      subTitle: "즐거운 독서시간!",
-      confirmText: "닫기",
-      onlyConfirm: true,
-      onConfirm: () => {
-
-        setPickStartYear(currentYear)
-        setPickStartMonth(currentMonth)
-        setPickEndYear(currentYear)
-        setPickEndMonth(currentMonth)
-
-        closeAllModals()
-      }
-    })
   };
   /* 독서 계획 추가 버튼 클릭 시 함수 END -----------------*/
 

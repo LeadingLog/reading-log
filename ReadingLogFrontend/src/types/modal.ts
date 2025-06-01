@@ -24,6 +24,7 @@ export type ModalData = {
   bookTitle?: string; // 책 제목
   bookSubTitle?: string; // 책 저자
   bookLink?: string // 알라딘 책 정보 페이지로 가기
+  isbn13?: string;
   bookId?: number // 책 고유 ID
 
   /* 캘린더 관련 */
