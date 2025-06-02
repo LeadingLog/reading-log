@@ -19,9 +19,9 @@ export default function BoxThisMonthReadingList() {
   const openModaTrackingPlan = (item: monthReadingListItem) => {
     openModal('ModalTrackingPlan', {
       bookId: item.bookId,
-      bookTitle: item.title,
+      bookTitle: item.bookTitle,
       bookSubTitle: item.author,
-      cover: item.cover,
+      cover: item.coverImgUrl,
       bookLink: item.link,
       cancelText: '닫기',
       confirmText: '독서 시작',
@@ -35,7 +35,7 @@ export default function BoxThisMonthReadingList() {
       const data = await fetchThisMonthReadingList({ userId, year, month, page, size });
       // 받아온 독서상태별로 데이터 순서 정렬
       const sortedList = data.monthlyReadingList.sort((a : monthReadingListItem, b : monthReadingListItem) => {
-        return readOrder[a.readStatus] - readOrder[b.readStatus];
+        return readOrder[a.bookStatus] - readOrder[b.bookStatus];
       });
       setThisMonthReadingList((prev) => [...prev, ...sortedList])
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
@@ -89,8 +89,8 @@ export default function BoxThisMonthReadingList() {
           className="cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
           onClick={() => openModaTrackingPlan(item)}
         >
-          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.title}</span>
-          <ItemReadStatus readStatus={item.readStatus}/>
+          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.bookTitle}</span>
+          <ItemReadStatus readStatus={item.bookStatus}/>
         </li>
       ))}
       {isLoading && (

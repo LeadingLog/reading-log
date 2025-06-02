@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { useModalStore } from "../../store/modalStore.ts";
-import { AladinApiItem, BookSearchResultProps } from "../../types/aladinApi";
+import { BookSearchResultProps } from "../../types/aladinApi";
 import { fetchBooks } from "../../api/aladinApi.ts";
+import { ReadingListAddBody } from "../../types/readingListAdd.ts";
+import { readingListAddApi } from "../../api/readingListAddAPI.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 const BookSearchResult: React.FC<BookSearchResultProps> = ({
                                                              totalResults,
@@ -11,13 +14,13 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                                                              isLoading
                                                            }) => {
 
-  const [favoriteMap, setFavoriteMap] = useState<{ [isbn13: string]: boolean }>({});
   const { openModal, closeAllModals } = useModalStore();
+  console.log('ghkrdlsghkrdls',bookSearchResultList)
   /* 무한 스크롤 관련 */
   const [moreTotalResults, setMoreTotalResults] = useState<number>(totalResults)
   const containerRef = useRef<HTMLLIElement>(null);
   const [searchPage, setSearchPage] = useState<number>(2)
-  const [moreBookList, setMoreBookList] = useState<AladinApiItem[]>([]);
+  const [moreBookList, setMoreBookList] = useState<ReadingListAddBody[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const searchBooks = async (query: string, page: number) => {
     if (!query.trim()) return;
@@ -29,12 +32,14 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     try {
       const response = await fetchBooks(userId, query, page); // 페이지 번호로 요청
       if (response.data && Array.isArray(response.data.item)) {
-        const items = response.data.item.map((item: AladinApiItem) => ({
-          title: item.title,
+        const items = response.data.item.map((item: ReadingListAddBody) => ({
+          userId: user_id ?? 0,
+          bookTitle: item.bookTitle,
           author: item.author,
           isbn13: item.isbn13,
-          cover: item.cover,
-          link: item.link
+          link: item.link,
+          coverImgUrl: item.coverImgUrl,
+          bookStatus: item.bookStatus,
         }));
         setMoreBookList(prev => [...prev, ...items]);
         setSearchPage(prev => prev + 1); // 페이지 증가!!
@@ -82,53 +87,77 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     };
   }, [searchPage, searchValue, moreBookList.length, isLoading]);
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
-  const FavoriteToggle = (e: React.MouseEvent, isbn13: string) => {
-    e.stopPropagation(); // 해당 부분 클릭하면 부모요소 클릭 이벤트가 실행되지 않도록 방지 요소
-    const isCurrentlyFavorite = favoriteMap[isbn13];
-    if (isCurrentlyFavorite) {
-      openModal("ModalNotice", {
-        title: "관심도서에서 제거 하시겠어요?",
-        subTitle: "관심도서 목록에서 제거됩니다.",
-        cancelText: "닫기",
-        confirmText: "제거하기",
-        reverseBtn: true,
-        onConfirm: () => {
-          openModal("ModalNotice", {
-            title: "제거되었습니다.",
-            subTitle: "언제든 다시 추가 가능해요!",
-            onlyConfirm: true,
-            withMotion: true,
-            onConfirm: () => closeAllModals()
-          });
-          setFavoriteMap(prev => ({ ...prev, [isbn13]: false }));
-        },
-      });
-    } else {
+  const { user_id } = useUserStore()
+  const setModalIsLoading = useModalStore(state => state.setModalIsLoading);
+
+  const ConfirmButton = () => {
+    const modalIsLoading = useModalStore((state) => state.modalIsLoading);
+
+    return modalIsLoading ? (
+      <>
+        <span>추가 중</span>
+        <span
+          className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin ml-2"/>
+      </>
+    ) : (
+      "예 추가할래요!"
+    );
+  };
+
+  /* 관심도서로 추가 api */
+  const addInterested = async (item : ReadingListAddBody) => {
+    console.log(item)
+    const ReadingListAddBodyList: ReadingListAddBody = {
+      userId: user_id ?? 0,
+      bookTitle: item.bookTitle,
+      author: item.author,
+      isbn13: item.isbn13,
+      link: item.link,
+      coverImgUrl: item.coverImgUrl,
+      bookStatus: 'INTERESTED',
+    };
+    const addInterestedModal = () => {
       openModal("ModalNotice", {
         title: "관심도서로 설정하시겠어요?",
         subTitle: "관심도서로 설정됩니다.",
         cancelText: "닫기",
-        confirmText: "예 추가할래요!",
-        onConfirm: () => {
-          openModal("ModalNotice", {
-            title: "관심도서에 추가되었어요!",
-            subTitle: "이 책이 마음에 드셨군요!",
-            onlyConfirm: true,
-            withMotion: true,
-            onConfirm: () => closeAllModals()
-          });
-          setFavoriteMap(prev => ({ ...prev, [isbn13]: true }));
+        confirmText: <ConfirmButton/>,
+        onConfirm: async () => {
+          try {
+            setModalIsLoading(true)
+            const response = await readingListAddApi(ReadingListAddBodyList)
+            if (response) {
+              openModal("ModalNotice", {
+                title: "관심도서에 추가되었어요!",
+                subTitle: "이 책이 마음에 드셨군요!",
+                onlyClose: true,
+                withMotion: true,
+                onCancel: () => closeAllModals()
+              });
+            }
+          } catch (error) {
+            console.error('관심 도서 추가 실패', error)
+            openModal("ModalNotice", {
+              title: '요청 실패',
+              subTitle: `${error}`,
+              onlyClose: true,
+              withMotion: true,
+            });
+          } finally {
+            setModalIsLoading(false)
+          }
         },
       });
     }
+    addInterestedModal()
   }
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 END ------------- */
 
   /* 책 리스트를 클릭하면 책 계획 모달이 뜨는 경우 ------------- */
-  const openModalBookPlan = (item: AladinApiItem) => {
+  const openModalBookPlan = (item: ReadingListAddBody) => {
     openModal("ModalBookPlan", {
-      cover: item.cover, // 여기 추가
-      bookTitle: item.title,
+      cover: item.coverImgUrl, // 여기 추가
+      bookTitle: item.bookTitle,
       bookSubTitle: item.author,
       isbn13: item.isbn13,
       cancelText: "다음에 읽기",
@@ -162,7 +191,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
               onClick={() => openModalBookPlan(item)}
             >
               <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl overflow-hidden">
-                <img src={item.cover} alt={item.title} className="w-full h-full object-cover"/>
+                <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
               </div>
               <div className="flex flex-col flex-1 self-start">
                 <p
@@ -173,7 +202,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {item.title}
+                  {item.bookTitle}
                 </p>
                 <p className="text-base overflow-hidden text-main_SearchBar_SearchResult_Book_SubTitle_Text"
                    style={{
@@ -189,11 +218,11 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                 <div
                   key={item.isbn13}
                   className={`${
-                    favoriteMap[item.isbn13] ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
+                    item.bookStatus === "INTERESTED" ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
                   } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    FavoriteToggle(e, item.isbn13); // 상태 변경
+                    addInterested(item);
                   }}
                 >
                   <IconFavorite width="100%" height="100%"/>

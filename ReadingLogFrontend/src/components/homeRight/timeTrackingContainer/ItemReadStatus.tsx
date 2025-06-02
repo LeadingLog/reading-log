@@ -51,7 +51,7 @@ export default function ItemReadStatus({ readStatus }: ModalTrackingPlanProps) {
   return (
     /* 이번 달 독서 리스트 */
     <>
-      {readStatus !== "noRead" ? (
+      {readStatus !== "NOT_STARTED" ? (
         <button
           onClick={toggleSwitch}
           className="relative flex items-center w-[70px] h-full rounded-full px-1 bg-toggle_Read_Status_Bg overflow-hidden"

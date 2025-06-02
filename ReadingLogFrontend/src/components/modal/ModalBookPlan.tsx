@@ -79,8 +79,8 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
     setIsLoading(true)
     const ReadingListAddBodyList: ReadingListAddBody = {
       userId: user_id ?? 0 ,
-      bookTitle: bookTitle,
-      author: bookSubTitle,
+      bookTitle: bookTitle ?? "",
+      author: bookSubTitle ?? "",
       isbn13: isbn13,
       link: bookLink,
       coverImgUrl: cover,
@@ -186,8 +186,8 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   const addInterested = async () => {
     const ReadingListAddBodyList: ReadingListAddBody = {
       userId: user_id ?? 0,
-      bookTitle: bookTitle,
-      author: bookSubTitle,
+      bookTitle: bookTitle ?? "",
+      author: bookSubTitle ?? "",
       isbn13: isbn13,
       link: bookLink,
       coverImgUrl: cover,

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import CustomScrollbar from "../common/CustomScrollbar.tsx";
 import { fetchBooks } from "../../api/aladinApi.ts";
 import { AladinApiItem } from "../../types/aladinApi.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 export default function MainBookSearch() {
 
@@ -14,6 +15,7 @@ export default function MainBookSearch() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
+  const { user_id } = useUserStore()
 
   // 검색바를 클릭하면 실행
   const searchFocus = () => {
@@ -40,17 +42,18 @@ export default function MainBookSearch() {
   const searchBooks = async (query: string) => {
     if (!query.trim()) return;
     if (isFetching) return;
-    const userId = 1
     setIsFetching(true);
     try {
-      const response = await fetchBooks( userId ,query, 1);
+      const response = await fetchBooks( user_id ?? 0 ,query, 1);
       if (response.data && Array.isArray(response.data.item)) {
         const items = response.data.item.map((item: AladinApiItem) => ({
-          title: item.title,
+          userId: user_id ?? 0,
+          bookTitle: item.title,
           author: item.author,
           isbn13: item.isbn13,
-          cover: item.cover,
-          link: item.link
+          link: item.link,
+          coverImgUrl: item.cover,
+          bookStatus: item.bookStatus,
         }));
         setBookSearchResultList(items);
         setTotalResults(response.data.totalResults)

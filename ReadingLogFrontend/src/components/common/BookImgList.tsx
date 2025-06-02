@@ -4,10 +4,10 @@ import IconFavorite from "../../assets/Icon-favorite.svg?react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { readStatus, TabType } from "../../types/myReadingList.ts";
 import { fetchMyReadingList } from "../../api/myReadingListApi.ts";
-import { AladinApiItem } from "../../types/aladinApi.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
 import { fetchMyReadingListSearch } from "../../api/myReadingListSearchQueryApi.ts";
+import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 
 interface BookImgListProps {
   isActive: TabType;
@@ -17,7 +17,7 @@ interface BookImgListProps {
 
 export default function BookImgList({ isActive, query = '', inputRef }: BookImgListProps) {
   const [page, setPage] = useState<number>(0);
-  const [myReadingList, setMyReadingList] = useState<AladinApiItem[]>([]);
+  const [myReadingList, setMyReadingList] = useState<ReadingListAddBody[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { openModal } = useModalStore();
@@ -31,8 +31,8 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
         tabType: isActive,
         query: query
       });
-      const result: AladinApiItem[] = data.readingList.filter((item: AladinApiItem) =>
-        item.title.includes(query) || item.author.includes(query)
+      const result: ReadingListAddBody[] = data.readingList.filter((item: ReadingListAddBody) =>
+        item.bookTitle.includes(query) || item.author.includes(query)
       );
       setMyReadingList(result); // 이 줄이 주석 처리되어 있어 실제로 목록이 업데이트되지 않았습니다
 
@@ -84,10 +84,10 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
   // 내 독서 목록 내부 검색 시 끝
 
 
-  const openModalBookPlan = (item: AladinApiItem) => {
+  const openModalBookPlan = (item: ReadingListAddBody) => {
     openModal("ModalBookPlan", {
-      cover: item.cover,
-      bookTitle: item.title,
+      cover: item.coverImgUrl,
+      bookTitle: item.bookTitle,
       bookSubTitle: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
@@ -162,17 +162,17 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
           onClick={() => openModalBookPlan(item)}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >
-          <img src={item.cover} alt={item.title} className="w-full h-full object-cover" />
+          <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover" />
           <div
             className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
-              ${item.readStatus === 'reading' ? 'bg-imgBook_Item_Reading_Bg' :
-              item.readStatus === 'complete' ? 'bg-imgBook_Item_Complete_Bg' :
+              ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :
+              item.bookStatus === 'COMPLETED' ? 'bg-imgBook_Item_Complete_Bg' :
                 'bg-imgBook_Item_NoRead_Bg'}`}
           >
-            <span className="text-xs">{readStatus[item.readStatus as ReadStatus] || "오류"}</span>
+            <span className="text-xs">{readStatus[item.bookStatus as ReadStatus] || "오류"}</span>
             <span className="flex justify-center items-center text-imgBook_Icon_Color mt-[1px]">
-              {item.readStatus === 'reading' && <IconReading className="text-imgBook_Icon_Color" />}
-              {item.readStatus === 'complete' && <IconReadComplete className="text-imgBook_Icon_Color" />}
+              {item.bookStatus === 'IN_PROGRESS' && <IconReading className="text-imgBook_Icon_Color" />}
+              {item.bookStatus === 'COMPLETED' && <IconReadComplete className="text-imgBook_Icon_Color" />}
             </span>
           </div>
           <div className="absolute w-8 h-8 right-2 bottom-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
