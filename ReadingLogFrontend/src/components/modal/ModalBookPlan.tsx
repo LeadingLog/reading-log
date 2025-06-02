@@ -5,10 +5,11 @@ import IconCalendar from "../../assets/Icon-calendar.svg?react"
 import { ModalBookPlanProps } from "../../types/modal.ts";
 import { readingListAddApi } from "../../api/readingListAddAPI.ts";
 import { ReadingListAddBody } from "../../types/readingListAdd.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSubTitle, isbn13, cover, bookLink }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
-
+  const { user_id } = useUserStore()
 
   /* 시작 달 종료 달 표시용 */
   const [pickStartYear, setPickStartYear] = useState<number>(0);
@@ -70,9 +71,11 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   }
   /* 닫을 때 실행될 함수 END --------------- */
 
+
+  /* 독서계획추가 api */
   const ReadingListAdd = async () => {
     const ReadingListAddBodyList: ReadingListAddBody = {
-      userId: 7,
+      userId: user_id ?? 0 ,
       bookTitle: bookTitle,
       author: bookSubTitle,
       isbn13: isbn13,
@@ -84,7 +87,31 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
       readStartDt: `${pickStartYear}-${String(pickStartMonth).padStart(2, '0')}-01`,
       readEndDt: `${pickEndYear}-${String(pickEndMonth).padStart(2, '0')}-${getLastDateOfMonth(pickEndYear, pickEndMonth)}`
     };
-    await readingListAddApi(ReadingListAddBodyList)
+    try {
+      const response = await readingListAddApi(ReadingListAddBodyList)
+
+      if (response) {
+        openModal('ModalNotice', {
+          title: "내 독서 목록에 추가 되었어요!",
+          subTitle: "즐거운 독서시간!",
+          confirmText: "닫기",
+          onlyConfirm: true,
+          onConfirm: async () => {
+            setPickStartYear(currentYear)
+            setPickStartMonth(currentMonth)
+            setPickEndYear(currentYear)
+            setPickEndMonth(currentMonth)
+            closeAllModals()
+          }
+        })
+      }
+    } catch (error) {
+      openModal('ModalNotice', {
+        title: '요청 실패',
+        subTitle: `${error}`,
+        onlyClose: true
+      })
+    }
   }
 
   /* 독서 계획 추가 버튼 클릭 시 함수 */
@@ -114,25 +141,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
       alertModal("시작일이 오늘 보다 이전 일 순 없어요!"); // 경고 모달 또는 alert
       return;
     } else {
-
       await ReadingListAdd()
-
-      openModal('ModalNotice', {
-        title: "내 독서 목록에 추가 되었어요!",
-        subTitle: "즐거운 독서시간!",
-        confirmText: "닫기",
-        onlyConfirm: true,
-        onConfirm: async () => {
-
-
-          setPickStartYear(currentYear)
-          setPickStartMonth(currentMonth)
-          setPickEndYear(currentYear)
-          setPickEndMonth(currentMonth)
-
-          closeAllModals()
-        }
-      })
     }
 
   };
@@ -147,6 +156,46 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
 
   }, []);
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 END -----------------*/
+
+
+  /* 관심도서로 추가 api */
+  const addInterested = async () => {
+    const ReadingListAddBodyList: ReadingListAddBody = {
+      userId: user_id ?? 0,
+      bookTitle: bookTitle,
+      author: bookSubTitle,
+      isbn13: isbn13,
+      link: bookLink,
+      coverImgUrl: cover,
+      bookStatus: 'INTERESTED',
+    };
+    openModal("ModalNotice", {
+      title: "관심도서로 설정하시겠어요?",
+      subTitle: "관심도서로 설정됩니다.",
+      cancelText: "닫기",
+      confirmText: "예 추가할래요!",
+      onConfirm: async () => {
+        try {
+          const response = await readingListAddApi(ReadingListAddBodyList)
+          if (response) {
+            openModal("ModalNotice", {
+              title: "관심도서에 추가되었어요!",
+              subTitle: "이 책이 마음에 드셨군요!",
+              onlyConfirm: true,
+              withMotion: true,
+              onConfirm: () => closeAllModals()
+            });
+          }
+        } catch (error) {
+          openModal("ModalNotice", {
+            title: `${error}`,
+            onlyClose: true,
+            withMotion: true,
+          });
+        }
+      },
+    });
+  }
 
   /* 유동적인 이미지 높이 값을 설정하기 위해 오른쪽 독서계획 영역의 높이 값을 추적함 수 ----------------*/
   const parentRef = useRef<HTMLAnchorElement | null>(null);
@@ -190,10 +239,16 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
             className={`object-contain min-w-fit`}
             style={{ height: `${imageHeight}px` }}
           />
-          <div
-            className="absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
+          <button
+            className="absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5"
+            onClick={(e) => {
+              e.preventDefault();  // 이벤트 버블링 방지
+              e.stopPropagation(); // <a>의 기본 링크 동작 방지
+              addInterested();
+            }}
+          >
             <IconFavorite width="100%" height="100%"/>
-          </div>
+          </button>
         </a>
         <article
           className="flex flex-1 justify-between flex-col gap-8 bg-modal_Content_Bg p-2.5 rounded-lg"
