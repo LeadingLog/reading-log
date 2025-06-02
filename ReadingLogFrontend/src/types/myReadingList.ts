@@ -13,9 +13,9 @@ export const tabLabels: Record<TabType, string> = {
 
 // readStatus 객체를 Record 타입으로 정의
 export const readStatus: Record<ReadStatus, string> = {
-  reading: "독서중",
-  noRead: "읽기전",
-  complete: "완독",
+  IN_PROGRESS: "독서중",
+  NOT_STARTED: "읽기전",
+  COMPLETED: "완독",
 };
 
 // 내 독서 목록 요청 파라미터 타입

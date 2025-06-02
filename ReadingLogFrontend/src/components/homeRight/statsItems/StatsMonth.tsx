@@ -31,7 +31,7 @@ export default function StatsMonth() {
       /* 이번 달 총 독서 시간  */
       const totalMonthlyBookTime = data.monthlyReadingList.reduce((acc: number, cur: StatsMonthList) => acc + cur.bookTime, 0);
 
-      const [monthlyHour, monthlyMin] = chageTime(totalMonthlyBookTime)
+      const [monthlyHour, monthlyMin] = changeTime(totalMonthlyBookTime)
 
       /* 이번 달 독서 시간 */
       setMonthlyTimeHour(monthlyHour)
@@ -49,7 +49,7 @@ export default function StatsMonth() {
   const [monthlyTimeMin, setMonthlyTimeMin] = useState<number>(0)
 
   /* 초값 시간 정보로 변경 */
-  const chageTime = (responseTime: number) => {
+  const changeTime = (responseTime: number) => {
     const hour = Math.floor(responseTime / 3600);
     const min = Math.floor((responseTime % 3600) / 60);
 

@@ -1,17 +1,19 @@
-import { ReadStatus } from "./readStatus.ts";
+import { ReadingListAddBody } from "./readingListAdd.ts";
 
 export interface AladinApiItem {
-  title: string;
-  author: string;
-  isbn13: string;
-  cover: string;
-  isFavorite?: boolean; // optional
+  userId: number;
+  title?: string;
+  author?: string;
+  isbn13?: string;
   link?: string;
-  readStatus?: ReadStatus
+  cover?: string;
+  bookStatus?: string;
+  readStartDt?: string;
+  readEndDt?: string;
 }
 
 export interface BookSearchResultProps {
-  bookSearchResultList: AladinApiItem[];
+  bookSearchResultList: ReadingListAddBody[];
   searchValue: string;
   isLoading?: boolean;
   totalResults : number

@@ -3,7 +3,6 @@ import IconReadComplete from "../../assets/Icon-readcomplete.svg?react";
 import IconFavorite from "../../assets/Icon-favorite.svg?react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { readStatus } from "../../types/myReadingList.ts";
-import { AladinApiItem } from "../../types/aladinApi.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
 import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../types/monthReadingList.ts";
@@ -28,13 +27,13 @@ export default function BookImgList() {
       const data = await fetchThisMonthReadingList({ userId, year, month, page, size });
       // 받아온 독서상태별로 데이터 순서 정렬
       const sortedList = data.monthlyReadingList.sort((a : monthReadingListItem, b : monthReadingListItem) => {
-        return readOrder[a.readStatus] - readOrder[b.readStatus];
+        return readOrder[a.bookStatus] - readOrder[b.bookStatus];
       });
       setThisMonthReadingList((prev) => [...prev, ...sortedList])
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore(!isLastPage);
     } catch (error) {
-      console.error("쿼리 테스트 에러:", error);
+      console.error("이번 달 독서리스트 가져오기 실패:", error);
       setHasMore(false); // 더 이상 시도하지 않도록 설정
     } finally {
       setIsLoading(false); // 검색 완료 후 로딩 상태 해제
@@ -53,10 +52,10 @@ export default function BookImgList() {
     searchThisMonthReadingList({ userId: 1, year, month, page, size: 20 });
   }, [page]);
 
-  const openModalBookPlan = (item: AladinApiItem) => {
+  const openModalBookPlan = (item: monthReadingListItem) => {
     openModal("ModalBookPlan", {
-      cover: item.cover,
-      bookTitle: item.title,
+      cover: item.coverImgUrl,
+      bookTitle: item.bookTitle,
       bookSubTitle: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
@@ -93,17 +92,17 @@ export default function BookImgList() {
           onClick={() => openModalBookPlan(item)}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >
-          <img src={item.cover} alt={item.title} className="w-full h-full object-cover" />
+          <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover" />
           <div
             className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
-              ${item.readStatus === 'reading' ? 'bg-imgBook_Item_Reading_Bg' :
-              item.readStatus === 'complete' ? 'bg-imgBook_Item_Complete_Bg' :
+              ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :
+              item.bookStatus === 'COMPLETED' ? 'bg-imgBook_Item_Complete_Bg' :
                 'bg-imgBook_Item_NoRead_Bg'}`}
           >
-            <span className="text-xs">{readStatus[item.readStatus as ReadStatus] || "오류"}</span>
+            <span className="text-xs">{readStatus[item.bookStatus as ReadStatus] || "오류"}</span>
             <span className="flex justify-center items-center text-imgBook_Icon_Color mt-[1px]">
-              {item.readStatus === 'reading' && <IconReading className="text-imgBook_Icon_Color" />}
-              {item.readStatus === 'complete' && <IconReadComplete className="text-imgBook_Icon_Color" />}
+              {item.bookStatus === 'IN_PROGRESS' && <IconReading className="text-imgBook_Icon_Color" />}
+              {item.bookStatus === 'COMPLETED' && <IconReadComplete className="text-imgBook_Icon_Color" />}
             </span>
           </div>
           <div className="absolute w-8 h-8 right-2 bottom-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">

@@ -4,6 +4,7 @@ import type { ModalState } from "../types/modal.ts";
 // Zustand 스토어 생성
 export const useModalStore = create<ModalState>((set) => ({
   modals: [],
+  modalIsLoading: false, // ✅ 추가
   openModal: (type, data = {}) => {
     const modalId = crypto.randomUUID(); // 고유 ID 생성
     set((state) => ({
@@ -19,4 +20,5 @@ export const useModalStore = create<ModalState>((set) => ({
   closeAllModals: () => {
     set({ modals: [] });
   },
+  setModalIsLoading: (loading: boolean) => set({ modalIsLoading: loading }), // ✅ setter 추가
 }));
