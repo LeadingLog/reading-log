@@ -11,6 +11,8 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   const { closeModal, openModal, closeAllModals } = useModalStore();
   const { user_id } = useUserStore()
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   /* 시작 달 종료 달 표시용 */
   const [pickStartYear, setPickStartYear] = useState<number>(0);
   const [pickStartMonth, setPickStartMonth] = useState<number>(0);
@@ -74,6 +76,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
 
   /* 독서계획추가 api */
   const ReadingListAdd = async () => {
+    setIsLoading(true)
     const ReadingListAddBodyList: ReadingListAddBody = {
       userId: user_id ?? 0 ,
       bookTitle: bookTitle,
@@ -96,6 +99,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
           subTitle: "즐거운 독서시간!",
           confirmText: "닫기",
           onlyConfirm: true,
+          withMotion: true,
           onConfirm: async () => {
             setPickStartYear(currentYear)
             setPickStartMonth(currentMonth)
@@ -106,11 +110,15 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
         })
       }
     } catch (error) {
+      console.error('독서 목록 추가 실패', error)
       openModal('ModalNotice', {
         title: '요청 실패',
         subTitle: `${error}`,
-        onlyClose: true
+        onlyClose: true,
+        withMotion: true,
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -158,6 +166,22 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 END -----------------*/
 
 
+  /* 관심도서 추가 모달 로딩 관련 */
+  const setModalIsLoading = useModalStore(state => state.setModalIsLoading);
+
+  const ConfirmButton = () => {
+    const modalIsLoading = useModalStore((state) => state.modalIsLoading);
+
+    return modalIsLoading ? (
+      <>
+        <span>추가 중</span>
+        <span className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin ml-2" />
+      </>
+    ) : (
+      "예 추가할래요!"
+    );
+  };
+
   /* 관심도서로 추가 api */
   const addInterested = async () => {
     const ReadingListAddBodyList: ReadingListAddBody = {
@@ -169,32 +193,40 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
       coverImgUrl: cover,
       bookStatus: 'INTERESTED',
     };
-    openModal("ModalNotice", {
-      title: "관심도서로 설정하시겠어요?",
-      subTitle: "관심도서로 설정됩니다.",
-      cancelText: "닫기",
-      confirmText: "예 추가할래요!",
-      onConfirm: async () => {
-        try {
-          const response = await readingListAddApi(ReadingListAddBodyList)
-          if (response) {
+    const addInterestedModal = () => {
+      openModal("ModalNotice", {
+        title: "관심도서로 설정하시겠어요?",
+        subTitle: "관심도서로 설정됩니다.",
+        cancelText: "닫기",
+        confirmText: <ConfirmButton />,
+        onConfirm: async () => {
+          try {
+            setModalIsLoading(true)
+            const response = await readingListAddApi(ReadingListAddBodyList)
+            if (response) {
+              openModal("ModalNotice", {
+                title: "관심도서에 추가되었어요!",
+                subTitle: "이 책이 마음에 드셨군요!",
+                onlyClose: true,
+                withMotion: true,
+                onCancel: () => closeAllModals()
+              });
+            }
+          } catch (error) {
+            console.error('관심 도서 추가 실패',error)
             openModal("ModalNotice", {
-              title: "관심도서에 추가되었어요!",
-              subTitle: "이 책이 마음에 드셨군요!",
-              onlyConfirm: true,
+              title: '요청 실패',
+              subTitle: `${error}`,
+              onlyClose: true,
               withMotion: true,
-              onConfirm: () => closeAllModals()
             });
+          } finally {
+            setModalIsLoading(false)
           }
-        } catch (error) {
-          openModal("ModalNotice", {
-            title: `${error}`,
-            onlyClose: true,
-            withMotion: true,
-          });
-        }
-      },
-    });
+        },
+      });
+    }
+    addInterestedModal()
   }
 
   /* 유동적인 이미지 높이 값을 설정하기 위해 오른쪽 독서계획 영역의 높이 값을 추적함 수 ----------------*/
@@ -310,9 +342,18 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
               onClick={() => {
                 completeBookPlan();      // 현재 페이지 관련 초기화 작업
               }}
-              className="flex-1 min-w-[130px] px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
+              className="flex-1 min-w-[130px] justify-center items-center gap-1 flex px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
             >
-              독서 계획 추가
+
+              {isLoading ? (
+                <>
+                  <span>추가 중</span>
+                  <span
+                    className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin"></span>
+                </>
+              ): (
+                <span>독서 계획 추가</span>
+              )}
             </button>
           </section>
         </article>

@@ -5,7 +5,7 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export async function readingListAddApi(ReadingListAddBody: ReadingListAddBody) {
   const {data} = await axios.post(
-    `${serverUrl}/api/readingrecord/add`, ReadingListAddBody, {
+    `${serverUrl}/readingrecord/add`, ReadingListAddBody, {
       headers: {
         "Content-Type": "application/json"
       }

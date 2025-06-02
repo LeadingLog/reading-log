@@ -134,14 +134,14 @@ export const readingListHandlers = [
   }),
 
   // 독서 계획 추가
-  http.post(`${serverUrl}/readinglist/add`, async ({request}) => {
-    const body = await request.json();
-    console.log(body);
-
-    return HttpResponse.json({
-      success: true,
-    });
-  }),
+  // http.post(`${serverUrl}/readinglist/add`, async ({request}) => {
+  //   const body = await request.json();
+  //   console.log(body);
+  //
+  //   return HttpResponse.json({
+  //     success: true,
+  //   });
+  // }),
 
   // 관심 도서 추가
   http.post(`${serverUrl}/readinglist/update`, async ({request}) => {

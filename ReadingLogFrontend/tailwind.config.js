@@ -147,6 +147,8 @@ export default {
         modal_BookPlan_Calendar_Date_Text : "#000000",   // 독서 계획 - 달력 표시 날짜 텍스트 색 색
         modal_BookPlan_Calendar_Bg        : "#EEE6E3",   // 독서 계획 - 달력 표시 배경
         modal_BookPlan_Calendar_Icon_Color: "#000000",   // 독서 계획 - 달력 아이콘 색
+        modal_BookPlan_loadingBg          : "#FDFAF3",   // 독서 계획 - 로딩 중일 때 배경 색
+        modal_BookPlan_loadingSpinner     : "#96B2C8",   // 독서 계획 - 로딩 스피너 색
 
         /* 연도 및 월 선택 모달 */
         modal_Pick_Calendar_Back_Bg          : "#96B2C8",   // 연도 선택 모달 - 배경 색

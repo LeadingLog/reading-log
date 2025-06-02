@@ -14,7 +14,7 @@ export type ModalData = {
   title?: string; // 모달 제목
   subTitle?: string; // 모달 부제목
   cancelText?: string; // 취소 버튼 텍스트
-  confirmText?: string; // 확인 버튼 텍스트
+  confirmText?: React.ReactNode; // 확인 버튼 텍스트
   onlyClose?: boolean; // 닫기 버튼만 사용할지 여부
   onlyConfirm?: boolean; // 확인 버튼만 사용할지 여부
   reverseBtn?: boolean; // 버튼 순서 반대로 설정할지 여부
@@ -73,7 +73,7 @@ export interface ModalCalendarProps extends ModalData {
 }
 
 export interface ModalInstance {
-  modalId: string;          // 각 모달을 유일하게 식별하기 위한 고유 ID
+  modalId: string;     // 각 모달을 유일하게 식별하기 위한 고유 ID
   type: ModalType;     // 어떤 모달인지 구분 (e.g., ModalNotice)
   data: ModalData;     // 그 모달이 사용하는 데이터 (제목, 서브타이틀, onConfirm 등)
 }
@@ -81,7 +81,9 @@ export interface ModalInstance {
 // Zustand 스토어 타입
 export interface ModalState {
   modals: ModalInstance[];
+  modalIsLoading: boolean;  // 상태 추가
   openModal: (type: ModalType, data?: ModalData) => string;
   closeModal: (modalId: string) => void;
   closeAllModals: () => void;
+  setModalIsLoading: (loading: boolean) => void;  // setter 함수 추가
 }
