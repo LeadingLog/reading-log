@@ -20,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 
 import org.springframework.stereotype.Service;
@@ -74,7 +73,7 @@ public class ReadingListService {
 
         return rtn;
     }
-}
+
 	
 	private BookStatus convertStatus(String status) {
 		return switch (status) {
@@ -174,9 +173,7 @@ public class ReadingListService {
 	
 	//책 목록 검색하기 
 	@Transactional
-	public Page<ReadingList> getReadingListByFilter(Integer userId, Integer tabType, int page, int size) {
-	    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-
+	public Page<ReadingList> getReadingListByFilter(Integer userId, Integer tabType, Pageable pageable) {
 	    BookStatus status = null;
 	    switch (tabType) {
 	        case 1 -> status = BookStatus.IN_PROGRESS;
@@ -191,6 +188,7 @@ public class ReadingListService {
 	        return readingListRepository.findByUserIdAndBookStatus(userId, status, pageable);
 	    }
 	}
+
 	
 	//검색어로 책 검색하기 
 	@Transactional

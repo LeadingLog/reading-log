@@ -2,6 +2,7 @@ package com.example.demo.readingList;
 
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,15 +83,22 @@ public class ReadingListController {
     //리스트 가져오기 
     @GetMapping("/readingList")
     public ResponseEntity<?> getReadingList(
-    		   @RequestParam("userId") Integer userId,
-    	       @RequestParam("tabType") Integer tabType,
-    	       @RequestParam(value = "page", defaultValue = "0") int page,
-    	       @RequestParam(value = "size", defaultValue = "10") int size) {
+            @RequestParam("userId") Integer userId,
+            @RequestParam("tabType") Integer tabType,
+            @PageableDefault(size = 10, page = 0) Pageable pageable) {
 
         try {
-            Page<ReadingList> readingPage = readingListService.getReadingListByFilter(userId, tabType, page, size);
+            // 기본 정렬이 없으면 bookTitle 오름차순 설정
+            if (pageable.getSort().isUnsorted()) {
+                pageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by("bookTitle").ascending()
+                );
+            }
 
-            //웅답값 구성 
+            Page<ReadingList> readingPage = readingListService.getReadingListByFilter(userId, tabType, pageable);
+
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("success", true);
             response.put("tabType", tabType);
@@ -101,15 +110,16 @@ public class ReadingListController {
             pageInfo.put("totalPages", readingPage.getTotalPages());
             response.put("page", pageInfo);
 
-            List<Map<String, Object>> readingList = ReadingListReaponseDto.convertToDtoList(readingPage.getContent()); 
-            		
+            List<Map<String, Object>> readingList = ReadingListReaponseDto.convertToDtoList(readingPage.getContent());
             response.put("readingList", readingList);
+
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(ApiResponse.failure(e.getMessage()));
         }
     }
+
     
     //내 도서 리스트에서 도서 검색 
     @GetMapping("/search")
