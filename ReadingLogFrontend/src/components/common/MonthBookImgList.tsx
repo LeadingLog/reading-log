@@ -33,7 +33,7 @@ export default function BookImgList() {
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore(!isLastPage);
     } catch (error) {
-      console.error("이번 달 독서리스트 가져오기 실패:", error);
+      console.error( year,"년", month, "월 독서리스트 가져오기 실패:", error);
       setHasMore(false); // 더 이상 시도하지 않도록 설정
     } finally {
       setIsLoading(false); // 검색 완료 후 로딩 상태 해제
