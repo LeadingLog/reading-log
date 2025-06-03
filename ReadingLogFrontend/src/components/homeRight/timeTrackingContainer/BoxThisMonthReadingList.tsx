@@ -3,7 +3,6 @@ import { useModalStore } from "../../../store/modalStore.ts";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../../types/monthReadingList.ts";
 import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
-import { useDateStore } from "../../../store/useDateStore.ts";
 
 export default function BoxThisMonthReadingList() {
 
