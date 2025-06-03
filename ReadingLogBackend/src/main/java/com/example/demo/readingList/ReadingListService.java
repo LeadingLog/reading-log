@@ -2,6 +2,7 @@ package com.example.demo.readingList;
 
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,11 +27,13 @@ public class ReadingListService {
 
 
     // 이번달 독서 리스트
-	public Map<String, Object> getMonthlyReadingList(Integer userId, Integer year, Integer month, Pageable pageable) {
+	public Map<String, Object> getMonthlyReadingList(Integer userId, Pageable pageable) {
         Map<String, Object> rtn = new HashMap<>();
 
         try {
-            String yymm = String.format("%d%02d", year, month);
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
+            String yymm = today.format(formatter);
 
             Page<ReadingList> monthlyReadingPage = readingListRepository.getMontlyReadingList(userId, yymm, pageable);
 
