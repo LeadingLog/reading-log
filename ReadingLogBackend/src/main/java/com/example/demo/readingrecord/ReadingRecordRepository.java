@@ -1,5 +1,6 @@
 package com.example.demo.readingrecord;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,8 +24,8 @@ public interface ReadingRecordRepository extends JpaRepository<ReadingRecord, Lo
 	// 사용자별 연도 필터링된 총 독서 시간
 	@Query(value = "SELECT SUM(r.total_time) FROM reading_record r WHERE r.user_id = :userId AND EXTRACT(YEAR FROM r.read_date) = :year", nativeQuery = true)
 	Integer findTotalReadingTimeByUserIdAndYear(@Param("userId") Integer userId, @Param("year") Integer year);
-	
-	//년/월에 읽은 도서의 독서 조회 
+
+	// 년/월에 읽은 도서의 독서 조회
 	@Query(value = """
 			SELECT
 			    rr.book_id,
@@ -48,6 +49,14 @@ public interface ReadingRecordRepository extends JpaRepository<ReadingRecord, Lo
 	List<Object[]> findExactYearMonthBookTotalTimeByUserId(@Param("userId") Integer userId, @Param("year") Integer year,
 			@Param("month") Integer month);
 
+	// 오늘 사용자가 읽은 시간
+	@Query(value = "SELECT SUM(r.total_time) " + "FROM reading_record r "
+			+ "WHERE r.user_id = :userId AND r.read_date = CURRENT_DATE", nativeQuery = true)
+	Integer findTodayTotalReadingTimeByUser(@Param("userId") Integer userId);
+
+	
+	
+	
 //	// 사용자 아이디 & 독서 일자 중 연 > 월 > 책 > 읽은시간
 //	@Query(value = "SELECT " + "EXTRACT(YEAR FROM r.read_date) AS year, " + "EXTRACT(MONTH FROM r.read_date) AS month, "
 //			+ "r.book_id, " + "SUM(r.total_time) AS total_time " + "FROM reading_record r "

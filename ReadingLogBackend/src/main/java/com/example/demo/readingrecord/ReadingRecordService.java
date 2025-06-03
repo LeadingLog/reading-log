@@ -105,6 +105,13 @@ public class ReadingRecordService {
 		return resultList;
 	}
 	
+	//사용자별 오늘 읽은 책 시간 
+	public Integer getReadingTotalTimeToday(Integer userId) {
+		    Integer totalTime = readingRecordRepository.findTodayTotalReadingTimeByUser(userId);
+		    return totalTime != null ? totalTime : 0;
+		}
+		
+	
 //	// 사용자의 총 연간>월별>책별>읽은 시간
 //	public List<Map<String, Object>> getTimeYearMonthBookStats(Integer userId) {
 //		List<Object[]> rawResults = readingRecordRepository.findYearMonthBookTotalTimeByUserId(userId);
