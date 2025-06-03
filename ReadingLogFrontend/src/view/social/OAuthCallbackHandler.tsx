@@ -63,7 +63,7 @@ export default function OAuthCallbackHandler({
       const data = response.data;
       if (response.status === 200) { // 로그인에 성공하면 사용자 정보를 저장한다.
         useUserStore.getState().setUser({
-          user_id: data.userId,
+          userId: data.userId,
           nickname: data.nickname,
           email: data.userEmail,
           provider,

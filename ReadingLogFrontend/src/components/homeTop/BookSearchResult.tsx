@@ -33,7 +33,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
       const response = await fetchBooks(userId, query, page); // 페이지 번호로 요청
       if (response.data && Array.isArray(response.data.item)) {
         const items = response.data.item.map((item: ReadingListAddBody) => ({
-          userId: user_id ?? 0,
+          userId: userId ?? 0,
           bookTitle: item.bookTitle,
           author: item.author,
           isbn13: item.isbn13,
@@ -87,7 +87,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     };
   }, [searchPage, searchValue, moreBookList.length, isLoading]);
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
-  const { user_id } = useUserStore()
+  const { userId } = useUserStore();
   const setModalIsLoading = useModalStore(state => state.setModalIsLoading);
 
   const ConfirmButton = () => {
@@ -108,7 +108,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   const addInterested = async (item : ReadingListAddBody) => {
     console.log(item)
     const ReadingListAddBodyList: ReadingListAddBody = {
-      userId: user_id ?? 0,
+      userId: userId ?? 0,
       bookTitle: item.bookTitle,
       author: item.author,
       isbn13: item.isbn13,

@@ -9,9 +9,9 @@ import { useUserStore } from "../../store/userStore.ts";
 
 const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSubTitle, isbn13, cover, bookLink }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
-  const { user_id } = useUserStore()
+  const { userId } = useUserStore();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   /* 시작 달 종료 달 표시용 */
   const [pickStartYear, setPickStartYear] = useState<number>(0);
@@ -78,7 +78,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   const ReadingListAdd = async () => {
     setIsLoading(true)
     const ReadingListAddBodyList: ReadingListAddBody = {
-      userId: user_id ?? 0 ,
+      userId: userId ?? 0 ,
       bookTitle: bookTitle ?? "",
       author: bookSubTitle ?? "",
       isbn13: isbn13,
@@ -185,7 +185,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   /* 관심도서로 추가 api */
   const addInterested = async () => {
     const ReadingListAddBodyList: ReadingListAddBody = {
-      userId: user_id ?? 0,
+      userId: userId ?? 0,
       bookTitle: bookTitle ?? "",
       author: bookSubTitle ?? "",
       isbn13: isbn13,

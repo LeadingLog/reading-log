@@ -15,7 +15,7 @@ export default function ItemStopWatch() {
 
   const { params } = usePageStore();
   const bookData = params.TimeTracking?.bookData;
-  const {user_id: userId} = useUserStore();
+  const {userId} = useUserStore();
   const {openModal, closeModal} = useModalStore();
   const {setRightContent} = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
 
