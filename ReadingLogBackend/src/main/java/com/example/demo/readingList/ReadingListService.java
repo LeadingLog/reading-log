@@ -4,7 +4,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 
 import java.time.YearMonth;
@@ -14,13 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-import com.example.demo.readingrecord.ReadingRecordService;
 import org.springframework.data.domain.Page;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,7 +112,7 @@ public class ReadingListService {
 	//책 상태 값 변경 
 	@Transactional
 	public void updateReadingList(Map<String, Object> request) {
-		Long bookId = Long.parseLong(request.get("bookId").toString());
+		Integer bookId = Integer.parseInt(request.get("bookId").toString());
 		Integer userId = Integer.parseInt(request.get("userId").toString());
 		String bookStatusStr = (String) request.get("bookStatus");
 
@@ -158,7 +152,7 @@ public class ReadingListService {
 	//독서리스트 지우기 
 	@Transactional
 	public void deleteReadingList(Map<String, Object> request) {
-	    Long bookId = Long.parseLong(request.get("bookId").toString());
+		Integer bookId = Integer.parseInt(request.get("bookId").toString());
 	    Integer userId = Integer.parseInt(request.get("userId").toString());
 
 	    ReadingList readingList = readingListRepository.findById(bookId)

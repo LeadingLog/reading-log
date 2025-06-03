@@ -21,7 +21,7 @@ public class ReadingRecordService {
 
 	// 추가 하기
 	@Transactional
-	public ReadingRecord addRecord(Long bookId, Integer userId, LocalDate readDate, Integer totalTime,
+	public ReadingRecord addRecord(Integer bookId, Integer userId, LocalDate readDate, Integer totalTime,
 			LocalTime startTime, LocalTime endTime) {
 
 		ReadingRecord readingRecord = ReadingRecord.builder().bookId(bookId).userId(userId).readDate(readDate)

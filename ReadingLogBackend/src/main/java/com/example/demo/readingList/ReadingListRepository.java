@@ -25,7 +25,7 @@ import com.example.demo.code.BookStatus;
 
 
 @Repository
-public interface ReadingListRepository extends JpaRepository<ReadingList, Long> {
+public interface ReadingListRepository extends JpaRepository<ReadingList, Integer> {
 
 	// 알라딘 서버 응답 값에 추가 할 것
 	Optional<ReadingList> findByUserIdAndIsbn13(Integer userId, String isbn13);
