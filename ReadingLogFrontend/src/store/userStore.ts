@@ -1,5 +1,5 @@
-import {create} from "zustand";
-import {persist} from "zustand/middleware";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface UserState {
   userId: number | null;
@@ -20,18 +20,18 @@ export const useUserStore = create<UserState>()(
       provider: null,
 
       setUser: (user) =>
-        set((state) => ({
+        set( (state) => ({
           ...state,
           ...user,
-        })),
+        }) ),
 
       resetUser: () =>
-        set({
+        set( {
           userId: 0,
           nickname: null,
           email: null,
           provider: null,
-        }),
+        } ),
     }),
     {
       name: "user-storage",

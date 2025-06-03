@@ -15,24 +15,24 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                                                            }) => {
 
   const { openModal, closeAllModals } = useModalStore();
-  console.log('ghkrdlsghkrdls',bookSearchResultList)
+  console.log( 'ghkrdlsghkrdls', bookSearchResultList )
   /* 무한 스크롤 관련 */
-  const [moreTotalResults, setMoreTotalResults] = useState<number>(totalResults)
-  const containerRef = useRef<HTMLLIElement>(null);
-  const [searchPage, setSearchPage] = useState<number>(2)
-  const [moreBookList, setMoreBookList] = useState<ReadingListAddBody[]>([]);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [moreTotalResults, setMoreTotalResults] = useState<number>( totalResults )
+  const containerRef = useRef<HTMLLIElement>( null );
+  const [searchPage, setSearchPage] = useState<number>( 2 )
+  const [moreBookList, setMoreBookList] = useState<ReadingListAddBody[]>( [] );
+  const [isFetching, setIsFetching] = useState<boolean>( false );
   const searchBooks = async (query: string, page: number) => {
     if (!query.trim()) return;
     if (isFetching) return;
 
     const userId = 1
-    setIsFetching(true);
+    setIsFetching( true );
     if (totalResults === moreBookList.length) return;
     try {
-      const response = await fetchBooks(userId, query, page); // 페이지 번호로 요청
-      if (response.data && Array.isArray(response.data.item)) {
-        const items = response.data.item.map((item: ReadingListAddBody) => ({
+      const response = await fetchBooks( userId, query, page ); // 페이지 번호로 요청
+      if (response.data && Array.isArray( response.data.item )) {
+        const items = response.data.item.map( (item: ReadingListAddBody) => ({
           userId: userId ?? 0,
           bookTitle: item.bookTitle,
           author: item.author,
@@ -40,35 +40,35 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
           link: item.link,
           coverImgUrl: item.coverImgUrl,
           bookStatus: item.bookStatus,
-        }));
-        setMoreBookList(prev => [...prev, ...items]);
-        setSearchPage(prev => prev + 1); // 페이지 증가!!
-        setIsFetching(false);
+        }) );
+        setMoreBookList( prev => [...prev, ...items] );
+        setSearchPage( prev => prev + 1 ); // 페이지 증가!!
+        setIsFetching( false );
       }
     } catch (error) {
-      console.error('도서 검색 중 오류 발생:', error);
+      console.error( '도서 검색 중 오류 발생:', error );
     }
   };
 
   /* 첫 검색 결과 가져오기 */
-  useEffect(() => {
-    setMoreBookList(bookSearchResultList)
-    setMoreTotalResults(totalResults)
-    setSearchPage(2); // ✅ 검색어 바뀔 때 page도 초기화
-  }, [bookSearchResultList, searchValue]);
+  useEffect( () => {
+    setMoreBookList( bookSearchResultList )
+    setMoreTotalResults( totalResults )
+    setSearchPage( 2 ); // ✅ 검색어 바뀔 때 page도 초기화
+  }, [bookSearchResultList, searchValue] );
 
   // ✅ IntersectionObserver 적용
-  useEffect(() => {
+  useEffect( () => {
     if (isLoading) return;
     if (moreTotalResults === moreBookList.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
+        entries.forEach( entry => {
           if (entry.isIntersecting) {
-            searchBooks(searchValue, searchPage);
+            searchBooks( searchValue, searchPage );
           }
-        });
+        } );
       },
       {
         root: null,
@@ -78,20 +78,20 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
 
     const target = containerRef.current;
     if (target) {
-      observer.observe(target);
+      observer.observe( target );
     }
 
     return () => {
-      if (target) observer.unobserve(target);
+      if (target) observer.unobserve( target );
       observer.disconnect();
     };
-  }, [searchPage, searchValue, moreBookList.length, isLoading]);
+  }, [searchPage, searchValue, moreBookList.length, isLoading] );
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const { userId } = useUserStore();
-  const setModalIsLoading = useModalStore(state => state.setModalIsLoading);
+  const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
 
   const ConfirmButton = () => {
-    const modalIsLoading = useModalStore((state) => state.modalIsLoading);
+    const modalIsLoading = useModalStore( (state) => state.modalIsLoading );
 
     return modalIsLoading ? (
       <>
@@ -105,8 +105,8 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   };
 
   /* 관심도서로 추가 api */
-  const addInterested = async (item : ReadingListAddBody) => {
-    console.log(item)
+  const addInterested = async (item: ReadingListAddBody) => {
+    console.log( item )
     const ReadingListAddBodyList: ReadingListAddBody = {
       userId: userId ?? 0,
       bookTitle: item.bookTitle,
@@ -117,37 +117,37 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
       bookStatus: 'INTERESTED',
     };
     const addInterestedModal = () => {
-      openModal("ModalNotice", {
+      openModal( "ModalNotice", {
         title: "관심도서로 설정하시겠어요?",
         subTitle: "관심도서로 설정됩니다.",
         cancelText: "닫기",
         confirmText: <ConfirmButton/>,
         onConfirm: async () => {
           try {
-            setModalIsLoading(true)
-            const response = await readingListAddApi(ReadingListAddBodyList)
+            setModalIsLoading( true )
+            const response = await readingListAddApi( ReadingListAddBodyList )
             if (response) {
-              openModal("ModalNotice", {
+              openModal( "ModalNotice", {
                 title: "관심도서에 추가되었어요!",
                 subTitle: "이 책이 마음에 드셨군요!",
                 onlyClose: true,
                 withMotion: true,
                 onCancel: () => closeAllModals()
-              });
+              } );
             }
           } catch (error) {
-            console.error('관심 도서 추가 실패', error)
-            openModal("ModalNotice", {
+            console.error( '관심 도서 추가 실패', error )
+            openModal( "ModalNotice", {
               title: '요청 실패',
               subTitle: `${error}`,
               onlyClose: true,
               withMotion: true,
-            });
+            } );
           } finally {
-            setModalIsLoading(false)
+            setModalIsLoading( false )
           }
         },
-      });
+      } );
     }
     addInterestedModal()
   }
@@ -155,7 +155,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
 
   /* 책 리스트를 클릭하면 책 계획 모달이 뜨는 경우 ------------- */
   const openModalBookPlan = (item: ReadingListAddBody) => {
-    openModal("ModalBookPlan", {
+    openModal( "ModalBookPlan", {
       cover: item.coverImgUrl, // 여기 추가
       bookTitle: item.bookTitle,
       bookSubTitle: item.author,
@@ -163,7 +163,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
       bookLink: item.link
-    })
+    } )
   }
   /* 책 리스트를 클릭하면 책 계획 모달이 뜨는 경우 END ------------- */
 
@@ -184,11 +184,11 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                 className="w-5 h-5 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
             </li>
           }
-          {moreBookList.map((item, idx) => (
+          {moreBookList.map( (item, idx) => (
             <li
               key={idx}
               className="cursor-pointer flex gap-2 basis-[calc(50%-8px)] transition-[border] p-1 border-2 border-transparent items-center hover:border-main_SearchBar_Border rounded-lg"
-              onClick={() => openModalBookPlan(item)}
+              onClick={() => openModalBookPlan( item )}
             >
               <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl overflow-hidden">
                 <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
@@ -222,14 +222,14 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                   } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    addInterested(item);
+                    addInterested( item );
                   }}
                 >
                   <IconFavorite width="100%" height="100%"/>
                 </div>
               </div>
             </li>
-          ))}
+          ) )}
           {!isLoading && moreTotalResults - moreBookList.length !== 0 ? (
             <li
               ref={containerRef}

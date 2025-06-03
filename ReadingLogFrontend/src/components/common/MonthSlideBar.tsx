@@ -2,14 +2,14 @@ import IconTriangle from "../../assets/Icon-triangle.svg?react";
 import { useDateStore } from "../../store/useDateStore.ts";
 
 export default function YearSlideBar() {
-  const { month, year, setMonth, setYear , decreaseMonth, increaseMonth } = useDateStore();
+  const { month, year, setMonth, setYear, decreaseMonth, increaseMonth } = useDateStore();
 
   /* 현재 년도 */
   const nowYear = () => {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
-    setYear(currentYear);
-    setMonth(currentMonth)
+    setYear( currentYear );
+    setMonth( currentMonth )
   };
 
   /* 선택 월 이전 이후 월 표시용 */
@@ -20,7 +20,7 @@ export default function YearSlideBar() {
       prevMonth = 12;
       displayYear = year - 1;
     }
-    return `${displayYear}.${String(prevMonth).padStart(2, "0")}`;
+    return `${displayYear}.${String( prevMonth ).padStart( 2, "0" )}`;
   };
 
   const getNextMonthText = () => {
@@ -30,7 +30,7 @@ export default function YearSlideBar() {
       nextMonth = 1;
       displayYear = year + 1;
     }
-    return `${displayYear}.${String(nextMonth).padStart(2, "0")}`;
+    return `${displayYear}.${String( nextMonth ).padStart( 2, "0" )}`;
   };
 
   return (
@@ -43,7 +43,7 @@ export default function YearSlideBar() {
           {getPrevMonthText()}
         </span>
         <button className="flex-1 text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover rotate-180">
-          <IconTriangle />
+          <IconTriangle/>
         </button>
       </div>
 
@@ -51,7 +51,7 @@ export default function YearSlideBar() {
         onClick={nowYear}
         className="text-3xl items-center cursor-pointer h-full text-yearSlide_ThisYear_Text font-bold"
       >
-        {year}.{String(month).padStart(2, '0')}
+        {year}.{String( month ).padStart( 2, '0' )}
       </span>
 
       <div
@@ -59,7 +59,7 @@ export default function YearSlideBar() {
         className="flex flex-1 items-center cursor-pointer group h-full pr-8"
       >
         <button className="flex-1 text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
-          <IconTriangle />
+          <IconTriangle/>
         </button>
         <span className="flex-1 text-left text-yearSlide_PrevNext_Text">
           {getNextMonthText()}

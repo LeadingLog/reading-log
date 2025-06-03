@@ -18,7 +18,7 @@ export default function TimeLine() {
       { StatsPage: { tab: 'StatsMonth' } }, // 파라미터
       { title: `나의 리딩로그 - 월별통계` }
     )
-    setMonth(month)
+    setMonth( month )
   }
 
   const statsYear = () => {
@@ -201,17 +201,17 @@ export default function TimeLine() {
     }
   ];
 
-  const [monthArr, setMonthArr] = useState<TimelineEntry[]>(getInitialMonthArr);
+  const [monthArr, setMonthArr] = useState<TimelineEntry[]>( getInitialMonthArr );
 
   /* 년도 변경 시 도서 권 수 변경 */
   const searchTimeLineReadingList = async ({ userId, year }: fetchTimeLineReadingListParams) => {
     try {
-      const data = await fetchTimeLineReadingList({ userId, year });
+      const data = await fetchTimeLineReadingList( { userId, year } );
 
       const freshArr = getInitialMonthArr();
 
-      const updated: TimelineEntry[] = freshArr.map((month) => {
-        const found = data.timeLineReadingList.find((item: TimelineEntry) => item.month === month.month);
+      const updated: TimelineEntry[] = freshArr.map( (month) => {
+        const found = data.timeLineReadingList.find( (item: TimelineEntry) => item.month === month.month );
         return found
           ? {
             ...month,
@@ -220,49 +220,49 @@ export default function TimeLine() {
             complete: found.complete,
           }
           : month;
-      });
+      } );
 
-      setMonthArr(updated);
+      setMonthArr( updated );
     } catch (error) {
-      console.error("타임라인에 보여 질 년&월 도서 수 가져오기 실패:", error);
+      console.error( "타임라인에 보여 질 년&월 도서 수 가져오기 실패:", error );
     }
   };
 
   /* 총 독서 시간 가져오기 */
-  const [allReadingTimeHour, setAllReadingTimeHour] = useState(0)
-  const [allReadingTimeMin, setAllReadingTimeMin] = useState(0)
-  const [allReadingTimeSec, setAllReadingTimeSec] = useState(0)
+  const [allReadingTimeHour, setAllReadingTimeHour] = useState( 0 )
+  const [allReadingTimeMin, setAllReadingTimeMin] = useState( 0 )
+  const [allReadingTimeSec, setAllReadingTimeSec] = useState( 0 )
 
   const readingTime = async (userId: fetchAllReadingTimeParams) => {
     try {
-      const response = await fetchAllReadingTime(userId)
+      const response = await fetchAllReadingTime( userId )
 
       const totalSeconds = response.data;
 
-      const hour = Math.floor(totalSeconds / 3600);
-      const min = Math.floor((totalSeconds % 3600) / 60);
+      const hour = Math.floor( totalSeconds / 3600 );
+      const min = Math.floor( (totalSeconds % 3600) / 60 );
       const sec = totalSeconds % 60;
 
-      setAllReadingTimeHour(hour)
-      setAllReadingTimeMin(min)
-      setAllReadingTimeSec(sec)
+      setAllReadingTimeHour( hour )
+      setAllReadingTimeMin( min )
+      setAllReadingTimeSec( sec )
 
     } catch (error) {
-      setAllReadingTimeHour(99)
-      setAllReadingTimeMin(99)
-      setAllReadingTimeSec(99)
-      console.error("독서 시간을 가져오지 못함", error)
+      setAllReadingTimeHour( 99 )
+      setAllReadingTimeMin( 99 )
+      setAllReadingTimeSec( 99 )
+      console.error( "독서 시간을 가져오지 못함", error )
     }
 
   }
 
-  useEffect(() => {
-    readingTime({ userId: 1 })
-  }, []);
+  useEffect( () => {
+    readingTime( { userId: 1 } )
+  }, [] );
 
-  useEffect(() => {
-    searchTimeLineReadingList({ userId: 1, year });
-  }, [year]);
+  useEffect( () => {
+    searchTimeLineReadingList( { userId: 1, year } );
+  }, [year] );
 
   return (
     <section className="flex flex-col gap-4 rounded-xl flex-1">
@@ -270,7 +270,7 @@ export default function TimeLine() {
       <article
         className="flex gap-2 justify-center items-center text-allReadingTime_Text text-2xl bg-allReadingTime_Bg rounded-xl p-3.5">
         총 독서 시간
-        <span>{String(allReadingTimeHour).padStart(2, '0')}:{String(allReadingTimeMin).padStart(2, '0')}:{String(allReadingTimeSec).padStart(2, '0')}</span>
+        <span>{String( allReadingTimeHour ).padStart( 2, '0' )}:{String( allReadingTimeMin ).padStart( 2, '0' )}:{String( allReadingTimeSec ).padStart( 2, '0' )}</span>
       </article>
 
       {/* 작년 이번년 내년 선택 슬라이드 */}
@@ -357,14 +357,14 @@ export default function TimeLine() {
         </div>
         {/* 월 표시 버튼 */}
         <ul className="grid grid-cols-7 grid-rows-9 w-full">
-          {monthArr.map((item, idx) => (
+          {monthArr.map( (item, idx) => (
             <li
               key={idx}
               className={`relative`}
               style={{ gridColumnStart: `${item.col}`, gridRowStart: `${item.row}` }}
             >
               <button
-                onClick={() => statsMonth(item.month)}
+                onClick={() => statsMonth( item.month )}
                 style={{
                   top: item.top,
                   left: item.left,
@@ -408,7 +408,7 @@ export default function TimeLine() {
                 </div>
               </button>
             </li>
-          ))}
+          ) )}
         </ul>
       </article>
     </section>

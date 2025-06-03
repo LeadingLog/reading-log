@@ -9,8 +9,8 @@ export default function StatsPage() {
     /* 통계 페이지 */
     <section className="flex flex-1 flex-col gap-4 overflow-hidden">
       {/* 조건부 렌더링 */}
-      {params.StatsPage?.tab === 'StatsYear' && <StatsYear />}
-      {params.StatsPage?.tab === 'StatsMonth' && <StatsMonth />}
+      {params.StatsPage?.tab === 'StatsYear' && <StatsYear/>}
+      {params.StatsPage?.tab === 'StatsMonth' && <StatsMonth/>}
     </section>
   );
 }

@@ -6,20 +6,20 @@ import { tabLabels, TabType } from "../../types/myReadingList.ts";
 
 export default function MyBookList() {
 
-  const [isActive, setIsActive] = useState<TabType>(0)
+  const [isActive, setIsActive] = useState<TabType>( 0 )
 
   const tabNumber: TabType[] = [0, 1, 2, 3];
 
   const changeType = (type: TabType) => {
-    setIsActive(type)
+    setIsActive( type )
   }
 
-  const [searchValue, setSearchValue] = useState<string>("")
+  const [searchValue, setSearchValue] = useState<string>( "" )
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>( null );
 
   const changeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+    setSearchValue( e.target.value );
   };
 
   return (
@@ -27,16 +27,16 @@ export default function MyBookList() {
     <section className="flex flex-col flex-1 gap-4 overflow-hidden">
       {/* 전체, 독서중, 완독, 읽기전 탭 리스트 */}
       <ul className="flex gap-5">
-        {tabNumber.map((type) => (
+        {tabNumber.map( (type) => (
           <li
             key={type}
-            onClick={() => changeType(type)}
+            onClick={() => changeType( type )}
             className={`${isActive === type ? 'font-semibold text-myBookList_ActiveTab_Text bg-myBookList_ActiveTab_Bg' : 'text-myBookList_InActiveTab_Text bg-myBookList_InActiveTab_Bg'}
               flex-1 text-xl cursor-pointer px-2 py-1 text-center rounded-full`}
           >
             {tabLabels[type]}
           </li>
-        ))}
+        ) )}
       </ul>
       {/* 검색 바 */}
       <article
@@ -56,7 +56,7 @@ export default function MyBookList() {
         {searchValue && (
           <button
             onClick={() => {
-              setSearchValue("")
+              setSearchValue( "" )
             }}
             className="absolute flex justify-center items-center w-[20x] h-[20px] aspect-square right-3 top-1.5 bg-myBook_SearchBar_ClearText_Bg z-[1] text-xs font-black text-myBook_SearchBar_ClearText_Color hover:text-gray-600 rounded-full"
           >

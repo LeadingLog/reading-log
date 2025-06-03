@@ -67,6 +67,7 @@ export interface ModalTrackingPlanProps extends ModalData {
   // ModalTrackingPlan에 필요한 속성 추가 가능
   modalId?: string;
 }
+
 export interface ModalCalendarProps extends ModalData {
   // ModalCalendarProps에 필요한 속성 추가 가능
   modalId?: string;
