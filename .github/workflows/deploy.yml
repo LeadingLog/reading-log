@@ -1,0 +1,62 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      # 설정한 브랜치를 푸시할때만 배포됩니다.
+      - 'F-ModalTrackingPlan_Dev'
+      - 'F-MainBookSearching_Dev'
+      - 'F-TimeLine_Dev'
+      - 'F-MyReadingList_Dev'
+      - 'F-MyFavoriteList_Dev'
+      - 'F-ThisMonthReadingList_Dev'
+      # - 'F-UserLogin'
+      - 'frontdev'
+      # - 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 코드 체크아웃
+      - uses: actions/checkout@v2
+
+      # 2. Node.js 환경 설정
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      # 3. 의존성 설치 및 빌드
+      - name: Install & Build
+        working-directory: ReadingLogFrontend
+        env:
+          VITE_ALADIN_API: ${{ secrets.VITE_ALADIN_API }}
+          VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
+          VITE_NAVER_CLIENT_ID: ${{ secrets.VITE_NAVER_CLIENT_ID }}
+          VITE_NAVER_REDIRECT_URI: ${{ secrets.VITE_NAVER_REDIRECT_URI }}
+          VITE_KAKAO_CLIENT_ID: ${{ secrets.VITE_KAKAO_CLIENT_ID }}
+          VITE_KAKAO_REDIRECT_URI: ${{ secrets.VITE_KAKAO_REDIRECT_URI }}
+        run: |
+          echo "VITE_ALADIN_API=$VITE_ALADIN_API"
+          npm install
+          npm run build
+
+      # 3.5. vercel.json 복사 (dist 안으로)
+      - name: Copy vercel.json to dist
+        run: cp ReadingLogFrontend/vercel.json ReadingLogFrontend/dist/
+
+
+      # 4. 빌드 결과물을 다른 저장소로 푸시
+      - name: Push to Vercel Repo
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
+        with:
+          source-directory: 'ReadingLogFrontend/dist'  # ✅ Vite 기본 빌드 결과물 경로
+          destination-github-username: "inging-bo"
+          destination-repository-name: "reading-log"  # ✅ 대상 레포지토리 이름 수정
+          user-email: ${{ secrets.EMAIL }}
+          commit-message: "${{ github.event.commits[0].message }} Deploy: ${{ github.sha }} "
+          target-branch: master
