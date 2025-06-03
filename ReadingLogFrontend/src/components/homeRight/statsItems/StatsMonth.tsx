@@ -11,54 +11,54 @@ import { useDateStore } from "../../../store/useDateStore.ts";
 export default function StatsMonth() {
 
   const { year, month } = useDateStore();
-  const [bookGraphList, setBookGraphList] = useState<StatsMonthList[]>([])
+  const [bookGraphList, setBookGraphList] = useState<StatsMonthList[]>( [] )
 
   const searchStatsMonthList = async ({ userId, year, month }: fetchStatsMonthApiParams) => {
     try {
 
-      const response = await fetchStatsMonthApi({ userId, year, month })
+      const response = await fetchStatsMonthApi( { userId, year, month } )
       const data = response.data
 
       /* 도서 그래프 */
       /* 그래프 높이 조절하기 위해 가장 긴 시간을 기준을 최대 높이로 정함 */
-      const maxTime = Math.max(...data.monthlyReadingList.map((item: StatsMonthList) => item.bookTime));
-      const updatedList = data.monthlyReadingList.map((item: StatsMonthList) => ({
+      const maxTime = Math.max( ...data.monthlyReadingList.map( (item: StatsMonthList) => item.bookTime ) );
+      const updatedList = data.monthlyReadingList.map( (item: StatsMonthList) => ({
         ...item,
-        bookTime: parseFloat((item.bookTime / maxTime).toFixed(2))
-      }));
-      setBookGraphList(updatedList)
+        bookTime: parseFloat( (item.bookTime / maxTime).toFixed( 2 ) )
+      }) );
+      setBookGraphList( updatedList )
 
       /* 이번 달 총 독서 시간  */
-      const totalMonthlyBookTime = data.monthlyReadingList.reduce((acc: number, cur: StatsMonthList) => acc + cur.bookTime, 0);
+      const totalMonthlyBookTime = data.monthlyReadingList.reduce( (acc: number, cur: StatsMonthList) => acc + cur.bookTime, 0 );
 
-      const [monthlyHour, monthlyMin] = changeTime(totalMonthlyBookTime)
+      const [monthlyHour, monthlyMin] = changeTime( totalMonthlyBookTime )
 
       /* 이번 달 독서 시간 */
-      setMonthlyTimeHour(monthlyHour)
-      setMonthlyTimeMin(monthlyMin)
+      setMonthlyTimeHour( monthlyHour )
+      setMonthlyTimeMin( monthlyMin )
 
     } catch (error) {
-      console.error("독서 시간을 가져오지 못함", error)
+      console.error( "독서 시간을 가져오지 못함", error )
     } finally {
       // setIsLoading(false);
     }
   }
 
   /* 현재 달 독서 시간 */
-  const [monthlyTimeHour, setMonthlyTimeHour] = useState<number>(0)
-  const [monthlyTimeMin, setMonthlyTimeMin] = useState<number>(0)
+  const [monthlyTimeHour, setMonthlyTimeHour] = useState<number>( 0 )
+  const [monthlyTimeMin, setMonthlyTimeMin] = useState<number>( 0 )
 
   /* 초값 시간 정보로 변경 */
   const changeTime = (responseTime: number) => {
-    const hour = Math.floor(responseTime / 3600);
-    const min = Math.floor((responseTime % 3600) / 60);
+    const hour = Math.floor( responseTime / 3600 );
+    const min = Math.floor( (responseTime % 3600) / 60 );
 
     return [hour, min]
   }
 
-  useEffect(() => {
-    searchStatsMonthList({ userId: 1, year, month })
-  }, [year, month]);
+  useEffect( () => {
+    searchStatsMonthList( { userId: 1, year, month } )
+  }, [year, month] );
 
   return (
     /* 월별 통계  */
@@ -66,7 +66,7 @@ export default function StatsMonth() {
       <MonthSlideBar/>
       <article className="flex flex-col text-center">
         <span className="text-2xl font-semibold text-stats_Info_Text">
-          <span>{String(month).padStart(2, '0')}월</span>에는
+          <span>{String( month ).padStart( 2, '0' )}월</span>에는
           <span
             className="text-stats_Info_Text_Highlight"> 총 {monthlyTimeHour}시간 {monthlyTimeMin}분</span> 책을 읽었어요</span>
       </article>
@@ -77,7 +77,7 @@ export default function StatsMonth() {
         scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color bottom-0.5"
         // scrollbarWidth=""
       >
-        {bookGraphList.map((item, idx) => (
+        {bookGraphList.map( (item, idx) => (
             <li
               key={idx}
               className={`h-[40%] flex flex-col self-end gap-1 px-1 pt-1 border-t-2 border-x-2 -mr-0.5 border-stats_Month_Graph_Book_Border bg-stats_Month_Graph_Book_Bg`}

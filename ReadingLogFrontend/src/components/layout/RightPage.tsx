@@ -17,11 +17,11 @@ export default function RightPage() {
         <span className="pl-2.5">
           {pageData.title || '이번 달 독서 리스트'}
         </span>
-        <TodayReadingTime />
+        <TodayReadingTime/>
       </span>
       {/* 조건부 렌더링 */}
-      {rightContent === 'TimeTracking' && <TimeTracking />}
-      {rightContent === 'StatsPage' && <StatsPage />}
+      {rightContent === 'TimeTracking' && <TimeTracking/>}
+      {rightContent === 'StatsPage' && <StatsPage/>}
     </section>
   );
 }

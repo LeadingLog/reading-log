@@ -1,5 +1,5 @@
 import ItemStopWatch from "./ItemStopWatch.tsx";
-import {usePageStore} from "../../../store/pageStore.ts";
+import { usePageStore } from "../../../store/pageStore.ts";
 
 export default function BoxStopWatch() {
   const { params } = usePageStore();

@@ -11,27 +11,27 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
                                                        year,
                                                      }) => {
   const { closeModal } = useModalStore()
-  const [modalYear, setModalYear] = useState<number>(year ?? new Date().getFullYear());
-  const [isVisible, setIsVisible] = useState(true);
+  const [modalYear, setModalYear] = useState<number>( year ?? new Date().getFullYear() );
+  const [isVisible, setIsVisible] = useState( true );
 
-  const monthList: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
+  const monthList: number[] = Array.from( { length: 12 }, (_, i) => i + 1 );
 
   /* 월 클릭 시 독서 계획 모달 시작 달 or 종료달 날이 변경 됨*/
   const handleMonthClick = (monthItem: number) => {
     if (pickYear && pickMonth) {
-      pickYear(modalYear)
-      pickMonth(monthItem)
+      pickYear( modalYear )
+      pickMonth( monthItem )
     }
   };
 
   /* 닫히는 모션까지 구현을 위해 닫기를 누른 뒤 시간차를 둠 */
   const handleClose = () => {
-    setIsVisible(false); // 애니메이션 시작
-    setTimeout(() => {
+    setIsVisible( false ); // 애니메이션 시작
+    setTimeout( () => {
       if (modalId) {
-        closeModal(modalId); // exit 끝난 후 진짜 제거
+        closeModal( modalId ); // exit 끝난 후 진짜 제거
       }
-    }, 250); // exit duration과 맞추기
+    }, 250 ); // exit duration과 맞추기
   };
 
   return (
@@ -56,7 +56,7 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
                 className="flex-1 text-modal_Pick_Calendar_Year_Handler_Text"
                 onClick={() => {
                   if (modalYear !== undefined) {
-                    setModalYear((prev) => prev - 1)
+                    setModalYear( (prev) => prev - 1 )
                   }
                 }}
               >
@@ -70,7 +70,7 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
               <button
                 className="flex-1 text-modal_Pick_Calendar_Year_Handler_Text"
                 onClick={() => {
-                  setModalYear((prev) => prev + 1)
+                  setModalYear( (prev) => prev + 1 )
                 }}
               >
                 &gt;
@@ -78,17 +78,17 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
             </div>
             <ul
               className="grid grid-cols-[repeat(3,_minmax(70px,_1fr))] grid-rows-[repeat(4,_minmax(0px,_1fr))] gap-4 ">
-              {monthList.map((monthItem, i) => (
+              {monthList.map( (monthItem, i) => (
                 <li
                   key={i}
                   className="flex cursor-pointer justify-center items-center bg-modal_Pick_Calendar_Month_Bg p-2 rounded-lg
                   hover:brightness-95
                   active:brightness-90 active:scale-90 transition-[transform, background] duration-100 ease-in-out"
-                  onClick={() => handleMonthClick(monthItem)}
+                  onClick={() => handleMonthClick( monthItem )}
                 >
                   {monthItem}월
                 </li>
-              ))}
+              ) )}
             </ul>
           </div>
           <div

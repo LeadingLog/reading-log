@@ -1,5 +1,5 @@
 import ItemTimer from "./ItemTimer.tsx";
-import {usePageStore} from "../../../store/pageStore.ts";
+import { usePageStore } from "../../../store/pageStore.ts";
 
 export default function BoxTimer() {
   const { params } = usePageStore();

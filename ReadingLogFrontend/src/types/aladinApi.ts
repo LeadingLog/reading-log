@@ -16,6 +16,6 @@ export interface BookSearchResultProps {
   bookSearchResultList: ReadingListAddBody[];
   searchValue: string;
   isLoading?: boolean;
-  totalResults : number
+  totalResults: number
 }
 

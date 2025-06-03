@@ -4,12 +4,12 @@ import { fetchMonthReadingListParams } from "../types/monthReadingList.ts";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const fetchMonthReadingList = async ({
-                                                  userId,
-                                                  year,
-                                                  month,
-                                                  page,
-                                                  size,
-                                                }: fetchMonthReadingListParams) => {
+                                              userId,
+                                              year,
+                                              month,
+                                              page,
+                                              size,
+                                            }: fetchMonthReadingListParams) => {
 
   const { data } = await axios.get(
     `${serverUrl}/readinglist/yymm`,

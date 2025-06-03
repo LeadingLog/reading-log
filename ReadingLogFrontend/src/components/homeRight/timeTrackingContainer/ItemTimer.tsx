@@ -6,20 +6,20 @@ import { motion } from "framer-motion";
 
 export default function ItemTimer() {
 
-  const {openModal, closeAllModals} = useModalStore();
-  const {pageData, setRightContent} = usePageStore();
+  const { openModal, closeAllModals } = useModalStore();
+  const { pageData, setRightContent } = usePageStore();
 
   // 독서 종료 모달
   const stopTimer = () => {
-    openModal("ModalNotice", {
+    openModal( "ModalNotice", {
       title: "독서를 종료하시나요?",
       subTitle: "종료 시 시간이 저장돼요",
       cancelText: "아니요 더 읽을래요!",
       confirmText: "네 종료할게요!",
       reverseBtn: true,
       onConfirm: () => {
-        setTimeLeft(0)
-        openModal("ModalNotice", {
+        setTimeLeft( 0 )
+        openModal( "ModalNotice", {
           title: "독서시간 저장 완료!",
           subTitle: "수고하셨어요!",
           onlyConfirm: true,
@@ -27,18 +27,18 @@ export default function ItemTimer() {
           onConfirm: () => { // 타이머 컴포넌트 사라짐
             setRightContent(
               'TimeTracking',
-              {TimeTracking: {tab: 'onlyMonthReadingList'}}, // 파라미터,
+              { TimeTracking: { tab: 'onlyMonthReadingList' } }, // 파라미터,
             )
             closeAllModals()
           }
-        })
+        } )
       }
-    })
+    } )
   }
 
   // 타이머 시간 표시
 
-  const [timeLeft, setTimeLeft] = useState(pageData.time || 0);
+  const [timeLeft, setTimeLeft] = useState( pageData.time || 0 );
   const radius = 60;
   const circumference = 2 * Math.PI * radius;
   const progress =
@@ -46,11 +46,11 @@ export default function ItemTimer() {
       ? circumference * (timeLeft / pageData.time)
       : 0;
   // pageData.time이 바뀔 경우 초기화
-  useEffect(() => {
-    setTimeLeft(pageData.time || 0);
-  }, [pageData.time]);
+  useEffect( () => {
+    setTimeLeft( pageData.time || 0 );
+  }, [pageData.time] );
 
-  useEffect(() => {
+  useEffect( () => {
     // if (timeLeft <= 0) {
     //   setTimeLeft(0);
     //   openModal("ModalNotice", {
@@ -62,12 +62,12 @@ export default function ItemTimer() {
     //   return;
     // }
 
-    const interval = setInterval(() => {
-      setTimeLeft(prev => Math.max(prev - 1, 0));
-    }, 1000);
+    const interval = setInterval( () => {
+      setTimeLeft( prev => Math.max( prev - 1, 0 ) );
+    }, 1000 );
 
-    return () => clearInterval(interval);
-  }, [timeLeft, openModal]);
+    return () => clearInterval( interval );
+  }, [timeLeft, openModal] );
 
   return (
     // 독서 타임 트랙킹 - 타이머 인 경우
@@ -83,18 +83,18 @@ export default function ItemTimer() {
             strokeDasharray={circumference} // 원의 총 길이
             strokeDashoffset={progress} // 시간이 지남에 따라 점점 사라짐
             strokeLinecap="square"
-            animate={{strokeDashoffset: circumference * (timeLeft / (pageData.time ?? 0))}}
-            transition={{duration: 1, ease: "linear"}} // 부드러운 감소 효과
+            animate={{ strokeDashoffset: circumference * (timeLeft / (pageData.time ?? 0)) }}
+            transition={{ duration: 1, ease: "linear" }} // 부드러운 감소 효과
             className="stroke-timeLeft_Bg"
-            style={{transform: "rotate(-90deg)", transformOrigin: "center"}} // 시작 위치를 상단으로 변경
+            style={{ transform: "rotate(-90deg)", transformOrigin: "center" }} // 시작 위치를 상단으로 변경
           />
         </svg>
         {/* 시간 표시 */}
         <span className="flex justify-center items-end flex-1 text-2xl">{pageData.time || '시간 값 오류'}분</span>
         <div className="flex gap-2 flex-1 justify-center">
-          <p className="text-6xl align-bottom">{String(Math.floor(timeLeft / 60)).padStart(2, '0')}</p>
+          <p className="text-6xl align-bottom">{String( Math.floor( timeLeft / 60 ) ).padStart( 2, '0' )}</p>
           <span className="text-5xl self-start">:</span>
-          <p className="text-6xl self-start">{String(timeLeft % 60).padStart(2, '0')}</p>
+          <p className="text-6xl self-start">{String( timeLeft % 60 ).padStart( 2, '0' )}</p>
         </div>
         {/* 정지 버튼 */}
         <div className="flex flex-1 mb-4 gap-5 justify-center items-center ">
