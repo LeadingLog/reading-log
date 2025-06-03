@@ -3,12 +3,10 @@ import { useModalStore } from "../../../store/modalStore.ts";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../../types/monthReadingList.ts";
 import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
-import { useDateStore } from "../../../store/useDateStore.ts";
 
 export default function BoxThisMonthReadingList() {
 
   const { openModal } = useModalStore();
-  const { year, month } = useDateStore(); // Zustand에서 년도 정보 가져오기
 
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState(true); // 더 불러올 데이터가 있는지 여부
@@ -28,11 +26,11 @@ export default function BoxThisMonthReadingList() {
     })
   }
 
-  const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchThisMonthReadingListParams) => {
+  const searchThisMonthReadingList = async ({ userId, page, size }: fetchThisMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
     try {
       setIsLoading(true);
-      const data = await fetchThisMonthReadingList({ userId, year, month, page, size });
+      const data = await fetchThisMonthReadingList({ userId, page, size });
       // 받아온 독서상태별로 데이터 순서 정렬
       const sortedList = data.monthlyReadingList.sort((a : monthReadingListItem, b : monthReadingListItem) => {
         return readOrder[a.bookStatus] - readOrder[b.bookStatus];
@@ -41,7 +39,7 @@ export default function BoxThisMonthReadingList() {
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore(!isLastPage);
     } catch (error) {
-      console.error("쿼리 테스트 에러:", error);
+      console.error("이번달 독서 리스트 가져오기 실패", error);
       setHasMore(false); // 더 이상 시도하지 않도록 설정
     } finally {
       setIsLoading(false); // 검색 완료 후 로딩 상태 해제
@@ -49,7 +47,7 @@ export default function BoxThisMonthReadingList() {
   };
 
   useEffect(() => {
-    searchThisMonthReadingList({ userId: 1, year, month, page, size: 20 });
+    searchThisMonthReadingList({ userId: 1, page, size: 20 });
   }, [page]);
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>(null);
