@@ -7,7 +7,7 @@ import axios from "axios";
 
 const ModalMyPage: React.FC<ModalMyPageProps> = ({modalId}) => {
   const {openModal, closeModal, closeAllModals} = useModalStore();
-  const {nickname, user_id: userId, email} = useUserStore();
+  const {nickname, userId, email} = useUserStore();
   const navigate = useNavigate();
   const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
 

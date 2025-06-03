@@ -15,7 +15,7 @@ export default function MainBookSearch() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const { user_id } = useUserStore()
+  const { userId } = useUserStore();
 
   // 검색바를 클릭하면 실행
   const searchFocus = () => {
@@ -44,10 +44,10 @@ export default function MainBookSearch() {
     if (isFetching) return;
     setIsFetching(true);
     try {
-      const response = await fetchBooks( user_id ?? 0 ,query, 1);
+      const response = await fetchBooks( userId ?? 0 ,query, 1);
       if (response.data && Array.isArray(response.data.item)) {
         const items = response.data.item.map((item: AladinApiItem) => ({
-          userId: user_id ?? 0,
+          userId: userId ?? 0,
           bookTitle: item.title,
           author: item.author,
           isbn13: item.isbn13,
