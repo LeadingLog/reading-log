@@ -1,5 +1,5 @@
 export interface ReadingListAddBody {
-  userId: number;
+  userId: number | null;
   bookTitle: string;
   author: string;
   isbn13?: string;

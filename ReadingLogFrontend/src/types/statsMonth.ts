@@ -1,6 +1,6 @@
 // 월별 통계 요청 파라미터 타입
 export interface fetchStatsMonthApiParams {
-  userId?: number;
+  userId: number | null;
   year?: number;
   month?: number;
 }

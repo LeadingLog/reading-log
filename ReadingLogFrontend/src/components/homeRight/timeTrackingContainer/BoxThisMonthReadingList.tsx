@@ -3,10 +3,12 @@ import { useModalStore } from "../../../store/modalStore.ts";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../../types/monthReadingList.ts";
 import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
+import { useUserStore } from "../../../store/userStore.ts";
 
 export default function BoxThisMonthReadingList() {
 
   const { openModal } = useModalStore();
+  const { userId } = useUserStore()
 
   const [page, setPage] = useState<number>( 0 );
   const [hasMore, setHasMore] = useState( true ); // 더 불러올 데이터가 있는지 여부
@@ -47,7 +49,7 @@ export default function BoxThisMonthReadingList() {
   };
 
   useEffect( () => {
-    searchThisMonthReadingList( { userId: 1, page, size: 20 } );
+    searchThisMonthReadingList( { userId, page, size: 20 } );
   }, [page] );
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>( null );

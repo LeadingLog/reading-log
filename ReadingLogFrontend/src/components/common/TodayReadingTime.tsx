@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { fetchTodayReadingTime } from "../../api/todayReadingTimeApi.ts";
 import { fetchTodayReadingTimeApiParams } from "../../types/todayReadingTime.ts";
 import { usePageStore } from "../../store/pageStore.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 export default function TodayReadingTime() {
 
   const { params } = usePageStore()
+  const { userId } = useUserStore()
   const today = new Date();
 
   const [todayReadingTimeHour, setTodayReadingTimeHour] = useState( 0 )
@@ -32,7 +34,7 @@ export default function TodayReadingTime() {
   }
 
   useEffect( () => {
-    searchTodayReadingTime( { userId: 1 } )
+    searchTodayReadingTime( { userId } )
   }, [params] );
 
   return (

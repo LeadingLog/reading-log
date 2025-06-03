@@ -1,7 +1,7 @@
 import { ReadingListAddBody } from "./readingListAdd.ts";
 
 export interface AladinApiItem {
-  userId: number;
+  userId: number | null;
   title?: string;
   author?: string;
   isbn13?: string;

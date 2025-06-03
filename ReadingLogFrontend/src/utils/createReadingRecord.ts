@@ -2,7 +2,7 @@ import { ReadingRecord } from "../types/readingRecord.ts";
 
 interface CreateReadingRecordParams {
   bookId: number;
-  userId: number;
+  userId: number | null;
   startTimestamp: Date;
   time: {
     hour: number;

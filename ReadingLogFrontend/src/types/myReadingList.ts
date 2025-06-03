@@ -20,7 +20,7 @@ export const readStatus: Record<ReadStatus, string> = {
 
 // 내 독서 목록 요청 파라미터 타입
 export interface fetchMyReadingListParams {
-  userId: number;
+  userId: number | null;
   tabType: TabType;
   size?: number;
   page?: number;

@@ -1,6 +1,6 @@
 // 연별 통계 요청 파라미터 타입
 export interface fetchStatsYearApiParams {
-  userId?: number;
+  userId: number | null;
   year?: number;
 }
 

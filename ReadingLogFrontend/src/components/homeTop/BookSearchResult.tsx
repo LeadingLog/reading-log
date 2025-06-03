@@ -15,7 +15,8 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                                                            }) => {
 
   const { openModal, closeAllModals } = useModalStore();
-  console.log( 'ghkrdlsghkrdls', bookSearchResultList )
+  const { userId } = useUserStore();
+
   /* 무한 스크롤 관련 */
   const [moreTotalResults, setMoreTotalResults] = useState<number>( totalResults )
   const containerRef = useRef<HTMLLIElement>( null );
@@ -26,14 +27,13 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     if (!query.trim()) return;
     if (isFetching) return;
 
-    const userId = 1
     setIsFetching( true );
     if (totalResults === moreBookList.length) return;
     try {
       const response = await fetchBooks( userId, query, page ); // 페이지 번호로 요청
       if (response.data && Array.isArray( response.data.item )) {
         const items = response.data.item.map( (item: ReadingListAddBody) => ({
-          userId: userId ?? 0,
+          userId: userId,
           bookTitle: item.bookTitle,
           author: item.author,
           isbn13: item.isbn13,
@@ -87,7 +87,6 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     };
   }, [searchPage, searchValue, moreBookList.length, isLoading] );
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
-  const { userId } = useUserStore();
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
 
   const ConfirmButton = () => {
@@ -108,7 +107,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   const addInterested = async (item: ReadingListAddBody) => {
     console.log( item )
     const ReadingListAddBodyList: ReadingListAddBody = {
-      userId: userId ?? 0,
+      userId: userId,
       bookTitle: item.bookTitle,
       author: item.author,
       isbn13: item.isbn13,

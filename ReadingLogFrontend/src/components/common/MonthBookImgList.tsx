@@ -8,6 +8,7 @@ import { useModalStore } from "../../store/modalStore.ts";
 import { fetchMonthReadingListParams, monthReadingListItem, readOrder } from "../../types/monthReadingList.ts";
 import { useDateStore } from "../../store/useDateStore.ts";
 import { fetchMonthReadingList } from "../../api/monthReadingListApi.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 export default function BookImgList() {
   const [page, setPage] = useState<number>( 0 );
@@ -16,6 +17,7 @@ export default function BookImgList() {
   const { openModal } = useModalStore();
 
   const { year, month } = useDateStore();
+  const { userId } = useUserStore();
 
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
@@ -45,11 +47,11 @@ export default function BookImgList() {
     setThisMonthReadingList( [] );
     setPage( 0 );
     setHasMore( true );
-    searchThisMonthReadingList( { userId: 1, year, month, page: 0, size: 20 } );
+    searchThisMonthReadingList( { userId, year, month, page: 0, size: 20 } );
   }, [month, year] );
 
   useEffect( () => {
-    searchThisMonthReadingList( { userId: 1, year, month, page, size: 20 } );
+    searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
   }, [page] );
 
   const openModalBookPlan = (item: monthReadingListItem) => {

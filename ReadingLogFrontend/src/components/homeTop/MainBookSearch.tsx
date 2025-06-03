@@ -44,10 +44,10 @@ export default function MainBookSearch() {
     if (isFetching) return;
     setIsFetching( true );
     try {
-      const response = await fetchBooks( userId ?? 0, query, 1 );
+      const response = await fetchBooks( userId, query, 1 );
       if (response.data && Array.isArray( response.data.item )) {
         const items = response.data.item.map( (item: AladinApiItem) => ({
-          userId: userId ?? 0,
+          userId: userId,
           bookTitle: item.title,
           author: item.author,
           isbn13: item.isbn13,

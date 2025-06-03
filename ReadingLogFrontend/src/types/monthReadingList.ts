@@ -5,7 +5,7 @@ import { ReadStatus } from "./readStatus.ts";
 
 export interface monthReadingListItem {
   bookId: number;
-  userId: number;
+  userId: number | null;
   bookTitle: string;
   author: string;
   isbn13?: string;
@@ -18,7 +18,7 @@ export interface monthReadingListItem {
 
 // 독서 리스트 요청 파라미터 타입
 export interface fetchMonthReadingListParams {
-  userId: number,
+  userId: number | null;
   year: number,
   month: number,
   page?: number,
@@ -27,7 +27,7 @@ export interface fetchMonthReadingListParams {
 
 // 독서 리스트 요청 파라미터 타입
 export interface fetchThisMonthReadingListParams {
-  userId: number,
+  userId: number | null;
   page?: number,
   size?: number
 }

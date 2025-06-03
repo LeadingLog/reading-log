@@ -78,7 +78,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   const ReadingListAdd = async () => {
     setIsLoading( true )
     const ReadingListAddBodyList: ReadingListAddBody = {
-      userId: userId ?? 0,
+      userId: userId,
       bookTitle: bookTitle ?? "",
       author: bookSubTitle ?? "",
       isbn13: isbn13,
@@ -186,7 +186,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   /* 관심도서로 추가 api */
   const addInterested = async () => {
     const ReadingListAddBodyList: ReadingListAddBody = {
-      userId: userId ?? 0,
+      userId: userId,
       bookTitle: bookTitle ?? "",
       author: bookSubTitle ?? "",
       isbn13: isbn13,

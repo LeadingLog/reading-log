@@ -3,10 +3,12 @@ import YearSlideBar from "../../common/YearSlideBar.tsx";
 import { fetchStatsYearApiParams, StatsYearList } from "../../../types/statsYear.ts";
 import { fetchStatsYearApi } from "../../../api/statsYearApi.ts";
 import { useDateStore } from "../../../store/useDateStore.ts";
+import { useUserStore } from "../../../store/userStore.ts";
 
 export default function StatsYear() {
 
-  const { year } = useDateStore()
+  const { year } = useDateStore();
+  const { userId } = useUserStore();
 
 
   /* 통계 정보 */
@@ -54,7 +56,7 @@ export default function StatsYear() {
   }
 
   useEffect( () => {
-    searchStatsYear( { userId: 1, year } )
+    searchStatsYear( { userId, year } )
   }, [year] );
 
 

@@ -8,6 +8,7 @@ import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
 import { fetchMyReadingListSearch } from "../../api/myReadingListSearchQueryApi.ts";
 import { ReadingListAddBody } from "../../types/readingListAdd.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 interface BookImgListProps {
   isActive: TabType;
@@ -21,13 +22,14 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
   const [hasMore, setHasMore] = useState( true );
   const [isLoading, setIsLoading] = useState( false );
   const { openModal } = useModalStore();
+  const { userId } = useUserStore()
 
 // 내 독서 목록 내부 검색 시 코드
   const searchBook = async (query: string) => {
     setIsLoading( true );
     try {
       const data = await fetchMyReadingListSearch( {
-        userId: 1,
+        userId: userId,
         tabType: isActive,
         query: query
       } );
@@ -58,7 +60,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
 
         try {
           const data = await fetchMyReadingList( {
-            userId: 1,
+            userId: userId,
             tabType: isActive,
             page: 0, // query가 빈 값이 되면 항상 첫 페이지부터 로드
             size: 21,
@@ -110,7 +112,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
       setIsLoading( true );
       try {
         const data = await fetchMyReadingList( {
-          userId: 1,
+          userId: userId,
           tabType: isActive,
           page,
           size: 21,

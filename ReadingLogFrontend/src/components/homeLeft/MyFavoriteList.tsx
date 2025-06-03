@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { TabName } from "../../types/tabName.ts";
 import { fetchMyFavoriteListParams } from "../../types/myFavoriteList.ts";
 import { fetchMyFavoriteList } from "../../api/myFavoriteListApi.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 interface Props {
   activeTab: TabName;
@@ -17,6 +18,7 @@ export default function MyFavoriteList({ activeTab }: Props) {
   const [isLoading, setIsLoading] = useState( false );
 
   const { openModal } = useModalStore();
+  const { userId } = useUserStore()
 
   const openModalBookPlan = (item: AladinApiItem) => {
     openModal( "ModalBookPlan", {
@@ -49,7 +51,7 @@ export default function MyFavoriteList({ activeTab }: Props) {
 
   useEffect( () => {
     if (activeTab === "관심 도서") {
-      searchMyFavoriteList( { userId: 1, page, size: 21 } );
+      searchMyFavoriteList( { userId, page, size: 21 } );
     }
   }, [page, activeTab] );
 
