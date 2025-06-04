@@ -32,6 +32,9 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Intege
 
 	// 유져 아이디 별로 필터링
 	Page<ReadingList> findByUserId(Integer userId, Pageable pageable);
+	
+	// 유져 아이디 별 관심 도서 제외 모든 책 
+	Page<ReadingList> findByUserIdAndBookStatusNot(Integer userId, BookStatus bookStatus, Pageable pageable);
 
 	// 유저ID & 독서상태에따라 필터링
 	Page<ReadingList> findByUserIdAndBookStatus(Integer userId, BookStatus bookStatus, Pageable pageable);
