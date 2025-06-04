@@ -177,7 +177,7 @@ public class ReadingListService {
 	    }
 
 	    if (status == null) {
-	        return readingListRepository.findByUserId(userId, pageable);
+	        return readingListRepository.findByUserIdAndBookStatusNot(userId, BookStatus.INTERESTED, pageable);
 	    } else {
 	        return readingListRepository.findByUserIdAndBookStatus(userId, status, pageable);
 	    }
