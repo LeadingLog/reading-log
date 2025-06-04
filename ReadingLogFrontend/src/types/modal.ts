@@ -22,7 +22,7 @@ export type ModalData = {
   /* 책 정보 관련 */
   cover?: string // 책 표지
   bookTitle?: string; // 책 제목
-  bookSubTitle?: string; // 책 저자
+  author?: string; // 책 저자
   bookLink?: string // 알라딘 책 정보 페이지로 가기
   isbn13?: string;
   bookId?: number // 책 고유 ID

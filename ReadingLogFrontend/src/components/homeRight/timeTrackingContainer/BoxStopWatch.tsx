@@ -14,7 +14,7 @@ export default function BoxStopWatch() {
           <span className="text-2xl">
             {bookData?.bookTitle}
           </span>
-          <span onClick={stop}>{bookData?.bookSubTitle}</span>
+          <span onClick={stop}>{bookData?.author}</span>
         </section>
         <section className="flex flex-1 gap-6">
           <article className="flex-1 bg-trackingBook_Bg rounded-xl">

@@ -1,8 +1,8 @@
 import IconReading from "../../assets/Icon-reading.svg?react";
 import IconReadComplete from "../../assets/Icon-readcomplete.svg?react";
 import IconFavorite from "../../assets/Icon-favorite.svg?react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { readStatus, TabType } from "../../types/myReadingList.ts";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { BookImgListProps, readStatus } from "../../types/myReadingList.ts";
 import { fetchMyReadingList } from "../../api/myReadingListApi.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
@@ -10,34 +10,31 @@ import { fetchMyReadingListSearch } from "../../api/myReadingListSearchQueryApi.
 import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
-interface BookImgListProps {
-  isActive: TabType;
-  query?: string;
-  inputRef?: React.RefObject<HTMLInputElement | null>;
-}
-
-export default function BookImgList({ isActive, query = '', inputRef }: BookImgListProps) {
+export default function BookImgList({ MyReadingListTabType, query = '', inputRef }: BookImgListProps) {
   const [page, setPage] = useState<number>( 0 );
   const [myReadingList, setMyReadingList] = useState<ReadingListAddBody[]>( [] );
   const [hasMore, setHasMore] = useState( true );
   const [isLoading, setIsLoading] = useState( false );
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
-
+  const [isFetching, setIsFetching] = useState<boolean>( false );
 // 내 독서 목록 내부 검색 시 코드
+
+  const [isSearching, setIsSearching] = useState( false );
+
   const searchBook = async (query: string) => {
-    setIsLoading( true );
+    if (isFetching) return;
+    setIsSearching( true );
+    setIsFetching( true );
     try {
+
       const data = await fetchMyReadingListSearch( {
         userId: userId,
-        tabType: isActive,
+        MyReadingListTabType: MyReadingListTabType,
         query: query
       } );
-      const result: ReadingListAddBody[] = data.readingList.filter( (item: ReadingListAddBody) =>
-        item.bookTitle.includes( query ) || item.author.includes( query )
-      );
-      setMyReadingList( result ); // 이 줄이 주석 처리되어 있어 실제로 목록이 업데이트되지 않았습니다
-
+      setMyReadingList( data.readingList );
+      setIsFetching( false );
     } catch (error) {
       console.error( "리스트 로딩 실패:", error );
     } finally {
@@ -45,7 +42,14 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
     }
   };
 
+  /* 내 독서 목록 탭을 처음 클릭 시 timeout 실행을 방지 하고자 둠 */
+  const isFirstRender = useRef( true );
+
   useEffect( () => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return; // 첫 렌더링에서는 아무 것도 하지 않음
+    }
     const timeout = setTimeout( async () => {
       if (query !== "" && inputRef) {
         // 검색어가 있을 때
@@ -54,6 +58,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
         await searchBook( query );
       } else {
         // 검색어가 없을 때 (초기 상태로 되돌림)
+        setIsSearching( false );
         setPage( 0 );
         setHasMore( true );
         setIsLoading( true );
@@ -61,7 +66,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
         try {
           const data = await fetchMyReadingList( {
             userId: userId,
-            tabType: isActive,
+            MyReadingListTabType: MyReadingListTabType,
             page: 0, // query가 빈 값이 되면 항상 첫 페이지부터 로드
             size: 21,
           } );
@@ -78,7 +83,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
           setIsLoading( false );
         }
       }
-    }, 300 );
+    }, 500 );
 
     // 타이머 정리
     return () => clearTimeout( timeout );
@@ -90,7 +95,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
     openModal( "ModalBookPlan", {
       cover: item.coverImgUrl,
       bookTitle: item.bookTitle,
-      bookSubTitle: item.author,
+      author: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
       bookLink: item.link,
@@ -102,22 +107,30 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
     setMyReadingList( [] );
     setPage( 0 );
     setHasMore( true );
-  }, [isActive] );
+
+    skipObserver.current = true;
+    const timer = setTimeout( () => {
+      skipObserver.current = false;
+    }, 100 ); // 짧게 차단 후 재허용
+
+    return () => clearTimeout( timer );
+  }, [MyReadingListTabType] );
 
   // 페이지 또는 탭 변경 시 데이터 로딩
   useEffect( () => {
-    if (!hasMore) return;
+    if (isSearching || (page > 0 && !hasMore)) return;
 
     const loadMyReadingList = async () => {
       setIsLoading( true );
       try {
         const data = await fetchMyReadingList( {
           userId: userId,
-          tabType: isActive,
+          MyReadingListTabType: MyReadingListTabType,
           page,
           size: 21,
         } );
 
+        console.log( '페이지 또는 탭 변경시 데이터 로딩' )
         setMyReadingList( (prev) =>
           page === 0 ? data.readingList : [...prev, ...data.readingList]
         );
@@ -133,13 +146,15 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
     };
 
     loadMyReadingList();
-  }, [page, isActive] );
+  }, [page, MyReadingListTabType, isSearching] );
 
   // Intersection Observer 설정 스크롤 시 마지막 부분을 확인용
+
+  const skipObserver = useRef( false ); // 탭 변경시 옵져버 기능을 중지 하기 위한 것
   const myReadingListObserver = useRef<IntersectionObserver | null>( null );
   const lastItemRef = useCallback(
     (node: HTMLLIElement | null) => {
-      if (isLoading || !hasMore) return;
+      if (isLoading || !hasMore || isSearching) return;
 
       if (myReadingListObserver.current) {
         myReadingListObserver.current.disconnect();
@@ -147,6 +162,12 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
 
       myReadingListObserver.current = new IntersectionObserver( (entries) => {
         if (entries[0].isIntersecting) {
+          if (skipObserver.current) {
+            // observer 동작 무시 (탭 변경 직후)
+            skipObserver.current = false; // 다음부터는 다시 동작하게 함
+            return;
+          }
+
           setPage( (prev) => prev + 1 );
         }
       } );
@@ -194,7 +215,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
           <span className="text-2xl font-bold">읽고 싶은 도서를 추가해보세요!</span>
         </li>
       )}
-      {hasMore && (
+      {hasMore && !isSearching && (
         <li
           ref={lastItemRef}
           className="invisible h-1 col-span-3"

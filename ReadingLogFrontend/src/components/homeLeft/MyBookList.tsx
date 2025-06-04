@@ -2,16 +2,16 @@ import IconSearch from "../../assets/Icon-search.svg?react";
 import BookImgList from "../common/BookImgList.tsx";
 import React, { useRef, useState } from "react";
 import CustomScrollbar from "../common/CustomScrollbar.tsx";
-import { tabLabels, TabType } from "../../types/myReadingList.ts";
+import { MyReadingListTabLabels, MyReadingListTabType } from "../../types/myReadingList.ts";
 
 export default function MyBookList() {
 
-  const [isActive, setIsActive] = useState<TabType>( 0 )
+  const [isActiveMyReadingListType, setIsActiveMyReadingListType] = useState<MyReadingListTabType>( 0 )
 
-  const tabNumber: TabType[] = [0, 1, 2, 3];
+  const MyReadingListTabNumber: MyReadingListTabType[] = [0, 1, 2, 3];
 
-  const changeType = (type: TabType) => {
-    setIsActive( type )
+  const changeType = (type: MyReadingListTabType) => {
+    setIsActiveMyReadingListType( type )
   }
 
   const [searchValue, setSearchValue] = useState<string>( "" )
@@ -27,14 +27,14 @@ export default function MyBookList() {
     <section className="flex flex-col flex-1 gap-4 overflow-hidden">
       {/* 전체, 독서중, 완독, 읽기전 탭 리스트 */}
       <ul className="flex gap-5">
-        {tabNumber.map( (type) => (
+        {MyReadingListTabNumber.map( (type) => (
           <li
             key={type}
             onClick={() => changeType( type )}
-            className={`${isActive === type ? 'font-semibold text-myBookList_ActiveTab_Text bg-myBookList_ActiveTab_Bg' : 'text-myBookList_InActiveTab_Text bg-myBookList_InActiveTab_Bg'}
+            className={`${isActiveMyReadingListType === type ? 'font-semibold text-myBookList_ActiveTab_Text bg-myBookList_ActiveTab_Bg' : 'text-myBookList_InActiveTab_Text bg-myBookList_InActiveTab_Bg'}
               flex-1 text-xl cursor-pointer px-2 py-1 text-center rounded-full`}
           >
-            {tabLabels[type]}
+            {MyReadingListTabLabels[type]}
           </li>
         ) )}
       </ul>
@@ -70,7 +70,7 @@ export default function MyBookList() {
         scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color"
         // scrollbarWidth=""
       >
-        <BookImgList isActive={isActive} query={searchValue} inputRef={inputRef}/>
+        <BookImgList MyReadingListTabType={isActiveMyReadingListType} query={searchValue} inputRef={inputRef}/>
       </CustomScrollbar>
     </section>
   )

@@ -1,5 +1,4 @@
 // 독서 상태
-import { ReadStatus } from "./readStatus.ts";
 
 // 월별 독서 리스트 타입
 
@@ -11,7 +10,7 @@ export interface monthReadingListItem {
   isbn13?: string;
   link?: string;
   cover?: string;
-  bookStatus: ReadStatus;
+  bookStatus: 'IN_PROGRESS' | 'NOT_STARTED' | 'COMPLETED' | 'INTERESTED';
   readStartDt?: string;
   readEndDt?: string;
 }
@@ -33,8 +32,9 @@ export interface fetchThisMonthReadingListParams {
 }
 
 // 정렬 우선순위 객체
-export const readOrder: Record<ReadStatus, number> = {
+export const readOrder: Record<'IN_PROGRESS' | 'NOT_STARTED' | 'COMPLETED' | 'INTERESTED', number> = {
   IN_PROGRESS: 0, // 독서 중
   NOT_STARTED: 1, // 읽기 전
-  COMPLETED: 2 // 완독
+  COMPLETED: 2, // 완독
+  INTERESTED: 3 // 관심도서
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { useModalStore } from "../../store/modalStore.ts";
-import { BookSearchResultProps } from "../../types/aladinApi";
+import { AladinApiItem, BookSearchResultProps } from "../../types/aladinApi";
 import { fetchBooks } from "../../api/aladinApi.ts";
 import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 import { readingListAddApi } from "../../api/readingListAddAPI.ts";
@@ -32,13 +32,13 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     try {
       const response = await fetchBooks( userId, query, page ); // 페이지 번호로 요청
       if (response.data && Array.isArray( response.data.item )) {
-        const items = response.data.item.map( (item: ReadingListAddBody) => ({
+        const items = response.data.item.map( (item: AladinApiItem) => ({
           userId: userId,
-          bookTitle: item.bookTitle,
+          bookTitle: item.title,
           author: item.author,
           isbn13: item.isbn13,
           link: item.link,
-          coverImgUrl: item.coverImgUrl,
+          coverImgUrl: item.cover,
           bookStatus: item.bookStatus,
         }) );
         setMoreBookList( prev => [...prev, ...items] );
@@ -157,7 +157,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     openModal( "ModalBookPlan", {
       cover: item.coverImgUrl, // 여기 추가
       bookTitle: item.bookTitle,
-      bookSubTitle: item.author,
+      author: item.author,
       isbn13: item.isbn13,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",

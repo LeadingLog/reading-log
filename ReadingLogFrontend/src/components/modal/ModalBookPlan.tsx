@@ -7,7 +7,7 @@ import { readingListAddApi } from "../../api/readingListAddAPI.ts";
 import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
-const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSubTitle, isbn13, cover, bookLink }) => {
+const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author, isbn13, cover, bookLink }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
   const { userId } = useUserStore();
 
@@ -80,7 +80,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
     const ReadingListAddBodyList: ReadingListAddBody = {
       userId: userId,
       bookTitle: bookTitle ?? "",
-      author: bookSubTitle ?? "",
+      author: author ?? "",
       isbn13: isbn13,
       link: bookLink,
       coverImgUrl: cover,
@@ -188,7 +188,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
     const ReadingListAddBodyList: ReadingListAddBody = {
       userId: userId,
       bookTitle: bookTitle ?? "",
-      author: bookSubTitle ?? "",
+      author: author ?? "",
       isbn13: isbn13,
       link: bookLink,
       coverImgUrl: cover,
@@ -291,7 +291,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
               <p className="absolute top-1 bottom-1 left-0 w-1 bg-title_Marker"></p>
               <span className="text-lg font-semibold text-modal_BookPlan_Book_Title_Text ml-2">{bookTitle}</span>
             </span>
-            <p className="text-modal_BookPlan_Book_Sub_Title_Text">{bookSubTitle}</p>
+            <p className="text-modal_BookPlan_Book_Sub_Title_Text">{author}</p>
           </div>
 
           <section className="relative flex gap-4">
