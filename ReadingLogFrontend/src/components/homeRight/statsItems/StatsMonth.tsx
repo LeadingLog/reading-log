@@ -7,10 +7,12 @@ import { useEffect, useState } from "react";
 import { fetchStatsMonthApi } from "../../../api/statsMonthApi.ts";
 import { fetchStatsMonthApiParams, StatsMonthList } from "../../../types/statsMonth.ts";
 import { useDateStore } from "../../../store/useDateStore.ts";
+import { useUserStore } from "../../../store/userStore.ts";
 
 export default function StatsMonth() {
 
   const { year, month } = useDateStore();
+  const { userId } = useUserStore()
   const [bookGraphList, setBookGraphList] = useState<StatsMonthList[]>( [] )
 
   const searchStatsMonthList = async ({ userId, year, month }: fetchStatsMonthApiParams) => {
@@ -57,7 +59,7 @@ export default function StatsMonth() {
   }
 
   useEffect( () => {
-    searchStatsMonthList( { userId: 1, year, month } )
+    searchStatsMonthList( { userId, year, month } )
   }, [year, month] );
 
   return (

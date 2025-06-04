@@ -3,10 +3,12 @@ import { useModalStore } from "../../../store/modalStore.ts";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../../types/monthReadingList.ts";
 import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
+import { useUserStore } from "../../../store/userStore.ts";
 
 export default function BoxThisMonthReadingList() {
 
   const { openModal } = useModalStore();
+  const { userId } = useUserStore()
 
   const [page, setPage] = useState<number>( 0 );
   const [hasMore, setHasMore] = useState( true ); // 더 불러올 데이터가 있는지 여부
@@ -14,12 +16,12 @@ export default function BoxThisMonthReadingList() {
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
   /* 독서 타임 트래킹 모달 오픈 */
-  const openModaTrackingPlan = (item: monthReadingListItem) => {
+  const openModalTrackingPlan = (item: monthReadingListItem) => {
     openModal( 'ModalTrackingPlan', {
       bookId: item.bookId,
-      bookTitle: item.bookTitle,
+      bookTitle: item.title,
       bookSubTitle: item.author,
-      cover: item.coverImgUrl,
+      cover: item.cover,
       bookLink: item.link,
       cancelText: '닫기',
       confirmText: '독서 시작',
@@ -47,7 +49,7 @@ export default function BoxThisMonthReadingList() {
   };
 
   useEffect( () => {
-    searchThisMonthReadingList( { userId: 1, page, size: 20 } );
+    searchThisMonthReadingList( { userId, page, size: 20 } );
   }, [page] );
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>( null );
@@ -85,9 +87,9 @@ export default function BoxThisMonthReadingList() {
         <li
           key={idx}
           className="cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-          onClick={() => openModaTrackingPlan( item )}
+          onClick={() => openModalTrackingPlan( item )}
         >
-          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.bookTitle}</span>
+          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.title}</span>
           <ItemReadStatus readStatus={item.bookStatus}/>
         </li>
       ) )}

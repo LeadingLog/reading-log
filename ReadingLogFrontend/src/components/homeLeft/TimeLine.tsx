@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import { fetchTimeLineReadingList } from "../../api/timeLineReadingListApi.ts";
 import { fetchAllReadingTimeParams, fetchTimeLineReadingListParams, TimelineEntry } from "../../types/timeLine.ts";
 import { fetchAllReadingTime } from "../../api/allReadingTimeApi.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 export default function TimeLine() {
 
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   const { year, setMonth } = useDateStore(); // Zustand에서 년도 정보 가져오기
+  const { userId } = useUserStore()
 
   const statsMonth = (month: number) => {
     setRightContent(
@@ -257,11 +259,11 @@ export default function TimeLine() {
   }
 
   useEffect( () => {
-    readingTime( { userId: 1 } )
+    readingTime( { userId } )
   }, [] );
 
   useEffect( () => {
-    searchTimeLineReadingList( { userId: 1, year } );
+    searchTimeLineReadingList( { userId, year } );
   }, [year] );
 
   return (

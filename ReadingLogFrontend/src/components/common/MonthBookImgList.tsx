@@ -8,6 +8,7 @@ import { useModalStore } from "../../store/modalStore.ts";
 import { fetchMonthReadingListParams, monthReadingListItem, readOrder } from "../../types/monthReadingList.ts";
 import { useDateStore } from "../../store/useDateStore.ts";
 import { fetchMonthReadingList } from "../../api/monthReadingListApi.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 export default function BookImgList() {
   const [page, setPage] = useState<number>( 0 );
@@ -16,6 +17,7 @@ export default function BookImgList() {
   const { openModal } = useModalStore();
 
   const { year, month } = useDateStore();
+  const { userId } = useUserStore();
 
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
@@ -45,17 +47,17 @@ export default function BookImgList() {
     setThisMonthReadingList( [] );
     setPage( 0 );
     setHasMore( true );
-    searchThisMonthReadingList( { userId: 1, year, month, page: 0, size: 20 } );
+    searchThisMonthReadingList( { userId, year, month, page: 0, size: 20 } );
   }, [month, year] );
 
   useEffect( () => {
-    searchThisMonthReadingList( { userId: 1, year, month, page, size: 20 } );
+    searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
   }, [page] );
 
   const openModalBookPlan = (item: monthReadingListItem) => {
     openModal( "ModalBookPlan", {
-      cover: item.coverImgUrl,
-      bookTitle: item.bookTitle,
+      cover: item.cover,
+      bookTitle: item.title,
       bookSubTitle: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
@@ -92,7 +94,7 @@ export default function BookImgList() {
           onClick={() => openModalBookPlan( item )}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >
-          <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+          <img src={item.cover} alt={item.title} className="w-full h-full object-cover"/>
           <div
             className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
               ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :
