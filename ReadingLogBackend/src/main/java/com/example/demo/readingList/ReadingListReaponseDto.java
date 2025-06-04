@@ -10,7 +10,7 @@ public class ReadingListReaponseDto {
 	 public static List<Map<String, Object>> convertToDtoList(List<ReadingList> bookList) {
 	        return bookList.stream().map(book -> {
 	            Map<String, Object> bookMap = new LinkedHashMap<>();
-	            bookMap.put("bookID", book.getBookId());
+	            bookMap.put("bookId", book.getBookId());
 	            bookMap.put("bookTitle", book.getBookTitle());
 	            bookMap.put("author", book.getAuthor());
 	            bookMap.put("isbn13", book.getIsbn13());
