@@ -118,8 +118,9 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
           size: 21,
         } );
 
+        console.log(data.readingList)
         setMyReadingList( (prev) =>
-          page === 0 ? data.readingList : [...prev, ...data.readingList]
+          page === 0 ? data.readingList.filter((item: ReadingListAddBody) => item.bookStatus !== "INTERESTED") : [...prev, ...data.readingList]
         );
 
         const isLastPage = data.page.number + 1 >= data.page.totalPages;

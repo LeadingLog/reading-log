@@ -31,13 +31,13 @@ export default function MyFavoriteList({ activeTab }: Props) {
     } );
   };
 
-  const searchMyFavoriteList = async ({ userId, page, size }: fetchMyFavoriteListParams) => {
+  const searchMyFavoriteList = async ({ userId, tabType, page, size }: fetchMyFavoriteListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
     try {
       setIsLoading( true );
-      const data = await fetchMyFavoriteList( { userId, page, size } );
+      const data = await fetchMyFavoriteList( { userId, tabType, page, size } );
 
-      setFavoriteList( (prev) => [...prev, ...data.favoriteList] );
+      setFavoriteList( (prev) => [...prev, ...data.readingList] );
 
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore( !isLastPage );
@@ -51,7 +51,7 @@ export default function MyFavoriteList({ activeTab }: Props) {
 
   useEffect( () => {
     if (activeTab === "관심 도서") {
-      searchMyFavoriteList( { userId, page, size: 21 } );
+      searchMyFavoriteList( { userId, tabType: 4, page, size: 21 } );
     }
   }, [page, activeTab] );
 
