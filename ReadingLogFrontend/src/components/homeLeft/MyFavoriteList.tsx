@@ -1,11 +1,11 @@
 import CustomScrollbar from "../common/CustomScrollbar.tsx";
-import { AladinApiItem } from "../../types/aladinApi.ts";
 import { useModalStore } from "../../store/modalStore.ts";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { TabName } from "../../types/tabName.ts";
 import { fetchMyFavoriteListParams } from "../../types/myFavoriteList.ts";
 import { fetchMyFavoriteList } from "../../api/myFavoriteListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
+import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 
 interface Props {
   activeTab: TabName;
@@ -13,23 +13,23 @@ interface Props {
 
 export default function MyFavoriteList({ activeTab }: Props) {
   const [page, setPage] = useState<number>( 0 );
-  const [favoriteList, setFavoriteList] = useState<AladinApiItem[]>( [] );
+  const [favoriteList, setFavoriteList] = useState<ReadingListAddBody[]>( [] );
   const [hasMore, setHasMore] = useState( true ); // 더 불러올 데이터가 있는지 여부
   const [isLoading, setIsLoading] = useState( false );
 
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
 
-  const openModalBookPlan = (item: AladinApiItem) => {
+  const openModalBookPlan = ((item: ReadingListAddBody) => {
     openModal( "ModalBookPlan", {
-      cover: item.cover,
-      bookTitle: item.title,
+      cover: item.coverImgUrl,
+      bookTitle: item.bookTitle,
       bookSubTitle: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
       bookLink: item.link,
     } );
-  };
+  });
 
   const searchMyFavoriteList = async ({ userId, tabType, page, size }: fetchMyFavoriteListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
@@ -82,13 +82,13 @@ export default function MyFavoriteList({ activeTab }: Props) {
       containerClassName="grid grid-cols-3 gap-6 content-start flex-1"
       scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color"
     >
-      {favoriteList.map( (item: AladinApiItem, idx) => (
+      {favoriteList.map( (item: ReadingListAddBody, idx) => (
         <li
           key={idx}
           onClick={() => openModalBookPlan( item )}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >
-          <img src={item.cover} alt={item.title} className="w-full h-full object-cover"/>
+          <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
         </li>
       ) )}
 

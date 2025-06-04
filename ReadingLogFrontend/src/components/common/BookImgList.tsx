@@ -67,7 +67,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
           } );
 
           // 이전 목록을 완전히 대체 (검색 취소 시 처음부터 다시 로드)
-          setMyReadingList( data.readingList );
+          setMyReadingList( data.readingList.filter( (item: ReadingListAddBody) => item.bookStatus !== "INTERESTED" ) );
 
           const isLastPage = data.page.number + 1 >= data.page.totalPages;
           setHasMore( !isLastPage );
@@ -118,9 +118,9 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
           size: 21,
         } );
 
-        console.log(data.readingList)
+        console.log( data.readingList )
         setMyReadingList( (prev) =>
-          page === 0 ? data.readingList.filter((item: ReadingListAddBody) => item.bookStatus !== "INTERESTED") : [...prev, ...data.readingList]
+          page === 0 ? data.readingList.filter( (item: ReadingListAddBody) => item.bookStatus !== "INTERESTED" ) : [...prev, ...data.readingList]
         );
 
         const isLastPage = data.page.number + 1 >= data.page.totalPages;
