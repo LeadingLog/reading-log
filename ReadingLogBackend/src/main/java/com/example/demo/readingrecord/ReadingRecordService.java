@@ -21,7 +21,7 @@ public class ReadingRecordService {
 
 	// 추가 하기
 	@Transactional
-	public ReadingRecord addRecord(Long bookId, Integer userId, LocalDate readDate, Integer totalTime,
+	public ReadingRecord addRecord(Integer bookId, Integer userId, LocalDate readDate, Integer totalTime,
 			LocalTime startTime, LocalTime endTime) {
 
 		ReadingRecord readingRecord = ReadingRecord.builder().bookId(bookId).userId(userId).readDate(readDate)
@@ -104,6 +104,13 @@ public class ReadingRecordService {
 
 		return resultList;
 	}
+	
+	//사용자별 오늘 읽은 책 시간 
+	public Integer getReadingTotalTimeToday(Integer userId) {
+		    Integer totalTime = readingRecordRepository.findTodayTotalReadingTimeByUser(userId);
+		    return totalTime != null ? totalTime : 0;
+		}
+		
 	
 //	// 사용자의 총 연간>월별>책별>읽은 시간
 //	public List<Map<String, Object>> getTimeYearMonthBookStats(Integer userId) {
