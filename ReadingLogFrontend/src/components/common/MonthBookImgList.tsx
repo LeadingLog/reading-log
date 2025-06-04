@@ -28,7 +28,8 @@ export default function BookImgList() {
       setIsLoading( true );
       const data = await fetchMonthReadingList( { userId, year, month, page, size } );
       // 받아온 독서상태별로 데이터 순서 정렬
-      const sortedList = data.monthlyReadingList.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
+      const filterInterested = data.monthlyReadingList.filter((item:monthReadingListItem) => item.bookStatus !== "INTERESTED")
+      const sortedList = filterInterested.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
         return readOrder[a.bookStatus] - readOrder[b.bookStatus];
       } );
       setThisMonthReadingList( (prev) => [...prev, ...sortedList] )
@@ -47,10 +48,13 @@ export default function BookImgList() {
     setThisMonthReadingList( [] );
     setPage( 0 );
     setHasMore( true );
-    searchThisMonthReadingList( { userId, year, month, page: 0, size: 20 } );
+    if (page === 0) {
+      searchThisMonthReadingList( { userId, year, month, page: 0, size: 20 } );
+    }
   }, [month, year] );
 
   useEffect( () => {
+    if (page === 0) return
     searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
   }, [page] );
 
