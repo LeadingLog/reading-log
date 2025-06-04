@@ -26,6 +26,7 @@ export type ModalData = {
   bookLink?: string // 알라딘 책 정보 페이지로 가기
   isbn13?: string;
   bookId?: number // 책 고유 ID
+  bookStatus?: 'IN_PROGRESS' | 'NOT_STARTED' | 'COMPLETED' | 'INTERESTED';
 
   /* 캘린더 관련 */
   pickYear?: React.Dispatch<React.SetStateAction<number>>;

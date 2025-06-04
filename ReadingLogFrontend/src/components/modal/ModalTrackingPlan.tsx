@@ -4,6 +4,9 @@ import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { motion } from "framer-motion";
 import { usePageStore } from "../../store/pageStore.ts";
 import { ModalTrackingPlanProps } from "../../types/modal.ts";
+import { bookStatusChangeApi } from "../../api/bookStatusChange.ts";
+import { bookStatusChangeBody } from "../../types/bookStatusChange.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 
 const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
@@ -16,9 +19,13 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
                                                                cancelText,
                                                                confirmText,
                                                              }) => {
-  const { closeModal } = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
+  const { closeModal, openModal } = useModalStore(); // Zustand 상태 및 닫기 함수 가져오기
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
+  const { userId } = useUserStore()
+  const [isLoading, setIsLoading] = useState<boolean>( false );
   type TimeChoice = 3 | 30 | 60;
+  console.log(bookId)
+  console.log(typeof bookId)
 
   const [timeChoice, setTimeChoice] = useState<TimeChoice | undefined>( undefined );
 
@@ -35,6 +42,50 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
         return "left-2"; // 기본 위치
     }
   };
+
+  const readingStart = async () => {
+    setIsLoading( true )
+    const bookStatusChangeBodyValue: bookStatusChangeBody = {
+      userId: userId,
+      bookId: bookId ?? null,
+      bookStatus: "IN_PROGRESS"
+    }
+    try {
+      await bookStatusChangeApi( bookStatusChangeBodyValue )
+      setRightContent( 'TimeTracking', {
+          TimeTracking: {
+            tab: isOn ? 'Timer' : 'StopWatch',
+            bookData:
+              {
+                bookId,
+                cover,
+                bookTitle,
+                author
+              }
+          }
+        },
+        {
+          title: `독서 타임 트래킹 - ${isOn ? '타이머' : '스탑워치'}`,
+          time:
+          timeChoice,
+        }
+      );
+      setIsOn( false );
+      if (modalId) { // modalId가 있을 경우에만 closeModal 호출
+        closeModal( modalId );
+      }
+    } catch (error) {
+      console.error( '독서 목록 추가 실패', error )
+      openModal( 'ModalNotice', {
+        title: '요청 실패',
+        subTitle: `${error}`,
+        onlyClose: true,
+        withMotion: true,
+      } )
+    } finally {
+      setIsLoading( false )
+    }
+  }
 
 
   const [isOn, setIsOn] = useState( false ) // 타이머 토글 on/off
@@ -157,36 +208,19 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
               {cancelText || "다음에 읽기"}
             </button>
             <button
-              onClick={() => {
-                setRightContent(
-                  'TimeTracking',
-                  {
-                    TimeTracking: {
-                      tab: isOn ? 'Timer' : 'StopWatch',
-                      bookData:
-                        {
-                          bookId,
-                          cover,
-                          bookTitle,
-                          author
-                        }
-                    }
-                  },
-                  {
-                    title: `독서 타임 트래킹 - ${isOn ? '타이머' : '스탑워치'}`,
-                    time:
-                    timeChoice,
-                  }
-                )
-                ;
-                setIsOn( false );
-                if (modalId) { // modalId가 있을 경우에만 closeModal 호출
-                  closeModal( modalId );
-                }
-              }}
-              className="flex-1 min-w-[120px] px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
+              onClick={() => readingStart()}
+              className="flex-1 gap-1 flex justify-center items-center min-w-[120px] px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
             >
-              {confirmText || "독서 시작"}
+
+              {isLoading ? (
+                <>
+                  <span>추가 중</span>
+                  <span
+                    className="w-5 h-5 border-4 border-modal_Tracking_loadingBg border-t-modal_Tracking_loadingSpinner rounded-full animate-spin"></span>
+                </>
+              ) : (
+                <span>{confirmText || "독서 시작"}</span>
+              )}
             </button>
           </section>
         </article>
