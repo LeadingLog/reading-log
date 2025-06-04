@@ -20,7 +20,7 @@ export default function BoxThisMonthReadingList() {
     openModal( 'ModalTrackingPlan', {
       bookId: item.bookId,
       bookTitle: item.title,
-      bookSubTitle: item.author,
+      author: item.author,
       cover: item.cover,
       bookLink: item.link,
       cancelText: '닫기',

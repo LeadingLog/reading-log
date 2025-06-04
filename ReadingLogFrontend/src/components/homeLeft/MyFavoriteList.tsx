@@ -1,17 +1,12 @@
 import CustomScrollbar from "../common/CustomScrollbar.tsx";
 import { useModalStore } from "../../store/modalStore.ts";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { TabName } from "../../types/tabName.ts";
 import { fetchMyFavoriteListParams } from "../../types/myFavoriteList.ts";
 import { fetchMyFavoriteList } from "../../api/myFavoriteListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 
-interface Props {
-  activeTab: TabName;
-}
-
-export default function MyFavoriteList({ activeTab }: Props) {
+export default function MyFavoriteList() {
   const [page, setPage] = useState<number>( 0 );
   const [favoriteList, setFavoriteList] = useState<ReadingListAddBody[]>( [] );
   const [hasMore, setHasMore] = useState( true ); // 더 불러올 데이터가 있는지 여부
@@ -24,7 +19,7 @@ export default function MyFavoriteList({ activeTab }: Props) {
     openModal( "ModalBookPlan", {
       cover: item.coverImgUrl,
       bookTitle: item.bookTitle,
-      bookSubTitle: item.author,
+      author: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
       bookLink: item.link,
@@ -50,10 +45,8 @@ export default function MyFavoriteList({ activeTab }: Props) {
   };
 
   useEffect( () => {
-    if (activeTab === "관심 도서") {
-      searchMyFavoriteList( { userId, tabType: 4, page, size: 21 } );
-    }
-  }, [page, activeTab] );
+    searchMyFavoriteList( { userId, tabType: 4, page, size: 21 } );
+  }, [page] );
 
   // Intersection Observer 설정
   const myFavoriteListObserver = useRef<IntersectionObserver | null>( null );

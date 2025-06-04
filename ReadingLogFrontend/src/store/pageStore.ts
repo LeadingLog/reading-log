@@ -37,7 +37,7 @@ type BookData = {
   bookId?: number; // 책 정보
   cover?: string;
   bookTitle?: string;
-  bookSubTitle?: string;
+  author?: string;
   // 추가 데이터 필드 확장 가능
 }
 

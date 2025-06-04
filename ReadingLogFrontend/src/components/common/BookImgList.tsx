@@ -1,20 +1,14 @@
 import IconReading from "../../assets/Icon-reading.svg?react";
 import IconReadComplete from "../../assets/Icon-readcomplete.svg?react";
 import IconFavorite from "../../assets/Icon-favorite.svg?react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { readStatus, TabType } from "../../types/myReadingList.ts";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { BookImgListProps, readStatus } from "../../types/myReadingList.ts";
 import { fetchMyReadingList } from "../../api/myReadingListApi.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
 import { fetchMyReadingListSearch } from "../../api/myReadingListSearchQueryApi.ts";
 import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 import { useUserStore } from "../../store/userStore.ts";
-
-interface BookImgListProps {
-  isActive: TabType;
-  query?: string;
-  inputRef?: React.RefObject<HTMLInputElement | null>;
-}
 
 export default function BookImgList({ isActive, query = '', inputRef }: BookImgListProps) {
   const [page, setPage] = useState<number>( 0 );
@@ -28,6 +22,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
   const searchBook = async (query: string) => {
     setIsLoading( true );
     try {
+      console.log( ' 내 독서 목록 내부 검색 시 코드')
       const data = await fetchMyReadingListSearch( {
         userId: userId,
         tabType: isActive,
@@ -54,10 +49,10 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
         await searchBook( query );
       } else {
         // 검색어가 없을 때 (초기 상태로 되돌림)
-        setPage( 0 );
+        // setPage( 0 );
         setHasMore( true );
         setIsLoading( true );
-
+        console.log( '검색어가 없을 때 (초기 상태로 되돌림)')
         try {
           const data = await fetchMyReadingList( {
             userId: userId,
@@ -90,7 +85,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
     openModal( "ModalBookPlan", {
       cover: item.coverImgUrl,
       bookTitle: item.bookTitle,
-      bookSubTitle: item.author,
+      author: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
       bookLink: item.link,
@@ -118,7 +113,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
           size: 21,
         } );
 
-        console.log( data.readingList )
+        console.log( '페이지 또는 탭 변경시 데이터 로딩')
         setMyReadingList( (prev) =>
           page === 0 ? data.readingList.filter( (item: ReadingListAddBody) => item.bookStatus !== "INTERESTED" ) : [...prev, ...data.readingList]
         );
@@ -134,7 +129,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
     };
 
     loadMyReadingList();
-  }, [page, isActive] );
+  }, [page] );
 
   // Intersection Observer 설정 스크롤 시 마지막 부분을 확인용
   const myReadingListObserver = useRef<IntersectionObserver | null>( null );

@@ -62,7 +62,7 @@ export default function BookImgList() {
     openModal( "ModalBookPlan", {
       cover: item.cover,
       bookTitle: item.title,
-      bookSubTitle: item.author,
+      author: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
       bookLink: item.link,

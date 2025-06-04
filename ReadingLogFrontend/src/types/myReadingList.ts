@@ -1,5 +1,6 @@
 // 내 독서 목록 탭 타입
 import { ReadStatus } from "./readStatus.ts";
+import React from "react";
 
 export type TabType = 0 | 1 | 2 | 3 | 4;
 
@@ -27,4 +28,11 @@ export interface fetchMyReadingListParams {
   size?: number;
   page?: number;
   query?: string;
+}
+
+// 내 독서 목록 내부 이미지 리스트로 넘기는 props 타입
+export interface BookImgListProps {
+  isActive: TabType;
+  query?: string;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 }

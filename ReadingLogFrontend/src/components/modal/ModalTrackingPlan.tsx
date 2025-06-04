@@ -12,7 +12,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
                                                                bookId,
                                                                bookLink,
                                                                bookTitle,
-                                                               bookSubTitle,
+                                                               author,
                                                                cancelText,
                                                                confirmText,
                                                              }) => {
@@ -70,7 +70,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
               <p className="absolute top-0 bottom-0 left-0 w-1 bg-title_Marker"></p>
               <span className="ml-2 text-modal_Tracking_Book_Title_Text">{bookTitle}</span>
             </span>
-            <p className="text-sm text-modal_Tracking_Book_SubTitle_Text">{bookSubTitle}</p>
+            <p className="text-sm text-modal_Tracking_Book_SubTitle_Text">{author}</p>
           </div>
           <section>
             <div className="flex justify-between items-center">
@@ -168,7 +168,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
                           bookId,
                           cover,
                           bookTitle,
-                          bookSubTitle
+                          author
                         }
                     }
                   },
