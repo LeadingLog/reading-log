@@ -56,8 +56,8 @@ export default function BookImgList() {
 
   const openModalBookPlan = (item: monthReadingListItem) => {
     openModal( "ModalBookPlan", {
-      cover: item.coverImgUrl,
-      bookTitle: item.bookTitle,
+      cover: item.cover,
+      bookTitle: item.title,
       bookSubTitle: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
@@ -94,7 +94,7 @@ export default function BookImgList() {
           onClick={() => openModalBookPlan( item )}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >
-          <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+          <img src={item.cover} alt={item.title} className="w-full h-full object-cover"/>
           <div
             className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
               ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :

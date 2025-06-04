@@ -6,11 +6,11 @@ import { ReadStatus } from "./readStatus.ts";
 export interface monthReadingListItem {
   bookId: number;
   userId: number | null;
-  bookTitle: string;
+  title: string;
   author: string;
   isbn13?: string;
   link?: string;
-  coverImgUrl?: string;
+  cover?: string;
   bookStatus: ReadStatus;
   readStartDt?: string;
   readEndDt?: string;

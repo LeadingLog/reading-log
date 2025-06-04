@@ -16,12 +16,12 @@ export default function BoxThisMonthReadingList() {
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
   /* 독서 타임 트래킹 모달 오픈 */
-  const openModaTrackingPlan = (item: monthReadingListItem) => {
+  const openModalTrackingPlan = (item: monthReadingListItem) => {
     openModal( 'ModalTrackingPlan', {
       bookId: item.bookId,
-      bookTitle: item.bookTitle,
+      bookTitle: item.title,
       bookSubTitle: item.author,
-      cover: item.coverImgUrl,
+      cover: item.cover,
       bookLink: item.link,
       cancelText: '닫기',
       confirmText: '독서 시작',
@@ -87,9 +87,9 @@ export default function BoxThisMonthReadingList() {
         <li
           key={idx}
           className="cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
-          onClick={() => openModaTrackingPlan( item )}
+          onClick={() => openModalTrackingPlan( item )}
         >
-          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.bookTitle}</span>
+          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.title}</span>
           <ItemReadStatus readStatus={item.bookStatus}/>
         </li>
       ) )}
