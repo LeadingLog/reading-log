@@ -10,7 +10,7 @@ import { fetchMyReadingListSearch } from "../../api/myReadingListSearchQueryApi.
 import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
-export default function BookImgList({ isActive, query = '', inputRef }: BookImgListProps) {
+export default function BookImgList({ MyReadingListTabType, query = '', inputRef }: BookImgListProps) {
   const [page, setPage] = useState<number>( 0 );
   const [myReadingList, setMyReadingList] = useState<ReadingListAddBody[]>( [] );
   const [hasMore, setHasMore] = useState( true );
@@ -25,7 +25,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
       console.log( ' 내 독서 목록 내부 검색 시 코드')
       const data = await fetchMyReadingListSearch( {
         userId: userId,
-        tabType: isActive,
+        MyReadingListTabType: MyReadingListTabType,
         query: query
       } );
       const result: ReadingListAddBody[] = data.readingList.filter( (item: ReadingListAddBody) =>
@@ -49,14 +49,14 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
         await searchBook( query );
       } else {
         // 검색어가 없을 때 (초기 상태로 되돌림)
-        // setPage( 0 );
+        setPage( 0 );
         setHasMore( true );
         setIsLoading( true );
         console.log( '검색어가 없을 때 (초기 상태로 되돌림)')
         try {
           const data = await fetchMyReadingList( {
             userId: userId,
-            tabType: isActive,
+            MyReadingListTabType: MyReadingListTabType,
             page: 0, // query가 빈 값이 되면 항상 첫 페이지부터 로드
             size: 21,
           } );
@@ -97,7 +97,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
     setMyReadingList( [] );
     setPage( 0 );
     setHasMore( true );
-  }, [isActive] );
+  }, [MyReadingListTabType] );
 
   // 페이지 또는 탭 변경 시 데이터 로딩
   useEffect( () => {
@@ -108,7 +108,7 @@ export default function BookImgList({ isActive, query = '', inputRef }: BookImgL
       try {
         const data = await fetchMyReadingList( {
           userId: userId,
-          tabType: isActive,
+          MyReadingListTabType: MyReadingListTabType,
           page,
           size: 21,
         } );
