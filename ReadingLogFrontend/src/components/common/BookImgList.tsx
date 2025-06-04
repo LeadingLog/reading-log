@@ -17,30 +17,24 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   const [isLoading, setIsLoading] = useState( false );
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
-
+  const [isFetching, setIsFetching] = useState<boolean>( false );
 // 내 독서 목록 내부 검색 시 코드
 
   const [isSearching, setIsSearching] = useState( false );
 
   const searchBook = async (query: string) => {
+    if (isFetching) return;
     setIsSearching( true );
-    setIsLoading( true );
+    setIsFetching( true );
     try {
-      
+
       const data = await fetchMyReadingListSearch( {
         userId: userId,
         MyReadingListTabType: MyReadingListTabType,
         query: query
       } );
-      const lowerQuery = query.toLowerCase();
-      const result: ReadingListAddBody[] = data.readingList.filter( (item: ReadingListAddBody) => {
-        const title = item.bookTitle.toLowerCase();
-        const author = item.author.toLowerCase();
-        return title.includes( lowerQuery ) || author.includes( lowerQuery ) ||
-          title.startsWith( lowerQuery ) || author.startsWith( lowerQuery );
-      } );
-      setMyReadingList( result );
-
+      setMyReadingList( data.readingList );
+      setIsFetching( false );
     } catch (error) {
       console.error( "리스트 로딩 실패:", error );
     } finally {
@@ -89,7 +83,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
           setIsLoading( false );
         }
       }
-    }, 300 );
+    }, 500 );
 
     // 타이머 정리
     return () => clearTimeout( timeout );
