@@ -19,19 +19,27 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   const { userId } = useUserStore()
 
 // 내 독서 목록 내부 검색 시 코드
+
+  const [isSearching, setIsSearching] = useState( false );
+
   const searchBook = async (query: string) => {
+    setIsSearching( true );
     setIsLoading( true );
     try {
-      console.log( ' 내 독서 목록 내부 검색 시 코드')
+      
       const data = await fetchMyReadingListSearch( {
         userId: userId,
         MyReadingListTabType: MyReadingListTabType,
         query: query
       } );
-      const result: ReadingListAddBody[] = data.readingList.filter( (item: ReadingListAddBody) =>
-        item.bookTitle.includes( query ) || item.author.includes( query )
-      );
-      setMyReadingList( result ); // 이 줄이 주석 처리되어 있어 실제로 목록이 업데이트되지 않았습니다
+      const lowerQuery = query.toLowerCase();
+      const result: ReadingListAddBody[] = data.readingList.filter( (item: ReadingListAddBody) => {
+        const title = item.bookTitle.toLowerCase();
+        const author = item.author.toLowerCase();
+        return title.includes( lowerQuery ) || author.includes( lowerQuery ) ||
+          title.startsWith( lowerQuery ) || author.startsWith( lowerQuery );
+      } );
+      setMyReadingList( result );
 
     } catch (error) {
       console.error( "리스트 로딩 실패:", error );
@@ -40,7 +48,14 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     }
   };
 
+  /* 내 독서 목록 탭을 처음 클릭 시 timeout 실행을 방지 하고자 둠 */
+  const isFirstRender = useRef( true );
+
   useEffect( () => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return; // 첫 렌더링에서는 아무 것도 하지 않음
+    }
     const timeout = setTimeout( async () => {
       if (query !== "" && inputRef) {
         // 검색어가 있을 때
@@ -49,10 +64,11 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
         await searchBook( query );
       } else {
         // 검색어가 없을 때 (초기 상태로 되돌림)
+        setIsSearching( false );
         setPage( 0 );
         setHasMore( true );
         setIsLoading( true );
-        console.log( '검색어가 없을 때 (초기 상태로 되돌림)')
+
         try {
           const data = await fetchMyReadingList( {
             userId: userId,
@@ -62,7 +78,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
           } );
 
           // 이전 목록을 완전히 대체 (검색 취소 시 처음부터 다시 로드)
-          setMyReadingList( data.readingList.filter( (item: ReadingListAddBody) => item.bookStatus !== "INTERESTED" ) );
+          setMyReadingList( data.readingList );
 
           const isLastPage = data.page.number + 1 >= data.page.totalPages;
           setHasMore( !isLastPage );
@@ -97,11 +113,18 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     setMyReadingList( [] );
     setPage( 0 );
     setHasMore( true );
+
+    skipObserver.current = true;
+    const timer = setTimeout( () => {
+      skipObserver.current = false;
+    }, 100 ); // 짧게 차단 후 재허용
+
+    return () => clearTimeout( timer );
   }, [MyReadingListTabType] );
 
   // 페이지 또는 탭 변경 시 데이터 로딩
   useEffect( () => {
-    if (!hasMore) return;
+    if (isSearching || (page > 0 && !hasMore)) return;
 
     const loadMyReadingList = async () => {
       setIsLoading( true );
@@ -113,9 +136,9 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
           size: 21,
         } );
 
-        console.log( '페이지 또는 탭 변경시 데이터 로딩')
+        console.log( '페이지 또는 탭 변경시 데이터 로딩' )
         setMyReadingList( (prev) =>
-          page === 0 ? data.readingList.filter( (item: ReadingListAddBody) => item.bookStatus !== "INTERESTED" ) : [...prev, ...data.readingList]
+          page === 0 ? data.readingList : [...prev, ...data.readingList]
         );
 
         const isLastPage = data.page.number + 1 >= data.page.totalPages;
@@ -129,13 +152,15 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     };
 
     loadMyReadingList();
-  }, [page] );
+  }, [page, MyReadingListTabType, isSearching] );
 
   // Intersection Observer 설정 스크롤 시 마지막 부분을 확인용
+
+  const skipObserver = useRef( false ); // 탭 변경시 옵져버 기능을 중지 하기 위한 것
   const myReadingListObserver = useRef<IntersectionObserver | null>( null );
   const lastItemRef = useCallback(
     (node: HTMLLIElement | null) => {
-      if (isLoading || !hasMore) return;
+      if (isLoading || !hasMore || isSearching) return;
 
       if (myReadingListObserver.current) {
         myReadingListObserver.current.disconnect();
@@ -143,6 +168,12 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
 
       myReadingListObserver.current = new IntersectionObserver( (entries) => {
         if (entries[0].isIntersecting) {
+          if (skipObserver.current) {
+            // observer 동작 무시 (탭 변경 직후)
+            skipObserver.current = false; // 다음부터는 다시 동작하게 함
+            return;
+          }
+
           setPage( (prev) => prev + 1 );
         }
       } );
@@ -190,7 +221,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
           <span className="text-2xl font-bold">읽고 싶은 도서를 추가해보세요!</span>
         </li>
       )}
-      {hasMore && (
+      {hasMore && !isSearching && (
         <li
           ref={lastItemRef}
           className="invisible h-1 col-span-3"

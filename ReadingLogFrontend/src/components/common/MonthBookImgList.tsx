@@ -28,7 +28,7 @@ export default function BookImgList() {
       setIsLoading( true );
       const data = await fetchMonthReadingList( { userId, year, month, page, size } );
       // 받아온 독서상태별로 데이터 순서 정렬
-      const filterInterested = data.monthlyReadingList.filter((item:monthReadingListItem) => item.bookStatus !== "INTERESTED")
+      const filterInterested = data.monthlyReadingList.filter( (item: monthReadingListItem) => item.bookStatus !== "INTERESTED" )
       const sortedList = filterInterested.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
         return readOrder[a.bookStatus] - readOrder[b.bookStatus];
       } );
@@ -43,20 +43,20 @@ export default function BookImgList() {
     }
   };
 
+  useEffect( () => {
+    if (page === 0) return; // prevent redundant call from reset
+    if (isLoading || !hasMore) return;
+    searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
+  }, [page] );
+
   // 년도 및 월이 변경되는 경우 해당 월 정보 가져옴
   useEffect( () => {
     setThisMonthReadingList( [] );
     setPage( 0 );
     setHasMore( true );
-    if (page === 0) {
-      searchThisMonthReadingList( { userId, year, month, page: 0, size: 20 } );
-    }
+    // 직접 호출
+    searchThisMonthReadingList( { userId, year, month, page: 0, size: 20 } );
   }, [month, year] );
-
-  useEffect( () => {
-    if (page === 0) return
-    searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
-  }, [page] );
 
   const openModalBookPlan = (item: monthReadingListItem) => {
     openModal( "ModalBookPlan", {
@@ -87,7 +87,7 @@ export default function BookImgList() {
 
       if (node) myReadingListObserver.current.observe( node );
     },
-    [isLoading, hasMore]
+    [isLoading, hasMore, page]
   );
 
   return (
