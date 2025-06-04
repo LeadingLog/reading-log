@@ -17,6 +17,7 @@ export const readStatus: Record<ReadStatus, string> = {
   IN_PROGRESS: "독서중",
   NOT_STARTED: "읽기전",
   COMPLETED: "완독",
+  INTERESTED: "관심도서",
 };
 
 // 내 독서 목록 요청 파라미터 타입
