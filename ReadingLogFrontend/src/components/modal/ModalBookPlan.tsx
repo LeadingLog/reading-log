@@ -34,6 +34,9 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth() + 1;
 
+  console.log(currentYear)
+  console.log(currentMonth)
+
   /* 종료 달 부분에 그 달의 마지막 날을 표시 하기 위한 것 */
   const getLastDateOfMonth = (currentYear: number, currentMonth: number): string => {
     const lastDate = new Date( currentYear, currentMonth, 0 ).getDate(); // month는 1-12로 받아서 그대로 사용
@@ -152,7 +155,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
   useEffect( () => {
     setPickStartYear( Number(readStartDt?.split("-")[0]) || currentYear )
     setPickStartMonth( Number(readStartDt?.split("-")[1]) || currentMonth )
-    setPickEndYear( Number(readEndDt?.split("-")[0]) || currentMonth )
+    setPickEndYear( Number(readEndDt?.split("-")[0]) || currentYear )
     setPickEndMonth( Number(readEndDt?.split("-")[1]) || currentMonth )
   }, [] );
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 END -----------------*/
