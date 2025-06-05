@@ -3,14 +3,14 @@ import { fetchMyReadingListParams } from "../types/myReadingList.ts";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-export const fetchMyReadingList = async ({ userId, tabType, page, size }: fetchMyReadingListParams) => {
+export const fetchMyReadingList = async ({ userId, MyReadingListTabType, page, size }: fetchMyReadingListParams) => {
 
   const { data } = await axios.get(
     `${serverUrl}/readinglist/readingList`,
     {
       params: {
         userId: userId, // 실제 로그인 유저 ID로 교체 필요
-        tabType: tabType,
+        tabType: MyReadingListTabType,
         page: page,
         size: size
       },

@@ -6,8 +6,8 @@ import ModalManager from "./components/modal/ModalManager.tsx";
 function App() {
   return (
     <BrowserRouter>
-      <ModalManager />
-      <Router />
+      <ModalManager/>
+      <Router/>
     </BrowserRouter>
   );
 }

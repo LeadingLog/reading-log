@@ -1,19 +1,19 @@
-import {http, HttpResponse} from 'msw';
+import { http, HttpResponse } from 'msw';
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const bookHandlers = [
   // 검색된 도서 클릭시
-  http.get(`${serverUrl}/book/search/detail`, async ({request}) => {
+  http.get( `${serverUrl}/book/search/detail`, async ({ request }) => {
     const body = await request.json();
-    console.log(body);
+    console.log( body );
 
-    return HttpResponse.json({
+    return HttpResponse.json( {
       startRead: "2024-06-01", // 일자는 무조건 1일
       endRead: "2024-08-31", // 일자는 무조건 달의 마지말 일
       isFavorite: true
-    });
-  }),
+    } );
+  } ),
 
   // 키워드로 검색(제목+저자)
   // http.get(`${serverUrl}/books/search`, async ({request}) => {

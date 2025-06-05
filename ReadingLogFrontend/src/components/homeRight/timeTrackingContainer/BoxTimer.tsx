@@ -1,5 +1,5 @@
 import ItemTimer from "./ItemTimer.tsx";
-import {usePageStore} from "../../../store/pageStore.ts";
+import { usePageStore } from "../../../store/pageStore.ts";
 
 export default function BoxTimer() {
   const { params } = usePageStore();
@@ -14,7 +14,7 @@ export default function BoxTimer() {
       >
         <section className="flex flex-col text-center">
           <span className="text-2xl">{bookData?.bookTitle}</span>
-          <span>{bookData?.bookSubTitle}</span>
+          <span>{bookData?.author}</span>
         </section>
         <section className="flex flex-1 gap-6">
           <article className="flex-1 bg-trackingBook_Bg rounded-xl">

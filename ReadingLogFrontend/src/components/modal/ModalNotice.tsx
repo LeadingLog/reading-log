@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {useModalStore} from '../../store/modalStore';
-import {ModalNoticeProps} from "../../types/modal.ts";
-import {AnimatePresence, motion} from "framer-motion";
+import React, { useState } from 'react';
+import { useModalStore } from '../../store/modalStore';
+import { ModalNoticeProps } from "../../types/modal.ts";
+import { AnimatePresence, motion } from "framer-motion";
 
 const ModalNotice: React.FC<ModalNoticeProps> = ({
                                                    modalId,
@@ -18,8 +18,8 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
                                                    withMotion,
                                                  }) => {
   const { closeModal } = useModalStore();
-  const [inputValue, setInputValue] = useState('');
-  const [isVisible, setIsVisible] = useState(true);
+  const [inputValue, setInputValue] = useState( '' );
+  const [isVisible, setIsVisible] = useState( true );
 
   /* withMotion 사용 시 모션 표시 위한 부분*/
   const handleClose = () => {
@@ -27,12 +27,12 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
       onCancel();
     }
     if (withMotion) {
-      setIsVisible(false);
-      setTimeout(() => {
-        if (modalId) closeModal(modalId);
-      }, 150);
+      setIsVisible( false );
+      setTimeout( () => {
+        if (modalId) closeModal( modalId );
+      }, 150 );
     } else {
-      if (modalId) closeModal(modalId);
+      if (modalId) closeModal( modalId );
     }
   };
 
@@ -54,7 +54,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => setInputValue( e.target.value )}
             className="bg-modal_Content_Bg border-0 border-b-2 border-myPage_Update_Line focus:outline-none focus:border-b-2 focus:border-myPage_Update_Line_Focus"
             placeholder="입력하세요"
           />
@@ -74,7 +74,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
               className={`${reverseBtn ? 'text-modal_Quit_Text' : 'bg-modal_Right_Btn_Bg'} flex flex-1 justify-center items-center min-w-fit px-2 py-1 rounded-lg`}
               onClick={() => {
                 if (showInput) {
-                  onConfirm?.(inputValue);
+                  onConfirm?.( inputValue );
                 } else {
                   onConfirm?.();
                 }

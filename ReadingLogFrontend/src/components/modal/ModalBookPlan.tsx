@@ -7,17 +7,17 @@ import { readingListAddApi } from "../../api/readingListAddAPI.ts";
 import { ReadingListAddBody } from "../../types/readingListAdd.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
-const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSubTitle, isbn13, cover, bookLink }) => {
+const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author, isbn13, cover, bookLink }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
-  const { user_id } = useUserStore()
+  const { userId } = useUserStore();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>( false );
 
   /* 시작 달 종료 달 표시용 */
-  const [pickStartYear, setPickStartYear] = useState<number>(0);
-  const [pickStartMonth, setPickStartMonth] = useState<number>(0);
-  const [pickEndYear, setPickEndYear] = useState<number>(0);
-  const [pickEndMonth, setPickEndMonth] = useState<number>(0);
+  const [pickStartYear, setPickStartYear] = useState<number>( 0 );
+  const [pickStartMonth, setPickStartMonth] = useState<number>( 0 );
+  const [pickEndYear, setPickEndYear] = useState<number>( 0 );
+  const [pickEndMonth, setPickEndMonth] = useState<number>( 0 );
 
   /* 현재 날로 초기화 하기 용*/
   const today = new Date();
@@ -26,8 +26,8 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
 
   /* 종료 달 부분에 그 달의 마지막 날을 표시 하기 위한 것 */
   const getLastDateOfMonth = (currentYear: number, currentMonth: number): string => {
-    const lastDate = new Date(currentYear, currentMonth, 0).getDate(); // month는 1-12로 받아서 그대로 사용
-    return String(lastDate).padStart(2, '0');
+    const lastDate = new Date( currentYear, currentMonth, 0 ).getDate(); // month는 1-12로 받아서 그대로 사용
+    return String( lastDate ).padStart( 2, '0' );
   };
 
   /* 시작달 or 종료달 캘릭터 뛰우기 */
@@ -49,24 +49,24 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
         modal.data?.startOrEnd !== startOrEnd
     );
     if (otherModal) {
-      closeModal(otherModal.modalId);
+      closeModal( otherModal.modalId );
     }
     // 모달 열기
-    openModal('ModalCalendar', {
+    openModal( 'ModalCalendar', {
       startOrEnd,
       year: isStart ? pickStartYear : pickEndYear,
       pickYear: isStart ? setPickStartYear : setPickEndYear,
       pickMonth: isStart ? setPickStartMonth : setPickEndMonth
-    });
+    } );
   };
 
   /* 닫을 때 실행될 함수 --------------- */
   const close = () => {
 
-    setPickStartYear(currentYear)
-    setPickStartMonth(currentMonth)
-    setPickEndYear(currentYear)
-    setPickEndMonth(currentMonth)
+    setPickStartYear( currentYear )
+    setPickStartMonth( currentMonth )
+    setPickEndYear( currentYear )
+    setPickEndMonth( currentMonth )
 
     closeAllModals()
 
@@ -76,61 +76,61 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
 
   /* 독서계획추가 api */
   const ReadingListAdd = async () => {
-    setIsLoading(true)
+    setIsLoading( true )
     const ReadingListAddBodyList: ReadingListAddBody = {
-      userId: user_id ?? 0 ,
+      userId: userId,
       bookTitle: bookTitle ?? "",
-      author: bookSubTitle ?? "",
+      author: author ?? "",
       isbn13: isbn13,
       link: bookLink,
       coverImgUrl: cover,
       bookStatus: 'NOT_STARTED',
 
       // 문자열 템플릿을 사용해 날짜 포맷 구성
-      readStartDt: `${pickStartYear}-${String(pickStartMonth).padStart(2, '0')}-01`,
-      readEndDt: `${pickEndYear}-${String(pickEndMonth).padStart(2, '0')}-${getLastDateOfMonth(pickEndYear, pickEndMonth)}`
+      readStartDt: `${pickStartYear}-${String( pickStartMonth ).padStart( 2, '0' )}-01`,
+      readEndDt: `${pickEndYear}-${String( pickEndMonth ).padStart( 2, '0' )}-${getLastDateOfMonth( pickEndYear, pickEndMonth )}`
     };
     try {
-      const response = await readingListAddApi(ReadingListAddBodyList)
+      const response = await readingListAddApi( ReadingListAddBodyList )
 
       if (response) {
-        openModal('ModalNotice', {
+        openModal( 'ModalNotice', {
           title: "내 독서 목록에 추가 되었어요!",
           subTitle: "즐거운 독서시간!",
           confirmText: "닫기",
           onlyConfirm: true,
           withMotion: true,
           onConfirm: async () => {
-            setPickStartYear(currentYear)
-            setPickStartMonth(currentMonth)
-            setPickEndYear(currentYear)
-            setPickEndMonth(currentMonth)
+            setPickStartYear( currentYear )
+            setPickStartMonth( currentMonth )
+            setPickEndYear( currentYear )
+            setPickEndMonth( currentMonth )
             closeAllModals()
           }
-        })
+        } )
       }
     } catch (error) {
-      console.error('독서 목록 추가 실패', error)
-      openModal('ModalNotice', {
+      console.error( '독서 목록 추가 실패', error )
+      openModal( 'ModalNotice', {
         title: '요청 실패',
         subTitle: `${error}`,
         onlyClose: true,
         withMotion: true,
-      })
+      } )
     } finally {
-      setIsLoading(false)
+      setIsLoading( false )
     }
   }
 
   /* 독서 계획 추가 버튼 클릭 시 함수 */
   const completeBookPlan = async () => {
     const alertModal = (alertMessage: string) => {
-      openModal('ModalNotice', {
+      openModal( 'ModalNotice', {
         title: alertMessage,
         cancelText: "다시 선택하기",
         onlyClose: true,
         withMotion: true
-      });
+      } );
     }
     // 종료일이 시작일보다 앞선 경우
     const isEndBeforeStart =
@@ -143,10 +143,10 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
       (pickStartYear === currentYear && pickStartMonth < currentMonth);
 
     if (isEndBeforeStart) {
-      alertModal("종료일이 시작일보다 빠를 수 없어요!"); // 경고 모달 또는 alert
+      alertModal( "종료일이 시작일보다 빠를 수 없어요!" ); // 경고 모달 또는 alert
       return;
     } else if (isStartBeforeToday) {
-      alertModal("시작일이 오늘 보다 이전 일 순 없어요!"); // 경고 모달 또는 alert
+      alertModal( "시작일이 오늘 보다 이전 일 순 없어요!" ); // 경고 모달 또는 alert
       return;
     } else {
       await ReadingListAdd()
@@ -156,26 +156,27 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   /* 독서 계획 추가 버튼 클릭 시 함수 END -----------------*/
 
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 */
-  useEffect(() => {
-    setPickStartYear(currentYear)
-    setPickStartMonth(currentMonth)
-    setPickEndYear(currentYear)
-    setPickEndMonth(currentMonth)
+  useEffect( () => {
+    setPickStartYear( currentYear )
+    setPickStartMonth( currentMonth )
+    setPickEndYear( currentYear )
+    setPickEndMonth( currentMonth )
 
-  }, []);
+  }, [] );
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 END -----------------*/
 
 
   /* 관심도서 추가 모달 로딩 관련 */
-  const setModalIsLoading = useModalStore(state => state.setModalIsLoading);
+  const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
 
   const ConfirmButton = () => {
-    const modalIsLoading = useModalStore((state) => state.modalIsLoading);
+    const modalIsLoading = useModalStore( (state) => state.modalIsLoading );
 
     return modalIsLoading ? (
       <>
         <span>추가 중</span>
-        <span className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin ml-2" />
+        <span
+          className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin ml-2"/>
       </>
     ) : (
       "예 추가할래요!"
@@ -185,74 +186,74 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
   /* 관심도서로 추가 api */
   const addInterested = async () => {
     const ReadingListAddBodyList: ReadingListAddBody = {
-      userId: user_id ?? 0,
+      userId: userId,
       bookTitle: bookTitle ?? "",
-      author: bookSubTitle ?? "",
+      author: author ?? "",
       isbn13: isbn13,
       link: bookLink,
       coverImgUrl: cover,
       bookStatus: 'INTERESTED',
     };
     const addInterestedModal = () => {
-      openModal("ModalNotice", {
+      openModal( "ModalNotice", {
         title: "관심도서로 설정하시겠어요?",
         subTitle: "관심도서로 설정됩니다.",
         cancelText: "닫기",
-        confirmText: <ConfirmButton />,
+        confirmText: <ConfirmButton/>,
         onConfirm: async () => {
           try {
-            setModalIsLoading(true)
-            const response = await readingListAddApi(ReadingListAddBodyList)
+            setModalIsLoading( true )
+            const response = await readingListAddApi( ReadingListAddBodyList )
             if (response) {
-              openModal("ModalNotice", {
+              openModal( "ModalNotice", {
                 title: "관심도서에 추가되었어요!",
                 subTitle: "이 책이 마음에 드셨군요!",
                 onlyClose: true,
                 withMotion: true,
                 onCancel: () => closeAllModals()
-              });
+              } );
             }
           } catch (error) {
-            console.error('관심 도서 추가 실패',error)
-            openModal("ModalNotice", {
+            console.error( '관심 도서 추가 실패', error )
+            openModal( "ModalNotice", {
               title: '요청 실패',
               subTitle: `${error}`,
               onlyClose: true,
               withMotion: true,
-            });
+            } );
           } finally {
-            setModalIsLoading(false)
+            setModalIsLoading( false )
           }
         },
-      });
+      } );
     }
     addInterestedModal()
   }
 
   /* 유동적인 이미지 높이 값을 설정하기 위해 오른쪽 독서계획 영역의 높이 값을 추적함 수 ----------------*/
-  const parentRef = useRef<HTMLAnchorElement | null>(null);
-  const [imageHeight, setImageHeight] = useState<number>(0);
+  const parentRef = useRef<HTMLAnchorElement | null>( null );
+  const [imageHeight, setImageHeight] = useState<number>( 0 );
 
-  useEffect(() => {
+  useEffect( () => {
     const parent = parentRef.current;
     if (!parent) return;
 
     // ResizeObserver 인스턴스 생성
-    const resizeObserver = new ResizeObserver((entries) => {
+    const resizeObserver = new ResizeObserver( (entries) => {
       for (const entry of entries) {
         const newHeight = entry.contentRect.height;
-        setImageHeight(newHeight);
+        setImageHeight( newHeight );
       }
-    });
+    } );
 
-    resizeObserver.observe(parent); // 감시 시작
+    resizeObserver.observe( parent ); // 감시 시작
 
     // 언마운트 시 관찰 중지
     return () => {
-      resizeObserver.unobserve(parent);
-      setImageHeight(0)
+      resizeObserver.unobserve( parent );
+      setImageHeight( 0 )
     };
-  }, []);
+  }, [] );
 
   /* 유동적인 이미지 높이 값을 설정하기 위해 오른쪽 독서계획 영역의 높이 값을 추적함 수 END ----------------*/
   return (
@@ -290,7 +291,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
               <p className="absolute top-1 bottom-1 left-0 w-1 bg-title_Marker"></p>
               <span className="text-lg font-semibold text-modal_BookPlan_Book_Title_Text ml-2">{bookTitle}</span>
             </span>
-            <p className="text-modal_BookPlan_Book_Sub_Title_Text">{bookSubTitle}</p>
+            <p className="text-modal_BookPlan_Book_Sub_Title_Text">{author}</p>
           </div>
 
           <section className="relative flex gap-4">
@@ -299,11 +300,11 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
               <button
                 className="flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg"
                 onClick={() => {
-                  openCalendar("시작 달")
+                  openCalendar( "시작 달" )
                 }}
               >
                 <span className="text-modal_BookPlan_Calendar_Date_Text">
-                  {pickStartYear}.{String(pickStartMonth).padStart(2, '0')}.01
+                  {pickStartYear}.{String( pickStartMonth ).padStart( 2, '0' )}.01
                 </span>
                 <span className="w-3 text-modal_BookPlan_Calendar_Icon_Color">
                   <IconCalendar width="100%" height="100%"/>
@@ -316,11 +317,11 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
               <button
                 className="flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg"
                 onClick={() => {
-                  openCalendar("종료 달")
+                  openCalendar( "종료 달" )
                 }}
               >
                 <span className="text-modal_BookPlan_Calendar_Date_Text">
-                  {pickEndYear}.{String(pickEndMonth).padStart(2, '0')}.{getLastDateOfMonth(pickEndYear, pickEndMonth)}
+                  {pickEndYear}.{String( pickEndMonth ).padStart( 2, '0' )}.{getLastDateOfMonth( pickEndYear, pickEndMonth )}
                 </span>
                 <span className="w-3 text-modal_BookPlan_Calendar_Icon_Color">
                   <IconCalendar width="100%" height="100%"/>
@@ -351,7 +352,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, bookSub
                   <span
                     className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin"></span>
                 </>
-              ): (
+              ) : (
                 <span>독서 계획 추가</span>
               )}
             </button>

@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Main from "../view/Main.tsx";
 import Error from "../view/Error.tsx";
 import Login from "../view/Login.tsx";
@@ -12,11 +12,11 @@ export default function Router() {
 
   return (
     <Routes>
-      <Route path="*" element={<Error />} />
-      <Route path="/" element={<Main />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/oauth/naver/callback" element={<NaverCallback />} />
-      <Route path="/oauth/kakao/callback" element={<KakaoCallback />} />
+      <Route path="*" element={<Error/>}/>
+      <Route path="/" element={<Main/>}/>
+      <Route path="/login" element={<Login/>}/>
+      <Route path="/oauth/naver/callback" element={<NaverCallback/>}/>
+      <Route path="/oauth/kakao/callback" element={<KakaoCallback/>}/>
 
       {/* 루트 경로 접근 시 로그인 여부 체크
       <Route

@@ -2,12 +2,12 @@ import IconTriangle from "../../assets/Icon-triangle.svg?react";
 import { useDateStore } from "../../store/useDateStore.ts";
 
 export default function YearSlideBar() {
-  const { year, setYear , decreaseYear, increaseYear } = useDateStore();
+  const { year, setYear, decreaseYear, increaseYear } = useDateStore();
 
   /* 현재 년도 */
   const nowYear = () => {
     const currentYear = new Date().getFullYear();
-    setYear(currentYear);
+    setYear( currentYear );
   };
 
   return (
@@ -20,7 +20,7 @@ export default function YearSlideBar() {
           {year - 1}
         </span>
         <button className="flex-1 text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover rotate-180">
-          <IconTriangle />
+          <IconTriangle/>
         </button>
       </div>
 
@@ -36,7 +36,7 @@ export default function YearSlideBar() {
         className="flex flex-1 items-center cursor-pointer group h-full"
       >
         <button className="flex-1 text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
-          <IconTriangle />
+          <IconTriangle/>
         </button>
         <span className="flex-1 text-left text-yearSlide_PrevNext_Text">
           {year + 1}

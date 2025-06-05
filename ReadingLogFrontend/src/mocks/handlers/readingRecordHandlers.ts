@@ -1,38 +1,38 @@
-import {http, HttpResponse} from 'msw';
+import { http, HttpResponse } from 'msw';
 import statsMonthList from "../dummyData/statsMonthListData/statsMonthList.json"
 import statsYearList from "../dummyData/statsYearListData/statsYearList.json"
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const readingRecordHandlers = [
-  http.get(`${serverUrl}/test4`, () => {
-    return HttpResponse.json({
+  http.get( `${serverUrl}/test4`, () => {
+    return HttpResponse.json( {
       test: 'test'
-    });
-  }),
+    } );
+  } ),
 
   // 독서 타이머 기록
-  http.post(`${serverUrl}/api/readingrecord/add`, async ({request}) => {
+  http.post( `${serverUrl}/api/readingrecord/add`, async ({ request }) => {
     const body = await request.json();
-    console.log(body);
+    console.log( body );
 
-    return HttpResponse.json({
+    return HttpResponse.json( {
       success: true,
-    });
-  }),
+    } );
+  } ),
 
   // 사용자의 연간 총 독서 시간 조회
-  http.get(`${serverUrl}/api/readingrecord/stats/time/yy`, async ({request}) => {
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('user_id');
-    const year = url.searchParams.get('year');
-    console.log(`userId: ${userId}, year: ${year}`);
+  http.get( `${serverUrl}/api/readingrecord/stats/time/yy`, async ({ request }) => {
+    const url = new URL( request.url );
+    const userId = url.searchParams.get( 'user_id' );
+    const year = url.searchParams.get( 'year' );
+    console.log( `userId: ${userId}, year: ${year}` );
 
-    return HttpResponse.json({
+    return HttpResponse.json( {
       success: true,
       data: 240
-    });
-  }),
+    } );
+  } ),
 
   // 사용자의 총 독서 시간 조회
   // http.get( `${serverUrl}/api/readingrecord/stats/time`, async ({ request }) => {
@@ -58,12 +58,12 @@ export const readingRecordHandlers = [
 
 
   // 사용자의 전체 년도와 월별 읽은 책 (시간 중심)
-  http.get(`${serverUrl}/api/readingrecord/stats/time/book_id`, async ({request}) => {
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('user_id');
-    console.log(`userId: ${userId}`);
+  http.get( `${serverUrl}/api/readingrecord/stats/time/book_id`, async ({ request }) => {
+    const url = new URL( request.url );
+    const userId = url.searchParams.get( 'user_id' );
+    console.log( `userId: ${userId}` );
 
-    return HttpResponse.json({
+    return HttpResponse.json( {
       success: true,
       data: [
         {
@@ -125,35 +125,35 @@ export const readingRecordHandlers = [
           }
         }
       ],
-    });
-  }),
+    } );
+  } ),
 
   // 사용자의 전체 년도와 월별 읽은 책 (책 중심)
-  http.get(`${serverUrl}/api/readingrecord/stats/book/book_id`, async ({request}) => {
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('user_id');
-    console.log(`userId: ${userId}`);
+  http.get( `${serverUrl}/api/readingrecord/stats/book/book_id`, async ({ request }) => {
+    const url = new URL( request.url );
+    const userId = url.searchParams.get( 'user_id' );
+    console.log( `userId: ${userId}` );
 
-    return HttpResponse.json({
+    return HttpResponse.json( {
       success: true,
       data: [
         {
           timeDate: {
             "2024-04": 50,
-            "2025-04" :50
+            "2025-04": 50
           },
           bookId: "book_001"
         },
         {
           timeDate: {
             "2025-01": 20,
-            "2024-06" :40
+            "2024-06": 40
           },
           bookId: "book_002"
         },
       ]
-    });
-  }),
+    } );
+  } ),
 
   // 월별 통계
   // http.get( `${serverUrl}/api/readingrecord/stats/time/yymm/book_id`, async ({ request }) => {

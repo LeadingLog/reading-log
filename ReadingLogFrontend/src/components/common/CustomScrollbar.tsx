@@ -18,16 +18,16 @@ const CustomScrollbar = ({
                            className = '',
                            direction = 'vertical', // ➕ 기본값 세로
                          }: CustomScrollbarProps) => {
-  const [scrollPercentage, setScrollPercentage] = useState(0);
-  const [scrollbarHeight, setScrollbarHeight] = useState(0);
+  const [scrollPercentage, setScrollPercentage] = useState( 0 );
+  const [scrollbarHeight, setScrollbarHeight] = useState( 0 );
 
-  const containerRef = useRef<HTMLUListElement>(null);
-  const [useScrollbar, setUseScrollbar] = useState<boolean>(false);// 스크롤바 표시 여부
+  const containerRef = useRef<HTMLUListElement>( null );
+  const [useScrollbar, setUseScrollbar] = useState<boolean>( false );// 스크롤바 표시 여부
 
   /* 스크롤 드래그 */
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartPos = useRef(0); // 클릭한 위치 (Y 또는 X)
-  const initialScroll = useRef(0); // 클릭 시 스크롤 위치
+  const [isDragging, setIsDragging] = useState( false );
+  const dragStartPos = useRef( 0 ); // 클릭한 위치 (Y 또는 X)
+  const initialScroll = useRef( 0 ); // 클릭 시 스크롤 위치
 
   // 스크롤바 높이 계산 함수
   const calculateScrollbarHeight = () => {
@@ -41,21 +41,21 @@ const CustomScrollbar = ({
     const scrollPos = isVertical ? container.scrollTop : container.scrollLeft;
 
     if (contentSize <= containerSize) {
-      setUseScrollbar(false);
+      setUseScrollbar( false );
       return;
     }
 
-    setUseScrollbar(true);
+    setUseScrollbar( true );
 
-    const thumbSize = Math.max((containerSize / contentSize) * containerSize, 20);
-    setScrollbarHeight(thumbSize);
+    const thumbSize = Math.max( (containerSize / contentSize) * containerSize, 20 );
+    setScrollbarHeight( thumbSize );
 
     const maxScroll = contentSize - containerSize;
     const percentage = maxScroll > 0
       ? (scrollPos / maxScroll) * (containerSize - thumbSize)
       : 0;
 
-    setScrollPercentage(percentage);
+    setScrollPercentage( percentage );
   };
 
 
@@ -70,20 +70,20 @@ const CustomScrollbar = ({
       const containerSize = isVertical ? container.clientHeight : container.clientWidth;
       const scrollPos = isVertical ? container.scrollTop : container.scrollLeft;
 
-      const thumbSize = Math.max((containerSize / contentSize) * containerSize, 20);
+      const thumbSize = Math.max( (containerSize / contentSize) * containerSize, 20 );
 
       const maxScroll = contentSize - containerSize;
       const percentage = maxScroll > 0
         ? (scrollPos / maxScroll) * (containerSize - thumbSize)
         : 0;
 
-      setScrollPercentage(percentage);
+      setScrollPercentage( percentage );
     }
   };
 
   const handleDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setIsDragging(true);
+    setIsDragging( true );
     dragStartPos.current = direction === 'vertical' ? e.clientY : e.clientX;
     initialScroll.current = direction === 'vertical'
       ? containerRef.current?.scrollTop || 0
@@ -108,7 +108,7 @@ const CustomScrollbar = ({
   };
 
   const handleDragEnd = () => {
-    setIsDragging(false);
+    setIsDragging( false );
 
     // 👉 원상복구
 
@@ -117,37 +117,37 @@ const CustomScrollbar = ({
   };
 
   // 초기 마운트 시 높이 계산
-  useEffect(() => {
+  useEffect( () => {
     calculateScrollbarHeight();
-  }, []);
+  }, [] );
 
   // ResizeObserver로 container 크기 변화를 감지
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(() => {
+  useEffect( () => {
+    const resizeObserver = new ResizeObserver( () => {
       calculateScrollbarHeight();
-    });
+    } );
 
-    const mutationObserver = new MutationObserver(() => {
+    const mutationObserver = new MutationObserver( () => {
       calculateScrollbarHeight();
-    });
+    } );
 
     const container = containerRef.current;
     if (container) {
-      resizeObserver.observe(container);
-      mutationObserver.observe(container, {
+      resizeObserver.observe( container );
+      mutationObserver.observe( container, {
         childList: true,
         subtree: true,
-      });
+      } );
     }
 
     return () => {
       resizeObserver.disconnect();
       mutationObserver.disconnect();
     };
-  }, []);
+  }, [] );
 
   // 가로 스크롤 가능하도록
-  useEffect(() => {
+  useEffect( () => {
     const container = containerRef.current;
     if (!container || direction !== "horizontal") return;
 
@@ -157,22 +157,22 @@ const CustomScrollbar = ({
       container.scrollLeft = container.scrollLeft + e.deltaY;
     };
 
-    container.addEventListener("wheel", handleWheel, { passive: false });
+    container.addEventListener( "wheel", handleWheel, { passive: false } );
 
     return () => {
-      container.removeEventListener("wheel", handleWheel);
+      container.removeEventListener( "wheel", handleWheel );
     };
-  }, [direction]);
+  }, [direction] );
 
   // 스크롤 잡고 이동 관련
-  useEffect(() => {
-    window.addEventListener("mousemove", handleDragMove);
-    window.addEventListener("mouseup", handleDragEnd);
+  useEffect( () => {
+    window.addEventListener( "mousemove", handleDragMove );
+    window.addEventListener( "mouseup", handleDragEnd );
     return () => {
-      window.removeEventListener("mousemove", handleDragMove);
-      window.removeEventListener("mouseup", handleDragEnd);
+      window.removeEventListener( "mousemove", handleDragMove );
+      window.removeEventListener( "mouseup", handleDragEnd );
     };
-  }, [isDragging]);
+  }, [isDragging] );
 
   return (
     <section

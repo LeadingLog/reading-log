@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 
 // 오른쪽 페이지 콘텐츠 타입
 type RightContentType =
@@ -37,7 +37,7 @@ type BookData = {
   bookId?: number; // 책 정보
   cover?: string;
   bookTitle?: string;
-  bookSubTitle?: string;
+  author?: string;
   // 추가 데이터 필드 확장 가능
 }
 
@@ -54,14 +54,14 @@ type PageState = {
 };
 
 // Zustand 스토어 생성
-export const usePageStore = create<PageState>((set) => ({
+export const usePageStore = create<PageState>( (set) => ({
   rightContent: 'TimeTracking',
   params: {},
   pageData: {},
   setRightContent: (content, params = {}, pageData = {}) =>
-    set({
+    set( {
       rightContent: content,
       params: params, // StatsPage 외에는 params 초기화
       pageData: pageData // 전달된 pageData로 업데이트
-    }),
-}));
+    } ),
+}) );

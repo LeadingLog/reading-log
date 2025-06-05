@@ -5,66 +5,72 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { readStatus } from "../../types/myReadingList.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
-import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../types/monthReadingList.ts";
-import { fetchThisMonthReadingList } from "../../api/ThisMonthReadingListApi.ts";
+import { fetchMonthReadingListParams, monthReadingListItem, readOrder } from "../../types/monthReadingList.ts";
 import { useDateStore } from "../../store/useDateStore.ts";
+import { fetchMonthReadingList } from "../../api/monthReadingListApi.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 export default function BookImgList() {
-  const [page, setPage] = useState<number>(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState<number>( 0 );
+  const [hasMore, setHasMore] = useState( true );
+  const [isLoading, setIsLoading] = useState( false );
   const { openModal } = useModalStore();
 
   const { year, month } = useDateStore();
+  const { userId } = useUserStore();
 
-  const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>([])
+  const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
 
-  const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchThisMonthReadingListParams) => {
+  const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
     try {
-      setIsLoading(true);
-      const data = await fetchThisMonthReadingList({ userId, year, month, page, size });
+      setIsLoading( true );
+      const data = await fetchMonthReadingList( { userId, year, month, page, size } );
       // 받아온 독서상태별로 데이터 순서 정렬
-      const sortedList = data.monthlyReadingList.sort((a : monthReadingListItem, b : monthReadingListItem) => {
+      const filterInterested = data.monthlyReadingList.filter( (item: monthReadingListItem) => item.bookStatus !== "INTERESTED" )
+      const sortedList = filterInterested.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
         return readOrder[a.bookStatus] - readOrder[b.bookStatus];
-      });
-      setThisMonthReadingList((prev) => [...prev, ...sortedList])
+      } );
+      setThisMonthReadingList( (prev) => [...prev, ...sortedList] )
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
-      setHasMore(!isLastPage);
+      setHasMore( !isLastPage );
     } catch (error) {
-      console.error("이번 달 독서리스트 가져오기 실패:", error);
-      setHasMore(false); // 더 이상 시도하지 않도록 설정
+      console.error( year, "년", month, "월 독서리스트 가져오기 실패:", error );
+      setHasMore( false ); // 더 이상 시도하지 않도록 설정
     } finally {
-      setIsLoading(false); // 검색 완료 후 로딩 상태 해제
+      setIsLoading( false ); // 검색 완료 후 로딩 상태 해제
     }
   };
 
-  // 년도 및 월이 변경되는 경우 해당 월 정보 가져옴
-  useEffect(() => {
-    setThisMonthReadingList([]);
-    setPage(0);
-    setHasMore(true);
-    searchThisMonthReadingList({ userId: 1, year, month, page: 0, size: 20 });
-  }, [month, year]);
+  useEffect( () => {
+    if (page === 0) return; // prevent redundant call from reset
+    if (isLoading || !hasMore) return;
+    searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
+  }, [page] );
 
-  useEffect(() => {
-    searchThisMonthReadingList({ userId: 1, year, month, page, size: 20 });
-  }, [page]);
+  // 년도 및 월이 변경되는 경우 해당 월 정보 가져옴
+  useEffect( () => {
+    setThisMonthReadingList( [] );
+    setPage( 0 );
+    setHasMore( true );
+    // 직접 호출
+    searchThisMonthReadingList( { userId, year, month, page: 0, size: 20 } );
+  }, [month, year] );
 
   const openModalBookPlan = (item: monthReadingListItem) => {
-    openModal("ModalBookPlan", {
-      cover: item.coverImgUrl,
-      bookTitle: item.bookTitle,
-      bookSubTitle: item.author,
+    openModal( "ModalBookPlan", {
+      cover: item.cover,
+      bookTitle: item.title,
+      author: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
       bookLink: item.link,
-    });
+    } );
   };
 
   // Intersection Observer 설정 스크롤 시 마지막 부분을 확인용
-  const myReadingListObserver = useRef<IntersectionObserver | null>(null);
+  const myReadingListObserver = useRef<IntersectionObserver | null>( null );
   const lastItemRef = useCallback(
     (node: HTMLLIElement | null) => {
       if (isLoading || !hasMore) return;
@@ -73,26 +79,26 @@ export default function BookImgList() {
         myReadingListObserver.current.disconnect();
       }
 
-      myReadingListObserver.current = new IntersectionObserver((entries) => {
+      myReadingListObserver.current = new IntersectionObserver( (entries) => {
         if (entries[0].isIntersecting) {
-          setPage((prev) => prev + 1);
+          setPage( (prev) => prev + 1 );
         }
-      });
+      } );
 
-      if (node) myReadingListObserver.current.observe(node);
+      if (node) myReadingListObserver.current.observe( node );
     },
-    [isLoading, hasMore]
+    [isLoading, hasMore, page]
   );
 
   return (
     <>
-      {thisMonthReadingList.map((item, idx) => (
+      {thisMonthReadingList.map( (item, idx) => (
         <li
           key={idx}
-          onClick={() => openModalBookPlan(item)}
+          onClick={() => openModalBookPlan( item )}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >
-          <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover" />
+          <img src={item.cover} alt={item.title} className="w-full h-full object-cover"/>
           <div
             className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
               ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :
@@ -101,15 +107,16 @@ export default function BookImgList() {
           >
             <span className="text-xs">{readStatus[item.bookStatus as ReadStatus] || "오류"}</span>
             <span className="flex justify-center items-center text-imgBook_Icon_Color mt-[1px]">
-              {item.bookStatus === 'IN_PROGRESS' && <IconReading className="text-imgBook_Icon_Color" />}
-              {item.bookStatus === 'COMPLETED' && <IconReadComplete className="text-imgBook_Icon_Color" />}
+              {item.bookStatus === 'IN_PROGRESS' && <IconReading className="text-imgBook_Icon_Color"/>}
+              {item.bookStatus === 'COMPLETED' && <IconReadComplete className="text-imgBook_Icon_Color"/>}
             </span>
           </div>
-          <div className="absolute w-8 h-8 right-2 bottom-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
-            <IconFavorite width="100%" height="100%" />
+          <div
+            className="absolute w-8 h-8 right-2 bottom-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
+            <IconFavorite width="100%" height="100%"/>
           </div>
         </li>
-      ))}
+      ) )}
       {isLoading && (
         <li className="py-2 col-span-3 justify-center flex gap-1 text-sm text-favoriteList_Searching_Text">
           <span>도서를 불러 오는 중입니다.</span>

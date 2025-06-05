@@ -9,83 +9,83 @@ import { useUserStore } from "../../store/userStore.ts";
 
 export default function MainBookSearch() {
 
-  const [focusSearch, setFocusSearch] = useState(false); // 검색바 포커스 상태
-  const [searchValue, setSearchValue] = useState(""); // 검색어 값
+  const [focusSearch, setFocusSearch] = useState( false ); // 검색바 포커스 상태
+  const [searchValue, setSearchValue] = useState( "" ); // 검색어 값
   const searchIconVisible = focusSearch || searchValue.trim() !== "";
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>( null );
+  const [isFetching, setIsFetching] = useState<boolean>( false );
 
-  const { user_id } = useUserStore()
+  const { userId } = useUserStore();
 
   // 검색바를 클릭하면 실행
   const searchFocus = () => {
-    setFocusSearch(true);
+    setFocusSearch( true );
   };
 
   // 검색바의 포커싱이 사라지면 실행
   const outFocus = () => {
     if (searchValue.trim() === "") {
-      setFocusSearch(false);
+      setFocusSearch( false );
     }
   };
 
   // 검색 중일 때 실행 (onChange 이벤트)
 
   const changeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+    setSearchValue( e.target.value );
   };
   /* 책 검색 결과 가져오기 */
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
-  const [totalResults, setTotalResults] = useState<number>(0)
-  const [bookSearchResultList, setBookSearchResultList] = useState([]);
+  const [isLoading, setIsLoading] = useState( false ); // 로딩 상태 추가
+  const [totalResults, setTotalResults] = useState<number>( 0 )
+  const [bookSearchResultList, setBookSearchResultList] = useState( [] );
 
   const searchBooks = async (query: string) => {
     if (!query.trim()) return;
     if (isFetching) return;
-    setIsFetching(true);
+    setIsFetching( true );
     try {
-      const response = await fetchBooks( user_id ?? 0 ,query, 1);
-      if (response.data && Array.isArray(response.data.item)) {
-        const items = response.data.item.map((item: AladinApiItem) => ({
-          userId: user_id ?? 0,
+      const response = await fetchBooks( userId, query, 1 );
+      if (response.data && Array.isArray( response.data.item )) {
+        const items = response.data.item.map( (item: AladinApiItem) => ({
+          userId: userId,
           bookTitle: item.title,
           author: item.author,
           isbn13: item.isbn13,
           link: item.link,
           coverImgUrl: item.cover,
           bookStatus: item.bookStatus,
-        }));
-        setBookSearchResultList(items);
-        setTotalResults(response.data.totalResults)
-        setIsFetching(false);
+        }) );
+        setBookSearchResultList( items );
+        setTotalResults( response.data.totalResults )
+        setIsFetching( false );
       } else {
-        setBookSearchResultList([]);
-        console.warn('No items in response:', response.data);
+        setBookSearchResultList( [] );
+        console.warn( 'No items in response:', response.data );
       }
     } catch (error) {
-      console.error('도서 검색 중 오류 발생:', error);
-      setBookSearchResultList([]);
+      console.error( '도서 검색 중 오류 발생:', error );
+      setBookSearchResultList( [] );
     } finally {
-      setIsLoading(false); // 검색 완료 후 로딩 상태 해제
+      setIsLoading( false ); // 검색 완료 후 로딩 상태 해제
     }
   };
   // 디바운스 처리 (300ms 이후 searchValue 업데이트)
-  useEffect(() => {
-    setIsLoading(true)
-    const timeout = setTimeout(() => {
+  useEffect( () => {
+    setIsLoading( true )
+    const timeout = setTimeout( () => {
       if (searchValue !== "") {
         (async () => {
           inputRef.current?.blur();
           inputRef.current?.focus();
-          await searchBooks(searchValue);
+          await searchBooks( searchValue );
         })();
       } else {
-        setBookSearchResultList([]);
+        setBookSearchResultList( [] );
       }
-    }, 500);
+    }, 500 );
 
-    return () => clearTimeout(timeout);
-  }, [searchValue]);
+    return () => clearTimeout( timeout );
+  }, [searchValue] );
 
   return (
     <>
@@ -120,8 +120,8 @@ export default function MainBookSearch() {
         {searchValue && (
           <button
             onClick={() => {
-              setBookSearchResultList([]);
-              setSearchValue("")
+              setBookSearchResultList( [] );
+              setSearchValue( "" )
               inputRef.current?.focus(); // ✅ 클릭 시 input에 포커스!
             }}
             className="absolute flex justify-center items-center w-[20x] h-[20px] aspect-square right-3 top-1.5 bg-main_SearchBar_ClearText_Bg z-[1] text-xs font-black text-main_SearchBar_ClearText_Color hover:text-gray-600 rounded-full"
@@ -146,7 +146,8 @@ export default function MainBookSearch() {
                 scrollbarClassName="right-1.5 w-1.5 scale-y-90 bg-scrollbar_Main_SearchBar_Result_Color transition-[colors] group-hover/scroll:bg-scrollbar_Main_SearchBar_Result_Hover_Color"
                 // scrollbarWidth=""
               >
-                <BookSearchResult isLoading={isLoading} searchValue={searchValue} bookSearchResultList={bookSearchResultList} totalResults={totalResults}/>
+                <BookSearchResult isLoading={isLoading} searchValue={searchValue}
+                                  bookSearchResultList={bookSearchResultList} totalResults={totalResults}/>
               </CustomScrollbar>
             </motion.div>
           </>

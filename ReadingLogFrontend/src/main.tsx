@@ -19,4 +19,4 @@ enableMocking().then( () => {
     {/*</StrictMode>,*/}
     </>
   )
-})
+} )
