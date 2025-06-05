@@ -4,7 +4,7 @@ import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import IconCalendar from "../../assets/Icon-calendar.svg?react"
 import { ModalBookPlanProps } from "../../types/modal.ts";
 import { readingListAddApi } from "../../api/readingListAddAPI.ts";
-import { ReadingListAddBody } from "../../types/readingListAdd.ts";
+import { ReadingListAddApiRequestBody } from "../../types/readingListAdd.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
 const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author, isbn13, cover, bookLink }) => {
@@ -77,7 +77,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
   /* 독서계획추가 api */
   const ReadingListAdd = async () => {
     setIsLoading( true )
-    const ReadingListAddBodyList: ReadingListAddBody = {
+    const ReadingListAddApiRequestBody: ReadingListAddApiRequestBody = {
       userId: userId,
       bookTitle: bookTitle ?? "",
       author: author ?? "",
@@ -91,7 +91,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
       readEndDt: `${pickEndYear}-${String( pickEndMonth ).padStart( 2, '0' )}-${getLastDateOfMonth( pickEndYear, pickEndMonth )}`
     };
     try {
-      const response = await readingListAddApi( ReadingListAddBodyList )
+      const response = await readingListAddApi( ReadingListAddApiRequestBody )
 
       if (response) {
         openModal( 'ModalNotice', {
@@ -185,7 +185,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
 
   /* 관심도서로 추가 api */
   const addInterested = async () => {
-    const ReadingListAddBodyList: ReadingListAddBody = {
+    const ReadingListAddApiRequestBody: ReadingListAddApiRequestBody = {
       userId: userId,
       bookTitle: bookTitle ?? "",
       author: author ?? "",
@@ -203,7 +203,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
         onConfirm: async () => {
           try {
             setModalIsLoading( true )
-            const response = await readingListAddApi( ReadingListAddBodyList )
+            const response = await readingListAddApi( ReadingListAddApiRequestBody )
             if (response) {
               openModal( "ModalNotice", {
                 title: "관심도서에 추가되었어요!",
