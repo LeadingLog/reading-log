@@ -16,7 +16,7 @@ export default function TodayReadingTime() {
 
   const searchTodayReadingTime = async ({ userId }: fetchTodayReadingTimeApiParams) => {
     try {
-      const response = await fetchTodayReadingTime( userId )
+      const response = await fetchTodayReadingTime( { userId } )
       const responseTime = response.data.todayTime
 
       /* 오늘 독서 시간 */

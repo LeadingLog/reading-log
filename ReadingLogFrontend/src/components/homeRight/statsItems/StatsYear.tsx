@@ -25,7 +25,7 @@ export default function StatsYear() {
     try {
       const response = await fetchStatsYearApi( { userId, year } )
       const data = response.data.data
-      console.log( data )
+
       if (data) {
         /* 독서 시간 */
         const totalReadingTime = data.toTalReadingTime

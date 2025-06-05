@@ -8,10 +8,11 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
                                                        startOrEnd,
                                                        pickYear,
                                                        pickMonth,
-                                                       year,
+                                                       currentYear,
                                                      }) => {
+  console.log(currentYear)
   const { closeModal } = useModalStore()
-  const [modalYear, setModalYear] = useState<number>( year ?? new Date().getFullYear() );
+  const [modalYear, setModalYear] = useState<number>( currentYear ?? new Date().getFullYear() );
   const [isVisible, setIsVisible] = useState( true );
 
   const monthList: number[] = Array.from( { length: 12 }, (_, i) => i + 1 );
@@ -63,7 +64,8 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
                 &lt;
               </button>
               <span
-                className="flex-1 text-modal_Pick_Calendar_Year_Text text-xl text-center"
+                className="flex-1 text-modal_Pick_Calendar_Year_Text text-xl text-center cursor-pointer"
+                onClick={() => setModalYear(new Date().getFullYear())}
               >
                 {modalYear}
               </span>

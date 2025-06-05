@@ -16,8 +16,10 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
                                                    onCancel,
                                                    showInput,
                                                    withMotion,
+                                                   loadingMessage
                                                  }) => {
   const { closeModal } = useModalStore();
+  const modalIsLoading = useModalStore( (state) => state.modalIsLoading );
   const [inputValue, setInputValue] = useState( '' );
   const [isVisible, setIsVisible] = useState( true );
 
@@ -71,7 +73,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
           )}
           {!onlyClose && (
             <button
-              className={`${reverseBtn ? 'text-modal_Quit_Text' : 'bg-modal_Right_Btn_Bg'} flex flex-1 justify-center items-center min-w-fit px-2 py-1 rounded-lg`}
+              className={`${reverseBtn ? 'text-modal_Quit_Text' : 'bg-modal_Right_Btn_Bg'} flex flex-1 justify-center items-center gap-1 min-w-fit px-2 py-1 rounded-lg`}
               onClick={() => {
                 if (showInput) {
                   onConfirm?.( inputValue );
@@ -80,7 +82,15 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
                 }
               }}
             >
-              {confirmText || "실행"}
+              {modalIsLoading && loadingMessage ? (
+                <>
+                  <span>{loadingMessage}</span>
+                  <span
+                    className="w-5 h-5 border-4 border-modal_Tracking_loadingBg border-t-modal_Tracking_loadingSpinner rounded-full animate-spin"></span>
+                </>
+              ) : (
+                <span>{confirmText || "실행"}</span>
+              )}
             </button>
           )}
         </div>
