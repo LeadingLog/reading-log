@@ -35,26 +35,27 @@ export const readingRecordHandlers = [
   }),
 
   // 사용자의 총 독서 시간 조회
-  http.get(`${serverUrl}/api/readingrecord/stats/time`, async ({request}) => {
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('user_id');
-    console.log(`userId: ${userId}`);
-
-    return HttpResponse.json({
-      success: true,
-      data: 4650
-    });
-  }),
+  // http.get( `${serverUrl}/api/readingrecord/stats/time`, async ({ request }) => {
+  //   const url = new URL( request.url );
+  //   const userId = url.searchParams.get( 'user_id' );
+  //   console.log( `userId: ${userId}` );
+  //
+  //   return HttpResponse.json( {
+  //     success: true,
+  //     data: 4650
+  //   } );
+  // } ),
 
   // 연별통계
-  http.get(`${serverUrl}/api/readingrecord/stats/time/yylist`, async ({request}) => {
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('user_id');
-    const year = url.searchParams.get('year');
-    console.log(`userId: ${userId}, year: ${year}`);
+  // http.get( `${serverUrl}/api/readingrecord/stats/time/yylist`, async ({ request }) => {
+  //   const url = new URL( request.url );
+  //   const userId = url.searchParams.get( 'user_id' );
+  //   const year = url.searchParams.get( 'year' );
+  //   console.log( `userId: ${userId}, year: ${year}` );
+  //
+  //   return HttpResponse.json( statsYearList );
+  // } ),
 
-    return HttpResponse.json(statsYearList);
-  }),
 
   // 사용자의 전체 년도와 월별 읽은 책 (시간 중심)
   http.get(`${serverUrl}/api/readingrecord/stats/time/book_id`, async ({request}) => {
@@ -155,25 +156,25 @@ export const readingRecordHandlers = [
   }),
 
   // 월별 통계
-  http.get(`${serverUrl}/api/readingrecord/stats/time/yymm/book_id`, async ({request}) => {
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('userId');
-    const year = url.searchParams.get('year');
-    const month = url.searchParams.get('month');
-    console.log(`userId: ${userId}, year: ${year}, month: ${month}`);
-
-    return HttpResponse.json(statsMonthList)
-  }),
+  // http.get( `${serverUrl}/api/readingrecord/stats/time/yymm/book_id`, async ({ request }) => {
+  //   const url = new URL( request.url );
+  //   const userId = url.searchParams.get( 'userId' );
+  //   const year = url.searchParams.get( 'year' );
+  //   const month = url.searchParams.get( 'month' );
+  //   console.log( `userId: ${userId}, year: ${year}, month: ${month}` );
+  //
+  //   return HttpResponse.json( statsMonthList )
+  // } ),
 
   // 오늘 독서 시간
-  http.get(`${serverUrl}/api/readingrecord/stats/time/yy`, async ({request}) => {
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('userId');
-    console.log(`userId: ${userId}`);
-
-    return HttpResponse.json({
-      success: true,
-      data: 4650
-    });
-  }),
+  // http.get( `${serverUrl}/api/readingrecord/stats/time/yy`, async ({ request }) => {
+  //   const url = new URL( request.url );
+  //   const userId = url.searchParams.get( 'userId' );
+  //   console.log( `userId: ${userId}` );
+  //
+  //   return HttpResponse.json( {
+  //     success: true,
+  //     data: 4650
+  //   } );
+  // } ),
 ];
