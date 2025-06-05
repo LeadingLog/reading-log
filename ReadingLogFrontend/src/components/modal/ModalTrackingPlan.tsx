@@ -24,8 +24,6 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
   const { userId } = useUserStore()
   const [isLoading, setIsLoading] = useState<boolean>( false );
   type TimeChoice = 3 | 30 | 60;
-  console.log(bookId)
-  console.log(typeof bookId)
 
   const [timeChoice, setTimeChoice] = useState<TimeChoice | undefined>( undefined );
 
