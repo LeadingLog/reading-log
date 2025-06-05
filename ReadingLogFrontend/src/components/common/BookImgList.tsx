@@ -7,12 +7,12 @@ import { fetchMyReadingList } from "../../api/myReadingListApi.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
 import { fetchMyReadingListSearch } from "../../api/myReadingListSearchQueryApi.ts";
-import { ReadingListAddApiRequestBody } from "../../types/readingListAdd.ts";
 import { useUserStore } from "../../store/userStore.ts";
+import { BookListType } from "../../types/commonBookListType.ts";
 
 export default function BookImgList({ MyReadingListTabType, query = '', inputRef }: BookImgListProps) {
   const [page, setPage] = useState<number>( 0 );
-  const [myReadingList, setMyReadingList] = useState<ReadingListAddApiRequestBody[]>( [] );
+  const [myReadingList, setMyReadingList] = useState<BookListType[]>( [] );
   const [hasMore, setHasMore] = useState( true );
   const [isLoading, setIsLoading] = useState( false );
   const { openModal } = useModalStore();
@@ -91,7 +91,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   // 내 독서 목록 내부 검색 시 끝
 
 
-  const openModalBookPlan = (item: ReadingListAddApiRequestBody) => {
+  const openModalBookPlan = (item: BookListType) => {
     openModal( "ModalBookPlan", {
       bookId: item.bookId,
       cover: item.coverImgUrl,
@@ -101,6 +101,8 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
       bookLink: item.link,
+      readStartDt: item.readStartDt,
+      readEndDt: item.readEndDt
     } );
   };
 
