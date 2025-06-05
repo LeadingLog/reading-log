@@ -18,6 +18,7 @@ export type ModalData = {
   onlyClose?: boolean; // 닫기 버튼만 사용할지 여부
   onlyConfirm?: boolean; // 확인 버튼만 사용할지 여부
   reverseBtn?: boolean; // 버튼 순서 반대로 설정할지 여부
+  loadingMessage?: string; // 로딩 시 메세지
 
   /* 책 정보 관련 */
   cover?: string // 책 표지
