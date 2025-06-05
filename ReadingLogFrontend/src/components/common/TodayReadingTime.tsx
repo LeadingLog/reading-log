@@ -14,15 +14,15 @@ export default function TodayReadingTime() {
   const [todayReadingTimeMin, setTodayReadingTimeMin] = useState( 0 )
   const [todayReadingTimeSecond, setTodayReadingTimeSecond] = useState( 0 )
 
-  const searchTodayReadingTime = async ({ userId }: fetchTodayReadingTimeApiParams) => {
+  const searchTodayReadingTime = async (userId: fetchTodayReadingTimeApiParams) => {
     try {
-      const response = await fetchTodayReadingTime( { userId } )
+      const response = await fetchTodayReadingTime( userId )
       const responseTime = response.data.todayTime
 
       /* 오늘 독서 시간 */
       const hour = Math.floor( responseTime / 3600 );
       const min = Math.floor( (responseTime % 3600) / 60 );
-      const second = Math.floor( responseTime % 3600 );
+      const second = Math.floor( responseTime % 60 );
 
       setTodayReadingTimeHour( hour )
       setTodayReadingTimeMin( min )

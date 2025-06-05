@@ -16,6 +16,7 @@ export default function StatsYear() {
   const [totalCompleteBookCount, setTotalCompleteBookCount] = useState<number>( 0 )
   const [totalReadingTimeHour, setTotalReadingTimeHour] = useState<number>( 0 )
   const [totalReadingTimeMin, setTotalReadingTimeMin] = useState<number>( 0 )
+  const [totalReadingTimeSec, setTotalReadingTimeSec] = useState<number>( 0 )
 
   /* 그래프 정보 */
   const monthList: number[] = Array.from( { length: 12 }, (_, i) => i + 1 );
@@ -28,11 +29,14 @@ export default function StatsYear() {
 
       if (data) {
         /* 독서 시간 */
-        const totalReadingTime = data.toTalReadingTime
+        const totalReadingTime = data.totalReadingTime
+        console.log(totalReadingTime)
         const ReadingTimeHour = Math.floor( totalReadingTime / 3600 )
         const ReadingTimeMin = Math.floor( (totalReadingTime % 3600) / 60 );
+        const ReadingTimeSec = Math.floor( totalReadingTime % 60 );
         setTotalReadingTimeHour( ReadingTimeHour )
         setTotalReadingTimeMin( ReadingTimeMin )
+        setTotalReadingTimeSec( ReadingTimeSec )
         /* 총 완독 권수 */
         const completeCount = data.monthlyReadingList.reduce( (arr: number, cur: StatsYearList) => arr + cur.complete, 0 )
         setTotalCompleteBookCount( completeCount )
@@ -131,7 +135,7 @@ export default function StatsYear() {
         </span>
         <span className="text-2xl font-semibold text-stats_Info_Text">
           {year}년도는
-          <span className="text-stats_Info_Text_Highlight"> {totalReadingTimeHour}시간 {totalReadingTimeMin}분 </span>
+          <span className="text-stats_Info_Text_Highlight"> {totalReadingTimeHour}시간 {totalReadingTimeMin}분 {totalReadingTimeSec}초 </span>
           이나 책을 읽으셨어요!
         </span>
       </article>
