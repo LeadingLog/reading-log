@@ -1,4 +1,4 @@
-import { ReadingListAddBody } from "./readingListAdd.ts";
+import { ReadingListAddApiRequestBody } from "./readingListAdd.ts";
 
 export interface AladinApiItem {
   userId: number | null;
@@ -13,7 +13,7 @@ export interface AladinApiItem {
 }
 
 export interface BookSearchResultProps {
-  bookSearchResultList: ReadingListAddBody[];
+  bookSearchResultList: ReadingListAddApiRequestBody[];
   searchValue: string;
   isLoading?: boolean;
   totalResults: number

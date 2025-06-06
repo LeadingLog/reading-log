@@ -4,18 +4,18 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { fetchMyFavoriteListParams } from "../../types/myFavoriteList.ts";
 import { fetchMyFavoriteList } from "../../api/myFavoriteListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
-import { ReadingListAddBody } from "../../types/readingListAdd.ts";
+import { ReadingListAddApiRequestBody } from "../../types/readingListAdd.ts";
 
 export default function MyFavoriteList() {
   const [page, setPage] = useState<number>( 0 );
-  const [favoriteList, setFavoriteList] = useState<ReadingListAddBody[]>( [] );
+  const [favoriteList, setFavoriteList] = useState<ReadingListAddApiRequestBody[]>( [] );
   const [hasMore, setHasMore] = useState( true ); // 더 불러올 데이터가 있는지 여부
   const [isLoading, setIsLoading] = useState( false );
 
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
 
-  const openModalBookPlan = ((item: ReadingListAddBody) => {
+  const openModalBookPlan = ((item: ReadingListAddApiRequestBody) => {
     openModal( "ModalBookPlan", {
       cover: item.coverImgUrl,
       bookTitle: item.bookTitle,
@@ -75,7 +75,7 @@ export default function MyFavoriteList() {
       containerClassName="grid grid-cols-3 gap-6 content-start flex-1"
       scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color"
     >
-      {favoriteList.map( (item: ReadingListAddBody, idx) => (
+      {favoriteList.map( (item: ReadingListAddApiRequestBody, idx) => (
         <li
           key={idx}
           onClick={() => openModalBookPlan( item )}

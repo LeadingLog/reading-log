@@ -243,7 +243,7 @@ export default function TimeLine() {
 
       const hour = Math.floor( totalSeconds / 3600 );
       const min = Math.floor( (totalSeconds % 3600) / 60 );
-      const sec = totalSeconds % 60;
+      const sec = Math.floor(totalSeconds % 60);
 
       setAllReadingTimeHour( hour )
       setAllReadingTimeMin( min )

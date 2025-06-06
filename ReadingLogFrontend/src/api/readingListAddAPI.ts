@@ -1,11 +1,11 @@
 import axios from "axios";
-import { ReadingListAddBody } from "../types/readingListAdd.ts";
+import { ReadingListAddApiRequestBody } from "../types/readingListAdd.ts";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-export async function readingListAddApi(ReadingListAddBody: ReadingListAddBody) {
+export async function readingListAddApi(ReadingListAddApiRequestBody: ReadingListAddApiRequestBody) {
   const { data } = await axios.post(
-    `${serverUrl}/readinglist/add`, ReadingListAddBody, {
+    `${serverUrl}/readinglist/add`, ReadingListAddApiRequestBody, {
       headers: {
         "Content-Type": "application/json"
       }

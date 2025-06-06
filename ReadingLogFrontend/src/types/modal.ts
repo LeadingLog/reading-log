@@ -18,6 +18,7 @@ export type ModalData = {
   onlyClose?: boolean; // 닫기 버튼만 사용할지 여부
   onlyConfirm?: boolean; // 확인 버튼만 사용할지 여부
   reverseBtn?: boolean; // 버튼 순서 반대로 설정할지 여부
+  loadingMessage?: string; // 로딩 시 메세지
 
   /* 책 정보 관련 */
   cover?: string // 책 표지
@@ -26,15 +27,15 @@ export type ModalData = {
   bookLink?: string // 알라딘 책 정보 페이지로 가기
   isbn13?: string;
   bookId?: number // 책 고유 ID
+  bookStatus?: 'IN_PROGRESS' | 'NOT_STARTED' | 'COMPLETED' | 'INTERESTED';
+  readStartDt?: string;
+  readEndDt?: string;
 
   /* 캘린더 관련 */
-  pickYear?: React.Dispatch<React.SetStateAction<number>>;
-  pickMonth?: React.Dispatch<React.SetStateAction<number>>;
-  month?: number;
-  year?: number;
+  pickYear?: React.Dispatch<React.SetStateAction<number>>; // 시작 달 or 종료 달 년도 변경 용
+  pickMonth?: React.Dispatch<React.SetStateAction<number>>; // 시작 달 or 종료 달 월 변경 용
+  currentYear?: number; // 선택하는 달력(시작달 or 종료달)의 년도
   startOrEnd?: '시작 달' | '종료 달';
-  startYear?: number;
-  startMonth?: number;
 
   /* 동적 효과 적용할 지 */
   withMotion?: boolean;
