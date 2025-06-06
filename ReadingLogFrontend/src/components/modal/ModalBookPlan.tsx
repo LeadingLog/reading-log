@@ -16,7 +16,8 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                                                        cover,
                                                        bookLink,
                                                        readStartDt,
-                                                       readEndDt
+                                                       readEndDt,
+                                                       confirmText
                                                      }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
   const { userId } = useUserStore();
@@ -33,9 +34,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth() + 1;
-
-  console.log(currentYear)
-  console.log(currentMonth)
 
   /* 종료 달 부분에 그 달의 마지막 날을 표시 하기 위한 것 */
   const getLastDateOfMonth = (currentYear: number, currentMonth: number): string => {
@@ -164,20 +162,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
   /* 관심도서 추가 모달 로딩 관련 */
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
 
-  const ConfirmButton = () => {
-    const modalIsLoading = useModalStore( (state) => state.modalIsLoading );
-
-    return modalIsLoading ? (
-      <>
-        <span>추가 중</span>
-        <span
-          className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin ml-2"/>
-      </>
-    ) : (
-      "예 추가할래요!"
-    );
-  };
-
   /* 관심도서로 추가 api */
   const addInterested = async () => {
     const ReadingListAddApiRequestBody: ReadingListAddApiRequestBody = {
@@ -191,10 +175,11 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
     };
     const addInterestedModal = () => {
       openModal( "ModalNotice", {
-        title: "관심도서로 설정하시겠어요?",
-        subTitle: "관심도서로 설정됩니다.",
-        cancelText: "닫기",
-        confirmText: <ConfirmButton/>,
+        title: "관심도서로 추가하시겠어요?",
+        subTitle: "관심도서에 추가됩니다.",
+        cancelText: "아니요",
+        confirmText: "추가하기",
+        loadingMessage: "추가중",
         onConfirm: async () => {
           try {
             setModalIsLoading( true )
@@ -348,7 +333,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                     className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin"></span>
                 </>
               ) : (
-                <span>독서 계획 추가</span>
+                <span>{confirmText || "독서 계획 추가"}</span>
               )}
             </button>
           </section>

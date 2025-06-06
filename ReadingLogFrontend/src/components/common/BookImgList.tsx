@@ -99,7 +99,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
       author: item.author,
       isbn13: item.isbn13,
       cancelText: "다음에 읽기",
-      confirmText: "독서 계획 추가",
+      confirmText: "독서 계획 변경",
       bookLink: item.link,
       readStartDt: item.readStartDt,
       readEndDt: item.readEndDt
