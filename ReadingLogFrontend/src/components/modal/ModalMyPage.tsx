@@ -128,7 +128,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
   // 회원 탈퇴 처리
   const handleAccountDeletion = async () => {
     try {
-      const response = await axios.post(`${serverUrl}/user/user_id/modified`, {
+      const response = await axios.post(`${serverUrl}/user/${userId}/delete`, {
         userId,
         nickname,
         email,
