@@ -58,6 +58,33 @@ public class ReadingRecordService {
 
 		return resultList;
 	}
+	
+	//연간 총 시간  +  월별 완독한 책의 수 
+	public Map<String, Object> getMonthlyCompleteCountAndTotalTime(Integer userId, Integer year) {
+	    List<Object[]> results = readingRecordRepository.getMonthlyCompleteCountAndTotalReadingTime(userId, year);
+
+	    List<Map<String, Object>> monthlyList = new ArrayList<>();
+	    int totalReadingTime = 0;
+
+	    for (Object[] row : results) {
+	        int readingTime = ((Number) row[0]).intValue();
+	        int month = ((Number) row[1]).intValue();
+	        int completeCount = ((Number) row[2]).intValue();
+
+	        totalReadingTime = readingTime; 
+	        Map<String, Object> monthData = new HashMap<>();
+	        monthData.put("month", month);
+	        monthData.put("complete", completeCount);
+	        monthlyList.add(monthData);
+	    }
+
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("totalReadingTime", totalReadingTime);
+	    response.put("monthlyReadingList", monthlyList);
+
+	    return response;
+	}
+
 
 	// 사용자의 전체 익은 시간
 	@Transactional(readOnly = true)

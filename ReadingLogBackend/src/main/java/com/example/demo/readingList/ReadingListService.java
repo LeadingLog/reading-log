@@ -198,7 +198,7 @@ public class ReadingListService {
 
 	    if (status == null) {
 	    	//전체 검색 
-	        return readingListRepository.searchByUserIdAndQueryWithAll(userId, query);
+	        return readingListRepository.searchByUserIdAndQueryExcludingInterested(userId, query);
 	    } else {
 	    	//필터링 된 상태에서 검색 
 	        return readingListRepository.searchByUserIdAndQueryWithStatus(userId, status, query);

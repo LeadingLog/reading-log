@@ -51,6 +51,17 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Intege
 			+ "AND (LOWER(r.bookTitle) LIKE LOWER(CONCAT('%', :query, '%')) "
 			+ "OR LOWER(r.author) LIKE LOWER(CONCAT('%', :query, '%')))")
 	List<ReadingList> searchByUserIdAndQueryWithAll(@Param("userId") Integer userId, @Param("query") String query);
+	
+	//전체 리스트에서 도서검색 인데 관심도서인건 빼고 
+	@Query("SELECT r FROM ReadingList r " 
+		       + "WHERE r.userId = :userId "
+		       + "AND r.bookStatus <> 'INTERESTED' " 
+		       + "AND (LOWER(r.bookTitle) LIKE LOWER(CONCAT('%', :query, '%')) "
+		       + "OR LOWER(r.author) LIKE LOWER(CONCAT('%', :query, '%')))")
+		List<ReadingList> searchByUserIdAndQueryExcludingInterested(
+		    @Param("userId") Integer userId, 
+		    @Param("query") String query);
+
 
 	//전체 미완독 도서 조회 
 	@Query("""

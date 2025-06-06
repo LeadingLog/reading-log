@@ -49,7 +49,7 @@ public class ReadingRecordController {
 			@RequestParam("year") Integer year) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			Map<String, Object> data = readingRecordService.getMonthlyTotalTimeByUserAndYear(userId, year);
+			Map<String, Object> data = readingRecordService.getMonthlyCompleteCountAndTotalTime(userId, year);
 			response.put("success", true);
 			response.put("data", data);
 			return ResponseEntity.ok(response);

@@ -55,6 +55,35 @@ public interface ReadingRecordRepository extends JpaRepository<ReadingRecord, Lo
 	Integer findTodayTotalReadingTimeByUser(@Param("userId") Integer userId);
 
 	
+	//해당 연에 월별로 완독한 도서 리스트와 총 읽은 시간 출력 
+	@Query(value = """
+		    SELECT 
+		        COALESCE(rr.total_time_sum, 0) AS total_reading_time,
+		        COALESCE(rl.month, months.month) AS month,
+		        COALESCE(rl.complete_count, 0) AS complete
+		    FROM 
+		        (SELECT generate_series(1, 12) AS month) AS months
+		    LEFT JOIN (
+		        SELECT 
+		            EXTRACT(MONTH FROM finish_chk) AS month,
+		            COUNT(*) AS complete_count
+		        FROM reading_list
+		        WHERE user_id = :userId
+		          AND book_status = 'COMPLETED'
+		          AND EXTRACT(YEAR FROM finish_chk) = :year
+		        GROUP BY EXTRACT(MONTH FROM finish_chk)
+		    ) rl ON rl.month = months.month
+		    LEFT JOIN (
+		        SELECT 
+		            SUM(total_time) AS total_time_sum
+		        FROM reading_record
+		        WHERE user_id = :userId
+		          AND EXTRACT(YEAR FROM read_date) = :year
+		    ) rr ON true
+		    ORDER BY month
+		""", nativeQuery = true)
+		List<Object[]> getMonthlyCompleteCountAndTotalReadingTime(@Param("userId") Integer userId, @Param("year") Integer year);
+
 	
 	
 //	// 사용자 아이디 & 독서 일자 중 연 > 월 > 책 > 읽은시간
