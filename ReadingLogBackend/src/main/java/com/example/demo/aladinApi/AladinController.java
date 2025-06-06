@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.example.demo.code.BookStatus;
 import com.example.demo.readingList.ReadingList;
 import com.example.demo.readingList.ReadingListRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -61,17 +62,15 @@ public class AladinController {
 			if (items != null) {
 				for (Map<String, Object> item : items) { // 아이템 하나씩 요소를 돌면서 isbn13으로 비교해서 동일하면 넣어주기
 					String isbn13 = (String) item.get("isbn13"); 
-					Optional<ReadingList> hasReadingList = readingListRepository.findByUserIdAndIsbn13(userId, isbn13);
+					Optional<ReadingList> hasReadingList = 
+						    readingListRepository.findByUserIdAndIsbn13AndBookStatus(userId, isbn13, BookStatus.INTERESTED);
 
 					if (hasReadingList.isPresent()) {
-						ReadingList rl = hasReadingList.get();
-						item.put("bookStatus", rl.getBookStatus().name());
-						if (rl.getReadStartDt() != null)
-							item.put("readStartDt", rl.getReadStartDt());
-						if (rl.getReadEndDt() != null)
-							item.put("readEndDt", rl.getReadEndDt());
+					    ReadingList rl = hasReadingList.get();
+					    item.put("bookStatus", rl.getBookStatus().name());
+					} else {
+					    item.put("bookStatus", null); 
 					}
-
 				}
 			}
 

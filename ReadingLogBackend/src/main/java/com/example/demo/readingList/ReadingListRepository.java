@@ -29,6 +29,9 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Intege
 
 	// 알라딘 서버 응답 값에 추가 할 것
 	Optional<ReadingList> findByUserIdAndIsbn13(Integer userId, String isbn13);
+	
+	//알라딘 서버 응답값에 관심도서 책만 추가 
+	Optional<ReadingList> findByUserIdAndIsbn13AndBookStatus(Integer userId, String isbn13, BookStatus bookStatus);
 
 	// 유져 아이디 별로 필터링
 	Page<ReadingList> findByUserId(Integer userId, Pageable pageable);
