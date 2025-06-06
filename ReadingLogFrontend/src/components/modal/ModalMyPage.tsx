@@ -127,16 +127,14 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
 
   // 회원 탈퇴 처리
   const handleAccountDeletion = async () => {
-    /*
     try {
       const response = await axios.post(`${serverUrl}/user/user_id/modified`, {
         userId,
         nickname,
         email,
       });
-      const data = response.data;
 
-      if (data.success) {
+      if (response.data.success) {
         openModal("ModalNotice", {
           title: "회원 탈퇴가 완료되었습니다",
           confirmText: "닫기",
@@ -147,14 +145,13 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
           }
         });
       } else {
-        console.warn("회원 탈퇴 실패:", data);
+        console.warn("회원 탈퇴 실패:", response.data);
         handleDeleteFail("회원 탈퇴에 실패하였습니다. 다시 시도해주세요.");
       }
     } catch (err) {
       console.error("회원 탈퇴 실패:", err);
       handleDeleteFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
-     */
 
     openModal( "ModalNotice", {
       title: "회원 탈퇴가 완료되었습니다",
