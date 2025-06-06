@@ -140,6 +140,8 @@ export default {
         modal_Tracking_Time_Divide_Color          : "#000000",   // 독서 타임 트래킹 - 타이머 시간 경계선 색
         modal_Tracking_Time_Choice_Text           : "#000000",   // 독서 타임 트래킹 - 타이머 시간 선택 시 텍스트 색
         modal_Tracking_Time_NoChoice_Text         : "#000000",   // 독서 타임 트래킹 - 타이머 시간 미 선택 시 텍스트 색
+        modal_Tracking_loadingBg                  : "#FDFAF3",   // 독서 타임 트래킹 - 로딩 중일 때 배경 색
+        modal_Tracking_loadingSpinner             : "#96B2C8",   // 독서 타임 트래킹 - 로딩 스피너 색
         
         modal_BookPlan_Book_Title_Text    : "#000000",   // 독서 계획 - 책 제목 텍스트 색
         modal_BookPlan_Book_Sub_Title_Text: "#A1A1A1",   // 독서 계획 - 책 저자 텍스트 색

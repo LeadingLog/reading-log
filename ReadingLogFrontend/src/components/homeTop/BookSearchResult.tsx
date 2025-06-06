@@ -3,7 +3,7 @@ import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { useModalStore } from "../../store/modalStore.ts";
 import { AladinApiItem, BookSearchResultProps } from "../../types/aladinApi";
 import { fetchBooks } from "../../api/aladinApi.ts";
-import { ReadingListAddBody } from "../../types/readingListAdd.ts";
+import { ReadingListAddApiRequestBody } from "../../types/readingListAdd.ts";
 import { readingListAddApi } from "../../api/readingListAddAPI.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
@@ -21,7 +21,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   const [moreTotalResults, setMoreTotalResults] = useState<number>( totalResults )
   const containerRef = useRef<HTMLLIElement>( null );
   const [searchPage, setSearchPage] = useState<number>( 2 )
-  const [moreBookList, setMoreBookList] = useState<ReadingListAddBody[]>( [] );
+  const [moreBookList, setMoreBookList] = useState<ReadingListAddApiRequestBody[]>( [] );
   const [isFetching, setIsFetching] = useState<boolean>( false );
   const searchBooks = async (query: string, page: number) => {
     if (!query.trim()) return;
@@ -104,9 +104,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   };
 
   /* 관심도서로 추가 api */
-  const addInterested = async (item: ReadingListAddBody) => {
+  const addInterested = async (item: ReadingListAddApiRequestBody) => {
     console.log( item )
-    const ReadingListAddBodyList: ReadingListAddBody = {
+    const ReadingListAddApiRequestBody: ReadingListAddApiRequestBody = {
       userId: userId,
       bookTitle: item.bookTitle,
       author: item.author,
@@ -124,7 +124,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
         onConfirm: async () => {
           try {
             setModalIsLoading( true )
-            const response = await readingListAddApi( ReadingListAddBodyList )
+            const response = await readingListAddApi( ReadingListAddApiRequestBody )
             if (response) {
               openModal( "ModalNotice", {
                 title: "관심도서에 추가되었어요!",
@@ -153,7 +153,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 END ------------- */
 
   /* 책 리스트를 클릭하면 책 계획 모달이 뜨는 경우 ------------- */
-  const openModalBookPlan = (item: ReadingListAddBody) => {
+  const openModalBookPlan = (item: ReadingListAddApiRequestBody) => {
     openModal( "ModalBookPlan", {
       cover: item.coverImgUrl, // 여기 추가
       bookTitle: item.bookTitle,

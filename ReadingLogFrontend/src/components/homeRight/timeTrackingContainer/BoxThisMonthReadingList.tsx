@@ -90,7 +90,7 @@ export default function BoxThisMonthReadingList() {
           onClick={() => openModalTrackingPlan( item )}
         >
           <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.title}</span>
-          <ItemReadStatus readStatus={item.bookStatus}/>
+          <ItemReadStatus bookId={item.bookId} bookStatus={item.bookStatus}/>
         </li>
       ) )}
       {isLoading && (

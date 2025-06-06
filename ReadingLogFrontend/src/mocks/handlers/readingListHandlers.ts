@@ -122,26 +122,15 @@ export const readingListHandlers = [
     }
   } ),
 
-
-  // 도서 상태값 변경(독서 중/완독)
-  http.post( `${serverUrl}/readinglist/change_status`, async ({ request }) => {
-    const body = await request.json();
-    console.log( body );
-
-    return HttpResponse.json( {
-      success: true,
-    } );
-  } ),
-
   // 독서 계획 추가
-  // http.post(`${serverUrl}/readinglist/add`, async ({request}) => {
-  //   const body = await request.json();
-  //   console.log(body);
-  //
-  //   return HttpResponse.json({
-  //     success: true,
-  //   });
-  // }),
+  http.post(`${serverUrl}/readinglist/add`, async ({request}) => {
+    const body = await request.json();
+    console.log(body);
+
+    return HttpResponse.json({
+      success: true,
+    });
+  }),
 
   // 관심 도서 추가
   http.post( `${serverUrl}/readinglist/update`, async ({ request }) => {
