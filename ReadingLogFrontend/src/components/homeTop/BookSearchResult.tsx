@@ -89,23 +89,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
 
-  const ConfirmButton = () => {
-    const modalIsLoading = useModalStore( (state) => state.modalIsLoading );
-
-    return modalIsLoading ? (
-      <>
-        <span>추가 중</span>
-        <span
-          className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin ml-2"/>
-      </>
-    ) : (
-      "예 추가할래요!"
-    );
-  };
-
   /* 관심도서로 추가 api */
   const addInterested = async (item: ReadingListAddApiRequestBody) => {
-    console.log( item )
+
     const ReadingListAddApiRequestBody: ReadingListAddApiRequestBody = {
       userId: userId,
       bookTitle: item.bookTitle,
@@ -117,10 +103,11 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     };
     const addInterestedModal = () => {
       openModal( "ModalNotice", {
-        title: "관심도서로 설정하시겠어요?",
-        subTitle: "관심도서로 설정됩니다.",
-        cancelText: "닫기",
-        confirmText: <ConfirmButton/>,
+        title: "관심도서로 추가하시겠어요?",
+        subTitle: "관심도서에 추가됩니다.",
+        cancelText: "아니요",
+        confirmText: "추가하기",
+        loadingMessage: "추가중",
         onConfirm: async () => {
           try {
             setModalIsLoading( true )
