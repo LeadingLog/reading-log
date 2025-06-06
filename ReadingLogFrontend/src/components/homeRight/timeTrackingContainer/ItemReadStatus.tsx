@@ -6,7 +6,11 @@ import { useUserStore } from "../../../store/userStore.ts";
 import { bookStatusChangeBody } from "../../../types/bookStatusChange.ts";
 
 // 2. 컴포넌트 정의
-export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusParams) {
+export default function ItemReadStatus({ bookId, bookStatus, onStatusChange }: itemReadStatusParams) {
+
+  const changeStatus = () => {
+    onStatusChange();
+  };
 
   const { openModal, closeAllModals } = useModalStore()
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
@@ -23,7 +27,7 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
     const bookStatusChangeBodyValue: bookStatusChangeBody = {
       userId: userId,
       bookId: bookId ?? null,
-      bookStatus: currentStatus
+      bookStatus: currentStatus === "IN_PROGRESS" ? "COMPLETED" : "IN_PROGRESS"
     }
 
     if (currentStatus === "IN_PROGRESS") {
@@ -37,6 +41,7 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
           setModalIsLoading( true )
           try {
             await bookStatusChangeApi( bookStatusChangeBodyValue )
+            changeStatus()
             setCurrentStatus( "COMPLETED" )
             openModal( "ModalNotice", {
               title: "완독을 축하드려요!",
@@ -68,6 +73,7 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
           setModalIsLoading( true )
           try {
             await bookStatusChangeApi( bookStatusChangeBodyValue )
+            changeStatus()
             setCurrentStatus( "IN_PROGRESS" )
             openModal( "ModalNotice", {
               title: "독서 중 도서로 변경되었습니다.!",
@@ -100,15 +106,19 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
           >
             {/* 움직이는 동그라미 */}
             <div
-              className={`z-[2] h-[calc(100%-6px)] absolute aspect-square rounded-full bg-modal_BookImg_Bg transition-[left,background] duration-300 ${
-                currentStatus === "IN_PROGRESS" ? 'bg-toggle_Reading_Circle_Color left-[8%] group-hover:bg-toggle_Reading_Circle_Hover' : 'bg-toggle_Complete_Circle_Color left-[63%] group-hover:bg-toggle_Complete_Circle_Hover'
-              }`}
+              className={`z-[2] h-[calc(100%-6px)] absolute aspect-square rounded-full bg-modal_BookImg_Bg transition-[left,background] duration-300 
+              ${currentStatus === "IN_PROGRESS" && 'bg-toggle_Reading_Circle_Color left-[8%] group-hover:bg-toggle_Reading_Circle_Hover'}
+              ${currentStatus === "COMPLETED" && 'bg-toggle_Complete_Circle_Color left-[63%] group-hover:bg-toggle_Complete_Circle_Hover'}`
+            }
             ></div>
 
             {/* 상태 텍스트 */}
-            <span className={`${currentStatus === "IN_PROGRESS" ? 'right-1' : 'left-3'} 
-            absolute text-[13px] font-semibold text-toggle_Complete_Text_Color transition-opacity duration-200`}>
-              {currentStatus === "IN_PROGRESS" ? '독서중' : '완독'}
+            <span className={`absolute text-[13px] font-semibold text-toggle_Complete_Text_Color transition-opacity duration-200
+              ${currentStatus === "IN_PROGRESS" && 'right-1'}
+              ${currentStatus === "COMPLETED" && 'left-3'}`
+            }>
+              {currentStatus === "IN_PROGRESS" && '독서중'}
+              {currentStatus === "COMPLETED" && '완독'}
             </span>
           </button>
         ) :
