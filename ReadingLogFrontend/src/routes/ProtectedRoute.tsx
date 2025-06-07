@@ -9,17 +9,16 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const serverUrl = import.meta.env.VITE_SERVER_URL;
-  const resetUser = useUserStore(state => state.resetUser);
-  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const resetUser = useUserStore( state => state.resetUser );
   const [authorized, setAuthorized] = useState<boolean | null>( null );
 
   useEffect( () => {
     (async () => {
 
-      await delay(3000);
-
       try {
-        await axios.get( `${serverUrl}/user/getUserSession`);
+        await axios.get( `${serverUrl}/user/getUserSession`, {
+          withCredentials: true
+        } );
         setAuthorized( true );
       } catch (error: unknown) {
         if (axios.isAxiosError( error ) && error.response?.status === 401) {
