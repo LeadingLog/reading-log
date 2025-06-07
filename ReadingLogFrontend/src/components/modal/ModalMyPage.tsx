@@ -7,7 +7,7 @@ import axios from "axios";
 
 const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
   const { openModal, closeModal, closeAllModals } = useModalStore();
-  const { nickname, userId, email } = useUserStore();
+  const { nickname, userId, email, resetUser } = useUserStore();
   const navigate = useNavigate();
   const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
 
@@ -138,6 +138,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
           confirmText: "닫기",
           onlyConfirm: true,
           onConfirm: () => {
+            resetUser(); // localStorage 초기화
             closeAllModals();
             navigate( "/login" );
           }
