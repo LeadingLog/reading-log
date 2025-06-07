@@ -13,20 +13,20 @@ export default function Router() {
   return (
     <Routes>
       <Route path="*" element={<Error/>}/>
-      {/*<Route path="/" element={<Main/>}/>*/}
+      <Route path="/" element={<Main/>}/>
       {/*<Route path="/login" element={<Login/>}/>*/}
       <Route path="/oauth/naver/callback" element={<NaverCallback/>}/>
       <Route path="/oauth/kakao/callback" element={<KakaoCallback/>}/>
 
       {/*루트 경로 접근 시 로그인 여부 체크*/}
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Main/>
-          </ProtectedRoute>
-        }
-      />
+      {/*<Route*/}
+      {/*  path="/"*/}
+      {/*  element={*/}
+      {/*    <ProtectedRoute>*/}
+      {/*      <Main/>*/}
+      {/*    </ProtectedRoute>*/}
+      {/*  }*/}
+      {/*/>*/}
 
 
       {/*로그인 페이지는 로그인되어있으면 메인으로 리다이렉트*/}
