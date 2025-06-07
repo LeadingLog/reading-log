@@ -146,7 +146,7 @@ export default function ItemStopWatch() {
   // 시간 경과 시 세션 연장 요청
   useEffect( () => {
     if (time.hour > 0) {
-      console.log( `스톱워치 테스트 :${time.hour}시간으로 바뀜 → 세션 연장 요청` );
+      console.log( `스톱워치 :${time.hour}시간으로 바뀜 → 세션 연장 요청` );
 
       const extendSession = async () => {
         try {
