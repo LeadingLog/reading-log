@@ -10,6 +10,7 @@ import { useDateStore } from "../../store/useDateStore.ts";
 import { fetchMonthReadingList } from "../../api/monthReadingListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
+/* 월별 통계 화면 아래 북 이미지 리스트 용 */
 export default function BookImgList() {
   const [page, setPage] = useState<number>( 0 );
   const [hasMore, setHasMore] = useState( true );
@@ -27,9 +28,9 @@ export default function BookImgList() {
     try {
       setIsLoading( true );
       const data = await fetchMonthReadingList( { userId, year, month, page, size } );
+
       // 받아온 독서상태별로 데이터 순서 정렬
-      const filterInterested = data.monthlyReadingList.filter( (item: monthReadingListItem) => item.bookStatus !== "INTERESTED" )
-      const sortedList = filterInterested.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
+      const sortedList = data.monthlyReadingList.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
         return readOrder[a.bookStatus] - readOrder[b.bookStatus];
       } );
       setThisMonthReadingList( (prev) => [...prev, ...sortedList] )
@@ -46,7 +47,7 @@ export default function BookImgList() {
   useEffect( () => {
     if (page === 0) return; // prevent redundant call from reset
     if (isLoading || !hasMore) return;
-    searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
+    searchThisMonthReadingList( { userId, year, month, page, size: 21 } );
   }, [page] );
 
   // 년도 및 월이 변경되는 경우 해당 월 정보 가져옴
@@ -55,13 +56,13 @@ export default function BookImgList() {
     setPage( 0 );
     setHasMore( true );
     // 직접 호출
-    searchThisMonthReadingList( { userId, year, month, page: 0, size: 20 } );
+    searchThisMonthReadingList( { userId, year, month, page: 0, size: 21 } );
   }, [month, year] );
 
   const openModalBookPlan = (item: monthReadingListItem) => {
     openModal( "ModalBookPlan", {
-      cover: item.cover,
-      bookTitle: item.title,
+      cover: item.coverImgUrl,
+      bookTitle: item.bookTitle,
       author: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
@@ -98,7 +99,7 @@ export default function BookImgList() {
           onClick={() => openModalBookPlan( item )}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >
-          <img src={item.cover} alt={item.title} className="w-full h-full object-cover"/>
+          <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
           <div
             className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
               ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :
@@ -117,27 +118,30 @@ export default function BookImgList() {
           </div>
         </li>
       ) )}
-      {isLoading && (
-        <li className="py-2 col-span-3 justify-center flex gap-1 text-sm text-favoriteList_Searching_Text">
+      {isLoading ? (
+        <li
+          className="pb-2 h-full flex-1 col-span-3 flex flex-col font-bold justify-center items-center gap-2 text-xl text-favoriteList_Empty_Text">
+          <span
+            className="w-10 h-10 border-8 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
           <span>도서를 불러 오는 중입니다.</span>
-          <span className="w-5 h-5 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
         </li>
-      )}
-      {!isLoading && thisMonthReadingList.length === 0 && (
-        <li className="py-2 col-span-3 justify-center flex gap-1 text-sm text-favoriteList_Empty_Text">
+      ) : !isLoading && thisMonthReadingList.length === 0 && (
+        <li
+          className="pb-2 h-full flex-1 col-span-3 font-bold justify-center items-center flex gap-1 text-sm text-favoriteList_Empty_Text">
           <span className="text-2xl font-bold">{month}월은 도서 정보가 없어요</span>
         </li>
       )}
-      {hasMore && (
+      {hasMore && !isLoading ? (
         <li
           ref={lastItemRef}
           className="invisible h-1 col-span-3"
         ></li>
-      )}
-      {!hasMore && thisMonthReadingList.length > 0 && (
-        <li className="py-2 col-span-3 justify-center flex gap-1 text-sm text-favoriteList_Searching_End_Text">
-          <span>{month}월달 도서를 모두 불러왔습니다.</span>
-        </li>
+      ) : (
+        !hasMore && thisMonthReadingList.length > 0 && (
+          <li className="pb-2 col-span-3 justify-center flex gap-1 text-sm text-favoriteList_Searching_End_Text">
+            <span>{month}월달 도서를 모두 불러왔습니다.</span>
+          </li>
+        )
       )}
     </>
   );

@@ -14,6 +14,14 @@ export default function TimeLine() {
   const { year, setMonth } = useDateStore(); // Zustand에서 년도 정보 가져오기
   const { userId } = useUserStore()
 
+  const thisMonthReadingList = () => {
+    setRightContent(
+      'TimeTracking', {},
+      { title: '이번 달 독서 리스트' },
+    )
+    // setMonth( month )
+  }
+
   const statsMonth = (month: number) => {
     setRightContent(
       'StatsPage',
@@ -243,7 +251,7 @@ export default function TimeLine() {
 
       const hour = Math.floor( totalSeconds / 3600 );
       const min = Math.floor( (totalSeconds % 3600) / 60 );
-      const sec = Math.floor(totalSeconds % 60);
+      const sec = Math.floor( totalSeconds % 60 );
 
       setAllReadingTimeHour( hour )
       setAllReadingTimeMin( min )
@@ -303,12 +311,7 @@ export default function TimeLine() {
 
           <button
             className="flex gap-2 justify-end items-center group"
-            onClick={() =>
-              setRightContent(
-                'TimeTracking', {},
-                { title: '이번 달 독서 리스트' },
-              )
-            }
+            onClick={() => thisMonthReadingList()}
           >
             이번 달 독서 리스트 보기
             <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
