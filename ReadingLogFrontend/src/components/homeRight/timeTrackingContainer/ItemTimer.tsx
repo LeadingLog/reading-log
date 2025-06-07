@@ -3,11 +3,25 @@ import { usePageStore } from "../../../store/pageStore.ts";
 import { useModalStore } from "../../../store/modalStore.ts";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useUserStore } from "../../../store/userStore.ts";
+import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
+import { saveReadingRecordApi } from "../../../api/readingRecord.ts";
 
 export default function ItemTimer() {
+  const { openModal, closeModal } = useModalStore();
+  const { pageData, setRightContent, params } = usePageStore();
+  const { userId } = useUserStore();
+  const bookData = params.TimeTracking?.bookData;
+  const [startTimestamp, setStartTimestamp] = useState<Date | null>( null ); // 스탑워치 시작 시간
+  const [time, setTime] = useState( { hour: 0, minute: 0, second: 0 } ); // 타이머 시간 저장
 
-  const { openModal, closeAllModals } = useModalStore();
-  const { pageData, setRightContent } = usePageStore();
+  const [timeLeft, setTimeLeft] = useState( pageData.time || 0 );
+  const radius = 60;
+  const circumference = 2 * Math.PI * radius;
+  const progress =
+    pageData.time && pageData.time > 0
+      ? circumference * (timeLeft / (pageData.time * 60))
+      : 0;
 
   // 독서 종료 모달
   const stopTimer = () => {
@@ -17,34 +31,75 @@ export default function ItemTimer() {
       cancelText: "아니요 더 읽을래요!",
       confirmText: "네 종료할게요!",
       reverseBtn: true,
-      onConfirm: () => {
-        setTimeLeft( 0 )
-        openModal( "ModalNotice", {
-          title: "독서시간 저장 완료!",
-          subTitle: "수고하셨어요!",
-          onlyConfirm: true,
-          confirmText: "닫기",
-          onConfirm: () => { // 타이머 컴포넌트 사라짐
-            setRightContent(
-              'TimeTracking',
-              { TimeTracking: { tab: 'onlyMonthReadingList' } }, // 파라미터,
-            )
-            closeAllModals()
-          }
-        } )
+      onConfirm: async () => {
+        // 데이터 보내기
+        await saveReadingRecord();
+        setTimeLeft( 0 );
       }
     } )
   }
 
-  // 타이머 시간 표시
+  /* 독서 시간 기록 */
+  const saveReadingRecord = async () => {
+    if (startTimestamp === null) {
+      handleReadingRecordFail( "독서 시간 기록에 실패하였습니다. 다시 시도해주세요.===" );
+      return;
+    }
 
-  const [timeLeft, setTimeLeft] = useState( pageData.time || 0 );
-  const radius = 60;
-  const circumference = 2 * Math.PI * radius;
-  const progress =
-    pageData.time && pageData.time > 0
-      ? circumference * (timeLeft / pageData.time)
-      : 0;
+    if (userId === null) {
+      console.warn( "User ID가 없습니다." );
+      return;
+    }
+
+    const readingRecord = createReadingRecord( {
+      bookId: bookData?.bookId ?? 0,
+      userId,
+      startTimestamp,
+      time: {
+        hour: time.hour,
+        minute: time.minute,
+        second: time.second
+      }
+    } );
+
+    try {
+      const data = await saveReadingRecordApi( readingRecord );
+      if (data.success) {
+        const secondModalId = openModal( "ModalNotice", {
+          title: "독서시간 저장 완료",
+          subTitle: "수고하셨어요",
+          onlyConfirm: true,
+          confirmText: "닫기",
+          onConfirm: () => {
+            closeModal( secondModalId );
+            setRightContent(
+              'TimeTracking',
+              { TimeTracking: { tab: 'onlyMonthReadingList' } }, // 파라미터,
+            )
+          }
+        } );
+      } else {
+        handleReadingRecordFail( "독서 시간 기록에 실패하였습니다. 다시 시도해주세요." );
+      }
+    } catch (err) {
+      console.warn( "독서 시간 기록 실패:", err );
+      handleReadingRecordFail( "서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요." );
+    }
+  }
+
+  // 독서 기록 실패 시 공통 모달 표시
+  const handleReadingRecordFail = (message?: string, title?: string) => {
+    const readingRecordFailModal = openModal( "ModalNotice", {
+      title: title || "독서 시간 저장 실패",
+      subTitle: message || "독서 시간 저장에 실패하였습니다. 다시 시도해주세요.",
+      onlyConfirm: true,
+      confirmText: "닫기",
+      onConfirm: () => {
+        closeModal( readingRecordFailModal );
+      },
+    } );
+  };
+
   // pageData.time이 바뀔 경우 초기화
   useEffect( () => {
     setTimeLeft( pageData.time || 0 );
@@ -69,6 +124,33 @@ export default function ItemTimer() {
     return () => clearInterval( interval );
   }, [timeLeft, openModal] );
 
+  useEffect( () => {
+    if (timeLeft === 0) {
+
+      updateReadTime( timeLeft, pageData.time! );
+      const handleTimerEnd = async () => {
+        await saveReadingRecord();
+      };
+      handleTimerEnd();
+    }
+  }, [timeLeft] );
+
+  const updateReadTime = (timeLeft: number, totalTimeInMinutes: number) => {
+    const totalSeconds = totalTimeInMinutes * 60; // 전체 설정 시간 (초)
+    const readSeconds = totalSeconds - timeLeft; // 읽은 시간 (초)
+
+    const hour = Math.floor( readSeconds / 3600 );
+    const minute = Math.floor( (readSeconds % 3600) / 60 );
+    const second = readSeconds % 60;
+
+    setTime( { hour, minute, second } );
+  };
+
+  useEffect( () => {
+    setStartTimestamp( new Date() ); // 타이머 시작 시간 기록
+    setTimeLeft( (pageData.time || 0) * 60 ); // 분 -> 초 변환
+  }, [pageData.time] );
+
   return (
     // 독서 타임 트랙킹 - 타이머 인 경우
     <>
@@ -83,7 +165,7 @@ export default function ItemTimer() {
             strokeDasharray={circumference} // 원의 총 길이
             strokeDashoffset={progress} // 시간이 지남에 따라 점점 사라짐
             strokeLinecap="square"
-            animate={{ strokeDashoffset: circumference * (timeLeft / (pageData.time ?? 0)) }}
+            animate={{ strokeDashoffset: circumference * (timeLeft / ((pageData.time ?? 0) * 60)) }}
             transition={{ duration: 1, ease: "linear" }} // 부드러운 감소 효과
             className="stroke-timeLeft_Bg"
             style={{ transform: "rotate(-90deg)", transformOrigin: "center" }} // 시작 위치를 상단으로 변경

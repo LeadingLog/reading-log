@@ -167,7 +167,7 @@ export default function ItemStopWatch() {
     }
   }, [time.hour] );
 
-  // 회원 탈퇴 실패 시 공통 모달 표시
+  // 독서 기록 실패 시 공통 모달 표시
   const handleReadingRecordFail = (message?: string, title?: string) => {
     const readingRecordFailModal = openModal( "ModalNotice", {
       title: title || "독서 시간 저장 실패",
