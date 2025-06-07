@@ -32,6 +32,12 @@ public class ReadingListService {
         this.readingListRepository = readingListRepository;
     }
 
+    public Map<String, Object> readingCountByMonth(Integer userId, Integer year) {
+        Map<String, Object> rtn = new HashMap<>();
+
+        return rtn;
+    }
+
 
     // 이번달 독서 리스트
     public Map<String, Object> getMonthlyReadingList(Integer userId, Integer year, Integer month, Pageable pageable) {
@@ -66,7 +72,7 @@ public class ReadingListService {
 
         return rtn;
     }
-  
+
 
     private BookStatus convertStatus(String status) {
         return switch (status) {
@@ -111,7 +117,7 @@ public class ReadingListService {
     //책 상태 값 변경
     @Transactional
     public void updateReadingList(Map<String, Object> request) {
-        Long bookId = Long.parseLong(request.get("bookId").toString());
+        Integer bookId = Integer.parseInt(request.get("bookId").toString());
         Integer userId = Integer.parseInt(request.get("userId").toString());
         String bookStatusStr = (String) request.get("bookStatus");
 
@@ -151,7 +157,7 @@ public class ReadingListService {
     //독서리스트 지우기
     @Transactional
     public void deleteReadingList(Map<String, Object> request) {
-        Long bookId = Long.parseLong(request.get("bookId").toString());
+        Integer bookId = Integer.parseInt(request.get("bookId").toString());
         Integer userId = Integer.parseInt(request.get("userId").toString());
 
         ReadingList readingList = readingListRepository.findById(bookId)
@@ -166,9 +172,7 @@ public class ReadingListService {
 
     //책 목록 검색하기
     @Transactional
-    public Page<ReadingList> getReadingListByFilter(Integer userId, Integer tabType, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-
+    public Page<ReadingList> getReadingListByFilter(Integer userId, Integer tabType, Pageable pageable) {
         BookStatus status = null;
         switch (tabType) {
             case 1 -> status = BookStatus.IN_PROGRESS;
@@ -178,11 +182,12 @@ public class ReadingListService {
         }
 
         if (status == null) {
-            return readingListRepository.findByUserId(userId, pageable);
+            return readingListRepository.findByUserIdAndBookStatusNot(userId, BookStatus.INTERESTED, pageable);
         } else {
             return readingListRepository.findByUserIdAndBookStatus(userId, status, pageable);
         }
     }
+
 
     //검색어로 책 검색하기
     @Transactional
@@ -198,7 +203,7 @@ public class ReadingListService {
 
         if (status == null) {
             //전체 검색
-            return readingListRepository.searchByUserIdAndQueryWithAll(userId, query);
+            return readingListRepository.searchByUserIdAndQueryExcludingInterested(userId, query);
         } else {
             //필터링 된 상태에서 검색
             return readingListRepository.searchByUserIdAndQueryWithStatus(userId, status, query);
@@ -210,7 +215,7 @@ public class ReadingListService {
     public List<ReadingList> getIncompleteBook(Integer userId) {
 
         LocalDate today = LocalDate.now().withDayOfMonth(1);
-        List<BookStatus> statuses = List.of(BookStatus.NOT_STARTED, BookStatus.IN_PROGRESS);
+        List<BookStatus> statuses = List.of (BookStatus.NOT_STARTED, BookStatus.IN_PROGRESS);
         return readingListRepository.findInCompleteBook(userId, statuses, today);
     }
 
@@ -219,7 +224,7 @@ public class ReadingListService {
     public List<ReadingList> getIncompleteBook(Integer userId, Integer year, Integer month) {
 
         LocalDate targetDate = LocalDate.of(year, month, YearMonth.of(year, month).lengthOfMonth());
-        List<BookStatus> statuses = List.of(BookStatus.NOT_STARTED, BookStatus.IN_PROGRESS);
+        List<BookStatus> statuses = List.of (BookStatus.NOT_STARTED, BookStatus.IN_PROGRESS);
         return readingListRepository.findInCompleteBookInMonth(userId, statuses, targetDate);
     }
 
