@@ -41,6 +41,6 @@ public class ReadingListDto {
 //                .createdAt(readingList.getCreatedAt()) // createdAt 필드 설정
                 .build();
     }
-    
+
 
 }
