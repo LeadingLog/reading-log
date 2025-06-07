@@ -19,9 +19,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       await delay(3000);
 
       try {
-        await axios.get( `${serverUrl}/user/getUserSession`, {
-          withCredentials: true,
-        } );
+        await axios.get( `${serverUrl}/user/getUserSession`);
         setAuthorized( true );
       } catch (error: unknown) {
         if (axios.isAxiosError( error ) && error.response?.status === 401) {
