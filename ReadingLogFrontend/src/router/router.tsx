@@ -4,7 +4,7 @@ import Error from "../view/Error.tsx";
 import Login from "../view/Login.tsx";
 import NaverCallback from "../view/social/NaverCallback.tsx";
 import KakaoCallback from "../view/social/KakaoCallback.tsx";
-import ProtectedRoute from "../routes/ProtectedRoute.tsx";
+//import ProtectedRoute from "../routes/ProtectedRoute.tsx";
 import { useUserStore } from "../store/userStore.ts";
 
 export default function Router() {
