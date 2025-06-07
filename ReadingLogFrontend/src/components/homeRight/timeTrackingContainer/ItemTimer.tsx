@@ -7,6 +7,7 @@ import { useUserStore } from "../../../store/userStore.ts";
 import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
 import { saveReadingRecordApi } from "../../../api/readingRecord.ts";
 
+
 export default function ItemTimer() {
   const { openModal, closeModal } = useModalStore();
   const { pageData, setRightContent, params } = usePageStore();
@@ -142,7 +143,7 @@ export default function ItemTimer() {
       };
       handleTimerEnd();
     }
-  }, [timeLeft, saveReadingRecord] );
+  }, [timeLeft] );
 
 
   return (

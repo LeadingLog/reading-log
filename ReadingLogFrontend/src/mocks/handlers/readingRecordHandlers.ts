@@ -12,14 +12,14 @@ export const readingRecordHandlers = [
   } ),
 
   // 독서 타이머 기록
-  // http.post( `${serverUrl}/api/readingrecord/add`, async ({ request }) => {
-  //   const body = await request.json();
-  //   console.log( body );
-  //
-  //   return HttpResponse.json( {
-  //     success: true,
-  //   } );
-  // } ),
+  http.post( `${serverUrl}/api/readingrecord/add`, async ({ request }) => {
+    const body = await request.json();
+    console.log( body );
+
+    return HttpResponse.json( {
+      success: true,
+    } );
+  } ),
 
   // 사용자의 연간 총 독서 시간 조회
   http.get( `${serverUrl}/api/readingrecord/stats/time/yy`, async ({ request }) => {
