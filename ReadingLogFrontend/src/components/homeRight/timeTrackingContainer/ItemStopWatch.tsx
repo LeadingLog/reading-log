@@ -145,8 +145,8 @@ export default function ItemStopWatch() {
 
   // 시간 경과 시 세션 연장 요청
   useEffect( () => {
-    if (time.minute > 0) {
-      console.log( `스톱워치 테스트 :${time.minute}시간으로 바뀜 → 세션 연장 요청` );
+    if (time.hour > 0) {
+      console.log( `스톱워치 :${time.hour}시간으로 바뀜 → 세션 연장 요청` );
 
       const extendSession = async () => {
         try {
@@ -165,7 +165,7 @@ export default function ItemStopWatch() {
         console.error( 'extendSession 실행 중 에러 발생:', e )
       );
     }
-  }, [time.minute] );
+  }, [time.hour] );
 
   // 회원 탈퇴 실패 시 공통 모달 표시
   const handleReadingRecordFail = (message?: string, title?: string) => {
