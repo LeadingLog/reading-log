@@ -5,36 +5,41 @@ import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from
 import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
 import { useUserStore } from "../../../store/userStore.ts";
 
+/* 이번 달 독서 리스트 */
 export default function BoxThisMonthReadingList() {
 
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
+
+  const now = new Date();
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1
 
   const [page, setPage] = useState<number>( 0 );
   const [hasMore, setHasMore] = useState( true ); // 더 불러올 데이터가 있는지 여부
   const [isLoading, setIsLoading] = useState( false ); // 로딩 상태 추가
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState( false );
 
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
     openModal( 'ModalTrackingPlan', {
       bookId: item.bookId,
-      bookTitle: item.title,
+      bookTitle: item.bookTitle,
       author: item.author,
-      cover: item.cover,
+      cover: item.coverImgUrl,
       bookLink: item.link,
       cancelText: '닫기',
       confirmText: '독서 시작',
     } )
   }
 
-  const searchThisMonthReadingList = async ({ userId, page, size }: fetchThisMonthReadingListParams) => {
+  const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchThisMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
     try {
       setIsLoading( true );
-      const data = await fetchThisMonthReadingList( { userId, page, size } );
+      const data = await fetchThisMonthReadingList( { userId, year, month, page, size } );
       // 받아온 독서상태별로 데이터 순서 정렬
       const sortedList = data.monthlyReadingList.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
         return readOrder[a.bookStatus] - readOrder[b.bookStatus];
@@ -52,14 +57,14 @@ export default function BoxThisMonthReadingList() {
 
   /* 독서중 & 완독 값 변경시 리렌더링용 */
   const handleStatusChange = () => {
-    setThisMonthReadingList([]); // 기존 리스트 초기화
-    setPage(0); // 첫 페이지부터 다시 시작
-    setRefresh((prev) => !prev); // refresh를 토글해서 useEffect 실행
+    setThisMonthReadingList( [] ); // 기존 리스트 초기화
+    setPage( 0 ); // 첫 페이지부터 다시 시작
+    setRefresh( (prev) => !prev ); // refresh를 토글해서 useEffect 실행
   };
 
   useEffect( () => {
-    searchThisMonthReadingList( { userId, page, size: 20 } );
-  }, [page, refresh]);
+    searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
+  }, [page, refresh] );
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>( null );
   const lastItemRef = useCallback(
@@ -98,7 +103,7 @@ export default function BoxThisMonthReadingList() {
           className="cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
           onClick={() => openModalTrackingPlan( item )}
         >
-          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.title}</span>
+          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.bookTitle}</span>
           <ItemReadStatus bookId={item.bookId} bookStatus={item.bookStatus} onStatusChange={handleStatusChange}/>
         </li>
       ) )}

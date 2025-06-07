@@ -5,6 +5,8 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const fetchThisMonthReadingList = async ({
                                                   userId,
+                                                  year,
+                                                  month,
                                                   page,
                                                   size
                                                 }: fetchThisMonthReadingListParams) => {
@@ -14,6 +16,8 @@ export const fetchThisMonthReadingList = async ({
     {
       params: {
         userId: userId, // 실제 로그인 유저 ID로 교체 필요
+        year: year,
+        month: month,
         page: page,
         size: size
       },
