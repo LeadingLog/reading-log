@@ -28,7 +28,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
         setAuthorized( false );
       }
     })();
-  }, [resetUser, serverUrl] );
+  }, [serverUrl] );
 
   if (authorized === null) {
     return (
