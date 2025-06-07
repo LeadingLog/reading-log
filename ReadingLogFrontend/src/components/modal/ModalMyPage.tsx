@@ -7,7 +7,7 @@ import axios from "axios";
 
 const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
   const { openModal, closeModal, closeAllModals } = useModalStore();
-  const { nickname, userId, email } = useUserStore();
+  const { nickname, userId, email, resetUser } = useUserStore();
   const navigate = useNavigate();
   const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
 
@@ -127,34 +127,30 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
 
   // 회원 탈퇴 처리
   const handleAccountDeletion = async () => {
-    /*
     try {
-      const response = await axios.post(`${serverUrl}/user/user_id/modified`, {
-        userId,
-        nickname,
-        email,
-      });
-      const data = response.data;
+      const response = await axios.delete( `${serverUrl}/user/${userId}/delete`, {
+        data: { userId }
+      } );
 
-      if (data.success) {
-        openModal("ModalNotice", {
+      if (response.data.success) {
+        openModal( "ModalNotice", {
           title: "회원 탈퇴가 완료되었습니다",
           confirmText: "닫기",
           onlyConfirm: true,
           onConfirm: () => {
+            resetUser(); // localStorage 초기화
             closeAllModals();
-            navigate("/login");
+            navigate( "/login" );
           }
-        });
+        } );
       } else {
-        console.warn("회원 탈퇴 실패:", data);
-        handleDeleteFail("회원 탈퇴에 실패하였습니다. 다시 시도해주세요.");
+        console.warn( "회원 탈퇴 실패:", response.data );
+        handleDeleteFail( "회원 탈퇴에 실패하였습니다. 다시 시도해주세요." );
       }
     } catch (err) {
-      console.error("회원 탈퇴 실패:", err);
-      handleDeleteFail("서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      console.error( "회원 탈퇴 실패:", err );
+      handleDeleteFail( "서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요." );
     }
-     */
 
     openModal( "ModalNotice", {
       title: "회원 탈퇴가 완료되었습니다",

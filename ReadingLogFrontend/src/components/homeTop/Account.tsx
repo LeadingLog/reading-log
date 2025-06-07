@@ -8,8 +8,7 @@ import axios from "axios";
 export default function Account() {
   const navigate = useNavigate();
   const { openModal, closeAllModals } = useModalStore(); // Zustand의 openModal 가져오기
-  const resetUser = useUserStore( (state) => state.resetUser ); // 로그아웃을 위한 reset
-  const nickname = useUserStore( (state) => state.nickname ); // 닉네임 가져오기
+  const { nickname, resetUser } = useUserStore();
 
   // 로그아웃 처리
   const handleLogout = async () => {
