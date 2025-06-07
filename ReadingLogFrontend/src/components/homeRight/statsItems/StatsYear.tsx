@@ -18,19 +18,23 @@ export default function StatsYear() {
   const [totalReadingTimeMin, setTotalReadingTimeMin] = useState<number>( 0 )
   const [totalReadingTimeSec, setTotalReadingTimeSec] = useState<number>( 0 )
 
+  const [isLoading, setIsLoading] = useState( false );
+
   /* 그래프 정보 */
   const monthList: number[] = Array.from( { length: 12 }, (_, i) => i + 1 );
   const [bookGraphList, setBookGraphList] = useState<StatsYearList[]>( [] )
 
   const searchStatsYear = async ({ userId, year }: fetchStatsYearApiParams) => {
+    setIsLoading( true )
     try {
       const response = await fetchStatsYearApi( { userId, year } )
+
       const data = response.data.data
 
       if (data) {
         /* 독서 시간 */
         const totalReadingTime = data.totalReadingTime
-        console.log(totalReadingTime)
+
         const ReadingTimeHour = Math.floor( totalReadingTime / 3600 )
         const ReadingTimeMin = Math.floor( (totalReadingTime % 3600) / 60 );
         const ReadingTimeSec = Math.floor( totalReadingTime % 60 );
@@ -42,8 +46,6 @@ export default function StatsYear() {
         setTotalCompleteBookCount( completeCount )
 
         const maxCompleteCount = Math.max( ...data.monthlyReadingList.map( (data: StatsYearList) => data.complete ) )
-
-
         const updatedList = data.monthlyReadingList.map( (item: StatsYearList) => ({
           ...item,
           height: parseFloat( (item.complete / maxCompleteCount).toFixed( 2 ) )
@@ -55,7 +57,7 @@ export default function StatsYear() {
     } catch (error) {
       console.error( "연별 통계 데이터 가져오기 실패", error )
     } finally {
-      //
+      setIsLoading( false )
     }
   }
 
@@ -135,7 +137,8 @@ export default function StatsYear() {
         </span>
         <span className="text-2xl font-semibold text-stats_Info_Text">
           {year}년도는
-          <span className="text-stats_Info_Text_Highlight"> {totalReadingTimeHour}시간 {totalReadingTimeMin}분 {totalReadingTimeSec}초 </span>
+          <span
+            className="text-stats_Info_Text_Highlight"> {totalReadingTimeHour}시간 {totalReadingTimeMin}분 {totalReadingTimeSec}초 </span>
           이나 책을 읽으셨어요!
         </span>
       </article>
@@ -166,25 +169,33 @@ export default function StatsYear() {
           ref={containerRef}
           className="flex flex-1 items-end justify-between"
         >
-          {bookGraphList.map( (item, i) =>
+          {isLoading ? (
             <li
-              key={i}
-              className={`relative h-[90%] flex flex-1 justify-center  `}
-
-            >
+              className={`relative h-[90%] font-bold flex flex-col flex-1 justify-center items-center gap-4 text-xl text-stats_Info_Text`}>
               <span
-                className="absolute transition-[bottom] bottom-0 month-circle w-5 aspect-square bg-stats_Year_Graph_MonthItem_Circle border-[5px] border-stats_Year_Graph_MonthItem_Circle_Border rounded-full"
-                style={{ bottom: `${item.height ? item.height * 100 : ""}%` }}
+                className="w-10 h-10 border-8 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
+              <span>연별 통계 그래프 정보를 가져 오는 중입니다.</span>
+            </li>
+          ) : (
+            bookGraphList.map( (item, i) =>
+              <li
+                key={i}
+                className={`relative h-[90%] flex flex-1 justify-center`}
               >
                 <span
-                  className="absolute left-1/2 transform -translate-x-1/2 bottom-[150%] text-stats_Year_Graph_Month_Text text-xl font-semibold bg-stats_Month_Graph_Icon_Color px-1 rounded-full"
+                  className="absolute transition-[bottom] bottom-0 month-circle w-5 aspect-square bg-stats_Year_Graph_MonthItem_Circle border-[5px] border-stats_Year_Graph_MonthItem_Circle_Border rounded-full"
+                  style={{ bottom: `${item.height * 100}%` }}
                 >
-                  {item.complete}
-                </span>
+                  <span
+                    className="absolute left-1/2 transform -translate-x-1/2 bottom-[150%] text-stats_Year_Graph_Month_Text text-xl font-semibold bg-stats_Month_Graph_Icon_Color px-1 rounded-full"
+                  >
+                    {item.complete}
+                  </span>
 
-              </span>
-            </li>
-          )}
+                </span>
+              </li>
+            ))
+          }
         </ul>
 
         {/* 그래프 월 표시 */}

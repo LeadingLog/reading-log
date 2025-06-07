@@ -5,11 +5,11 @@
 export interface monthReadingListItem {
   bookId: number;
   userId: number | null;
-  title: string;
+  bookTitle: string;
   author: string;
   isbn13?: string;
   link?: string;
-  cover?: string;
+  coverImgUrl?: string;
   bookStatus: 'IN_PROGRESS' | 'NOT_STARTED' | 'COMPLETED' | 'INTERESTED';
   readStartDt?: string;
   readEndDt?: string;
@@ -27,6 +27,8 @@ export interface fetchMonthReadingListParams {
 // 독서 리스트 요청 파라미터 타입
 export interface fetchThisMonthReadingListParams {
   userId: number | null;
+  year: number,
+  month: number,
   page?: number,
   size?: number
 }

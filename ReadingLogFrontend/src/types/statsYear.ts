@@ -8,5 +8,5 @@ export interface fetchStatsYearApiParams {
 export interface StatsYearList {
   month: number;
   complete: number;
-  height?: number
+  height: number
 }
