@@ -12,7 +12,7 @@ export default function Router() {
   return (
     <Routes>
       <Route path="*" element={<Error/>}/>
-      <Route path="/" element={<Main/>}/>
+      {/*<Route path="/" element={<Main/>}/>*/}
       {/*<Route path="/login" element={<Login/>}/>*/}
       <Route path="/oauth/naver/callback" element={<NaverCallback/>}/>
       <Route path="/oauth/kakao/callback" element={<KakaoCallback/>}/>
@@ -26,6 +26,10 @@ export default function Router() {
       {/*    </ProtectedRoute>*/}
       {/*  }*/}
       {/*/>*/}
+      <Route
+        path="/"
+        element={(userId === 0) ? <Navigate to="/login" replace/> : <Main/>}
+      />
 
       {/*로그인 페이지는 로그인되어있으면 메인으로 리다이렉트*/}
       <Route
