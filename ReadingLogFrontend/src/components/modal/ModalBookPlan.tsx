@@ -2,15 +2,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useModalStore } from '../../store/modalStore';
 import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import IconCalendar from "../../assets/Icon-calendar.svg?react"
-import { ModalBookPlanProps } from "../../types/modal.ts";
+import { ModalBookPlanProps, ModalData } from "../../types/modal.ts";
 import { readingListAddApi } from "../../api/readingListAddAPI.ts";
-import { ReadingListAddBody } from "../../types/readingListAdd.ts";
+import { ReadingListAddApiRequestBody } from "../../types/readingListAdd.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
-const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author, isbn13, cover, bookLink }) => {
+const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
+                                                       bookId,
+                                                       title,
+                                                       bookTitle,
+                                                       author,
+                                                       isbn13,
+                                                       cover,
+                                                       bookLink,
+                                                       readStartDt,
+                                                       readEndDt,
+                                                       confirmText
+                                                     }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
   const { userId } = useUserStore();
-
+  console.log(bookId)
   const [isLoading, setIsLoading] = useState<boolean>( false );
 
   /* 시작 달 종료 달 표시용 */
@@ -31,9 +42,10 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
   };
 
   /* 시작달 or 종료달 캘릭터 뛰우기 */
-  const openCalendar = (startOrEnd: "시작 달" | "종료 달") => {
+  const openCalendar = ({ startOrEnd }: ModalData) => {
     const isStart = startOrEnd === "시작 달";
     const { modals } = useModalStore.getState();
+
     // 이미 같은 종류의 모달이 열려 있다면 아무것도 하지 않음
     const sameModal = modals.find(
       (modal) =>
@@ -54,30 +66,16 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
     // 모달 열기
     openModal( 'ModalCalendar', {
       startOrEnd,
-      year: isStart ? pickStartYear : pickEndYear,
+      currentYear: isStart ? pickStartYear : pickEndYear,
       pickYear: isStart ? setPickStartYear : setPickEndYear,
       pickMonth: isStart ? setPickStartMonth : setPickEndMonth
     } );
   };
 
-  /* 닫을 때 실행될 함수 --------------- */
-  const close = () => {
-
-    setPickStartYear( currentYear )
-    setPickStartMonth( currentMonth )
-    setPickEndYear( currentYear )
-    setPickEndMonth( currentMonth )
-
-    closeAllModals()
-
-  }
-  /* 닫을 때 실행될 함수 END --------------- */
-
-
   /* 독서계획추가 api */
   const ReadingListAdd = async () => {
     setIsLoading( true )
-    const ReadingListAddBodyList: ReadingListAddBody = {
+    const ReadingListAddApiRequestBody: ReadingListAddApiRequestBody = {
       userId: userId,
       bookTitle: bookTitle ?? "",
       author: author ?? "",
@@ -91,7 +89,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
       readEndDt: `${pickEndYear}-${String( pickEndMonth ).padStart( 2, '0' )}-${getLastDateOfMonth( pickEndYear, pickEndMonth )}`
     };
     try {
-      const response = await readingListAddApi( ReadingListAddBodyList )
+      const response = await readingListAddApi( ReadingListAddApiRequestBody )
 
       if (response) {
         openModal( 'ModalNotice', {
@@ -101,10 +99,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
           onlyConfirm: true,
           withMotion: true,
           onConfirm: async () => {
-            setPickStartYear( currentYear )
-            setPickStartMonth( currentMonth )
-            setPickEndYear( currentYear )
-            setPickEndMonth( currentMonth )
             closeAllModals()
           }
         } )
@@ -157,11 +151,10 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
 
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 */
   useEffect( () => {
-    setPickStartYear( currentYear )
-    setPickStartMonth( currentMonth )
-    setPickEndYear( currentYear )
-    setPickEndMonth( currentMonth )
-
+    setPickStartYear( Number(readStartDt?.split("-")[0]) || currentYear )
+    setPickStartMonth( Number(readStartDt?.split("-")[1]) || currentMonth )
+    setPickEndYear( Number(readEndDt?.split("-")[0]) || currentYear )
+    setPickEndMonth( Number(readEndDt?.split("-")[1]) || currentMonth )
   }, [] );
   /* 모달 처음 실행할 때 현재 달로 시작 달 종료달 세팅 END -----------------*/
 
@@ -169,23 +162,9 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
   /* 관심도서 추가 모달 로딩 관련 */
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
 
-  const ConfirmButton = () => {
-    const modalIsLoading = useModalStore( (state) => state.modalIsLoading );
-
-    return modalIsLoading ? (
-      <>
-        <span>추가 중</span>
-        <span
-          className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin ml-2"/>
-      </>
-    ) : (
-      "예 추가할래요!"
-    );
-  };
-
   /* 관심도서로 추가 api */
   const addInterested = async () => {
-    const ReadingListAddBodyList: ReadingListAddBody = {
+    const ReadingListAddApiRequestBody: ReadingListAddApiRequestBody = {
       userId: userId,
       bookTitle: bookTitle ?? "",
       author: author ?? "",
@@ -196,14 +175,15 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
     };
     const addInterestedModal = () => {
       openModal( "ModalNotice", {
-        title: "관심도서로 설정하시겠어요?",
-        subTitle: "관심도서로 설정됩니다.",
-        cancelText: "닫기",
-        confirmText: <ConfirmButton/>,
+        title: "관심도서로 추가하시겠어요?",
+        subTitle: "관심도서에 추가됩니다.",
+        cancelText: "아니요",
+        confirmText: "추가하기",
+        loadingMessage: "추가중",
         onConfirm: async () => {
           try {
             setModalIsLoading( true )
-            const response = await readingListAddApi( ReadingListAddBodyList )
+            const response = await readingListAddApi( ReadingListAddApiRequestBody )
             if (response) {
               openModal( "ModalNotice", {
                 title: "관심도서에 추가되었어요!",
@@ -300,7 +280,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
               <button
                 className="flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg"
                 onClick={() => {
-                  openCalendar( "시작 달" )
+                  openCalendar( { startOrEnd: "시작 달" } )
                 }}
               >
                 <span className="text-modal_BookPlan_Calendar_Date_Text">
@@ -317,7 +297,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
               <button
                 className="flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg"
                 onClick={() => {
-                  openCalendar( "종료 달" )
+                  openCalendar( { startOrEnd: "종료 달" } )
                 }}
               >
                 <span className="text-modal_BookPlan_Calendar_Date_Text">
@@ -333,7 +313,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
           <section className="flex gap-4">
             <button
               onClick={() => {
-                close()
+                closeAllModals()
               }}
               className="flex-1 min-w-[130px] px-4 py-1 border-4 border-modal_Left_Btn_Border rounded-lg"
             >
@@ -353,7 +333,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({ title, bookTitle, author,
                     className="w-5 h-5 border-4 border-modal_BookPlan_loadingBg border-t-modal_BookPlan_loadingSpinner rounded-full animate-spin"></span>
                 </>
               ) : (
-                <span>독서 계획 추가</span>
+                <span>{confirmText || "독서 계획 추가"}</span>
               )}
             </button>
           </section>
