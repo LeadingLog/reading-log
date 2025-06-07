@@ -171,8 +171,8 @@ public class ReadingListController {
 
     // 이번달 독서 리스트
     @GetMapping("/yymm")
-    public ResponseEntity<Map<String, Object>> getMonthlyReadingList(@RequestParam Integer userId, @PageableDefault(size = 10, page = 0) Pageable pageable) {
-        Map<String, Object> rtn = readingListService.getMonthlyReadingList(userId, pageable);
+    public ResponseEntity<Map<String, Object>> getMonthlyReadingList(@RequestParam Integer userId, Integer year, Integer month, @PageableDefault(size = 10, page = 0) Pageable pageable) {
+        Map<String, Object> rtn = readingListService.getMonthlyReadingList(userId, year, month, pageable);
 
         Boolean success = (Boolean) rtn.get("success");
 

@@ -90,7 +90,8 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Long> 
             "FROM ReadingList r " +
             "WHERE r.userId = :userId " +
             "AND FUNCTION('TO_CHAR', r.readStartDt, 'YYYYMM') <= :yymm " +
-            "AND FUNCTION('TO_CHAR', r.readEndDt, 'YYYYMM') >= :yymm")
+            "AND FUNCTION('TO_CHAR', r.readEndDt, 'YYYYMM') >= :yymm " +
+			"AND r.bookStatus <> 'INTERESTED' ")
     Page<ReadingList> getMontlyReadingList (@Param("userId") Integer userId,@Param("yymm") String yymm, Pageable pageable);
 
 }
