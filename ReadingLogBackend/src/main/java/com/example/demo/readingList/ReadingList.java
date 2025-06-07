@@ -17,7 +17,7 @@ public class ReadingList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id", nullable = false)
-    private long bookId;
+    private Integer bookId;
     
     @Column(name = "user_id", nullable = false)
     private Integer userId;

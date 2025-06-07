@@ -25,13 +25,19 @@ import com.example.demo.code.BookStatus;
 
 
 @Repository
-public interface ReadingListRepository extends JpaRepository<ReadingList, Long> {
+public interface ReadingListRepository extends JpaRepository<ReadingList, Integer> {
 
 	// 알라딘 서버 응답 값에 추가 할 것
 	Optional<ReadingList> findByUserIdAndIsbn13(Integer userId, String isbn13);
+	
+	//알라딘 서버 응답값에 관심도서 책만 추가 
+	Optional<ReadingList> findByUserIdAndIsbn13AndBookStatus(Integer userId, String isbn13, BookStatus bookStatus);
 
 	// 유져 아이디 별로 필터링
 	Page<ReadingList> findByUserId(Integer userId, Pageable pageable);
+	
+	// 유져 아이디 별 관심 도서 제외 모든 책 
+	Page<ReadingList> findByUserIdAndBookStatusNot(Integer userId, BookStatus bookStatus, Pageable pageable);
 
 	// 유저ID & 독서상태에따라 필터링
 	Page<ReadingList> findByUserIdAndBookStatus(Integer userId, BookStatus bookStatus, Pageable pageable);
@@ -48,6 +54,17 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Long> 
 			+ "AND (LOWER(r.bookTitle) LIKE LOWER(CONCAT('%', :query, '%')) "
 			+ "OR LOWER(r.author) LIKE LOWER(CONCAT('%', :query, '%')))")
 	List<ReadingList> searchByUserIdAndQueryWithAll(@Param("userId") Integer userId, @Param("query") String query);
+	
+	//전체 리스트에서 도서검색 인데 관심도서인건 빼고 
+	@Query("SELECT r FROM ReadingList r " 
+		       + "WHERE r.userId = :userId "
+		       + "AND r.bookStatus <> 'INTERESTED' " 
+		       + "AND (LOWER(r.bookTitle) LIKE LOWER(CONCAT('%', :query, '%')) "
+		       + "OR LOWER(r.author) LIKE LOWER(CONCAT('%', :query, '%')))")
+		List<ReadingList> searchByUserIdAndQueryExcludingInterested(
+		    @Param("userId") Integer userId, 
+		    @Param("query") String query);
+
 
 	//전체 미완독 도서 조회 
 	@Query("""
