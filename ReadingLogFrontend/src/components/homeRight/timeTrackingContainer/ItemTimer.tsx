@@ -111,6 +111,8 @@ export default function ItemTimer() {
 
   // 남은 시간으로 읽은 시간 계산해 state 업데이트
   const updateReadTime = (timeLeft: number, totalTimeInMinutes: number) => {
+    console.log(`timeLeft: ${timeLeft}`);
+    console.log(`totalTimeInMinutes: ${totalTimeInMinutes}`);
     const totalSeconds = totalTimeInMinutes * 60; // 전체 설정 시간 (초)
     const readSeconds = totalSeconds - timeLeft; // 읽은 시간 (초)
 
