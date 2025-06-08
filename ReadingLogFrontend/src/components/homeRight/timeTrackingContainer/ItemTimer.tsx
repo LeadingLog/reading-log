@@ -7,9 +7,12 @@ import { useUserStore } from "../../../store/userStore.ts";
 import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
 import { saveReadingRecordApi } from "../../../api/readingRecord.ts";
 
+// TODO. 정지버튼 누르면 시간 줄어드는거 멈추기
+// TODO. 저장 완료되면 확인누르면 모든 모달 끄기
+// TODO. 꺼지면 타이머 화면도 끄기
 
 export default function ItemTimer() {
-  const { openModal, closeModal } = useModalStore();
+  const { openModal, closeModal, closeAllModals } = useModalStore();
   const { pageData, setRightContent, params } = usePageStore();
   const { userId } = useUserStore();
 
@@ -17,6 +20,7 @@ export default function ItemTimer() {
   const [startTimestamp, setStartTimestamp] = useState<Date | null>( null ); // 스탑워치 시작 시간
   const [time, setTime] = useState( { hour: 0, minute: 0, second: 0 } ); // 타이머 시간 저장
   const [timeLeft, setTimeLeft] = useState( pageData.time || 0 );
+  const [isRunning, setIsRunning] = useState( true ); // 타이머 실행 여부
 
   const radius = 60;
   const circumference = 2 * Math.PI * radius;
@@ -29,6 +33,7 @@ export default function ItemTimer() {
 
   // 독서 종료 모달
   const stopTimer = () => {
+    setIsRunning( false );
     openModal( "ModalNotice", {
       title: "독서를 종료하시나요?",
       subTitle: "종료 시 시간이 저장돼요",
@@ -36,9 +41,11 @@ export default function ItemTimer() {
       confirmText: "네 종료할게요!",
       reverseBtn: true,
       onConfirm: async () => {
-        // 데이터 보내기
         await saveReadingRecord();
         setTimeLeft( 0 );
+      },
+      onCancel: () => {
+        setIsRunning( true ); // 취소 선택시 타이머 재개
       }
     } )
   }
@@ -59,7 +66,7 @@ export default function ItemTimer() {
   /* 독서 시간 기록 */
   const saveReadingRecord = async () => {
     if (startTimestamp === null) {
-      handleReadingRecordFail( "독서 시간 기록에 실패하였습니다. 다시 시도해주세요.===" );
+      handleReadingRecordFail( "독서 시간 기록에 실패하였습니다. 다시 시도해주세요." );
       return;
     }
 
@@ -84,13 +91,13 @@ export default function ItemTimer() {
     try {
       const data = await saveReadingRecordApi( readingRecord );
       if (data.success) {
-        const secondModalId = openModal( "ModalNotice", {
+        openModal( "ModalNotice", {
           title: "독서시간 저장 완료",
           subTitle: "수고하셨어요",
           onlyConfirm: true,
           confirmText: "닫기",
           onConfirm: () => {
-            closeModal( secondModalId );
+            closeAllModals()
             setRightContent(
               'TimeTracking',
               { TimeTracking: { tab: 'onlyMonthReadingList' } }, // 파라미터,
@@ -122,28 +129,31 @@ export default function ItemTimer() {
   useEffect( () => {
     setStartTimestamp( new Date() ); // 타이머 시작 시간 기록
     setTimeLeft( (pageData.time || 0) * 60 ); // 분 -> 초 변환
+    setIsRunning(true);
   }, [pageData.time] );
 
   // 타이머 감소 처리 (1초마다)
   useEffect( () => {
+    if (!isRunning) return;
+
     const interval = setInterval( () => {
       setTimeLeft( prev => Math.max( prev - 1, 0 ) );
     }, 1000 );
 
     return () => clearInterval( interval );
-  }, [timeLeft, openModal] );
+  }, [timeLeft, openModal, isRunning] );
 
   // timeLeft가 0이 되면 기록 저장 함수 호출
   useEffect( () => {
-    if (timeLeft === 0) {
-
+    if (timeLeft === 0 && isRunning) {
+      setIsRunning(false); // 중복 저장 방지
       updateReadTime( timeLeft, pageData.time! );
       const handleTimerEnd = async () => {
         await saveReadingRecord();
       };
       handleTimerEnd();
     }
-  }, [timeLeft] );
+  }, [timeLeft, isRunning] );
 
 
   return (
@@ -187,6 +197,5 @@ export default function ItemTimer() {
       </article>
     </>
   )
-
 }
 
