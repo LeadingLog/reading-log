@@ -1,7 +1,7 @@
 import IconStop from "../../../assets/Icon-stop.svg?react"
 import { usePageStore } from "../../../store/pageStore.ts";
 import { useModalStore } from "../../../store/modalStore.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useUserStore } from "../../../store/userStore.ts";
 import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
@@ -11,6 +11,7 @@ export default function ItemTimer() {
   const { openModal, closeModal, closeAllModals } = useModalStore();
   const { pageData, setRightContent, params } = usePageStore();
   const { userId } = useUserStore();
+  const hasSavedRef = useRef(false);
 
   const bookData = params.TimeTracking?.bookData;
   const [startTimestamp, setStartTimestamp] = useState<Date | null>( null ); // 스탑워치 시작 시간
@@ -111,8 +112,8 @@ export default function ItemTimer() {
 
   // 남은 시간으로 읽은 시간 계산해 state 업데이트
   const updateReadTime = (timeLeft: number, totalTimeInMinutes: number) => {
-    console.log(`timeLeft: ${timeLeft}`);
-    console.log(`totalTimeInMinutes: ${totalTimeInMinutes}`);
+    console.log( `timeLeft: ${timeLeft}` );
+    console.log( `totalTimeInMinutes: ${totalTimeInMinutes}` );
     const totalSeconds = totalTimeInMinutes * 60; // 전체 설정 시간 (초)
     const readSeconds = totalSeconds - timeLeft; // 읽은 시간 (초)
 
@@ -127,7 +128,7 @@ export default function ItemTimer() {
   useEffect( () => {
     setStartTimestamp( new Date() ); // 타이머 시작 시간 기록
     setTimeLeft( (pageData.time || 0) * 60 ); // 분 -> 초 변환
-    setIsRunning(true);
+    setIsRunning( true );
   }, [pageData.time] );
 
   // 타이머 감소 처리 (1초마다)
@@ -143,8 +144,9 @@ export default function ItemTimer() {
 
   // timeLeft가 0이 되면 기록 저장 함수 호출
   useEffect( () => {
-    if (timeLeft === 0 && isRunning) {
-      setIsRunning(false); // 중복 저장 방지
+    if (timeLeft === 0 && isRunning && !hasSavedRef.current) {
+      setIsRunning( false );
+      hasSavedRef.current = true;
       updateReadTime( timeLeft, pageData.time! );
       const handleTimerEnd = async () => {
         await saveReadingRecord();
