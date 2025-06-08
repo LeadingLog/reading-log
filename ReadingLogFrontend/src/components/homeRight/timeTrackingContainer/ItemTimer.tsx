@@ -1,7 +1,7 @@
 import IconStop from "../../../assets/Icon-stop.svg?react"
 import { usePageStore } from "../../../store/pageStore.ts";
 import { useModalStore } from "../../../store/modalStore.ts";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useUserStore } from "../../../store/userStore.ts";
 import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
@@ -11,7 +11,6 @@ export default function ItemTimer() {
   const { openModal, closeModal, closeAllModals } = useModalStore();
   const { pageData, setRightContent, params } = usePageStore();
   const { userId } = useUserStore();
-  const hasSavedRef = useRef(false);
 
   const bookData = params.TimeTracking?.bookData;
   const [startTimestamp, setStartTimestamp] = useState<Date | null>( null ); // 스탑워치 시작 시간
@@ -120,6 +119,9 @@ export default function ItemTimer() {
     const hour = Math.floor( readSeconds / 3600 );
     const minute = Math.floor( (readSeconds % 3600) / 60 );
     const second = readSeconds % 60;
+    console.log(`hour: ${hour}`);
+    console.log(`minute: ${minute}`);
+    console.log(`second: ${second}`);
 
     setTime( { hour, minute, second } );
   };
@@ -144,12 +146,10 @@ export default function ItemTimer() {
 
   // timeLeft가 0이 되면 기록 저장 함수 호출
   useEffect( () => {
-    if (timeLeft === 0 && isRunning && !hasSavedRef.current) {
-      setIsRunning( false );
-      hasSavedRef.current = true;
-      updateReadTime( timeLeft, pageData.time! );
+    if (timeLeft === 0 && isRunning ) {
       const handleTimerEnd = async () => {
         await saveReadingRecord();
+        setIsRunning( false );
       };
       handleTimerEnd();
     }
