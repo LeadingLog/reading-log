@@ -7,10 +7,6 @@ import { useUserStore } from "../../../store/userStore.ts";
 import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
 import { saveReadingRecordApi } from "../../../api/readingRecord.ts";
 
-// TODO. 정지버튼 누르면 시간 줄어드는거 멈추기
-// TODO. 저장 완료되면 확인누르면 모든 모달 끄기
-// TODO. 꺼지면 타이머 화면도 끄기
-
 export default function ItemTimer() {
   const { openModal, closeModal, closeAllModals } = useModalStore();
   const { pageData, setRightContent, params } = usePageStore();

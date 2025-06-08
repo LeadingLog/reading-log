@@ -23,14 +23,14 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   const { userId } = useUserStore()
   const [isLoading, setIsLoading] = useState<boolean>( false );
-  type TimeChoice = 15 | 30 | 60;
+  type TimeChoice = 1 | 30 | 60;
 
   const [timeChoice, setTimeChoice] = useState<TimeChoice | undefined>( undefined );
 
   /* 타이머 시간 선택 시 UI */
   const getLeftPosition = (choice: TimeChoice | undefined) => {
     switch (choice) {
-      case 15:
+      case 1:
         return "left-2";
       case 30:
         return "left-1/2 -translate-x-1/2"; // 가운데 배치
@@ -91,7 +91,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
 
   useEffect( () => {
     if (!isOn) {
-      setTimeChoice( 15 );
+      setTimeChoice( 1 );
     }
   }, [isOn] );
 
@@ -156,12 +156,12 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
           >
             <button
               className="relative flex flex-1 text-xl"
-              onClick={() => setTimeChoice( 15 )}
+              onClick={() => setTimeChoice( 1 )}
             >
               <span
-                className={`${timeChoice === 15 ? 'text-modal_Tracking_Time_Choice_Text font-semibold' : 'text-modal_Tracking_Time_NoChoice_Text'} flex-1 absolute inset-0 z-[1]`}
+                className={`${timeChoice === 1 ? 'text-modal_Tracking_Time_Choice_Text font-semibold' : 'text-modal_Tracking_Time_NoChoice_Text'} flex-1 absolute inset-0 z-[1]`}
               >
-                15분
+                1분
               </span>
             </button>
             <button
