@@ -1,7 +1,7 @@
 import IconStop from "../../../assets/Icon-stop.svg?react"
 import { usePageStore } from "../../../store/pageStore.ts";
 import { useModalStore } from "../../../store/modalStore.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useUserStore } from "../../../store/userStore.ts";
 import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
@@ -17,7 +17,7 @@ export default function ItemTimer() {
   const [time, setTime] = useState( { hour: 0, minute: 0, second: 0 } ); // 타이머 시간 저장
   const [timeLeft, setTimeLeft] = useState( pageData.time || 0 );
   const [isRunning, setIsRunning] = useState( true ); // 타이머 실행 여부
-  const [hasSaved, setHasSaved] = useState( false ); // 독서 시간 기록 여부
+  const hasSavedRef = useRef( false ); // 중복 저장 방지용 ref
 
   const radius = 60;
   const circumference = 2 * Math.PI * radius;
@@ -30,6 +30,7 @@ export default function ItemTimer() {
 
   // 독서 종료 모달
   const stopTimer = () => {
+    console.log("독서 멈춤");
     setIsRunning( false );
     openModal( "ModalNotice", {
       title: "독서를 종료하시나요?",
@@ -62,6 +63,9 @@ export default function ItemTimer() {
 
   /* 독서 시간 기록 */
   const saveReadingRecord = async () => {
+    if (hasSavedRef.current) return; // 이미 저장했으면 종료
+    hasSavedRef.current = true;
+
     if (startTimestamp === null) {
       handleReadingRecordFail( "독서 시간 기록에 실패하였습니다. 다시 시도해주세요." );
       return;
@@ -147,15 +151,15 @@ export default function ItemTimer() {
 
   // timeLeft가 0이 되면 기록 저장 함수 호출
   useEffect( () => {
-    if (timeLeft === 0 && isRunning && !hasSaved) {
+    if (timeLeft === 0 && isRunning) {
+      console.log("독서 타이머 0");
       const handleTimerEnd = async () => {
         await saveReadingRecord();
-        setHasSaved( true );
         setIsRunning( false );
       };
       handleTimerEnd();
     }
-  }, [timeLeft, isRunning, hasSaved] );
+  }, [timeLeft, isRunning] );
 
 
   return (
