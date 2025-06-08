@@ -1,17 +1,49 @@
 import { Navigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore.ts";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const userId = useUserStore( (state) => state.userId );
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+  const resetUser = useUserStore( state => state.resetUser );
+  const [authorized, setAuthorized] = useState<boolean | null>( null );
 
-  if (userId === 0) { // 로그인이 안 되어 있으면 /login 으로 이동
+  useEffect( () => {
+    (async () => {
+
+      try {
+        await axios.get( `${serverUrl}/user/getUserSession`, {
+          withCredentials: true
+        } );
+        setAuthorized( true );
+      } catch (error: unknown) {
+        if (axios.isAxiosError( error ) && error.response?.status === 401) {
+          resetUser();
+          localStorage.clear();
+        }
+        setAuthorized( false );
+      }
+    })();
+  }, [serverUrl] );
+
+  if (authorized === null) {
+    return (
+      <>
+        <div className="flex flex-col justify-center items-center h-screen gap-4">
+          {/* 로딩 */}
+          <div className="w-10 h-10 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></div>
+        </div>
+      </>
+    );
+  }
+
+  if (!authorized) {
     return <Navigate to="/login" replace/>;
   }
 
-  return children;
-};
+  return <>{children}</>;
+}

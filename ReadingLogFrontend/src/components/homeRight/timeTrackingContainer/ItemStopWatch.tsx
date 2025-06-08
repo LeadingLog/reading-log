@@ -109,8 +109,8 @@ export default function ItemStopWatch() {
           confirmText: "닫기",
           onConfirm: () => {
             closeModal( secondModalId );
-            setRightContent( "TimeTracking", { // 우측 콘텐츠 변경
-              TimeTracking: { tab: "onlyMonthReadingList" },
+            setRightContent( 'TimeTracking', { // 우측 콘텐츠 변경
+              TimeTracking: { tab: 'onlyMonthReadingList' },
             } );
             // 초기화
             setTime( { hour: 0, minute: 0, second: 0 } );
@@ -167,7 +167,7 @@ export default function ItemStopWatch() {
     }
   }, [time.hour] );
 
-  // 회원 탈퇴 실패 시 공통 모달 표시
+  // 독서 기록 실패 시 공통 모달 표시
   const handleReadingRecordFail = (message?: string, title?: string) => {
     const readingRecordFailModal = openModal( "ModalNotice", {
       title: title || "독서 시간 저장 실패",
