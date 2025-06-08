@@ -17,6 +17,7 @@ export default function ItemTimer() {
   const [time, setTime] = useState( { hour: 0, minute: 0, second: 0 } ); // 타이머 시간 저장
   const [timeLeft, setTimeLeft] = useState( pageData.time || 0 );
   const [isRunning, setIsRunning] = useState( true ); // 타이머 실행 여부
+  const [hasSaved, setHasSaved] = useState( false ); // 독서 시간 기록 여부
 
   const radius = 60;
   const circumference = 2 * Math.PI * radius;
@@ -93,10 +94,10 @@ export default function ItemTimer() {
           onlyConfirm: true,
           confirmText: "닫기",
           onConfirm: () => {
-            closeAllModals()
+            closeAllModals();
             setRightContent(
               'TimeTracking',
-              { TimeTracking: { tab: 'onlyMonthReadingList' } }, // 파라미터,
+              { TimeTracking: { tab: 'onlyMonthReadingList' } },
             )
           }
         } );
@@ -119,9 +120,9 @@ export default function ItemTimer() {
     const hour = Math.floor( readSeconds / 3600 );
     const minute = Math.floor( (readSeconds % 3600) / 60 );
     const second = readSeconds % 60;
-    console.log(`hour: ${hour}`);
-    console.log(`minute: ${minute}`);
-    console.log(`second: ${second}`);
+    console.log( `hour: ${hour}` );
+    console.log( `minute: ${minute}` );
+    console.log( `second: ${second}` );
 
     setTime( { hour, minute, second } );
   };
@@ -146,14 +147,15 @@ export default function ItemTimer() {
 
   // timeLeft가 0이 되면 기록 저장 함수 호출
   useEffect( () => {
-    if (timeLeft === 0 && isRunning ) {
+    if (timeLeft === 0 && isRunning && !hasSaved) {
       const handleTimerEnd = async () => {
         await saveReadingRecord();
+        setHasSaved( true );
         setIsRunning( false );
       };
       handleTimerEnd();
     }
-  }, [timeLeft, isRunning] );
+  }, [timeLeft, isRunning, hasSaved] );
 
 
   return (
@@ -198,4 +200,6 @@ export default function ItemTimer() {
     </>
   )
 }
+
+
 

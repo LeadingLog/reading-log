@@ -109,8 +109,8 @@ export default function ItemStopWatch() {
           confirmText: "닫기",
           onConfirm: () => {
             closeModal( secondModalId );
-            setRightContent( "TimeTracking", { // 우측 콘텐츠 변경
-              TimeTracking: { tab: "onlyMonthReadingList" },
+            setRightContent( 'TimeTracking', { // 우측 콘텐츠 변경
+              TimeTracking: { tab: 'onlyMonthReadingList' },
             } );
             // 초기화
             setTime( { hour: 0, minute: 0, second: 0 } );
