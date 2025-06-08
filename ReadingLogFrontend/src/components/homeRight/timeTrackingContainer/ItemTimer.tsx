@@ -14,7 +14,6 @@ export default function ItemTimer() {
 
   const bookData = params.TimeTracking?.bookData;
   const [startTimestamp, setStartTimestamp] = useState<Date | null>( null ); // 스탑워치 시작 시간
-  //const [time, setTime] = useState( { hour: 0, minute: 0, second: 0 } ); // 타이머 시간 저장
   const [timeLeft, setTimeLeft] = useState( pageData.time || 0 );
   const [isRunning, setIsRunning] = useState( true ); // 타이머 실행 여부
   const hasSavedRef = useRef( false ); // 중복 저장 방지용 ref
@@ -30,7 +29,6 @@ export default function ItemTimer() {
 
   // 독서 종료 모달
   const stopTimer = () => {
-    console.log("독서 멈춤");
     setIsRunning( false );
     openModal( "ModalNotice", {
       title: "독서를 종료하시나요?",
@@ -77,15 +75,12 @@ export default function ItemTimer() {
     }
 
     const readTime = getReadTime(timeLeft, pageData.time!);
-    console.log("readTime:", readTime);
-
     const readingRecord = createReadingRecord( {
       bookId: bookData?.bookId ?? 0,
       userId,
       startTimestamp,
       time: readTime
     } );
-    console.log(readingRecord);
 
     try {
       const data = await saveReadingRecordApi( readingRecord );
@@ -143,7 +138,6 @@ export default function ItemTimer() {
   // timeLeft가 0이 되면 기록 저장 함수 호출
   useEffect( () => {
     if (timeLeft === 0 && isRunning) {
-      console.log("독서 타이머 0");
       const handleTimerEnd = async () => {
         await saveReadingRecord();
         setIsRunning( false );
@@ -195,6 +189,3 @@ export default function ItemTimer() {
     </>
   )
 }
-
-
-
