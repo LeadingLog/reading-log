@@ -14,9 +14,9 @@ export interface TimelineEntry {
   month: number;
   col: number;
   row: number;
-  noRead: number;
-  reading: number;
-  complete: number;
+  notStarted: number;
+  inProgress: number;
+  completed: number;
   top: string;
   left: string;
   right: string;
