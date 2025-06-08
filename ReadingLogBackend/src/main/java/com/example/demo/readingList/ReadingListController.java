@@ -179,7 +179,7 @@ public class ReadingListController {
 
 
 
-    // 이번달 독서 리스트
+    // 월별 독서 리스트
     @GetMapping("/yymm")
     public ResponseEntity<Map<String, Object>> getMonthlyReadingList(@RequestParam Integer userId, @RequestParam Integer year, @RequestParam Integer month, @PageableDefault(size = 10, page = 0) Pageable pageable) {
         Map<String, Object> rtn = readingListService.getMonthlyReadingList(userId, year, month, pageable);
@@ -192,6 +192,26 @@ public class ReadingListController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rtn);
         }
         
+    }
+
+    @GetMapping("/timeline/yymm")
+    public ResponseEntity<ReadingCountStatsResponse> readingCountByMonth(@RequestParam Integer userId, @RequestParam Integer year) {
+        ReadingCountStatsResponse response;
+        HttpStatus httpStatus;
+
+        try {
+            List<ReadingCountByMonthDto> monthlyStatsList = readingListService.readingCountByMonth(userId, year);
+
+            response = new ReadingCountStatsResponse(monthlyStatsList);
+            httpStatus = HttpStatus.OK;
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = "독서 통계 카운트 데이터를 가져오는 중 오류가 발생했습니다.";
+            response = new ReadingCountStatsResponse(errorMessage);
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(response, httpStatus);
+
     }
 
 }

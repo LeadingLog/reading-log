@@ -4,14 +4,13 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 
-import java.util.HashMap;
+import java.util.*;
 
 import java.time.YearMonth;
 
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -32,14 +31,42 @@ public class ReadingListService {
         this.readingListRepository = readingListRepository;
     }
 
-    public Map<String, Object> readingCountByMonth(Integer userId, Integer year) {
-        Map<String, Object> rtn = new HashMap<>();
+    public List<ReadingCountByMonthDto> readingCountByMonth(Integer userId, Integer year) {
+        List<ReadingListRepository.MonthlyStatusRawCountProjection> rawCounts = readingListRepository.readingCountByMonth(userId, year);
 
-        return rtn;
+        Map<YearMonth, ReadingCountByMonthDto> summaryMap = new HashMap<>();
+        for (int month = 1; month <= 12; month++) {
+            YearMonth ym = YearMonth.of(year, month);
+            summaryMap.put(ym, new ReadingCountByMonthDto(year, month));
+        }
+
+        for (ReadingListRepository.MonthlyStatusRawCountProjection rawCount : rawCounts) {
+            YearMonth yearMonth = null;
+            if (rawCount.getYear() != null && rawCount.getMonth() != null) {
+                yearMonth = YearMonth.of(rawCount.getYear(), rawCount.getMonth());
+            }
+            if (yearMonth != null && summaryMap.containsKey(yearMonth)) {
+                ReadingCountByMonthDto summary = summaryMap.get(yearMonth);
+                String bookStatus = rawCount.getBookStatus();
+
+                if (BookStatus.NOT_STARTED.name().equals(bookStatus)) {
+                    summary.setNotStarted(summary.getNotStarted() + rawCount.getMonthlyCount());
+                } else if (BookStatus.IN_PROGRESS.name().equals(bookStatus)) {
+                    summary.setInProgress(summary.getInProgress() + rawCount.getMonthlyCount());
+                } else if (BookStatus.COMPLETED.name().equals(bookStatus)) {
+                    summary.setCompleted(summary.getCompleted() + rawCount.getMonthlyCount());
+                }
+            }
+        }
+
+        List<ReadingCountByMonthDto> rtnList = new ArrayList<>(summaryMap.values());
+        rtnList.sort(Comparator.comparingInt(ReadingCountByMonthDto::getMonth));
+
+        return rtnList;
     }
 
 
-    // 이번달 독서 리스트
+    // 월별 독서 리스트
     public Map<String, Object> getMonthlyReadingList(Integer userId, Integer year, Integer month, Pageable pageable) {
         Map<String, Object> rtn = new HashMap<>();
 
