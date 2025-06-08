@@ -11,7 +11,7 @@ export interface fetchAllReadingTimeParams {
 // 받아온 해당 년도 월별 정보 타입
 export interface TimelineEntry {
   name: string;
-  month: number;
+  thisMonth: number;
   col: number;
   row: number;
   notStarted: number;
@@ -23,3 +23,4 @@ export interface TimelineEntry {
   bottom: string;
   transform: string;
 }
+

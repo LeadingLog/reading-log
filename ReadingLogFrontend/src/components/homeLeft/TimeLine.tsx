@@ -43,7 +43,7 @@ export default function TimeLine() {
   const getInitialMonthArr = (): TimelineEntry[] => [
     {
       name: '1월',
-      month: 1,
+      thisMmonth: 1,
       col: 3,
       row: 1,
       notStarted: 0,
@@ -57,7 +57,7 @@ export default function TimeLine() {
     },
     {
       name: '2월',
-      month: 2,
+      thisMmonth: 2,
       col: 5,
       row: 1,
       notStarted: 0,
@@ -71,7 +71,7 @@ export default function TimeLine() {
     },
     {
       name: '3월',
-      month: 3,
+      thisMmonth: 3,
       col: 7,
       row: 2,
       notStarted: 0,
@@ -85,7 +85,7 @@ export default function TimeLine() {
     },
     {
       name: '4월',
-      month: 4,
+      thisMmonth: 4,
       col: 6,
       row: 3,
       notStarted: 0,
@@ -99,7 +99,7 @@ export default function TimeLine() {
     },
     {
       name: '5월',
-      month: 5,
+      thisMmonth: 5,
       col: 4,
       row: 3,
       notStarted: 0,
@@ -113,7 +113,7 @@ export default function TimeLine() {
     },
     {
       name: '6월',
-      month: 6,
+      thisMmonth: 6,
       col: 2,
       row: 3,
       notStarted: 0,
@@ -127,7 +127,7 @@ export default function TimeLine() {
     },
     {
       name: '7월',
-      month: 7,
+      thisMmonth: 7,
       col: 1,
       row: 5,
       notStarted: 0,
@@ -141,7 +141,7 @@ export default function TimeLine() {
     },
     {
       name: '8월',
-      month: 8,
+      thisMmonth: 8,
       col: 3,
       row: 6,
       notStarted: 0,
@@ -155,7 +155,7 @@ export default function TimeLine() {
     },
     {
       name: '9월',
-      month: 9,
+      thisMmonth: 9,
       col: 5,
       row: 6,
       notStarted: 0,
@@ -169,7 +169,7 @@ export default function TimeLine() {
     },
     {
       name: '10월',
-      month: 10,
+      thisMmonth: 10,
       col: 7,
       row: 8,
       notStarted: 0,
@@ -183,7 +183,7 @@ export default function TimeLine() {
     },
     {
       name: '11월',
-      month: 11,
+      thisMmonth: 11,
       col: 6,
       row: 10,
       notStarted: 0,
@@ -197,7 +197,7 @@ export default function TimeLine() {
     },
     {
       name: '12월',
-      month: 12,
+      thisMmonth: 12,
       col: 4,
       row: 10,
       notStarted: 0,
@@ -220,9 +220,9 @@ export default function TimeLine() {
       console.log( response )
       const readingCountByMonth = response.readingCountByMonth;
       const freshArr = getInitialMonthArr();
-      const updated: TimelineEntry[] = freshArr.map( (month) => {
+      const updated: TimelineEntry[] = freshArr.map( (thisMonth) => {
         const found = readingCountByMonth.find(
-          (item: number) => item.month === month.month
+          (item: number) => item.month === thisMonth.month
         );
         return found
           ? {

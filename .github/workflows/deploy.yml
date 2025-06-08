@@ -9,7 +9,7 @@ on:
       - 'F-TimeLine_Dev'
       - 'F-MyReadingList_Dev'
       - 'F-MyFavoriteList_Dev'
-      - 'F-ThisMonthReadingList_Dev'
+#      - 'F-ThisMonthReadingList_Dev'
       - 'F-StatsMonth_Dev'
       - 'F-StatsYear_Dev'
       - 'F-UserLogin'
