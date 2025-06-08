@@ -14,7 +14,7 @@ export default function ItemTimer() {
 
   const bookData = params.TimeTracking?.bookData;
   const [startTimestamp, setStartTimestamp] = useState<Date | null>( null ); // 스탑워치 시작 시간
-  const [time, setTime] = useState( { hour: 0, minute: 0, second: 0 } ); // 타이머 시간 저장
+  //const [time, setTime] = useState( { hour: 0, minute: 0, second: 0 } ); // 타이머 시간 저장
   const [timeLeft, setTimeLeft] = useState( pageData.time || 0 );
   const [isRunning, setIsRunning] = useState( true ); // 타이머 실행 여부
   const hasSavedRef = useRef( false ); // 중복 저장 방지용 ref
@@ -76,18 +76,16 @@ export default function ItemTimer() {
       return;
     }
 
-    updateReadTime( timeLeft, pageData.time! );
+    const readTime = getReadTime(timeLeft, pageData.time!);
+    console.log("readTime:", readTime);
 
     const readingRecord = createReadingRecord( {
       bookId: bookData?.bookId ?? 0,
       userId,
       startTimestamp,
-      time: {
-        hour: time.hour,
-        minute: time.minute,
-        second: time.second
-      }
+      time: readTime
     } );
+    console.log(readingRecord);
 
     try {
       const data = await saveReadingRecordApi( readingRecord );
@@ -114,21 +112,14 @@ export default function ItemTimer() {
     }
   }
 
-  // 남은 시간으로 읽은 시간 계산해 state 업데이트
-  const updateReadTime = (timeLeft: number, totalTimeInMinutes: number) => {
-    console.log( `timeLeft: ${timeLeft}` );
-    console.log( `totalTimeInMinutes: ${totalTimeInMinutes}` );
-    const totalSeconds = totalTimeInMinutes * 60; // 전체 설정 시간 (초)
-    const readSeconds = totalSeconds - timeLeft; // 읽은 시간 (초)
-
-    const hour = Math.floor( readSeconds / 3600 );
-    const minute = Math.floor( (readSeconds % 3600) / 60 );
+  // 시간 계산 함수
+  const getReadTime = (timeLeft: number, totalTimeInMinutes: number) => {
+    const totalSeconds = totalTimeInMinutes * 60;
+    const readSeconds = totalSeconds - timeLeft;
+    const hour = Math.floor(readSeconds / 3600);
+    const minute = Math.floor((readSeconds % 3600) / 60);
     const second = readSeconds % 60;
-    console.log( `hour: ${hour}` );
-    console.log( `minute: ${minute}` );
-    console.log( `second: ${second}` );
-
-    setTime( { hour, minute, second } );
+    return { hour, minute, second };
   };
 
   // 페이지 시간 초기화 또는 변경시 타이머 초기화
