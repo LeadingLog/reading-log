@@ -12,8 +12,8 @@ on:
       - 'F-ThisMonthReadingList_Dev'
       - 'F-StatsMonth_Dev'
       - 'F-StatsYear_Dev'
-      # - 'F-UserLogin'
-      # - 'F-Stopwatch'
+      - 'F-UserLogin'
+      - 'F-Stopwatch'
       - 'frontdev'
       # - 'main'
 
