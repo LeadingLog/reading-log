@@ -95,7 +95,7 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Intege
 		);
 
 
-    // 이번달 독서 
+    // 월별 독서 리스트
     @Query ("SELECT r " +
 //            "r.bookTitle" +
 //            " , r.author" +
@@ -110,5 +110,49 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Intege
             "AND FUNCTION('TO_CHAR', r.readEndDt, 'YYYYMM') >= :yymm " +
 			"AND r.bookStatus <> 'INTERESTED' ")
     Page<ReadingList> getMontlyReadingList (@Param("userId") Integer userId,@Param("yymm") String yymm, Pageable pageable);
+
+	public interface MonthlyStatusRawCountProjection {
+		Integer getYear();
+		Integer getMonth();
+		String getBookStatus();
+		Long getMonthlyCount();
+	}
+
+	@Query(value = """
+		SELECT
+			CAST(EXTRACT(YEAR FROM generated_month) AS INT) AS year,
+			CAST(EXTRACT(MONTH FROM generated_month) AS INT) AS month,
+			book_status AS bookStatus,
+			COUNT(book_id) AS monthlyCount 
+		FROM (
+				 SELECT
+					 r.book_id,
+					 r.book_status,
+					 gs.generated_month::DATE AS generated_month
+				 FROM
+					 reading_list r,
+					 generate_series(
+							 date_trunc('month', COALESCE(r.read_startdt, r.create_date)), 
+							 date_trunc('month', COALESCE(r.read_enddt, (:targetYear || '-12-31')::DATE)) + INTERVAL '1 month',
+							 '1 month'::INTERVAL
+					 ) AS gs(generated_month) 
+				 WHERE
+						 r.user_id = :userId
+				   AND r.book_status <> 'INTERESTED' 
+				   AND (r.read_startdt IS NOT NULL OR r.create_date IS NOT NULL) 
+				   AND CAST(EXTRACT(YEAR FROM gs.generated_month) AS INT) = :targetYear
+				   AND gs.generated_month::DATE <= date_trunc('month', COALESCE(r.read_enddt, (:targetYear || '-12-31')::DATE))
+		
+			 ) AS MonthlyStatusRawData
+		GROUP BY
+			CAST(EXTRACT(YEAR FROM generated_month) AS INT),
+			CAST(EXTRACT(MONTH FROM generated_month) AS INT),
+			book_status
+		ORDER BY
+			CAST(EXTRACT(YEAR FROM generated_month) AS INT),
+			CAST(EXTRACT(MONTH FROM generated_month) AS INT),
+			book_status
+        """, nativeQuery = true)
+	List<MonthlyStatusRawCountProjection> readingCountByMonth(Integer userId, int targetYear);
 
 }
