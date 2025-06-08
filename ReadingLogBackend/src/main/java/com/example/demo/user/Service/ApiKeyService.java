@@ -28,7 +28,7 @@ public class ApiKeyService {
 	private String kakao_redirect_uri;
 	
 //	@Value("${kakao-app-admin-key}")
-     @Value("${KAKAO_APP_ADMIN_KEY}")
+     @Value("${KAKAO_REDIRECT_URI}")
 	private String kakao_app_admin_key;
 
 
