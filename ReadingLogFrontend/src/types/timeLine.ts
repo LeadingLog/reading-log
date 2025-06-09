@@ -7,11 +7,19 @@ export interface fetchTimeLineReadingListParams {
 export interface fetchAllReadingTimeParams {
   userId: number | null;
 }
+// 응답 받은 데이터 타입
+export interface ResponseBody {
+  year: number;
+  month: number;
+  notStarted: number;
+  inProgress: number;
+  completed: number;
+}
 
-// 받아온 해당 년도 월별 정보 타입
+// 월별 정보 타입
 export interface TimelineEntry {
   name: string;
-  thisMonth: number;
+  month: number;
   col: number;
   row: number;
   notStarted: number;

@@ -4,7 +4,12 @@ import { usePageStore } from "../../store/pageStore.ts";
 import { useDateStore } from "../../store/useDateStore.ts";
 import { useEffect, useState } from "react";
 import { fetchTimeLineReadingList } from "../../api/timeLineReadingListApi.ts";
-import { fetchAllReadingTimeParams, fetchTimeLineReadingListParams, TimelineEntry } from "../../types/timeLine.ts";
+import {
+  fetchAllReadingTimeParams,
+  fetchTimeLineReadingListParams,
+  ResponseBody,
+  TimelineEntry
+} from "../../types/timeLine.ts";
 import { fetchAllReadingTime } from "../../api/allReadingTimeApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
@@ -19,7 +24,6 @@ export default function TimeLine() {
       'TimeTracking', {},
       { title: '이번 달 독서 리스트' },
     )
-    // setMonth( month )
   }
 
   const statsMonth = (month: number) => {
@@ -43,7 +47,7 @@ export default function TimeLine() {
   const getInitialMonthArr = (): TimelineEntry[] => [
     {
       name: '1월',
-      thisMmonth: 1,
+      month: 1,
       col: 3,
       row: 1,
       notStarted: 0,
@@ -57,7 +61,7 @@ export default function TimeLine() {
     },
     {
       name: '2월',
-      thisMmonth: 2,
+      month: 2,
       col: 5,
       row: 1,
       notStarted: 0,
@@ -71,7 +75,7 @@ export default function TimeLine() {
     },
     {
       name: '3월',
-      thisMmonth: 3,
+      month: 3,
       col: 7,
       row: 2,
       notStarted: 0,
@@ -85,7 +89,7 @@ export default function TimeLine() {
     },
     {
       name: '4월',
-      thisMmonth: 4,
+      month: 4,
       col: 6,
       row: 3,
       notStarted: 0,
@@ -99,7 +103,7 @@ export default function TimeLine() {
     },
     {
       name: '5월',
-      thisMmonth: 5,
+      month: 5,
       col: 4,
       row: 3,
       notStarted: 0,
@@ -113,7 +117,7 @@ export default function TimeLine() {
     },
     {
       name: '6월',
-      thisMmonth: 6,
+      month: 6,
       col: 2,
       row: 3,
       notStarted: 0,
@@ -127,7 +131,7 @@ export default function TimeLine() {
     },
     {
       name: '7월',
-      thisMmonth: 7,
+      month: 7,
       col: 1,
       row: 5,
       notStarted: 0,
@@ -141,7 +145,7 @@ export default function TimeLine() {
     },
     {
       name: '8월',
-      thisMmonth: 8,
+      month: 8,
       col: 3,
       row: 6,
       notStarted: 0,
@@ -155,7 +159,7 @@ export default function TimeLine() {
     },
     {
       name: '9월',
-      thisMmonth: 9,
+      month: 9,
       col: 5,
       row: 6,
       notStarted: 0,
@@ -169,7 +173,7 @@ export default function TimeLine() {
     },
     {
       name: '10월',
-      thisMmonth: 10,
+      month: 10,
       col: 7,
       row: 8,
       notStarted: 0,
@@ -183,7 +187,7 @@ export default function TimeLine() {
     },
     {
       name: '11월',
-      thisMmonth: 11,
+      month: 11,
       col: 6,
       row: 10,
       notStarted: 0,
@@ -197,7 +201,7 @@ export default function TimeLine() {
     },
     {
       name: '12월',
-      thisMmonth: 12,
+      month: 12,
       col: 4,
       row: 10,
       notStarted: 0,
@@ -220,9 +224,9 @@ export default function TimeLine() {
       console.log( response )
       const readingCountByMonth = response.readingCountByMonth;
       const freshArr = getInitialMonthArr();
-      const updated: TimelineEntry[] = freshArr.map( (thisMonth) => {
+      const updated: TimelineEntry[] = freshArr.map( (month) => {
         const found = readingCountByMonth.find(
-          (item: number) => item.month === thisMonth.month
+          (item: ResponseBody) => item.month === month.month
         );
         return found
           ? {
@@ -388,8 +392,8 @@ export default function TimeLine() {
                   ${item.month === 3 && 'flex-col top-[50%] -translate-y-1/2 left-[-50%] group-hover:left-[-70%] group-hover:top-[50%]'}
                   ${item.month === 7 && 'flex-col top-[50%] -translate-y-1/2 left-[130%] group-hover:left-[160%] group-hover:top-[50%]'}
                   ${item.month === 10 && 'flex-col top-[50%] -translate-y-1/2 left-[-50%] group-hover:left-[-70%] group-hover:top-[50%]'}
-                  ${item.month === 11 && 'top-[-70%] group-hover:top-[-100%]'}
-                  ${item.month === 12 && 'top-[-70%] group-hover:top-[-100%]'}
+                  ${item.month === 11 && 'top-[-60%] group-hover:top-[-90%]'}
+                  ${item.month === 12 && 'top-[-60%] group-hover:top-[-90%]'}
                   group-hover:top-[130%] absolute flex gap-1 top-[110%] left-1/2 transform -translate-x-1/2 transition-all duration-200 ease-in-out`}>
                   {item.notStarted > 0 && (
                     <span
