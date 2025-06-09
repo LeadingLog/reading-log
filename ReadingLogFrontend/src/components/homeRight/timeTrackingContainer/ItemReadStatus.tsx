@@ -6,11 +6,7 @@ import { useUserStore } from "../../../store/userStore.ts";
 import { bookStatusChangeBody } from "../../../types/bookStatusChange.ts";
 
 // 2. 컴포넌트 정의
-export default function ItemReadStatus({ bookId, bookStatus, onStatusChange }: itemReadStatusParams) {
-
-  const changeStatus = () => {
-    onStatusChange();
-  };
+export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusParams) {
 
   const { openModal, closeAllModals } = useModalStore()
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
@@ -41,7 +37,6 @@ export default function ItemReadStatus({ bookId, bookStatus, onStatusChange }: i
           setModalIsLoading( true )
           try {
             await bookStatusChangeApi( bookStatusChangeBodyValue )
-            changeStatus()
             setCurrentStatus( "COMPLETED" )
             openModal( "ModalNotice", {
               title: "완독을 축하드려요!",
@@ -73,7 +68,6 @@ export default function ItemReadStatus({ bookId, bookStatus, onStatusChange }: i
           setModalIsLoading( true )
           try {
             await bookStatusChangeApi( bookStatusChangeBodyValue )
-            changeStatus()
             setCurrentStatus( "IN_PROGRESS" )
             openModal( "ModalNotice", {
               title: "독서 중 도서로 변경되었습니다.!",

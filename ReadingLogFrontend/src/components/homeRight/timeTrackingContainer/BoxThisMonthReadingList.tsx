@@ -20,7 +20,6 @@ export default function BoxThisMonthReadingList() {
   const [isLoading, setIsLoading] = useState( false ); // 로딩 상태 추가
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
-
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
     openModal( 'ModalTrackingPlan', {
@@ -52,12 +51,6 @@ export default function BoxThisMonthReadingList() {
     } finally {
       setIsLoading( false ); // 검색 완료 후 로딩 상태 해제
     }
-  };
-
-  /* 독서중 & 완독 값 변경시 리렌더링용 */
-  const handleStatusChange = () => {
-    setThisMonthReadingList( [] ); // 기존 리스트 초기화
-    setPage( 0 ); // 첫 페이지부터 다시 시작
   };
 
   useEffect( () => {
@@ -102,7 +95,7 @@ export default function BoxThisMonthReadingList() {
           onClick={() => openModalTrackingPlan( item )}
         >
           <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.bookTitle}</span>
-          <ItemReadStatus bookId={item.bookId} bookStatus={item.bookStatus} onStatusChange={handleStatusChange}/>
+          <ItemReadStatus bookId={item.bookId} bookStatus={item.bookStatus}/>
         </li>
       ) )}
       {isLoading && (

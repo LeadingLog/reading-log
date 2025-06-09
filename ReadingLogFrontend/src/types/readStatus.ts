@@ -5,5 +5,4 @@ export type ReadStatus = 'IN_PROGRESS' | 'NOT_STARTED' | 'COMPLETED' | 'INTEREST
 export type itemReadStatusParams = {
   bookId: number;
   bookStatus: 'IN_PROGRESS' | 'NOT_STARTED' | 'COMPLETED' | 'INTERESTED';
-  onStatusChange: () => void;
 }

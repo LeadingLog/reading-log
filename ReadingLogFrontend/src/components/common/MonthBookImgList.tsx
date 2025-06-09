@@ -21,7 +21,6 @@ export default function BookImgList() {
 
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
-
   const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
     try {
@@ -66,7 +65,9 @@ export default function BookImgList() {
       cancelText: "닫기",
       bookLink: item.link,
       monthReadingList: true,
-      onlyClose: true
+      readStartDt: item.readStartDt,
+      readEndDt: item.readEndDt,
+      onlyClose: true,
     } );
   };
 

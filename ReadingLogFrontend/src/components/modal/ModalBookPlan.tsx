@@ -365,13 +365,13 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           className="flex flex-1 justify-between flex-col gap-8 bg-modal_Content_Bg p-2.5 rounded-lg"
         >
           <div className="relative max-w-80 flex flex-col gap-1">
-            <span className="flex relative justify-between">
+            <span className="flex gap-2 relative justify-between">
               <p className="absolute top-1 bottom-1 left-0 w-1 bg-title_Marker"></p>
               <span
                 className="text-lg font-semibold break-keep text-modal_BookPlan_Book_Title_Text ml-2">{bookTitle}</span>
               {bookId && (
                 <button onClick={() => deleteBook()}
-                        className="min-w-fit text-modal_BookPlan_Book_DeleteBook_Text border-4 border-modal_BookPlan_Book_DeleteBook_Border px-2 rounded-lg">삭제</button>
+                        className="min-w-fit max-h-9 text-modal_BookPlan_Book_DeleteBook_Text border-4 border-modal_BookPlan_Book_DeleteBook_Border px-2 rounded-lg">삭제</button>
               )}
             </span>
             <p className="text-modal_BookPlan_Book_Sub_Title_Text">{author}</p>
