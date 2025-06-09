@@ -388,13 +388,13 @@ export default function TimeLine() {
                 group absolute w-8 h-8 rounded-full bg-timeLineMonthCircle transition-all duration-200 ease-in-out"
               >
                 {item.month}
-                <div className={`
-                  ${item.month === 3 && 'flex-col top-[50%] -translate-y-1/2 left-[-50%] group-hover:left-[-70%] group-hover:top-[50%]'}
-                  ${item.month === 7 && 'flex-col top-[50%] -translate-y-1/2 left-[130%] group-hover:left-[160%] group-hover:top-[50%]'}
-                  ${item.month === 10 && 'flex-col top-[50%] -translate-y-1/2 left-[-50%] group-hover:left-[-70%] group-hover:top-[50%]'}
-                  ${item.month === 11 && 'top-[-60%] group-hover:top-[-90%]'}
-                  ${item.month === 12 && 'top-[-60%] group-hover:top-[-90%]'}
-                  group-hover:top-[130%] absolute flex gap-1 top-[110%] left-1/2 transform -translate-x-1/2 transition-all duration-200 ease-in-out`}>
+                <div
+                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out top-[110%] left-1/2 transform -translate-x-1/2 group-hover:top-[130%]
+                    ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[-40%] group-hover:top-[50%] group-hover:left-[-70%]' : ''}
+                    ${item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[140%] group-hover:top-[50%] group-hover:left-[160%]' : ''}
+                    ${item.month === 11 || item.month === 12 ? 'top-[-60%] group-hover:top-[-90%]' : ''}
+                  `}
+                >
                   {item.notStarted > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full"
