@@ -8,6 +8,7 @@ import { useModalStore } from "../../store/modalStore.ts";
 import { fetchMyReadingListSearch } from "../../api/myReadingListSearchQueryApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 import { BookListType } from "../../types/commonBookListType.ts";
+import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 
 export default function BookImgList({ MyReadingListTabType, query = '', inputRef }: BookImgListProps) {
   const [page, setPage] = useState<number>( 0 );
@@ -17,8 +18,10 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
   const [isFetching, setIsFetching] = useState<boolean>( false );
-// 내 독서 목록 내부 검색 시 코드
+  // 내 독서 목록 내부 검색 시 코드
   const [isSearching, setIsSearching] = useState( false );
+
+  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
 
   const searchBook = async (query: string) => {
     if (isFetching) return;
@@ -118,6 +121,8 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     return () => clearTimeout( timer );
   }, [MyReadingListTabType] );
 
+
+
   // 페이지 또는 탭 변경 시 데이터 로딩
   useEffect( () => {
     if (isSearching || (page > 0 && !hasMore)) return;
@@ -148,7 +153,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     };
 
     loadMyReadingList();
-  }, [page, MyReadingListTabType, isSearching] );
+  }, [page, MyReadingListTabType, isSearching, myReadingListTrigger] );
 
 
   // Intersection Observer 설정 스크롤 시 마지막 부분을 확인용

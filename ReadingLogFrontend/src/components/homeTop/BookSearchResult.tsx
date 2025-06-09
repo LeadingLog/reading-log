@@ -16,6 +16,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
 
   const { openModal, closeAllModals } = useModalStore();
   const { userId } = useUserStore();
+
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
   const modalIsLoading = useModalStore( (state) => state.modalIsLoading );

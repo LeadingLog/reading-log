@@ -95,7 +95,7 @@ export default function StatsMonth() {
                 {item.bookStatus === "COMPLETED" && <IconReadComplete width="100%" height="100%"/>}
               </span>
               <span
-                className="self-center text-nowrap overflow-hidden text-ellipsis break-all [writing-mode:vertical-rl]">{item.title}</span>
+                className="self-center text-nowrap overflow-hidden text-ellipsis break-all [writing-mode:vertical-rl]">{item.bookTitle}</span>
             </li>
           )
         )}

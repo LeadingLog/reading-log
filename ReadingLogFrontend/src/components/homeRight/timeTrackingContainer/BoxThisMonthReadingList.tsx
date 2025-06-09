@@ -20,7 +20,6 @@ export default function BoxThisMonthReadingList() {
   const [isLoading, setIsLoading] = useState( false ); // 로딩 상태 추가
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
-  const [refresh, setRefresh] = useState( false );
 
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
@@ -59,12 +58,11 @@ export default function BoxThisMonthReadingList() {
   const handleStatusChange = () => {
     setThisMonthReadingList( [] ); // 기존 리스트 초기화
     setPage( 0 ); // 첫 페이지부터 다시 시작
-    setRefresh( (prev) => !prev ); // refresh를 토글해서 useEffect 실행
   };
 
   useEffect( () => {
     searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
-  }, [page, refresh] );
+  }, [page] );
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>( null );
   const lastItemRef = useCallback(

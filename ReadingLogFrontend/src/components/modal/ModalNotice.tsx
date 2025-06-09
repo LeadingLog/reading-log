@@ -42,13 +42,13 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
     <section
       className="flex gap-5 bg-modal_Default_Bg p-3 rounded-lg"
     >
-      <article className="flex flex-col gap-2 flex-1 p-3 min-w-60 bg-modal_Content_Bg rounded-lg">
-        <div className={`${onlyConfirm || onlyClose ? 'text-center' : ''} flex flex-col`}>
-          <span className="text-lg text-modal_Title_Text font-semibold">
+      <article className="flex flex-col gap-3 flex-1 p-3 min-w-60 max-w-80 bg-modal_Content_Bg rounded-lg">
+        <div className={`text-center flex flex-col gap-2`}>
+          <span className="text-lg break-keep text-modal_Title_Text font-semibold">
             {title || "전달할 메세지를 작성 안했어요"}
           </span>
           {subTitle && (
-            <span className="text-modal_Sub_Title text-sm text-center">{subTitle}</span>
+            <span className="text-modal_Sub_Title text-sm">{subTitle}</span>
           )}
         </div>
 

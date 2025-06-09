@@ -63,9 +63,10 @@ export default function BookImgList() {
       cover: item.coverImgUrl,
       bookTitle: item.bookTitle,
       author: item.author,
-      cancelText: "다음에 읽기",
-      confirmText: "독서 계획 추가",
+      cancelText: "닫기",
       bookLink: item.link,
+      monthReadingList: true,
+      onlyClose: true
     } );
   };
 

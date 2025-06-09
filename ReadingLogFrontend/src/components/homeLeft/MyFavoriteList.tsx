@@ -5,6 +5,7 @@ import { fetchMyFavoriteListParams } from "../../types/myFavoriteList.ts";
 import { fetchMyFavoriteList } from "../../api/myFavoriteListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 import { BookListType } from "../../types/commonBookListType.ts"
+import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 
 export default function MyFavoriteList() {
   const [page, setPage] = useState<number>( 0 );
@@ -15,11 +16,14 @@ export default function MyFavoriteList() {
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
 
+  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
+
   const openModalBookPlan = ((item: BookListType) => {
     openModal( "ModalBookPlan", {
       bookId: item.bookId,
       cover: item.coverImgUrl,
       bookTitle: item.bookTitle,
+      bookStatus: item.bookStatus,
       author: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
@@ -33,7 +37,9 @@ export default function MyFavoriteList() {
       setIsLoading( true );
       const data = await fetchMyFavoriteList( { userId, tabType, page, size } );
 
-      setFavoriteList( (prev) => [...prev, ...data.readingList] );
+      setFavoriteList( (prev) =>
+        page === 0 ? data.readingList : [...prev, ...data.readingList]
+      );
 
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore( !isLastPage );
@@ -47,7 +53,7 @@ export default function MyFavoriteList() {
 
   useEffect( () => {
     searchMyFavoriteList( { userId, tabType: 4, page, size: 21 } );
-  }, [page] );
+  }, [page, myReadingListTrigger] );
 
   // Intersection Observer 설정
   const myFavoriteListObserver = useRef<IntersectionObserver | null>( null );

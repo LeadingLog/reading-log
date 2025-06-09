@@ -31,6 +31,9 @@ export type ModalData = {
   readStartDt?: string;
   readEndDt?: string;
 
+  /* 월별통계와 구분 하기 위한 */
+  monthReadingList?: boolean;
+
   /* 캘린더 관련 */
   pickYear?: React.Dispatch<React.SetStateAction<number>>; // 시작 달 or 종료 달 년도 변경 용
   pickMonth?: React.Dispatch<React.SetStateAction<number>>; // 시작 달 or 종료 달 월 변경 용
