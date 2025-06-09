@@ -24,10 +24,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Create application.properties
+      - name: application.properties 최신화
         run: |
-          mkdir -p src/main/resources
-          echo "${{ secrets.APPLICATION_PROPERTIES }}" | base64 --decode > src/main/resources/application.properties
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" | base64 --decode > ReadingLogBackend/src/main/resources/application.properties
+
+      - name: Check application.properties content
+        run: cat ReadingLogBackend/src/main/resources/application.properties
+
 
       - name: Grant Execute Permission & Build with Gradle (skip tests)
         run: |
@@ -65,6 +68,7 @@ jobs:
           echo "NAVER_REDIRECT_URI=${{ secrets.NAVER_REDIRECT_URI }}" >> .env
           echo "KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}" >> .env
           echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env
+          echo "KAKAO_APP_ADMIN_KEY=${{ secrets.KAKAO_APP_ADMIN_KEY }}">> .env
           echo "AlADIN_KEY=${{ secrets.AlADIN_KEY }}" >> .env
 
 
