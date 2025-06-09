@@ -4,7 +4,12 @@ import { usePageStore } from "../../store/pageStore.ts";
 import { useDateStore } from "../../store/useDateStore.ts";
 import { useEffect, useState } from "react";
 import { fetchTimeLineReadingList } from "../../api/timeLineReadingListApi.ts";
-import { fetchAllReadingTimeParams, fetchTimeLineReadingListParams, TimelineEntry } from "../../types/timeLine.ts";
+import {
+  fetchAllReadingTimeParams,
+  fetchTimeLineReadingListParams,
+  ResponseBody,
+  TimelineEntry
+} from "../../types/timeLine.ts";
 import { fetchAllReadingTime } from "../../api/allReadingTimeApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
@@ -19,7 +24,6 @@ export default function TimeLine() {
       'TimeTracking', {},
       { title: '이번 달 독서 리스트' },
     )
-    // setMonth( month )
   }
 
   const statsMonth = (month: number) => {
@@ -46,9 +50,9 @@ export default function TimeLine() {
       month: 1,
       col: 3,
       row: 1,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: '-11px',
       left: '50%',
       right: 'unset',
@@ -60,9 +64,9 @@ export default function TimeLine() {
       month: 2,
       col: 5,
       row: 1,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: '-11px',
       left: '50%',
       right: 'unset',
@@ -74,9 +78,9 @@ export default function TimeLine() {
       month: 3,
       col: 7,
       row: 2,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: '50%',
       left: 'unset',
       right: '-10px',
@@ -88,9 +92,9 @@ export default function TimeLine() {
       month: 4,
       col: 6,
       row: 3,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: 'unset',
       left: '50%',
       right: 'unset',
@@ -102,9 +106,9 @@ export default function TimeLine() {
       month: 5,
       col: 4,
       row: 3,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: 'unset',
       left: '50%',
       right: 'unset',
@@ -116,9 +120,9 @@ export default function TimeLine() {
       month: 6,
       col: 2,
       row: 3,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: 'unset',
       left: '50%',
       right: 'unset',
@@ -130,9 +134,9 @@ export default function TimeLine() {
       month: 7,
       col: 1,
       row: 5,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: '50%',
       left: '-10px',
       right: 'unset',
@@ -144,9 +148,9 @@ export default function TimeLine() {
       month: 8,
       col: 3,
       row: 6,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: 'unset',
       left: '50%',
       right: 'unset',
@@ -158,9 +162,9 @@ export default function TimeLine() {
       month: 9,
       col: 5,
       row: 6,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: 'unset',
       left: '50%',
       right: 'unset',
@@ -172,9 +176,9 @@ export default function TimeLine() {
       month: 10,
       col: 7,
       row: 8,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: '50%',
       left: 'unset',
       right: '-10px',
@@ -186,9 +190,9 @@ export default function TimeLine() {
       month: 11,
       col: 6,
       row: 10,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: 'unset',
       left: '50%',
       right: 'unset',
@@ -200,9 +204,9 @@ export default function TimeLine() {
       month: 12,
       col: 4,
       row: 10,
-      noRead: 0,
-      reading: 0,
-      complete: 0,
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
       top: 'unset',
       left: '50%',
       right: 'unset',
@@ -216,18 +220,20 @@ export default function TimeLine() {
   /* 년도 변경 시 도서 권 수 변경 */
   const searchTimeLineReadingList = async ({ userId, year }: fetchTimeLineReadingListParams) => {
     try {
-      const data = await fetchTimeLineReadingList( { userId, year } );
-
+      const response = await fetchTimeLineReadingList( { userId, year } );
+      console.log( response )
+      const readingCountByMonth = response.readingCountByMonth;
       const freshArr = getInitialMonthArr();
-
       const updated: TimelineEntry[] = freshArr.map( (month) => {
-        const found = data.timeLineReadingList.find( (item: TimelineEntry) => item.month === month.month );
+        const found = readingCountByMonth.find(
+          (item: ResponseBody) => item.month === month.month
+        );
         return found
           ? {
             ...month,
-            noRead: found.noRead,
-            reading: found.reading,
-            complete: found.complete,
+            notStarted: found.notStarted,
+            inProgress: found.inProgress,
+            completed: found.completed,
           }
           : month;
       } );
@@ -382,32 +388,32 @@ export default function TimeLine() {
                 group absolute w-8 h-8 rounded-full bg-timeLineMonthCircle transition-all duration-200 ease-in-out"
               >
                 {item.month}
-                <div className={`
-                  ${item.month === 3 && 'flex-col top-[50%] -translate-y-1/2 left-[-50%] group-hover:left-[-70%] group-hover:top-[50%]'}
-                  ${item.month === 7 && 'flex-col top-[50%] -translate-y-1/2 left-[130%] group-hover:left-[160%] group-hover:top-[50%]'}
-                  ${item.month === 10 && 'flex-col top-[50%] -translate-y-1/2 left-[-50%] group-hover:left-[-70%] group-hover:top-[50%]'}
-                  ${item.month === 11 && 'top-[-70%] group-hover:top-[-100%]'}
-                  ${item.month === 12 && 'top-[-70%] group-hover:top-[-100%]'}
-                  group-hover:top-[130%] absolute flex gap-1 top-[110%] left-1/2 transform -translate-x-1/2 transition-all duration-200 ease-in-out`}>
-                  {item.noRead > 0 && (
+                <div
+                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out  left-1/2 transform -translate-x-1/2
+                    ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[-40%] group-hover:top-[50%] group-hover:left-[-70%]' :
+                    item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[140%] group-hover:top-[50%] group-hover:left-[160%]' :
+                    item.month === 11 || item.month === 12 ? 'top-[-60%] group-hover:top-[-90%]' : 'top-[110%] group-hover:top-[130%]'}
+                  `}
+                >
+                  {item.notStarted > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full"
                     >
-                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.noRead}</p>
+                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.notStarted}</p>
                     </span>
                   )}
-                  {item.reading > 0 && (
+                  {item.inProgress > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full"
                     >
-                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.reading}</p>
+                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.inProgress}</p>
                     </span>
                   )}
-                  {item.complete > 0 && (
+                  {item.completed > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full"
                     >
-                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.complete}</p>
+                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.completed}</p>
                     </span>
                   )}
                 </div>

@@ -1,35 +1,68 @@
 {
   "success": true,
-  "timeLineReadingList": [
+  "readingCountByMonth": [
     {
+      "completed": 2,
+      "inProgress": 2,
       "month": 1,
-      "noRead": 0,
-      "reading": 0,
-      "complete": 4
+      "notStarted": 0,
+      "year": 2025
     },
     {
+      "completed": 1,
+      "inProgress": 0,
       "month": 2,
-      "noRead": 0,
-      "reading": 4,
-      "complete": 3
+      "notStarted": 0,
+      "year": 2025
     },
     {
+      "completed": 0,
+      "inProgress": 3,
       "month": 3,
-      "noRead": 2,
-      "reading": 0,
-      "complete": 2
+      "notStarted": 1,
+      "year": 2025
     },
     {
+      "completed": 1,
+      "inProgress": 2,
       "month": 4,
-      "noRead": 1,
-      "reading": 7,
-      "complete": 11
+      "notStarted": 0,
+      "year": 2025
     },
     {
+      "completed": 0,
+      "inProgress": 4,
       "month": 5,
-      "noRead": 4,
-      "reading": 5,
-      "complete": 1
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 4,
+      "month": 7,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 4,
+      "month": 10,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 4,
+      "month": 11,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 4,
+      "month": 12,
+      "notStarted": 0,
+      "year": 2025
     }
   ]
 }
