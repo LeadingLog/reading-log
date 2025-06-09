@@ -389,10 +389,10 @@ export default function TimeLine() {
               >
                 {item.month}
                 <div
-                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out top-[110%] left-1/2 transform -translate-x-1/2 group-hover:top-[130%]
-                    ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[-40%] group-hover:top-[50%] group-hover:left-[-70%]' : ''}
-                    ${item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[140%] group-hover:top-[50%] group-hover:left-[160%]' : ''}
-                    ${item.month === 11 || item.month === 12 ? 'top-[-60%] group-hover:top-[-90%]' : ''}
+                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out  left-1/2 transform -translate-x-1/2
+                    ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[-40%] group-hover:top-[50%] group-hover:left-[-70%]' :
+                    item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[140%] group-hover:top-[50%] group-hover:left-[160%]' :
+                    item.month === 11 || item.month === 12 ? 'top-[-60%] group-hover:top-[-90%]' : 'top-[110%] group-hover:top-[130%]'}
                   `}
                 >
                   {item.notStarted > 0 && (
