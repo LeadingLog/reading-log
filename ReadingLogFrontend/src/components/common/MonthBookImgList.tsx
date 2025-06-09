@@ -1,6 +1,5 @@
 import IconReading from "../../assets/Icon-reading.svg?react";
 import IconReadComplete from "../../assets/Icon-readcomplete.svg?react";
-import IconFavorite from "../../assets/Icon-favorite.svg?react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { readStatus } from "../../types/myReadingList.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
@@ -21,7 +20,6 @@ export default function BookImgList() {
   const { userId } = useUserStore();
 
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
-
 
   const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
@@ -64,9 +62,12 @@ export default function BookImgList() {
       cover: item.coverImgUrl,
       bookTitle: item.bookTitle,
       author: item.author,
-      cancelText: "다음에 읽기",
-      confirmText: "독서 계획 추가",
+      cancelText: "닫기",
       bookLink: item.link,
+      monthReadingList: true,
+      readStartDt: item.readStartDt,
+      readEndDt: item.readEndDt,
+      onlyClose: true,
     } );
   };
 
@@ -111,10 +112,6 @@ export default function BookImgList() {
               {item.bookStatus === 'IN_PROGRESS' && <IconReading className="text-imgBook_Icon_Color"/>}
               {item.bookStatus === 'COMPLETED' && <IconReadComplete className="text-imgBook_Icon_Color"/>}
             </span>
-          </div>
-          <div
-            className="absolute w-8 h-8 right-2 bottom-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
-            <IconFavorite width="100%" height="100%"/>
           </div>
         </li>
       ) )}

@@ -4,21 +4,26 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { fetchMyFavoriteListParams } from "../../types/myFavoriteList.ts";
 import { fetchMyFavoriteList } from "../../api/myFavoriteListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
-import { ReadingListAddApiRequestBody } from "../../types/readingListAdd.ts";
+import { BookListType } from "../../types/commonBookListType.ts"
+import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 
 export default function MyFavoriteList() {
   const [page, setPage] = useState<number>( 0 );
-  const [favoriteList, setFavoriteList] = useState<ReadingListAddApiRequestBody[]>( [] );
+  const [favoriteList, setFavoriteList] = useState<BookListType[]>( [] );
   const [hasMore, setHasMore] = useState( true ); // 더 불러올 데이터가 있는지 여부
   const [isLoading, setIsLoading] = useState( false );
 
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
 
-  const openModalBookPlan = ((item: ReadingListAddApiRequestBody) => {
+  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
+
+  const openModalBookPlan = ((item: BookListType) => {
     openModal( "ModalBookPlan", {
+      bookId: item.bookId,
       cover: item.coverImgUrl,
       bookTitle: item.bookTitle,
+      bookStatus: item.bookStatus,
       author: item.author,
       cancelText: "다음에 읽기",
       confirmText: "독서 계획 추가",
@@ -32,7 +37,9 @@ export default function MyFavoriteList() {
       setIsLoading( true );
       const data = await fetchMyFavoriteList( { userId, tabType, page, size } );
 
-      setFavoriteList( (prev) => [...prev, ...data.readingList] );
+      setFavoriteList( (prev) =>
+        page === 0 ? data.readingList : [...prev, ...data.readingList]
+      );
 
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore( !isLastPage );
@@ -46,7 +53,7 @@ export default function MyFavoriteList() {
 
   useEffect( () => {
     searchMyFavoriteList( { userId, tabType: 4, page, size: 21 } );
-  }, [page] );
+  }, [page, myReadingListTrigger] );
 
   // Intersection Observer 설정
   const myFavoriteListObserver = useRef<IntersectionObserver | null>( null );
@@ -75,7 +82,7 @@ export default function MyFavoriteList() {
       containerClassName="grid grid-cols-3 gap-6 content-start flex-1"
       scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color"
     >
-      {favoriteList.map( (item: ReadingListAddApiRequestBody, idx) => (
+      {favoriteList.map( (item: BookListType, idx) => (
         <li
           key={idx}
           onClick={() => openModalBookPlan( item )}

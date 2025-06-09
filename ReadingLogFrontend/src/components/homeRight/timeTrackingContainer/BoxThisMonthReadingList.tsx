@@ -20,8 +20,6 @@ export default function BoxThisMonthReadingList() {
   const [isLoading, setIsLoading] = useState( false ); // 로딩 상태 추가
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
-  const [refresh, setRefresh] = useState( false );
-
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
     openModal( 'ModalTrackingPlan', {
@@ -55,16 +53,9 @@ export default function BoxThisMonthReadingList() {
     }
   };
 
-  /* 독서중 & 완독 값 변경시 리렌더링용 */
-  const handleStatusChange = () => {
-    setThisMonthReadingList( [] ); // 기존 리스트 초기화
-    setPage( 0 ); // 첫 페이지부터 다시 시작
-    setRefresh( (prev) => !prev ); // refresh를 토글해서 useEffect 실행
-  };
-
   useEffect( () => {
     searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
-  }, [page, refresh] );
+  }, [page] );
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>( null );
   const lastItemRef = useCallback(
@@ -104,7 +95,7 @@ export default function BoxThisMonthReadingList() {
           onClick={() => openModalTrackingPlan( item )}
         >
           <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.bookTitle}</span>
-          <ItemReadStatus bookId={item.bookId} bookStatus={item.bookStatus} onStatusChange={handleStatusChange}/>
+          <ItemReadStatus bookId={item.bookId} bookStatus={item.bookStatus}/>
         </li>
       ) )}
       {isLoading && (

@@ -1,6 +1,5 @@
 import IconReading from "../../assets/Icon-reading.svg?react";
 import IconReadComplete from "../../assets/Icon-readcomplete.svg?react";
-import IconFavorite from "../../assets/Icon-favorite.svg?react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BookImgListProps, readStatus } from "../../types/myReadingList.ts";
 import { fetchMyReadingList } from "../../api/myReadingListApi.ts";
@@ -9,6 +8,7 @@ import { useModalStore } from "../../store/modalStore.ts";
 import { fetchMyReadingListSearch } from "../../api/myReadingListSearchQueryApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 import { BookListType } from "../../types/commonBookListType.ts";
+import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 
 export default function BookImgList({ MyReadingListTabType, query = '', inputRef }: BookImgListProps) {
   const [page, setPage] = useState<number>( 0 );
@@ -18,9 +18,10 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
   const [isFetching, setIsFetching] = useState<boolean>( false );
-// 내 독서 목록 내부 검색 시 코드
-
+  // 내 독서 목록 내부 검색 시 코드
   const [isSearching, setIsSearching] = useState( false );
+
+  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
 
   const searchBook = async (query: string) => {
     if (isFetching) return;
@@ -120,6 +121,8 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     return () => clearTimeout( timer );
   }, [MyReadingListTabType] );
 
+
+
   // 페이지 또는 탭 변경 시 데이터 로딩
   useEffect( () => {
     if (isSearching || (page > 0 && !hasMore)) return;
@@ -150,7 +153,8 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     };
 
     loadMyReadingList();
-  }, [page, MyReadingListTabType, isSearching] );
+  }, [page, MyReadingListTabType, isSearching, myReadingListTrigger] );
+
 
   // Intersection Observer 설정 스크롤 시 마지막 부분을 확인용
 
@@ -178,7 +182,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
 
       if (node) myReadingListObserver.current.observe( node );
     },
-    [isLoading, hasMore]
+    [isLoading, hasMore,]
   );
 
   return (
@@ -201,10 +205,6 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
               {item.bookStatus === 'IN_PROGRESS' && <IconReading className="text-imgBook_Icon_Color"/>}
               {item.bookStatus === 'COMPLETED' && <IconReadComplete className="text-imgBook_Icon_Color"/>}
             </span>
-          </div>
-          <div
-            className="absolute w-8 h-8 right-2 bottom-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
-            <IconFavorite width="100%" height="100%"/>
           </div>
         </li>
       ) )}

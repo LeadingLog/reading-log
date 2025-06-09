@@ -143,14 +143,16 @@ export default {
         modal_Tracking_loadingBg                  : "#FDFAF3",   // 독서 타임 트래킹 - 로딩 중일 때 배경 색
         modal_Tracking_loadingSpinner             : "#96B2C8",   // 독서 타임 트래킹 - 로딩 스피너 색
         
-        modal_BookPlan_Book_Title_Text    : "#000000",   // 독서 계획 - 책 제목 텍스트 색
-        modal_BookPlan_Book_Sub_Title_Text: "#A1A1A1",   // 독서 계획 - 책 저자 텍스트 색
-        modal_BookPlan_StartEnd_Month_Text: "#000000",   // 독서 계획 - 시작 & 종료 타이틀 텍스트 색
-        modal_BookPlan_Calendar_Date_Text : "#000000",   // 독서 계획 - 달력 표시 날짜 텍스트 색 색
-        modal_BookPlan_Calendar_Bg        : "#EEE6E3",   // 독서 계획 - 달력 표시 배경
-        modal_BookPlan_Calendar_Icon_Color: "#000000",   // 독서 계획 - 달력 아이콘 색
-        modal_BookPlan_loadingBg          : "#FDFAF3",   // 독서 계획 - 로딩 중일 때 배경 색
-        modal_BookPlan_loadingSpinner     : "#96B2C8",   // 독서 계획 - 로딩 스피너 색
+        modal_BookPlan_Book_Title_Text       : "#000000",   // 독서 계획 - 책 제목 텍스트 색
+        modal_BookPlan_Book_Sub_Title_Text   : "#A1A1A1",   // 독서 계획 - 책 저자 텍스트 색
+        modal_BookPlan_Book_DeleteBook_Text  : "#A1A1A1",   // 독서 계획 - 책 저자 텍스트 색
+        modal_BookPlan_Book_DeleteBook_Border: "#E5CEC8",   // 독서 계획 - 책 저자 텍스트 색
+        modal_BookPlan_StartEnd_Month_Text   : "#000000",   // 독서 계획 - 시작 & 종료 타이틀 텍스트 색
+        modal_BookPlan_Calendar_Date_Text    : "#000000",   // 독서 계획 - 달력 표시 날짜 텍스트 색 색
+        modal_BookPlan_Calendar_Bg           : "#EEE6E3",   // 독서 계획 - 달력 표시 배경
+        modal_BookPlan_Calendar_Icon_Color   : "#000000",   // 독서 계획 - 달력 아이콘 색
+        modal_BookPlan_loadingBg             : "#FDFAF3",   // 독서 계획 - 로딩 중일 때 배경 색
+        modal_BookPlan_loadingSpinner        : "#96B2C8",   // 독서 계획 - 로딩 스피너 색
         
         /* 연도 및 월 선택 모달 */
         modal_Pick_Calendar_Back_Bg          : "#96B2C8",   // 연도 선택 모달 - 배경 색

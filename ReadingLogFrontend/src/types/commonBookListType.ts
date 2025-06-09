@@ -7,7 +7,7 @@ export interface BookListType {
   isbn13?: string;
   link?: string;
   coverImgUrl?: string;
-  bookStatus?: string;
+  bookStatus?: 'IN_PROGRESS' | 'NOT_STARTED' | 'COMPLETED' | 'INTERESTED';
   readStartDt?: string;
   readEndDt?: string;
 }

@@ -4,7 +4,7 @@ import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { motion } from "framer-motion";
 import { usePageStore } from "../../store/pageStore.ts";
 import { ModalTrackingPlanProps } from "../../types/modal.ts";
-import { bookStatusChangeApi } from "../../api/bookStatusChange.ts";
+import { bookStatusChangeApi } from "../../api/bookStatusChangeApi.ts";
 import { bookStatusChangeBody } from "../../types/bookStatusChange.ts";
 import { useUserStore } from "../../store/userStore.ts";
 
@@ -45,7 +45,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
     setIsLoading( true )
     const bookStatusChangeBodyValue: bookStatusChangeBody = {
       userId: userId,
-      bookId: bookId ?? null,
+      bookId: bookId,
       bookStatus: "IN_PROGRESS"
     }
     try {

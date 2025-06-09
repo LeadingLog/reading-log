@@ -8,12 +8,15 @@ import { fetchStatsMonthApi } from "../../../api/statsMonthApi.ts";
 import { fetchStatsMonthApiParams, StatsMonthList } from "../../../types/statsMonth.ts";
 import { useDateStore } from "../../../store/useDateStore.ts";
 import { useUserStore } from "../../../store/userStore.ts";
+import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
 
 export default function StatsMonth() {
 
   const { year, month } = useDateStore();
   const { userId } = useUserStore()
   const [bookGraphList, setBookGraphList] = useState<StatsMonthList[]>( [] )
+
+  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
 
   const searchStatsMonthList = async ({ userId, year, month }: fetchStatsMonthApiParams) => {
     try {
@@ -33,11 +36,12 @@ export default function StatsMonth() {
       /* 이번 달 총 독서 시간  */
       const totalMonthlyBookTime = data.monthlyReadingList.reduce( (acc: number, cur: StatsMonthList) => acc + cur.bookTime, 0 );
 
-      const [monthlyHour, monthlyMin] = changeTime( totalMonthlyBookTime )
+      const [monthlyHour, monthlyMin, monthlySec] = changeTime( totalMonthlyBookTime )
 
       /* 이번 달 독서 시간 */
       setMonthlyTimeHour( monthlyHour )
       setMonthlyTimeMin( monthlyMin )
+      setMonthlyTimeSec( monthlySec )
 
     } catch (error) {
       console.error( "독서 시간을 가져오지 못함", error )
@@ -49,18 +53,20 @@ export default function StatsMonth() {
   /* 현재 달 독서 시간 */
   const [monthlyTimeHour, setMonthlyTimeHour] = useState<number>( 0 )
   const [monthlyTimeMin, setMonthlyTimeMin] = useState<number>( 0 )
+  const [monthlyTimeSec, setMonthlyTimeSec] = useState<number>( 0 )
 
   /* 초값 시간 정보로 변경 */
   const changeTime = (responseTime: number) => {
     const hour = Math.floor( responseTime / 3600 );
     const min = Math.floor( (responseTime % 3600) / 60 );
+    const second = Math.floor( responseTime % 60 );
 
-    return [hour, min]
+    return [hour, min, second]
   }
 
   useEffect( () => {
     searchStatsMonthList( { userId, year, month } )
-  }, [year, month] );
+  }, [year, month, myReadingListTrigger] );
 
   return (
     /* 월별 통계  */
@@ -70,7 +76,7 @@ export default function StatsMonth() {
         <span className="text-2xl font-semibold text-stats_Info_Text">
           <span>{String( month ).padStart( 2, '0' )}월</span>에는
           <span
-            className="text-stats_Info_Text_Highlight"> 총 {monthlyTimeHour}시간 {monthlyTimeMin}분</span> 책을 읽었어요</span>
+            className="text-stats_Info_Text_Highlight"> 총 {monthlyTimeHour}시간 {monthlyTimeMin}분 {monthlyTimeSec}초</span> 책을 읽었어요</span>
       </article>
       {/* 독서 현황 시각화 그래프 영역 */}
       <CustomScrollbar
@@ -95,7 +101,7 @@ export default function StatsMonth() {
                 {item.bookStatus === "COMPLETED" && <IconReadComplete width="100%" height="100%"/>}
               </span>
               <span
-                className="self-center text-nowrap overflow-hidden text-ellipsis break-all [writing-mode:vertical-rl]">{item.title}</span>
+                className="self-center text-nowrap overflow-hidden text-ellipsis break-all [writing-mode:vertical-rl]">{item.bookTitle}</span>
             </li>
           )
         )}
