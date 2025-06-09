@@ -1,6 +1,5 @@
 import IconReading from "../../assets/Icon-reading.svg?react";
 import IconReadComplete from "../../assets/Icon-readcomplete.svg?react";
-import IconFavorite from "../../assets/Icon-favorite.svg?react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BookImgListProps, readStatus } from "../../types/myReadingList.ts";
 import { fetchMyReadingList } from "../../api/myReadingListApi.ts";
@@ -19,7 +18,6 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   const { userId } = useUserStore()
   const [isFetching, setIsFetching] = useState<boolean>( false );
 // 내 독서 목록 내부 검색 시 코드
-
   const [isSearching, setIsSearching] = useState( false );
 
   const searchBook = async (query: string) => {
@@ -152,6 +150,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     loadMyReadingList();
   }, [page, MyReadingListTabType, isSearching] );
 
+
   // Intersection Observer 설정 스크롤 시 마지막 부분을 확인용
 
   const skipObserver = useRef( false ); // 탭 변경시 옵져버 기능을 중지 하기 위한 것
@@ -178,7 +177,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
 
       if (node) myReadingListObserver.current.observe( node );
     },
-    [isLoading, hasMore]
+    [isLoading, hasMore,]
   );
 
   return (
@@ -201,10 +200,6 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
               {item.bookStatus === 'IN_PROGRESS' && <IconReading className="text-imgBook_Icon_Color"/>}
               {item.bookStatus === 'COMPLETED' && <IconReadComplete className="text-imgBook_Icon_Color"/>}
             </span>
-          </div>
-          <div
-            className="absolute w-8 h-8 right-2 bottom-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
-            <IconFavorite width="100%" height="100%"/>
           </div>
         </li>
       ) )}

@@ -16,7 +16,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
 
   const { openModal, closeAllModals } = useModalStore();
   const { userId } = useUserStore();
-
+  /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
+  const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
+  const modalIsLoading = useModalStore( (state) => state.modalIsLoading );
   /* 무한 스크롤 관련 */
   const [moreTotalResults, setMoreTotalResults] = useState<number>( totalResults )
   const containerRef = useRef<HTMLLIElement>( null );
@@ -55,7 +57,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     setMoreBookList( bookSearchResultList )
     setMoreTotalResults( totalResults )
     setSearchPage( 2 ); // ✅ 검색어 바뀔 때 page도 초기화
-  }, [bookSearchResultList, searchValue] );
+  }, [bookSearchResultList, searchValue, modalIsLoading] );
 
   // ✅ IntersectionObserver 적용
   useEffect( () => {
@@ -86,8 +88,6 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
       observer.disconnect();
     };
   }, [searchPage, searchValue, moreBookList.length, isLoading] );
-  /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
-  const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
 
   /* 관심도서로 추가 api */
   const addInterested = async (item: ReadingListAddApiRequestBody) => {
@@ -135,7 +135,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
         },
       } );
     }
-    addInterestedModal()
+    if (item.bookStatus !== "INTERESTED") {
+      addInterestedModal()
+    }
   }
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 END ------------- */
 

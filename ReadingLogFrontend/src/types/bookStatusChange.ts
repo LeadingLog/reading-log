@@ -7,7 +7,7 @@
 
 export interface bookStatusChangeBody {
   userId: number | null;
-  bookId: number | null;
+  bookId?: number;
   bookStatus: "INTERESTED" | "IN_PROGRESS" | "COMPLETED" | "NOT_STARTED";
   readStartDt?: string;
   readEndDt?: string;

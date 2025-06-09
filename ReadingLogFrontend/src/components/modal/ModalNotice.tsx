@@ -48,7 +48,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
             {title || "전달할 메세지를 작성 안했어요"}
           </span>
           {subTitle && (
-            <span className="text-modal_Sub_Title text-sm">{subTitle}</span>
+            <span className="text-modal_Sub_Title text-sm text-center">{subTitle}</span>
           )}
         </div>
 

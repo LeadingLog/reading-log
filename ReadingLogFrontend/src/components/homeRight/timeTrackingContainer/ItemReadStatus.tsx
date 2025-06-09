@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useModalStore } from "../../../store/modalStore.ts";
 import { itemReadStatusParams } from "../../../types/readStatus.ts";
-import { bookStatusChangeApi } from "../../../api/bookStatusChange.ts";
+import { bookStatusChangeApi } from "../../../api/bookStatusChangeApi.ts";
 import { useUserStore } from "../../../store/userStore.ts";
 import { bookStatusChangeBody } from "../../../types/bookStatusChange.ts";
 
