@@ -6,6 +6,7 @@ import { fetchBooks } from "../../api/aladinApi.ts";
 import { ReadingListAddApiRequestBody } from "../../types/readingListAdd.ts";
 import { readingListAddApi } from "../../api/readingListAddAPI.ts";
 import { useUserStore } from "../../store/userStore.ts";
+import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 
 const BookSearchResult: React.FC<BookSearchResultProps> = ({
                                                              totalResults,
@@ -16,6 +17,8 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
 
   const { openModal, closeAllModals } = useModalStore();
   const { userId } = useUserStore();
+
+  const { triggerChange } = useGlobalChangeStore.getState();
 
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
@@ -44,7 +47,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
           coverImgUrl: item.cover,
           bookStatus: item.bookStatus,
         }) );
-        setMoreBookList( prev => [...prev, ...items] );
+        setMoreBookList( prev =>
+          page === 0 ? prev : [...prev, ...items]
+        );
         setSearchPage( prev => prev + 1 ); // 페이지 증가!!
         setIsFetching( false );
       }
@@ -119,7 +124,10 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                 subTitle: "이 책이 마음에 드셨군요!",
                 onlyClose: true,
                 withMotion: true,
-                onCancel: () => closeAllModals()
+                onCancel: () => {
+                  triggerChange("MyReadingList")
+                  closeAllModals()
+                }
               } );
             }
           } catch (error) {
@@ -230,7 +238,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
           ) : !isLoading && moreTotalResults - moreBookList.length === 0 &&
             <li
               className="py-2 basis-full justify-center flex gap-1 text-sm text-main_SearchBar_searchingBook_Text">
-              <span>관심 도서를 모두 불러왔습니다.</span>
+              <span>관련 도서를 모두 불러왔습니다.</span>
             </li>
           }
         </>

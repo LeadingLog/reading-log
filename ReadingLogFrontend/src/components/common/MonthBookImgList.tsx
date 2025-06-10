@@ -8,6 +8,7 @@ import { fetchMonthReadingListParams, monthReadingListItem, readOrder } from "..
 import { useDateStore } from "../../store/useDateStore.ts";
 import { fetchMonthReadingList } from "../../api/monthReadingListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
+import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 
 /* 월별 통계 화면 아래 북 이미지 리스트 용 */
 export default function BookImgList() {
@@ -20,6 +21,8 @@ export default function BookImgList() {
   const { userId } = useUserStore();
 
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
+
+  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
 
   const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
@@ -55,7 +58,7 @@ export default function BookImgList() {
     setHasMore( true );
     // 직접 호출
     searchThisMonthReadingList( { userId, year, month, page: 0, size: 21 } );
-  }, [month, year] );
+  }, [month, year, myReadingListTrigger] );
 
   const openModalBookPlan = (item: monthReadingListItem) => {
     openModal( "ModalBookPlan", {

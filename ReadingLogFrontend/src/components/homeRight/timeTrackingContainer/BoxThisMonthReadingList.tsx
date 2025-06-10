@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../../types/monthReadingList.ts";
 import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
 import { useUserStore } from "../../../store/userStore.ts";
+import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
 
 /* 이번 달 독서 리스트 */
 export default function BoxThisMonthReadingList() {
@@ -19,6 +20,8 @@ export default function BoxThisMonthReadingList() {
   const [hasMore, setHasMore] = useState( true ); // 더 불러올 데이터가 있는지 여부
   const [isLoading, setIsLoading] = useState( false ); // 로딩 상태 추가
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
+
+  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
 
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
@@ -42,7 +45,10 @@ export default function BoxThisMonthReadingList() {
       const sortedList = data.monthlyReadingList.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
         return readOrder[a.bookStatus] - readOrder[b.bookStatus];
       } );
-      setThisMonthReadingList( (prev) => [...prev, ...sortedList] )
+
+      setThisMonthReadingList( (prev) =>
+       page === 0 ? sortedList : [...prev, ...sortedList]
+      )
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore( !isLastPage );
     } catch (error) {
@@ -55,7 +61,7 @@ export default function BoxThisMonthReadingList() {
 
   useEffect( () => {
     searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
-  }, [page] );
+  }, [page, myReadingListTrigger] );
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>( null );
   const lastItemRef = useCallback(
