@@ -6,6 +6,7 @@ import CustomScrollbar from "../common/CustomScrollbar.tsx";
 import { fetchBooks } from "../../api/aladinApi.ts";
 import { AladinApiItem } from "../../types/aladinApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
+import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 
 export default function MainBookSearch() {
 
@@ -16,6 +17,8 @@ export default function MainBookSearch() {
   const [isFetching, setIsFetching] = useState<boolean>( false );
 
   const { userId } = useUserStore();
+
+  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
 
   // 검색바를 클릭하면 실행
   const searchFocus = () => {
@@ -85,7 +88,7 @@ export default function MainBookSearch() {
     }, 500 );
 
     return () => clearTimeout( timeout );
-  }, [searchValue] );
+  }, [searchValue, myReadingListTrigger] );
 
   return (
     <>

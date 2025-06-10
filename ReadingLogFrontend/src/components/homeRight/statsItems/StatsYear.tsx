@@ -177,9 +177,9 @@ export default function StatsYear() {
               <span>연별 통계 그래프 정보를 가져 오는 중입니다.</span>
             </li>
           ) : (
-            bookGraphList.map( (item, i) =>
+            bookGraphList.map( (item) =>
               <li
-                key={i}
+                key={item.month}
                 className={`relative h-[90%] flex flex-1 justify-center`}
               >
                 <span

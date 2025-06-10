@@ -187,9 +187,9 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
 
   return (
     <>
-      {myReadingList.map( (item, idx) => (
+      {myReadingList.map( (item) => (
         <li
-          key={idx}
+          key={item.bookId}
           onClick={() => openModalBookPlan( item )}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >

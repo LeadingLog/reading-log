@@ -49,11 +49,11 @@ export default {
         timeLineMonthHoverCircle: "#E5CEC8", // 월 표시 호버서 시 색
         timeLineMonthText       : "#FFFFFF", // 월 표시 텍스트 색
         timeLineNoReadText      : "#FFFFFF", // 읽기전 텍스트 색
-        timeLineNoReadBg        : "#D9D9D9", // 읽기전 텍스트 색
+        timeLineNoReadBg        : "#D9D9D9", // 읽기전 배경 색
         timeLineReadingText     : "#FFFFFF", // 독서중 텍스트 색
-        timeLineReadingBg       : "#C9A89F", // 독서중 텍스트 색
+        timeLineReadingBg       : "#C9A89F", // 독서중 배경 색
         timeLineCompleteText    : "#FFFFFF", // 완독 텍스트 색
-        timeLineCompleteBg      : "#96B2C8", // 완독 텍스트 색
+        timeLineCompleteBg      : "#96B2C8", // 완독 배경 색
         
         /* 년도 슬라이드 관련 */
         yearSlide_Bg           : "#E5CEC8", // 년도 슬라이드 - 배경

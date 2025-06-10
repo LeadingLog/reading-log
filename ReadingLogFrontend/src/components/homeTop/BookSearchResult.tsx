@@ -6,6 +6,7 @@ import { fetchBooks } from "../../api/aladinApi.ts";
 import { ReadingListAddApiRequestBody } from "../../types/readingListAdd.ts";
 import { readingListAddApi } from "../../api/readingListAddAPI.ts";
 import { useUserStore } from "../../store/userStore.ts";
+import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 
 const BookSearchResult: React.FC<BookSearchResultProps> = ({
                                                              totalResults,
@@ -16,6 +17,8 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
 
   const { openModal, closeAllModals } = useModalStore();
   const { userId } = useUserStore();
+
+  const { triggerChange } = useGlobalChangeStore.getState();
 
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
@@ -44,7 +47,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
           coverImgUrl: item.cover,
           bookStatus: item.bookStatus,
         }) );
-        setMoreBookList( prev => [...prev, ...items] );
+        setMoreBookList( prev =>
+          page === 0 ? prev : [...prev, ...items]
+        );
         setSearchPage( prev => prev + 1 ); // 페이지 증가!!
         setIsFetching( false );
       }
@@ -119,7 +124,10 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                 subTitle: "이 책이 마음에 드셨군요!",
                 onlyClose: true,
                 withMotion: true,
-                onCancel: () => closeAllModals()
+                onCancel: () => {
+                  triggerChange("MyReadingList")
+                  closeAllModals()
+                }
               } );
             }
           } catch (error) {
@@ -173,9 +181,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                 className="w-5 h-5 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
             </li>
           }
-          {moreBookList.map( (item, idx) => (
+          {moreBookList.map( (item) => (
             <li
-              key={idx}
+              key={item.isbn13}
               className="cursor-pointer flex gap-2 basis-[calc(50%-8px)] transition-[border] p-1 border-2 border-transparent items-center hover:border-main_SearchBar_Border rounded-lg"
               onClick={() => openModalBookPlan( item )}
             >
@@ -205,7 +213,6 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
               </div>
               <div className="w-12 aspect-square relative">
                 <div
-                  key={item.isbn13}
                   className={`${
                     item.bookStatus === "INTERESTED" ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
                   } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
@@ -230,7 +237,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
           ) : !isLoading && moreTotalResults - moreBookList.length === 0 &&
             <li
               className="py-2 basis-full justify-center flex gap-1 text-sm text-main_SearchBar_searchingBook_Text">
-              <span>관심 도서를 모두 불러왔습니다.</span>
+              <span>관련 도서를 모두 불러왔습니다.</span>
             </li>
           }
         </>

@@ -20,9 +20,9 @@ const LeftPage: React.FC = () => {
     <section className="flex flex-col flex-1 overflow-hidden gap-4 h-full bg-page_Bg rounded-xl p-7">
       {/* 탭 영역 */}
       <ul className="flex text-base">
-        {LeftPageTabName.map( (tab: LeftPageTabName, idx) => (
+        {LeftPageTabName.map( (tab: LeftPageTabName) => (
           <li
-            key={idx}
+            key={tab}
             className={`flex justify-center flex-1 cursor-pointer pb-1 border-b-2  ${
               activeLeftPageTab === tab ? 'font-semibold border-b-8 border-leftPage_ActiveTab_Border' : 'border-leftPage_InActiveTab_Border'
             }`}
