@@ -390,14 +390,14 @@ export default function TimeLine() {
                 className={`hover:before:-inset-1.5 hover:before:opacity-100 hover:border-timeLineMonthHoverCircle
                   before:absolute before:inset-1 before:opacity-0 before:border-timeLineMonthHoverCircle before:border-[6px] before:rounded-[inherit] before:transition-all before:duration-200 before:ease-in-out
                   group absolute w-8 h-8 rounded-full bg-timeLineMonthCircle transition-all duration-200 ease-in-out
-                  ${item.month === nowMonth && year === nowYear ? 'before:-inset-1 before:opacity-100' : ''}
+                  ${item.month === nowMonth && year === nowYear ? 'before:-inset-0.5 before:opacity-100' : ''}
                   `}
               >
                 <span className="">{item.month}</span>
                 <div
                   className={`absolute flex gap-1 transition-all duration-200 ease-in-out left-1/2 transform -translate-x-1/2
-                    ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[0%] py-2 pr-8 pl-2 group-hover:top-[50%] group-hover:pr-10' :
-                    item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[100%] py-2 pr-2 pl-8 group-hover:top-[50%] group-hover:pl-10' :
+                    ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[0%] py-2 pr-8 pl-2 group-hover:top-[50%] group-hover:pr-12' :
+                    item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[100%] py-2 pr-2 pl-8 group-hover:top-[50%] group-hover:pl-12' :
                     item.month === 11 || item.month === 12 ? 'bottom-[100%] p-1 group-hover:p-2' : 'p-2 group-hover:pt-4'}
                   `}
                 >
