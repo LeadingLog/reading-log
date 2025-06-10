@@ -387,10 +387,11 @@ export default function TimeLine() {
                   bottom: item.bottom,
                   transform: item.transform
                 }}
-                className={`hover:before:-inset-1.5 hover:before:opacity-100 hover:border-timeLineMonthHoverCircle
-                  before:absolute before:inset-1 before:opacity-0 before:border-timeLineMonthHoverCircle before:border-[6px] before:rounded-[inherit] before:transition-all before:duration-200 before:ease-in-out
+                className={`
+                hover:before:-inset-1.5 hover:before:opacity-100 hover:border-timeLineMonthHoverCircle
+                  ${item.month === nowMonth && year === nowYear ? 'before:-inset-0.5 before:opacity-100' : 'before:inset-1 before:opacity-0'}
+                  before:absolute before:border-timeLineMonthHoverCircle before:border-[6px] before:rounded-[inherit] before:transition-all before:duration-200 before:ease-in-out
                   group absolute w-8 h-8 rounded-full bg-timeLineMonthCircle transition-all duration-200 ease-in-out
-                  ${item.month === nowMonth && year === nowYear ? 'before:-inset-0.5 before:opacity-100' : ''}
                   `}
               >
                 <span className="">{item.month}</span>
