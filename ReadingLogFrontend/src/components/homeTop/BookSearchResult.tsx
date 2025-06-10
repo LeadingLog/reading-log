@@ -181,9 +181,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                 className="w-5 h-5 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
             </li>
           }
-          {moreBookList.map( (item, idx) => (
+          {moreBookList.map( (item) => (
             <li
-              key={idx}
+              key={item.isbn13}
               className="cursor-pointer flex gap-2 basis-[calc(50%-8px)] transition-[border] p-1 border-2 border-transparent items-center hover:border-main_SearchBar_Border rounded-lg"
               onClick={() => openModalBookPlan( item )}
             >
@@ -213,7 +213,6 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
               </div>
               <div className="w-12 aspect-square relative">
                 <div
-                  key={item.isbn13}
                   className={`${
                     item.bookStatus === "INTERESTED" ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
                   } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}

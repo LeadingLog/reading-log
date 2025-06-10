@@ -19,6 +19,10 @@ export default function TimeLine() {
   const { year, setMonth } = useDateStore(); // Zustand에서 년도 정보 가져오기
   const { userId } = useUserStore()
 
+  const nowData = new Date()
+  const nowYear = nowData.getFullYear()
+  const nowMonth = nowData.getMonth() + 1
+
   const thisMonthReadingList = () => {
     setRightContent(
       'TimeTracking', {},
@@ -368,9 +372,9 @@ export default function TimeLine() {
         </div>
         {/* 월 표시 버튼 */}
         <ul className="grid grid-cols-7 grid-rows-9 w-full">
-          {monthArr.map( (item, idx) => (
+          {monthArr.map( (item) => (
             <li
-              key={idx}
+              key={item.month}
               className={`relative`}
               style={{ gridColumnStart: `${item.col}`, gridRowStart: `${item.row}` }}
             >
@@ -383,37 +387,39 @@ export default function TimeLine() {
                   bottom: item.bottom,
                   transform: item.transform
                 }}
-                className="hover:before:-inset-1.5 hover:before:opacity-100 hover:border-timeLineMonthHoverCircle
-                before:absolute before:inset-1 before:opacity-0 before:border-timeLineMonthHoverCircle before:border-[6px] before:rounded-[inherit] before:transition-all before:duration-200 before:ease-in-out
-                group absolute w-8 h-8 rounded-full bg-timeLineMonthCircle transition-all duration-200 ease-in-out"
+                className={`hover:before:-inset-1.5 hover:before:opacity-100 hover:border-timeLineMonthHoverCircle
+                  before:absolute before:inset-1 before:opacity-0 before:border-timeLineMonthHoverCircle before:border-[6px] before:rounded-[inherit] before:transition-all before:duration-200 before:ease-in-out
+                  group absolute w-8 h-8 rounded-full bg-timeLineMonthCircle transition-all duration-200 ease-in-out
+                  ${item.month === nowMonth && year === nowYear ? 'before:-inset-1 before:opacity-100' : ''}
+                  `}
               >
-                {item.month}
+                <span className="">{item.month}</span>
                 <div
-                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out  left-1/2 transform -translate-x-1/2
-                    ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[-40%] group-hover:top-[50%] group-hover:left-[-70%]' :
-                    item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[140%] group-hover:top-[50%] group-hover:left-[160%]' :
-                    item.month === 11 || item.month === 12 ? 'top-[-60%] group-hover:top-[-90%]' : 'top-[110%] group-hover:top-[130%]'}
+                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out left-1/2 transform -translate-x-1/2
+                    ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[0%] py-2 pr-8 pl-2 group-hover:top-[50%] group-hover:pr-10' :
+                    item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[100%] py-2 pr-2 pl-8 group-hover:top-[50%] group-hover:pl-10' :
+                    item.month === 11 || item.month === 12 ? 'bottom-[100%] p-1 group-hover:p-2' : 'p-2 group-hover:pt-4'}
                   `}
                 >
                   {item.notStarted > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full"
                     >
-                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.notStarted}</p>
+                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100" : ""} group-hover:opacity-100 opacity-0 text-xs`}>{item.notStarted}</p>
                     </span>
                   )}
                   {item.inProgress > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full"
                     >
-                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.inProgress}</p>
+                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100" : ""} group-hover:opacity-100 opacity-0 text-xs`}>{item.inProgress}</p>
                     </span>
                   )}
                   {item.completed > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full"
                     >
-                      <p className="group-hover:opacity-100 opacity-0 text-xs">{item.completed}</p>
+                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100" : ""} group-hover:opacity-100 opacity-0 text-xs`}>{item.completed}</p>
                     </span>
                   )}
                 </div>

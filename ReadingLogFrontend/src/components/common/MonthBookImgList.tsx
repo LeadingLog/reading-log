@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { readStatus } from "../../types/myReadingList.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
-import { fetchMonthReadingListParams, monthReadingListItem, readOrder } from "../../types/monthReadingList.ts";
+import { fetchMonthReadingListParams, monthReadingListItem } from "../../types/monthReadingList.ts";
 import { useDateStore } from "../../store/useDateStore.ts";
 import { fetchMonthReadingList } from "../../api/monthReadingListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
@@ -30,11 +30,7 @@ export default function BookImgList() {
       setIsLoading( true );
       const data = await fetchMonthReadingList( { userId, year, month, page, size } );
 
-      // 받아온 독서상태별로 데이터 순서 정렬
-      const sortedList = data.monthlyReadingList.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
-        return readOrder[a.bookStatus] - readOrder[b.bookStatus];
-      } );
-      setThisMonthReadingList( (prev) => [...prev, ...sortedList] )
+      setThisMonthReadingList( (prev) => [...prev, ...data.monthlyReadingList] )
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore( !isLastPage );
     } catch (error) {
@@ -48,7 +44,7 @@ export default function BookImgList() {
   useEffect( () => {
     if (page === 0) return; // prevent redundant call from reset
     if (isLoading || !hasMore) return;
-    searchThisMonthReadingList( { userId, year, month, page, size: 21 } );
+    searchThisMonthReadingList( { userId, year, month, page, size: 9 } );
   }, [page] );
 
   // 년도 및 월이 변경되는 경우 해당 월 정보 가져옴
@@ -57,7 +53,7 @@ export default function BookImgList() {
     setPage( 0 );
     setHasMore( true );
     // 직접 호출
-    searchThisMonthReadingList( { userId, year, month, page: 0, size: 21 } );
+    searchThisMonthReadingList( { userId, year, month, page: 0, size: 9 } );
   }, [month, year, myReadingListTrigger] );
 
   const openModalBookPlan = (item: monthReadingListItem) => {
@@ -97,9 +93,9 @@ export default function BookImgList() {
 
   return (
     <>
-      {thisMonthReadingList.map( (item, idx) => (
+      {thisMonthReadingList.map( (item) => (
         <li
-          key={idx}
+          key={item.bookId}
           onClick={() => openModalBookPlan( item )}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >

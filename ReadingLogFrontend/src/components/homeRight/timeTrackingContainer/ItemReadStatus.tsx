@@ -4,6 +4,7 @@ import { itemReadStatusParams } from "../../../types/readStatus.ts";
 import { bookStatusChangeApi } from "../../../api/bookStatusChangeApi.ts";
 import { useUserStore } from "../../../store/userStore.ts";
 import { bookStatusChangeBody } from "../../../types/bookStatusChange.ts";
+import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
 
 // 2. 컴포넌트 정의
 export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusParams) {
@@ -15,6 +16,8 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
   const [currentStatus, setCurrentStatus] = useState( bookStatus )
 
   const { userId } = useUserStore()
+
+  const { triggerChange } = useGlobalChangeStore.getState();
 
   /* 독서중 or 완독 토글*/
   const toggleSwitch = (e: React.MouseEvent) => {
@@ -38,6 +41,7 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
           try {
             await bookStatusChangeApi( bookStatusChangeBodyValue )
             setCurrentStatus( "COMPLETED" )
+            triggerChange("MyReadingList")
             openModal( "ModalNotice", {
               title: "완독을 축하드려요!",
               onlyClose: true,
@@ -69,6 +73,7 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
           try {
             await bookStatusChangeApi( bookStatusChangeBodyValue )
             setCurrentStatus( "IN_PROGRESS" )
+            triggerChange("MyReadingList")
             openModal( "ModalNotice", {
               title: "독서 중 도서로 변경되었습니다.!",
               onlyClose: true,

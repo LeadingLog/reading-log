@@ -1,7 +1,7 @@
 import ItemReadStatus from "./ItemReadStatus.tsx";
 import { useModalStore } from "../../../store/modalStore.ts";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { fetchThisMonthReadingListParams, monthReadingListItem, readOrder } from "../../../types/monthReadingList.ts";
+import { fetchThisMonthReadingListParams, monthReadingListItem } from "../../../types/monthReadingList.ts";
 import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
 import { useUserStore } from "../../../store/userStore.ts";
 import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
@@ -41,13 +41,9 @@ export default function BoxThisMonthReadingList() {
     try {
       setIsLoading( true );
       const data = await fetchThisMonthReadingList( { userId, year, month, page, size } );
-      // 받아온 독서상태별로 데이터 순서 정렬
-      const sortedList = data.monthlyReadingList.sort( (a: monthReadingListItem, b: monthReadingListItem) => {
-        return readOrder[a.bookStatus] - readOrder[b.bookStatus];
-      } );
 
       setThisMonthReadingList( (prev) =>
-       page === 0 ? sortedList : [...prev, ...sortedList]
+       page === 0 ? data.monthlyReadingList : [...prev, ...data.monthlyReadingList]
       )
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore( !isLastPage );
@@ -81,7 +77,7 @@ export default function BoxThisMonthReadingList() {
       // `node`가 있으면 해당 노드를 관찰하기 시작
       if (node) thisMonthReadingListObserver.current.observe( node );
     },
-    [isLoading, hasMore] // 이 값들이 변경되면 `lastItemRef`가 새로 정의됨
+    [isLoading, hasMore, myReadingListTrigger] // 이 값들이 변경되면 `lastItemRef`가 새로 정의됨
   );
 
   return (
@@ -94,9 +90,9 @@ export default function BoxThisMonthReadingList() {
         >
           <span className="text-xl">리스트가 비었어요</span>
         </li>
-      ) : thisMonthReadingList.map( (item, idx) => (
+      ) : thisMonthReadingList.map( (item) => (
         <li
-          key={idx}
+          key={item.bookId}
           className="cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
           onClick={() => openModalTrackingPlan( item )}
         >

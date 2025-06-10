@@ -82,9 +82,9 @@ export default function MyFavoriteList() {
       containerClassName="grid grid-cols-3 gap-6 content-start flex-1"
       scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color"
     >
-      {favoriteList.map( (item: BookListType, idx) => (
+      {favoriteList.map( (item: BookListType) => (
         <li
-          key={idx}
+          key={item.bookId}
           onClick={() => openModalBookPlan( item )}
           className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >

@@ -85,9 +85,9 @@ export default function StatsMonth() {
         scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color bottom-0.5"
         // scrollbarWidth=""
       >
-        {bookGraphList.map( (item, idx) => (
+        {bookGraphList.map( (item) => (
             <li
-              key={idx}
+              key={item.bookId}
               className={`h-[40%] flex flex-col self-end gap-1 px-1 pt-1 border-t-2 border-x-2 -mr-0.5 border-stats_Month_Graph_Book_Border bg-stats_Month_Graph_Book_Bg`}
               style={{ height: `${item.bookTime * 100}%` }}
             >
