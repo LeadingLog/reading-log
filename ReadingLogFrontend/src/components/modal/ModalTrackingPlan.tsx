@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useModalStore } from '../../store/modalStore';
-import IconFavorite from "../../assets/Icon-favorite.svg?react"
 import { motion } from "framer-motion";
 import { usePageStore } from "../../store/pageStore.ts";
 import { ModalTrackingPlanProps } from "../../types/modal.ts";
@@ -104,10 +103,6 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
         {/* 책 표지 */}
         <a href={`${bookLink}`} target="_blank"
            className="flex justify-center items-center max-h-96 relative aspect-square overflow-hidden rounded-lg">
-          <div
-            className="z-10 absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-favorite_Icon_Bg rounded-full p-1.5">
-            <IconFavorite width="100%" height="100%"/>
-          </div>
           <img src={cover} alt={bookTitle}
                className="relative drop-shadow-[2px_4px_6px_#00000080] z-10 h-[90%] object-contain"/>
           <img src={cover} alt={bookTitle} className="absolute inset-0 w-full h-full object-cover opacity-90 blur-sm"/>

@@ -33,8 +33,8 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
       openModal( "ModalNotice", {
         title: "완독한 도서 인가요?",
         subTitle: "완독한 도서로 변경됩니다.",
-        cancelText: "조금 더 읽을래요!",
-        confirmText: "예 완독했습니다!",
+        cancelText: "아니요",
+        confirmText: "완독도서로 변경",
         loadingMessage: "변경 중",
         onConfirm: async () => {
           setModalIsLoading( true )
@@ -63,10 +63,10 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
       } )
     } else if (currentStatus === "COMPLETED") {
       openModal( "ModalNotice", {
-        title: "아직 완독하지 않은 도서인가요?",
-        subTitle: "완독하지 않은 도서로 변경됩니다.",
-        cancelText: "닫기",
-        confirmText: "예 조금 더 읽을래요!",
+        title: "독서중인 도서로 변경하시겠습니까?",
+        subTitle: "독서중인 도서로 변경됩니다.",
+        cancelText: "아니요",
+        confirmText: "독서중으로 변경",
         loadingMessage: "변경 중",
         onConfirm: async () => {
           setModalIsLoading( true )
