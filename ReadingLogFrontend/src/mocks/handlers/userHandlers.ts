@@ -13,11 +13,9 @@ export const userHandlers = [
     console.log( `code: ${code}, state: ${state}` );
 
     return HttpResponse.json( {
-      users: {
-        userId: 'mocked-kakao-id',
-        nickname: 'MockKakaoUser',
-        email: 'mocKakao@example.com',
-      },
+      userId: 'mocked-kakao-id',
+      nickname: 'MockKakaoUser',
+      email: 'mocKakao@example.com',
     } );
   } ),
 
@@ -30,11 +28,9 @@ export const userHandlers = [
     console.log( `code: ${code}, state: ${state}` );
 
     return HttpResponse.json( {
-      users: {
-        userId: 'mocked-naver-id',
-        nickname: 'MockNaverUser',
-        email: 'mockNaver@example.com',
-      },
+      userId: 'mocked-naver-id',
+      nickname: 'MockNaverUser',
+      userEmail: 'mockNaver@example.com',
     } );
   } ),
 
@@ -68,11 +64,13 @@ export const userHandlers = [
   } ),
 
   // 탈퇴
-  http.delete( `${serverUrl}/user/user_id/delete`, async ({ request }) => {
-    const url = new URL( request.url );
-    const provider = url.searchParams.get( 'provider' );
-    const userId = url.searchParams.get( 'user_id' );
-    console.log( `userId: ${userId}, provider: ${provider}` );
+  http.delete( `${serverUrl}/user/:userId/delete`, async ({ request, params }) => {
+    const body = await request.json() as { userId: string };
+    const userIdFromParam = params.userId; // URL에서 가져온 userId (/user/123/delete)
+    const userIdFromBody = body.userId;     // body에서 보낸 userId ({ userId: 123 })
+
+    console.log( `userId (from URL param): ${userIdFromParam}` );
+    console.log( `userId (from body): ${userIdFromBody}` );
 
     return HttpResponse.json( {
       success: true,

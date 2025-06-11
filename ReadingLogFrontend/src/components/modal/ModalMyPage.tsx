@@ -151,16 +151,6 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
       console.error( "회원 탈퇴 실패:", err );
       handleDeleteFail( "서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요." );
     }
-
-    openModal( "ModalNotice", {
-      title: "회원 탈퇴가 완료되었습니다",
-      confirmText: "닫기",
-      onlyConfirm: true,
-      onConfirm: () => {
-        closeAllModals();
-        navigate( "/login" );
-      }
-    } );
   };
 
   // 회원 탈퇴 클릭
