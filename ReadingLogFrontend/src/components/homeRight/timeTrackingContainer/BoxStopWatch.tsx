@@ -17,7 +17,7 @@ export default function BoxStopWatch() {
           <span onClick={stop}>{bookData?.author}</span>
         </section>
         <section className="flex flex-1 gap-6">
-          <article className="flex-1 bg-trackingBook_Bg rounded-xl">
+          <article className="flex justify-center items-center flex-1 bg-trackingBook_Bg rounded-xl overflow-hidden">
             <img src={bookData?.cover} alt={bookData?.bookTitle}/>
           </article>
           <ItemStopWatch/>

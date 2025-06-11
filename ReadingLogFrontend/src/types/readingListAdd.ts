@@ -4,7 +4,7 @@ export interface ReadingListAddApiRequestBody {
   userId: number | null;
   bookTitle: string;
   author: string;
-  isbn13?: string;
+  isbn13: string;
   link?: string;
   coverImgUrl?: string;
   bookStatus?: string;

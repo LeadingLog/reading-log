@@ -21,7 +21,7 @@ export default function BoxThisMonthReadingList() {
   const [isLoading, setIsLoading] = useState( false ); // 로딩 상태 추가
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
-  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
+  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
 
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
@@ -32,7 +32,7 @@ export default function BoxThisMonthReadingList() {
         author: item.author,
         cover: item.coverImgUrl,
         bookLink: item.link,
-        onlyClose : true,
+        onlyClose: true,
         cancelText: '닫기',
         bookStatus: item.bookStatus
       } )
@@ -52,12 +52,12 @@ export default function BoxThisMonthReadingList() {
 
   const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchThisMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
+
     try {
       setIsLoading( true );
       const data = await fetchThisMonthReadingList( { userId, year, month, page, size } );
-
       setThisMonthReadingList( (prev) =>
-       page === 0 ? data.monthlyReadingList : [...prev, ...data.monthlyReadingList]
+        page === 0 ? data.monthlyReadingList : [...prev, ...data.monthlyReadingList]
       )
       const isLastPage = data.page.number + 1 >= data.page.totalPages;
       setHasMore( !isLastPage );
@@ -69,15 +69,23 @@ export default function BoxThisMonthReadingList() {
     }
   };
 
+  // 📌 1. 스크롤에 따른 페이지 증가
   useEffect( () => {
-    searchThisMonthReadingList( { userId, year, month, page, size: 20 } );
-  }, [page, myReadingListTrigger] );
+    searchThisMonthReadingList( { userId, year, month, page, size: 21 } );
+  }, [page] );
+
+  // 📌 2. 외부 트리거 발생 시 page: 0으로 새로 요청
+  useEffect( () => {
+    setPage( 0 );
+    // 페이지 초기화 후 새로 요청
+    searchThisMonthReadingList( { userId, year, month, page: 0, size: 21 } );
+  }, [myReadingListTrigger] );
+
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>( null );
   const lastItemRef = useCallback(
     (node: HTMLLIElement | null) => {
       if (isLoading || !hasMore) return; // 로딩 중이거나 더 이상 불러올 데이터가 없으면 종료
-
       if (thisMonthReadingListObserver.current) thisMonthReadingListObserver.current.disconnect(); // 기존 옵저버를 종료
 
       // 새로운 IntersectionObserver 생성
@@ -91,7 +99,7 @@ export default function BoxThisMonthReadingList() {
       // `node`가 있으면 해당 노드를 관찰하기 시작
       if (node) thisMonthReadingListObserver.current.observe( node );
     },
-    [isLoading, hasMore, myReadingListTrigger] // 이 값들이 변경되면 `lastItemRef`가 새로 정의됨
+    [isLoading, hasMore] // 이 값들이 변경되면 `lastItemRef`가 새로 정의됨
   );
 
   return (
@@ -102,7 +110,9 @@ export default function BoxThisMonthReadingList() {
         <li
           className="cursor-pointer flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
         >
-          <span className="text-xl">리스트가 비었어요</span>
+          <span className="text-xl"
+
+          >리스트가 비었어요</span>
         </li>
       ) : thisMonthReadingList.map( (item) => (
         <li
@@ -121,7 +131,7 @@ export default function BoxThisMonthReadingList() {
         </li>
       )}
       {/* 이 요소가 화면에 보이면 다음 페이지를 불러옴 */}
-      {hasMore && (
+      {hasMore && !isLoading && (
         <li
           ref={lastItemRef}
           className="invisible h-1 p-3" // 실제 표시되진 않지만 관찰용
@@ -129,7 +139,9 @@ export default function BoxThisMonthReadingList() {
       )}
       {!hasMore && thisMonthReadingList.length > 0 && (
         <li className="py-2 justify-center flex gap-1 text-sm text-favoriteList_Searching_End_Text">
-          <span>이번 달 독서 리스트를 모두 불러왔습니다.</span>
+          <span onClick={() => {
+            console.log( myReadingListTrigger )
+          }}>이번 달 독서 리스트를 모두 불러왔습니다.</span>
         </li>
       )}
     </>

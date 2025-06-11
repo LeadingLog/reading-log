@@ -92,7 +92,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       userId: userId,
       bookTitle: bookTitle ?? "",
       author: author ?? "",
-      isbn13: isbn13,
+      isbn13: isbn13 ?? "",
       link: bookLink,
       coverImgUrl: cover,
       bookStatus: 'NOT_STARTED',

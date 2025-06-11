@@ -21,6 +21,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   const { triggerChange } = useGlobalChangeStore.getState();
 
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
+  const [favorite, setFavorite] = useState<string[]>( [] );
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
   const modalIsLoading = useModalStore( (state) => state.modalIsLoading );
   /* 무한 스크롤 관련 */
@@ -125,7 +126,8 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                 onlyClose: true,
                 withMotion: true,
                 onCancel: () => {
-                  triggerChange("MyReadingList")
+                  triggerChange( "MyReadingList" )
+                  setFavorite( (prev: string[]) => [...prev, item.isbn13] );
                   closeAllModals()
                 }
               } );
@@ -144,7 +146,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
         },
       } );
     }
-    if (item.bookStatus !== "INTERESTED") {
+    if (item.bookStatus !== "INTERESTED" && !favorite.includes(item.isbn13)) {
       addInterestedModal()
     }
   }
@@ -214,7 +216,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
               <div className="w-12 aspect-square relative">
                 <div
                   className={`${
-                    item.bookStatus === "INTERESTED" ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
+                    item.bookStatus === "INTERESTED" || favorite.includes( item.isbn13 ) ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
                   } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
                   onClick={(e) => {
                     e.stopPropagation();

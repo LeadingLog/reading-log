@@ -1,7 +1,6 @@
 // 독서 상태
 
 // 월별 독서 리스트 타입
-
 export interface monthReadingListItem {
   bookId: number;
   userId: number | null;
@@ -13,6 +12,7 @@ export interface monthReadingListItem {
   bookStatus: 'IN_PROGRESS' | 'NOT_STARTED' | 'COMPLETED' | 'INTERESTED';
   readStartDt?: string;
   readEndDt?: string;
+  totalElements?: number;
 }
 
 // 독서 리스트 요청 파라미터 타입
