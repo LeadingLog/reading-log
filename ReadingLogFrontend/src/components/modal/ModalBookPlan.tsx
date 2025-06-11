@@ -112,7 +112,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           onlyConfirm: true,
           withMotion: true,
           onConfirm: async () => {
-            triggerChange("MyReadingList")
+            triggerChange( "MyReadingList" )
             closeAllModals()
           }
         } )
@@ -132,7 +132,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
 
   /* 독서계획변경 api */
   const bookPlanChange = async () => {
-    setIsLoading( true )
     const bookStatusChangeBody: bookStatusChangeBody = {
       bookId: bookId,
       userId: userId,
@@ -142,7 +141,18 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       readStartDt: `${pickStartYear}-${String( pickStartMonth ).padStart( 2, '0' )}-01`,
       readEndDt: `${pickEndYear}-${String( pickEndMonth ).padStart( 2, '0' )}-${getLastDateOfMonth( pickEndYear, pickEndMonth )}`
     };
+    if (readStartDt === bookStatusChangeBody.readStartDt && readEndDt === bookStatusChangeBody.readEndDt) {
+      openModal( 'ModalNotice', {
+        title: "기존 계획 날짜와 같습니다.",
+        subTitle: "날짜를 변경해주세요",
+        cancelText: "다시 선택하기",
+        onlyClose: true,
+        withMotion: true
+      } );
+      return;
+    }
     try {
+      setIsLoading( true )
       const response = await bookStatusChangeApi( bookStatusChangeBody )
 
       if (response) {
@@ -153,7 +163,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           onlyConfirm: true,
           withMotion: true,
           onConfirm: async () => {
-            triggerChange("MyReadingList")
+            triggerChange( "MyReadingList" )
             closeAllModals()
           }
         } )
@@ -170,7 +180,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       setIsLoading( false )
     }
   }
-
   /* 독서 계획 추가 버튼 클릭 시 함수 */
   const completeBookPlan = async () => {
     const alertModal = (alertMessage: string) => {
@@ -242,7 +251,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                 onlyClose: true,
                 withMotion: true,
                 onCancel: () => {
-                  triggerChange("MyReadingList")
+                  triggerChange( "MyReadingList" )
                   closeAllModals()
                 }
               } );
@@ -286,7 +295,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
               onlyClose: true,
               withMotion: true,
               onCancel: () => {
-                triggerChange("MyReadingList")
+                triggerChange( "MyReadingList" )
                 closeAllModals()
               }
             } );

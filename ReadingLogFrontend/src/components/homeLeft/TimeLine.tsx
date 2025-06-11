@@ -407,23 +407,23 @@ export default function TimeLine() {
                 >
                   {item.notStarted > 0 && (
                     <span
-                      className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineNoReadBg rounded-full"
+                      className="group-hover:w-5 flex justify-center items-center aspect-square bg-timeLineNoReadBg rounded-full"
                     >
-                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100" : ""} group-hover:opacity-100 opacity-0 text-xs`}>{item.notStarted}</p>
+                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.notStarted}</p>
                     </span>
                   )}
                   {item.inProgress > 0 && (
                     <span
-                      className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineReadingBg rounded-full"
+                      className="group-hover:w-5 flex justify-center items-center aspect-square bg-timeLineReadingBg rounded-full"
                     >
-                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100" : ""} group-hover:opacity-100 opacity-0 text-xs`}>{item.inProgress}</p>
+                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.inProgress}</p>
                     </span>
                   )}
                   {item.completed > 0 && (
                     <span
-                      className="group-hover:w-5 flex justify-center items-center w-4 aspect-square bg-timeLineCompleteBg rounded-full"
+                      className="group-hover:w-5 flex justify-center items-center aspect-square bg-timeLineCompleteBg rounded-full"
                     >
-                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100" : ""} group-hover:opacity-100 opacity-0 text-xs`}>{item.completed}</p>
+                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.completed}</p>
                     </span>
                   )}
                 </div>

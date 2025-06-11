@@ -102,7 +102,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
-      <section className="flex max-w-96 flex-col gap-3 bg-modal_Default_Bg p-5 rounded-lg">
+      <section className="flex max-w-96 min-w-80 flex-col gap-3 bg-modal_Default_Bg p-5 rounded-lg">
         {/* 타이틀 */}
         <span
           className="bg-modal_Tracking_Title_Bg text-modal_Tracking_Title_Text rounded-lg p-2 text-center font-semibold">독서 타임 트래킹</span>
@@ -198,7 +198,8 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
               </motion.div>
             </>
           ) : (
-            <div className="text-center text-modal_Tracking_Complete_Text bg-modal_Tracking_Complete_Text_Bg rounded-md p-1">
+            <div
+              className="text-center text-modal_Tracking_Complete_Text bg-modal_Tracking_Complete_Text_Bg rounded-md p-1">
               완독 도서
             </div>
           )}
