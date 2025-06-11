@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useModalStore } from "../../../store/modalStore.ts";
 import { itemReadStatusParams } from "../../../types/readStatus.ts";
 import { bookStatusChangeApi } from "../../../api/bookStatusChangeApi.ts";
@@ -18,7 +18,7 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
   const { userId } = useUserStore()
 
   const { triggerChange } = useGlobalChangeStore.getState();
-
+  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
   /* 독서중 or 완독 토글*/
   const toggleSwitch = (e: React.MouseEvent) => {
     e.stopPropagation(); // 해당 부분 클릭하면 부모요소 클릭 이벤트가 실행되지 않도록 방지 요소
@@ -94,7 +94,9 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
       } )
     }
   }
-
+  useEffect( () => {
+    setCurrentStatus(bookStatus)
+  }, [bookStatus, myReadingListTrigger] );
   return (
     /* 이번 달 독서 리스트 */
     <>

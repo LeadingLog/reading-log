@@ -25,15 +25,29 @@ export default function BoxThisMonthReadingList() {
 
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
-    openModal( 'ModalTrackingPlan', {
-      bookId: item.bookId,
-      bookTitle: item.bookTitle,
-      author: item.author,
-      cover: item.coverImgUrl,
-      bookLink: item.link,
-      cancelText: '닫기',
-      confirmText: '독서 시작',
-    } )
+    if (item.bookStatus === "COMPLETED") {
+      openModal( 'ModalTrackingPlan', {
+        bookId: item.bookId,
+        bookTitle: item.bookTitle,
+        author: item.author,
+        cover: item.coverImgUrl,
+        bookLink: item.link,
+        onlyClose : true,
+        cancelText: '닫기',
+        bookStatus: item.bookStatus
+      } )
+    } else {
+      openModal( 'ModalTrackingPlan', {
+        bookId: item.bookId,
+        bookTitle: item.bookTitle,
+        author: item.author,
+        cover: item.coverImgUrl,
+        bookLink: item.link,
+        cancelText: '닫기',
+        confirmText: '독서 시작',
+        bookStatus: item.bookStatus
+      } )
+    }
   }
 
   const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchThisMonthReadingListParams) => {

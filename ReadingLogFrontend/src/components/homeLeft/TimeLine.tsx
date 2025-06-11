@@ -228,7 +228,7 @@ export default function TimeLine() {
   const searchTimeLineReadingList = async ({ userId, year }: fetchTimeLineReadingListParams) => {
     try {
       const response = await fetchTimeLineReadingList( { userId, year } );
-      console.log( response )
+
       const readingCountByMonth = response.readingCountByMonth;
       const freshArr = getInitialMonthArr();
       const updated: TimelineEntry[] = freshArr.map( (month) => {
