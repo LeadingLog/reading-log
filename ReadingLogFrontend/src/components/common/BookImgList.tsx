@@ -1,7 +1,7 @@
 import IconReading from "../../assets/Icon-reading.svg?react";
 import IconReadComplete from "../../assets/Icon-readcomplete.svg?react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BookImgListProps, readStatus } from "../../types/myReadingList.ts";
+import { BookImgListProps, fetchMyReadingListParams, readStatus } from "../../types/myReadingList.ts";
 import { fetchMyReadingList } from "../../api/myReadingListApi.ts";
 import { ReadStatus } from "../../types/readStatus.ts";
 import { useModalStore } from "../../store/modalStore.ts";
@@ -21,7 +21,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   // 내 독서 목록 내부 검색 시 코드
   const [isSearching, setIsSearching] = useState( false );
 
-  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
+  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
 
   const searchBook = async (query: string) => {
     if (isFetching) return;
@@ -69,7 +69,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
             userId: userId,
             MyReadingListTabType: MyReadingListTabType,
             page: 0, // query가 빈 값이 되면 항상 첫 페이지부터 로드
-            size: 21,
+            size: 12,
           } );
 
           // 이전 목록을 완전히 대체 (검색 취소 시 처음부터 다시 로드)
@@ -121,40 +121,42 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     return () => clearTimeout( timer );
   }, [MyReadingListTabType] );
 
+  const loadMyReadingList = async ({ userId, MyReadingListTabType, page, size }: fetchMyReadingListParams) => {
+    if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
+    try {
+      setIsLoading( true );
+      const data = await fetchMyReadingList( {
+        userId: userId,
+        MyReadingListTabType: MyReadingListTabType,
+        page,
+        size: size,
+      } );
 
+      setMyReadingList( (prev) =>
+        page === 0 ? data.readingList : [...prev, ...data.readingList]
+      );
+
+      const isLastPage = data.page.number + 1 >= data.page.totalPages;
+      setHasMore( !isLastPage );
+    } catch (error) {
+      console.error( "리스트 로딩 실패:", error );
+      setHasMore( false );
+    } finally {
+      setIsLoading( false );
+    }
+  };
 
   // 페이지 또는 탭 변경 시 데이터 로딩
   useEffect( () => {
     if (isSearching || (page > 0 && !hasMore)) return;
+    loadMyReadingList( { userId, MyReadingListTabType, page, size: 12 } );
+  }, [page, MyReadingListTabType, isSearching] );
 
-    const loadMyReadingList = async () => {
-      setIsLoading( true );
-      try {
-        const data = await fetchMyReadingList( {
-          userId: userId,
-          MyReadingListTabType: MyReadingListTabType,
-          page,
-          size: 21,
-        } );
-
-        console.log( '페이지 또는 탭 변경시 데이터 로딩' )
-        setMyReadingList( (prev) =>
-          page === 0 ? data.readingList : [...prev, ...data.readingList]
-        );
-
-        const isLastPage = data.page.number + 1 >= data.page.totalPages;
-        setHasMore( !isLastPage );
-      } catch (error) {
-        console.error( "리스트 로딩 실패:", error );
-        setHasMore( false );
-      } finally {
-        setIsLoading( false );
-      }
-    };
-
-    loadMyReadingList();
-  }, [page, MyReadingListTabType, isSearching, myReadingListTrigger] );
-
+  useEffect( () => {
+    if (isSearching || (page > 0 && !hasMore)) return;
+    setPage( 0 )
+    loadMyReadingList( { userId, MyReadingListTabType, page: 0, size: 12 } );
+  }, [myReadingListTrigger] );
 
   // Intersection Observer 설정 스크롤 시 마지막 부분을 확인용
 
@@ -182,7 +184,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
 
       if (node) myReadingListObserver.current.observe( node );
     },
-    [isLoading, hasMore,]
+    [isLoading, hasMore]
   );
 
   return (
