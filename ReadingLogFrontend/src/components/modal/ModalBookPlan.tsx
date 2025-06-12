@@ -12,6 +12,7 @@ import { deleteBookApi } from "../../api/deleteBookApi.ts";
 import { DeleteBook } from "../../types/deleteBook.ts";
 import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 import { AxiosError } from "axios";
+import { useReadingBookStore } from "../../store/useReadingInfoStore.ts";
 
 const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                                                        bookId,
@@ -31,6 +32,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                                                      }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
   const { userId } = useUserStore();
+  const { readingBookId } = useReadingBookStore()
 
   /* db 변경 알림용 */
   const { triggerChange } = useGlobalChangeStore.getState();
@@ -207,6 +209,16 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
         withMotion: true
       } );
     }
+    if (bookId === readingBookId) {
+      openModal( 'ModalNotice', {
+        title: "독서중인 도서는 변경 할 수 없습니다.",
+        subTitle: "독서를 종료하고 변경하세요",
+        cancelText: "다시 선택하기",
+        onlyClose: true,
+        withMotion: true
+      } );
+      return;
+    }
     // 종료일이 시작일보다 앞선 경우
     const isEndBeforeStart =
       pickEndYear < pickStartYear ||
@@ -246,6 +258,16 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
 
   /* 관심도서로 추가 api */
   const addInterested = async () => {
+    if (bookId === readingBookId) {
+      openModal( 'ModalNotice', {
+        title: "독서중인 도서는\n관심도서로 변경 할 수 없습니다.",
+        subTitle: "독서를 종료하고 변경하세요",
+        cancelText: "다시 선택하기",
+        onlyClose: true,
+        withMotion: true
+      } );
+      return;
+    }
     const addInterestedRequestBody: bookStatusChangeBody = {
       bookId: bookId,
       userId: userId,
@@ -254,7 +276,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
     const addInterestedModal = () => {
       openModal( "ModalNotice", {
         title: "관심도서로 변경 하시겠어요?",
-        subTitle: "내 독서 목록에서는 제거 됩니다.",
+        subTitle: "내 독서 목록에서 제거 됩니다.",
         cancelText: "아니요",
         confirmText: "추가하기",
         loadingMessage: "추가중",
@@ -298,6 +320,16 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
   }
 
   const deleteBook = () => {
+    if (bookId === readingBookId) {
+      openModal( 'ModalNotice', {
+        title: "독서중인 도서는 삭제 할 수 없습니다.",
+        subTitle: "독서를 종료하고 변경하세요",
+        cancelText: "다시 선택하기",
+        onlyClose: true,
+        withMotion: true
+      } );
+      return;
+    }
     openModal( "ModalNotice", {
       title: `${bookTitle} 도서를 삭제 하시겠어요?`,
       subTitle: "해당 목록에서 제거 됩니다.",

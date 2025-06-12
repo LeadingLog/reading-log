@@ -44,7 +44,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
     >
       <article className="flex flex-col gap-3 flex-1 p-3 min-w-60 max-w-80 bg-modal_Content_Bg rounded-lg">
         <div className={`text-center flex flex-col gap-2`}>
-          <span className="text-lg break-keep text-modal_Title_Text font-semibold">
+          <span className="text-lg break-keep whitespace-pre-line text-modal_Title_Text font-semibold">
             {title || "전달할 메세지를 작성 안했어요"}
           </span>
           {subTitle && (

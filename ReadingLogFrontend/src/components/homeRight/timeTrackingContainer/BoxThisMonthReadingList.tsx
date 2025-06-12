@@ -6,6 +6,7 @@ import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.
 import { useUserStore } from "../../../store/userStore.ts";
 import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
 import { usePageStore } from "../../../store/pageStore.ts";
+import { useReadingBookStore } from "../../../store/useReadingInfoStore.ts";
 
 /* 이번 달 독서 리스트 */
 export default function BoxThisMonthReadingList() {
@@ -25,18 +26,28 @@ export default function BoxThisMonthReadingList() {
 
   const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
 
+  const { readingBookId } = useReadingBookStore()
+
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
-    console.log(params.TimeTracking)
+
     /* 타이머 & 스탑워치가 동작 중일 때 이번 달 독서 리스트 클릭 시 표시 모달 */
-    if (params.TimeTracking?.tab !== "onlyMonthReadingList") {
+    if (item.bookId === readingBookId) {
+      openModal('ModalNotice',{
+        title: "현재 독서 중인 도서입니다.",
+        subTitle: "독서종료 후 확인 가능합니다",
+        withMotion: true,
+        onlyClose: true
+      })
+      return;
+    } else if (params.TimeTracking?.tab !== "onlyMonthReadingList") {
       openModal('ModalNotice',{
         title: "독서중인 도서가 있습니다",
         subTitle: "독서종료 후 확인 가능합니다",
         withMotion: true,
         onlyClose: true
       })
-      return
+      return;
     }
     if (item.bookStatus === "COMPLETED") {
       openModal( 'ModalTrackingPlan', {

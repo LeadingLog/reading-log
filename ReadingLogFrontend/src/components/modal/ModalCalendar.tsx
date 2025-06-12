@@ -10,7 +10,7 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
                                                        pickMonth,
                                                        currentYear,
                                                      }) => {
-  console.log(currentYear)
+
   const { closeModal } = useModalStore()
   const [modalYear, setModalYear] = useState<number>( currentYear ?? new Date().getFullYear() );
   const [isVisible, setIsVisible] = useState( true );

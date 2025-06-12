@@ -17,8 +17,8 @@ export default function BoxTimer() {
           <span>{bookData?.author}</span>
         </section>
         <section className="flex flex-1 gap-6">
-          <article className="flex justify-center items-center flex-1 bg-trackingBook_Bg rounded-xl overflow-hidden">
-            <img src={bookData?.cover} alt={bookData?.bookTitle} className="object-cover"/>
+          <article className="flex justify-center aspect-square items-center flex-1 bg-trackingBook_Bg rounded-xl overflow-hidden">
+            <img src={bookData?.cover} alt={bookData?.bookTitle} className="object-cover w-full h-full"/>
           </article>
           <ItemTimer/>
         </section>
