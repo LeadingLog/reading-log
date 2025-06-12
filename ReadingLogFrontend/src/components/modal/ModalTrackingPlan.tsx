@@ -7,6 +7,7 @@ import { bookStatusChangeApi } from "../../api/bookStatusChangeApi.ts";
 import { bookStatusChangeBody } from "../../types/bookStatusChange.ts";
 import { useUserStore } from "../../store/userStore.ts";
 import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
+import { useReadingBookStore } from "../../store/useReadingInfoStore.ts";
 
 
 const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
@@ -31,6 +32,8 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
 
   const { triggerChange } = useGlobalChangeStore.getState();
 
+  const { setReadingBookId, endReadingBook } = useReadingBookStore();
+
   /* 타이머 시간 선택 시 UI */
   const getLeftPosition = (choice: TimeChoice | undefined) => {
     switch (choice) {
@@ -45,6 +48,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
     }
   };
 
+  /* 독서 시장 */
   const readingStart = async () => {
     setIsLoading( true )
     const bookStatusChangeBodyValue: bookStatusChangeBody = {
@@ -53,7 +57,9 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
       bookStatus: "IN_PROGRESS"
     }
     try {
-      await bookStatusChangeApi( bookStatusChangeBodyValue )
+      /* 도서 상태가 독서중인 도서는 요청 상태 변경 요청 X */
+      if (bookStatus !== "IN_PROGRESS") await bookStatusChangeApi( bookStatusChangeBodyValue )
+      setReadingBookId(bookId ?? 0)
       triggerChange( 'MyReadingList' )
       setRightContent( 'TimeTracking', {
           TimeTracking: {
@@ -78,6 +84,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
         closeModal( modalId );
       }
     } catch (error) {
+      endReadingBook()
       console.error( '독서 목록 추가 실패', error )
       openModal( 'ModalNotice', {
         title: '요청 실패',
@@ -223,7 +230,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
 
                 {isLoading ? (
                   <>
-                    <span>추가 중</span>
+                    <span>시작 중</span>
                     <span
                       className="w-5 h-5 border-4 border-modal_Tracking_loadingBg border-t-modal_Tracking_loadingSpinner rounded-full animate-spin"></span>
                   </>

@@ -5,12 +5,15 @@ import { fetchThisMonthReadingListParams, monthReadingListItem } from "../../../
 import { fetchThisMonthReadingList } from "../../../api/ThisMonthReadingListApi.ts";
 import { useUserStore } from "../../../store/userStore.ts";
 import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
+import { usePageStore } from "../../../store/pageStore.ts";
+import { useReadingBookStore } from "../../../store/useReadingInfoStore.ts";
 
 /* 이번 달 독서 리스트 */
 export default function BoxThisMonthReadingList() {
 
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
+  const { params, setRightContent } = usePageStore()
 
   const now = new Date();
   const year = now.getFullYear()
@@ -23,8 +26,29 @@ export default function BoxThisMonthReadingList() {
 
   const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
 
+  const { readingBookId } = useReadingBookStore()
+
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
+
+    /* 타이머 & 스탑워치가 동작 중일 때 이번 달 독서 리스트 클릭 시 표시 모달 */
+    if (item.bookId === readingBookId) {
+      openModal('ModalNotice',{
+        title: "현재 독서 중인 도서입니다.",
+        subTitle: "독서종료 후 확인 가능합니다",
+        withMotion: true,
+        onlyClose: true
+      })
+      return;
+    } else if (params.TimeTracking?.tab !== "onlyMonthReadingList") {
+      openModal('ModalNotice',{
+        title: "독서중인 도서가 있습니다",
+        subTitle: "독서종료 후 확인 가능합니다",
+        withMotion: true,
+        onlyClose: true
+      })
+      return;
+    }
     if (item.bookStatus === "COMPLETED") {
       openModal( 'ModalTrackingPlan', {
         bookId: item.bookId,
@@ -68,7 +92,14 @@ export default function BoxThisMonthReadingList() {
       setIsLoading( false ); // 검색 완료 후 로딩 상태 해제
     }
   };
-
+  useEffect( () => {
+    setRightContent(
+      'TimeTracking',
+      {TimeTracking:
+          {tab:"onlyMonthReadingList"}
+      },
+    )
+  }, [] );
   // 📌 1. 스크롤에 따른 페이지 증가
   useEffect( () => {
     searchThisMonthReadingList( { userId, year, month, page, size: 21 } );

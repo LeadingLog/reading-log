@@ -11,6 +11,8 @@ import { bookStatusChangeApi } from "../../api/bookStatusChangeApi.ts";
 import { deleteBookApi } from "../../api/deleteBookApi.ts";
 import { DeleteBook } from "../../types/deleteBook.ts";
 import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
+import { AxiosError } from "axios";
+import { useReadingBookStore } from "../../store/useReadingInfoStore.ts";
 
 const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                                                        bookId,
@@ -30,6 +32,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                                                      }) => {
   const { closeModal, openModal, closeAllModals } = useModalStore();
   const { userId } = useUserStore();
+  const { readingBookId } = useReadingBookStore()
 
   /* db 변경 알림용 */
   const { triggerChange } = useGlobalChangeStore.getState();
@@ -118,10 +121,18 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
         } )
       }
     } catch (error) {
+
+      let errorMessage = '알 수 없는 오류가 발생했습니다.';
+
+      if (error instanceof AxiosError && error.response) {
+        errorMessage = error.response.data?.message || error.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
       console.error( '독서 목록 추가 실패', error )
       openModal( 'ModalNotice', {
         title: '요청 실패',
-        subTitle: `${error}`,
+        subTitle: `${errorMessage}`,
         onlyClose: true,
         withMotion: true,
       } )
@@ -169,10 +180,18 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
         } )
       }
     } catch (error) {
+
+      let errorMessage = '알 수 없는 오류가 발생했습니다.';
+
+      if (error instanceof AxiosError && error.response) {
+        errorMessage = error.response.data?.message || error.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
       console.error( '독서 계획 변경 실패', error )
       openModal( 'ModalNotice', {
         title: '요청 실패',
-        subTitle: `${error}`,
+        subTitle: `${errorMessage}`,
         onlyClose: true,
         withMotion: true,
       } )
@@ -189,6 +208,16 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
         onlyClose: true,
         withMotion: true
       } );
+    }
+    if (bookId === readingBookId) {
+      openModal( 'ModalNotice', {
+        title: "독서중인 도서는 변경 할 수 없습니다.",
+        subTitle: "독서를 종료하고 변경하세요",
+        cancelText: "다시 선택하기",
+        onlyClose: true,
+        withMotion: true
+      } );
+      return;
     }
     // 종료일이 시작일보다 앞선 경우
     const isEndBeforeStart =
@@ -229,6 +258,16 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
 
   /* 관심도서로 추가 api */
   const addInterested = async () => {
+    if (bookId === readingBookId) {
+      openModal( 'ModalNotice', {
+        title: "독서중인 도서는\n관심도서로 변경 할 수 없습니다.",
+        subTitle: "독서를 종료하고 변경하세요",
+        cancelText: "다시 선택하기",
+        onlyClose: true,
+        withMotion: true
+      } );
+      return;
+    }
     const addInterestedRequestBody: bookStatusChangeBody = {
       bookId: bookId,
       userId: userId,
@@ -237,7 +276,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
     const addInterestedModal = () => {
       openModal( "ModalNotice", {
         title: "관심도서로 변경 하시겠어요?",
-        subTitle: "내 독서 목록에서는 제거 됩니다.",
+        subTitle: "내 독서 목록에서 제거 됩니다.",
         cancelText: "아니요",
         confirmText: "추가하기",
         loadingMessage: "추가중",
@@ -257,10 +296,17 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
               } );
             }
           } catch (error) {
+            let errorMessage = '알 수 없는 오류가 발생했습니다.';
+
+            if (error instanceof AxiosError && error.response) {
+              errorMessage = error.response.data?.message || error.message;
+            } else if (error instanceof Error) {
+              errorMessage = error.message;
+            }
             console.error( '관심 도서로 변경 실패', error )
             openModal( "ModalNotice", {
               title: '요청 실패',
-              subTitle: `${error}`,
+              subTitle: `${errorMessage}`,
               onlyClose: true,
               withMotion: true,
             } );
@@ -274,6 +320,16 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
   }
 
   const deleteBook = () => {
+    if (bookId === readingBookId) {
+      openModal( 'ModalNotice', {
+        title: "독서중인 도서는 삭제 할 수 없습니다.",
+        subTitle: "독서를 종료하고 변경하세요",
+        cancelText: "다시 선택하기",
+        onlyClose: true,
+        withMotion: true
+      } );
+      return;
+    }
     openModal( "ModalNotice", {
       title: `${bookTitle} 도서를 삭제 하시겠어요?`,
       subTitle: "해당 목록에서 제거 됩니다.",
@@ -301,10 +357,18 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
             } );
           }
         } catch (error) {
+          let errorMessage = '알 수 없는 오류가 발생했습니다.';
+
+          if (error instanceof AxiosError && error.response) {
+            errorMessage = error.response.data?.message || error.message;
+          } else if (error instanceof Error) {
+            errorMessage = error.message;
+          }
+
           console.error( '도서 삭제 실패', error )
           openModal( "ModalNotice", {
             title: '요청 실패',
-            subTitle: `${error}`,
+            subTitle: `${errorMessage}`,
             onlyClose: true,
             withMotion: true,
           } );
@@ -391,6 +455,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
               <p className="text-modal_BookPlan_StartEnd_Month_Text">시작 달</p>
               <button
                 className={`${monthReadingList ? 'cursor-default' : ''} flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg`}
+                disabled={isLoading}
                 onClick={() => {
                   openCalendar( { startOrEnd: "시작 달" } )
                 }}
@@ -410,6 +475,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
               <p className="text-modal_BookPlan_StartEnd_Month_Text">종료 달</p>
               <button
                 className={`${monthReadingList ? 'cursor-default' : ''} flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg`}
+                disabled={isLoading}
                 onClick={() => {
                   openCalendar( { startOrEnd: "종료 달" } )
                 }}
@@ -432,6 +498,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                 closeAllModals()
               }}
               className="flex-1 min-w-[130px] px-4 py-1 border-4 border-modal_Left_Btn_Border rounded-lg"
+              disabled={isLoading}
             >
               {cancelText || '닫기'}
             </button>
@@ -441,6 +508,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                   completeBookPlan();      // 현재 페이지 관련 초기화 작업
                 }}
                 className="flex-1 min-w-[130px] justify-center items-center gap-1 flex px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
+                disabled={isLoading}
               >
 
                 {isLoading ? (

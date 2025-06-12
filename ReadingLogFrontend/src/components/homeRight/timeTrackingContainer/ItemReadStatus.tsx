@@ -5,6 +5,7 @@ import { bookStatusChangeApi } from "../../../api/bookStatusChangeApi.ts";
 import { useUserStore } from "../../../store/userStore.ts";
 import { bookStatusChangeBody } from "../../../types/bookStatusChange.ts";
 import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
+import { useReadingBookStore } from "../../../store/useReadingInfoStore.ts";
 
 // 2. 컴포넌트 정의
 export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusParams) {
@@ -19,6 +20,8 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
 
   const { triggerChange } = useGlobalChangeStore.getState();
   const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
+
+  const { readingBookId } = useReadingBookStore()
   /* 독서중 or 완독 토글*/
   const toggleSwitch = (e: React.MouseEvent) => {
     e.stopPropagation(); // 해당 부분 클릭하면 부모요소 클릭 이벤트가 실행되지 않도록 방지 요소
@@ -28,7 +31,15 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
       bookId: bookId ?? null,
       bookStatus: currentStatus === "IN_PROGRESS" ? "COMPLETED" : "IN_PROGRESS"
     }
-
+    if (bookId === readingBookId) {
+      openModal('ModalNotice',{
+        title: "독서중인 도서는\n 독서 상태를 변경 할 수 없습니다.",
+        subTitle: "독서종료 후 변경 가능 합니다",
+        withMotion: true,
+        onlyClose: true
+      })
+      return
+    }
     if (currentStatus === "IN_PROGRESS") {
       openModal( "ModalNotice", {
         title: "완독한 도서 인가요?",
