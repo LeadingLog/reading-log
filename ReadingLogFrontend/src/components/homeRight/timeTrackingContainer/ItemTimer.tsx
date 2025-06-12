@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { useUserStore } from "../../../store/userStore.ts";
 import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
 import { saveReadingRecordApi } from "../../../api/readingRecord.ts";
+import { useReadingBookStore } from "../../../store/useReadingInfoStore.ts";
+import { WarningScreen } from "../../common/WarningScreen.tsx";
 
 export default function ItemTimer() {
   const { openModal, closeModal, closeAllModals } = useModalStore();
@@ -22,6 +24,8 @@ export default function ItemTimer() {
   const circumference = 2 * Math.PI * radius;
 
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
+
+  const { endReadingBook } = useReadingBookStore();
 
   // 프로그래스 계산 (시간 비율에 따라 원 그래프 감소)
   const progress =
@@ -89,6 +93,7 @@ export default function ItemTimer() {
     try {
       const data = await saveReadingRecordApi( readingRecord );
       if (data.success) {
+        endReadingBook()
         openModal( "ModalNotice", {
           title: "독서시간 저장 완료",
           subTitle: "수고하셨어요",
@@ -152,6 +157,7 @@ export default function ItemTimer() {
     }
   }, [timeLeft, isRunning] );
 
+  WarningScreen()
 
   return (
     // 독서 타임 트랙킹 - 타이머 인 경우

@@ -6,16 +6,14 @@ export function WarningScreen() {
   const { readingBookId } = useReadingBookStore();
 
   useEffect(() => {
-    const hasReadingBook = readingBookId;
-
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (!hasReadingBook) return;
+      if (!readingBookId) return;
 
       e.preventDefault();
       e.returnValue = ''; // 대부분의 브라우저에서 경고 메시지 대신 기본 경고창 표시
     };
 
-    if (hasReadingBook) {
+    if (readingBookId) {
       window.addEventListener('beforeunload', handleBeforeUnload);
     }
 

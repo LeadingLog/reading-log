@@ -13,12 +13,18 @@ export const useReadingBookStore = create<ReadingBookState>()(
       readingBookId: 0,
       setReadingBookId: (id) => set({ readingBookId: id }),
       endReadingBook: () => {
-        set({ readingBookId: 0 }); // 상태도 초기화
-        localStorage.removeItem('reading-book'); // ✅ 스토리지에서 삭제
+        set({ readingBookId: 0 });
+        localStorage.removeItem('reading-book');
       },
     }),
     {
-      name: 'reading-book', // ✅ localStorage 키 이름
+      name: 'reading-book',
+      /* 새고고침 하거나 홈에 접속했을 때 bookId값이 로컬에 남아있으면 지운다 */
+      onRehydrateStorage: () => (state) => {
+        if (state?.readingBookId !== 0) {
+          localStorage.removeItem('reading-book');
+        }
+      },
     }
   )
 );

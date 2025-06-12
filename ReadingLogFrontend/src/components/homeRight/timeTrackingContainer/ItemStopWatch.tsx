@@ -151,6 +151,7 @@ export default function ItemStopWatch() {
     console.log( "스탑워치 시작 시간:", now );
   };
 
+  WarningScreen()
   // 모달이 열리면서 독서 시작
   useEffect( () => {
     startTime();
@@ -193,8 +194,6 @@ export default function ItemStopWatch() {
       },
     } );
   };
-
-  WarningScreen()
 
   return (
     // 독서 타임 트랙킹 - 스탑워치 인 경우
