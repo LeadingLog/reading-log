@@ -66,6 +66,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
           {!onlyConfirm && (
             <button
               className={`${reverseBtn ? 'bg-modal_Right_Btn_Bg' : 'border-modal_Left_Btn_Border border-4'} flex-1 min-w-fit px-2 py-1 rounded-lg`}
+              disabled={modalIsLoading}
               onClick={handleClose}
             >
               {cancelText || "닫기"}
@@ -74,6 +75,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
           {!onlyClose && (
             <button
               className={`${reverseBtn ? 'text-modal_Quit_Text' : 'bg-modal_Right_Btn_Bg'} flex flex-1 justify-center items-center gap-1 min-w-fit px-2 py-1 rounded-lg`}
+              disabled={modalIsLoading}
               onClick={() => {
                 if (showInput) {
                   onConfirm?.( inputValue );

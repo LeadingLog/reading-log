@@ -8,6 +8,9 @@ import IconStop from "../../../assets/Icon-stop.svg?react"
 import { useUserStore } from "../../../store/userStore.ts";
 import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
 import { saveReadingRecordApi } from "../../../api/readingRecord.ts";
+import { useReadingBookStore } from "../../../store/useReadingInfoStore.ts";
+import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
+import { WarningScreen } from "../../common/WarningScreen.tsx";
 
 
 export default function ItemStopWatch() {
@@ -16,13 +19,17 @@ export default function ItemStopWatch() {
   const { params } = usePageStore();
   const bookData = params.TimeTracking?.bookData;
   const { userId } = useUserStore();
-  const { openModal, closeModal } = useModalStore();
+  const { openModal, closeModal, closeAllModals } = useModalStore();
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>( undefined );  // 1️⃣ interval ID 저장용
   const [time, setTime] = useState( { hour: 0, minute: 0, second: 0 } ); // 타이머 시간 저장
   const [play, setPlay] = useState<boolean>( true ); // 시작 & 일시정지 버튼 토글
   const [startTimestamp, setStartTimestamp] = useState<Date | null>( null ); // 스탑워치 시작 시간
+
+  const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
+  const { triggerChange } = useGlobalChangeStore.getState();
+  const { endReadingBook } = useReadingBookStore();
 
   // 스탑워치 1초마다 시간 증가
   const plusSecond = () => {
@@ -59,20 +66,23 @@ export default function ItemStopWatch() {
 
   /* 정지 버튼 클릭 시  */
   const stopTimer = () => {
-    playOrPause(); // 정지를 클릭하면 시간이 멈춘다.
+    setPlay( false );
+    clearInterval( intervalRef.current ); // 3️⃣ 일시정지
 
-    const firstModalId = openModal( "ModalNotice", {
+    openModal( "ModalNotice", {
       title: "독서를 종료하시나요?",
       subTitle: "종료 시 시간이 저장돼요",
       cancelText: "아니요 더 읽을래요!",
       confirmText: "네 종료할게요!",
       reverseBtn: true,
+      loadingMessage: "저장중",
       onConfirm: async () => {
+        setModalIsLoading( true )
         await saveReadingRecord(); // 저장 요청 보내기
-        closeModal( firstModalId ); // 첫 번째 모달 닫기
       },
       onCancel: () => {
-        playOrPause(); // 취소를 클릭하면 시간이 다시 카운트된다.
+        setPlay( true );
+        intervalRef.current = setInterval( plusSecond, 1000 ); // 2️⃣ interval ID 저장
       }
     } );
   }
@@ -102,13 +112,15 @@ export default function ItemStopWatch() {
     try {
       const data = await saveReadingRecordApi( readingRecord );
       if (data.success) {
-        const secondModalId = openModal( "ModalNotice", {
+        endReadingBook()
+        triggerChange( 'MyReadingList' )
+        openModal( "ModalNotice", {
           title: "독서시간 저장 완료",
           subTitle: "수고하셨어요",
           onlyConfirm: true,
           confirmText: "닫기",
           onConfirm: () => {
-            closeModal( secondModalId );
+            closeAllModals();
             setRightContent( 'TimeTracking', { // 우측 콘텐츠 변경
               TimeTracking: { tab: 'onlyMonthReadingList' },
             } );
@@ -125,6 +137,8 @@ export default function ItemStopWatch() {
     } catch (err) {
       console.warn( "독서 시간 기록 실패:", err );
       handleReadingRecordFail( "서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요." );
+    } finally {
+      setModalIsLoading( false )
     }
   }
 
@@ -179,6 +193,8 @@ export default function ItemStopWatch() {
       },
     } );
   };
+
+  WarningScreen()
 
   return (
     // 독서 타임 트랙킹 - 스탑워치 인 경우

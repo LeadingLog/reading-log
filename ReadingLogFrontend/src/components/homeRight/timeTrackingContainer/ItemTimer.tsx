@@ -21,6 +21,8 @@ export default function ItemTimer() {
   const radius = 60;
   const circumference = 2 * Math.PI * radius;
 
+  const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
+
   // 프로그래스 계산 (시간 비율에 따라 원 그래프 감소)
   const progress =
     pageData.time && pageData.time > 0
@@ -36,7 +38,9 @@ export default function ItemTimer() {
       cancelText: "아니요 더 읽을래요!",
       confirmText: "네 종료할게요!",
       reverseBtn: true,
+      loadingMessage: "저장중",
       onConfirm: async () => {
+        setModalIsLoading( true )
         await saveReadingRecord();
         setTimeLeft( 0 );
       },
@@ -74,7 +78,7 @@ export default function ItemTimer() {
       return;
     }
 
-    const readTime = getReadTime(timeLeft, pageData.time!);
+    const readTime = getReadTime( timeLeft, pageData.time! );
     const readingRecord = createReadingRecord( {
       bookId: bookData?.bookId ?? 0,
       userId,
@@ -104,6 +108,8 @@ export default function ItemTimer() {
     } catch (err) {
       console.warn( "독서 시간 기록 실패:", err );
       handleReadingRecordFail( "서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요." );
+    } finally {
+      setModalIsLoading( false )
     }
   }
 
@@ -111,8 +117,8 @@ export default function ItemTimer() {
   const getReadTime = (timeLeft: number, totalTimeInMinutes: number) => {
     const totalSeconds = totalTimeInMinutes * 60;
     const readSeconds = totalSeconds - timeLeft;
-    const hour = Math.floor(readSeconds / 3600);
-    const minute = Math.floor((readSeconds % 3600) / 60);
+    const hour = Math.floor( readSeconds / 3600 );
+    const minute = Math.floor( (readSeconds % 3600) / 60 );
     const second = readSeconds % 60;
     return { hour, minute, second };
   };
@@ -151,7 +157,7 @@ export default function ItemTimer() {
     // 독서 타임 트랙킹 - 타이머 인 경우
     <>
       <article
-        className="relative flex flex-col justify-center flex-1 aspect-square text-center  bg-stopWatchTimer_Item_Bg  rounded-full">
+        className="relative flex flex-col justify-center flex-1 aspect-square text-center bg-stopWatchTimer_Item_Bg rounded-full">
         {/* SVG 애니메이션 */}
         <svg className="absolute inset-0" viewBox="0 0 126 126">
           <circle cx="63" cy="63" r={radius} className="stroke-timeLeft_Color" fill="none" strokeWidth="6"/>

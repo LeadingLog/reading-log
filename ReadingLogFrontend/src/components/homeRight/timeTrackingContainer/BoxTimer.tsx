@@ -18,7 +18,7 @@ export default function BoxTimer() {
         </section>
         <section className="flex flex-1 gap-6">
           <article className="flex justify-center items-center flex-1 bg-trackingBook_Bg rounded-xl overflow-hidden">
-            <img src={bookData?.cover} alt={bookData?.bookTitle}/>
+            <img src={bookData?.cover} alt={bookData?.bookTitle} className="object-cover"/>
           </article>
           <ItemTimer/>
         </section>

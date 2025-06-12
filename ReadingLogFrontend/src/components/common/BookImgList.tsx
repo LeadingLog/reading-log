@@ -153,7 +153,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   }, [page, MyReadingListTabType, isSearching] );
 
   useEffect( () => {
-    if (isSearching || (page > 0 && !hasMore)) return;
+    if (isSearching) return;
     setPage( 0 )
     loadMyReadingList( { userId, MyReadingListTabType, page: 0, size: 12 } );
   }, [myReadingListTrigger] );

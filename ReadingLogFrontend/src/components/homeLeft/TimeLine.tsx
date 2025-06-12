@@ -13,27 +13,51 @@ import {
 import { fetchAllReadingTime } from "../../api/allReadingTimeApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
+import { useReadingBookStore } from "../../store/useReadingInfoStore.ts";
+import { useModalStore } from "../../store/modalStore.ts";
 
 export default function TimeLine() {
 
-  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
+  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
 
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   const { year, setMonth } = useDateStore(); // Zustand에서 년도 정보 가져오기
   const { userId } = useUserStore()
+  const { readingBookId } = useReadingBookStore()
+  const { openModal } = useModalStore()
 
   const nowData = new Date()
   const nowYear = nowData.getFullYear()
   const nowMonth = nowData.getMonth() + 1
 
   const thisMonthReadingList = () => {
+    if (readingBookId > 0) {
+      openModal( "ModalNotice", {
+        title: "독서중인 도서가 있습니다",
+        subTitle: "독서종료 후 확인 가능합니다",
+        onlyClose: true
+      } )
+      return
+    }
     setRightContent(
-      'TimeTracking', {},
+      'TimeTracking',
+      {
+        TimeTracking:
+          { tab: "onlyMonthReadingList" }
+      },
       { title: '이번 달 독서 리스트' },
     )
   }
 
   const statsMonth = (month: number) => {
+    if (readingBookId > 0) {
+      openModal( "ModalNotice", {
+        title: "독서중인 도서가 있습니다",
+        subTitle: "독서종료 후 확인 가능합니다",
+        onlyClose: true
+      } )
+      return
+    }
     setRightContent(
       'StatsPage',
       { StatsPage: { tab: 'StatsMonth' } }, // 파라미터
@@ -43,6 +67,14 @@ export default function TimeLine() {
   }
 
   const statsYear = () => {
+    if (readingBookId > 0) {
+      openModal( "ModalNotice", {
+        title: "독서중인 도서가 있습니다",
+        subTitle: "독서종료 후 확인 가능합니다",
+        onlyClose: true
+      } )
+      return
+    }
     setRightContent(
       'StatsPage',
       { StatsPage: { tab: 'StatsYear' } }, // 파라미터
@@ -281,7 +313,7 @@ export default function TimeLine() {
 
   useEffect( () => {
     readingTime( { userId } )
-  }, [] );
+  }, [myReadingListTrigger] );
 
   useEffect( () => {
     searchTimeLineReadingList( { userId, year } );
@@ -402,28 +434,31 @@ export default function TimeLine() {
                   className={`absolute flex gap-1 transition-all duration-200 ease-in-out left-1/2 transform -translate-x-1/2
                     ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[0%] py-2 pr-8 pl-2 group-hover:top-[50%] group-hover:pr-12' :
                     item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[100%] py-2 pr-2 pl-8 group-hover:top-[50%] group-hover:pl-12' :
-                    item.month === 11 || item.month === 12 ? 'bottom-[100%] p-1 group-hover:p-2' : 'p-2 group-hover:pt-4'}
+                      item.month === 11 || item.month === 12 ? 'bottom-[100%] p-1 group-hover:p-2' : 'p-2 group-hover:pt-4'}
                   `}
                 >
                   {item.notStarted > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center aspect-square bg-timeLineNoReadBg rounded-full"
                     >
-                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.notStarted}</p>
+                      <p
+                        className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.notStarted}</p>
                     </span>
                   )}
                   {item.inProgress > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center aspect-square bg-timeLineReadingBg rounded-full"
                     >
-                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.inProgress}</p>
+                      <p
+                        className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.inProgress}</p>
                     </span>
                   )}
                   {item.completed > 0 && (
                     <span
                       className="group-hover:w-5 flex justify-center items-center aspect-square bg-timeLineCompleteBg rounded-full"
                     >
-                      <p className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.completed}</p>
+                      <p
+                        className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.completed}</p>
                     </span>
                   )}
                 </div>
