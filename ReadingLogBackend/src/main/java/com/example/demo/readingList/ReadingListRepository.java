@@ -149,9 +149,9 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Intege
 			CAST(EXTRACT(MONTH FROM generated_month) AS INT),
 			book_status
 		ORDER BY
-	       		book_status,
 			CAST(EXTRACT(YEAR FROM generated_month) AS INT),
-			CAST(EXTRACT(MONTH FROM generated_month) AS INT)
+			CAST(EXTRACT(MONTH FROM generated_month) AS INT),
+			book_status
         """, nativeQuery = true)
 	List<MonthlyStatusRawCountProjection> readingCountByMonth(Integer userId, int targetYear);
 
