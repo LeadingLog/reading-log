@@ -118,7 +118,7 @@ public class ReadingRecordService {
 
 			Map<String, Object> map = new HashMap<>();
 
-			map.put("booId", bookId);
+			map.put("bookId", bookId);
 			map.put("bookTitle", bookTitle);
 			map.put("bookStatus", bookStatus); 
 			map.put("bookTime", bookTime);
