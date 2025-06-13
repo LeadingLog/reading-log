@@ -9,6 +9,7 @@ import { fetchStatsMonthApiParams, StatsMonthList } from "../../../types/statsMo
 import { useDateStore } from "../../../store/useDateStore.ts";
 import { useUserStore } from "../../../store/userStore.ts";
 import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
+// import { useTooltipStore } from "../../../store/useTooltipStore.ts";
 
 export default function StatsMonth() {
 
@@ -16,7 +17,19 @@ export default function StatsMonth() {
   const { userId } = useUserStore()
   const [bookGraphList, setBookGraphList] = useState<StatsMonthList[]>( [] )
 
-  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
+  /* 통계 마우스 호버시 도서 정보 표시 팝업 관련 */
+  // const setHoverContent = useTooltipStore((state) => state.setHoverContent);
+  //
+  // const handleMouseOver = ((e: React.MouseEvent, item:StatsMonthList)) => {
+  //   const { clientX, clientY } = e;
+  //   setHoverContent("StatsMonthBookTimeGraph", item, clientX, clientY);
+  // };
+  //
+  // const handleMouseOut = () => {
+  //   setHoverContent("", null, 0, 0);
+  // };
+
+  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
 
   const searchStatsMonthList = async ({ userId, year, month }: fetchStatsMonthApiParams) => {
     try {
@@ -81,14 +94,16 @@ export default function StatsMonth() {
       {/* 독서 현황 시각화 그래프 영역 */}
       <CustomScrollbar
         direction="horizontal"
-        containerClassName="flex content-start flex-1 border-b-4 border-stats_Month_Graph_Bottom_Border"
+        containerClassName="flex content-start flex-1 border-b-4 border-stats_Month_Graph_Bottom_Border overflow-y-hidden"
         scrollbarClassName="bg-scrollbar_Color transition-[colors] group-hover/scroll:bg-scrollbar_Hover_Color bottom-0.5"
         // scrollbarWidth=""
       >
         {bookGraphList.map( (item) => (
             <li
               key={item.bookId}
-              className={`h-[40%] flex flex-col self-end gap-1 px-1 pt-1 border-t-2 border-x-2 -mr-0.5 border-stats_Month_Graph_Book_Border bg-stats_Month_Graph_Book_Bg`}
+              // onMouseMove={() => handleMouseOver(item)}
+              // onMouseLeave={handleMouseOut}
+              className={`relative h-[40%] flex cursor-pointer flex-col self-end gap-1 px-1 pt-1 border-t-2 border-x-2 -mr-0.5 border-stats_Month_Graph_Book_Border bg-stats_Month_Graph_Book_Bg`}
               style={{ height: `${item.bookTime * 100}%` }}
             >
               <span
