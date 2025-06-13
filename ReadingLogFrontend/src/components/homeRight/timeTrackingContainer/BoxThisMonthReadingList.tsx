@@ -31,22 +31,13 @@ export default function BoxThisMonthReadingList() {
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
 
-    /* 타이머 & 스탑워치가 동작 중일 때 이번 달 독서 리스트 클릭 시 표시 모달 */
-    if (item.bookId === readingBookId) {
-      openModal('ModalNotice',{
-        title: "현재 독서 중인 도서입니다.",
-        subTitle: "독서종료 후 확인 가능합니다",
-        withMotion: true,
-        onlyClose: true
-      })
-      return;
-    } else if (params.TimeTracking?.tab !== "onlyMonthReadingList") {
-      openModal('ModalNotice',{
+    if (params.TimeTracking?.tab !== "onlyMonthReadingList") {
+      openModal( 'ModalNotice', {
         title: "독서중인 도서가 있습니다",
         subTitle: "독서종료 후 확인 가능합니다",
         withMotion: true,
         onlyClose: true
-      })
+      } )
       return;
     }
     if (item.bookStatus === "COMPLETED") {
@@ -95,8 +86,9 @@ export default function BoxThisMonthReadingList() {
   useEffect( () => {
     setRightContent(
       'TimeTracking',
-      {TimeTracking:
-          {tab:"onlyMonthReadingList"}
+      {
+        TimeTracking:
+          { tab: "onlyMonthReadingList" }
       },
     )
   }, [] );
@@ -148,10 +140,14 @@ export default function BoxThisMonthReadingList() {
       ) : thisMonthReadingList.map( (item) => (
         <li
           key={item.bookId}
-          className="cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group"
+          className={`cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group
+          ${readingBookId === item.bookId ? "border-4 border-readingList_Bg bg-readingList_Hover" : ""}`}
           onClick={() => openModalTrackingPlan( item )}
         >
-          <span className="flex-1 text-ellipsis overflow-hidden text-xl text-nowrap">{item.bookTitle}</span>
+          <span className={`flex-1 text-ellipsis overflow-hidden text-xl text-nowrap
+          ${readingBookId === item.bookId ? "text-white" : "text-black"}`}>
+            {item.bookTitle}
+          </span>
           <ItemReadStatus bookId={item.bookId} bookStatus={item.bookStatus}/>
         </li>
       ) )}

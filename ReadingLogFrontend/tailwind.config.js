@@ -169,14 +169,15 @@ export default {
         modal_Pick_Calendar_Cancel_Text      : "#000000",  // 연도 선택 모달 - 닫기 텍스트 색
 
         /* 독서 상태 토글 관련 색 */
-        toggle_Complete_Text_Color  : "#000000", // 독서 상태 토글 - 토글이 완독인 경우 텍스트 색
-        toggle_ReadingText_Color    : "#000000", // 독서 상태 토글 - 독서중인 경우 토글 텍스트 색
-        toggle_Reading_Circle_Color : "#E5CEC8", // 독서 상태 토글 - 독서중인 경우 토글 버튼 색
-        toggle_Reading_Circle_Hover : "#C9A89F", // 독서 상태 토글 - 책 리스트 호버시 토글버튼 색
-        toggle_Complete_Circle_Color: "#96B2C8", // 독서 상태 토글 - 토글이 완독인 경우 토글버튼 색
-        toggle_Complete_Circle_Hover: "#7A9BB7", // 독서 상태 토글 - 책 리스트 호버시 토글버튼 색
-        toggle_NoReading_Bg         : "#D9D9D9", // 독서 상태 토글 - 읽기 전 토글 배경
-        toggle_Read_Status_Bg       : "#FDFAF3", // 독서 상태 토글 - 배경
+        toggle_ReadingStart_Text_Color: "#ffffff", // 독서 상태 토글 - 토글이 완독인 경우 텍스트 색
+        toggle_Complete_Text_Color    : "#000000", // 독서 상태 토글 - 토글이 완독인 경우 텍스트 색
+        toggle_ReadingText_Color      : "#000000", // 독서 상태 토글 - 독서중인 경우 토글 텍스트 색
+        toggle_Reading_Circle_Color   : "#E5CEC8", // 독서 상태 토글 - 독서중인 경우 토글 버튼 색
+        toggle_Reading_Circle_Hover   : "#C9A89F", // 독서 상태 토글 - 책 리스트 호버시 토글버튼 색
+        toggle_Complete_Circle_Color  : "#96B2C8", // 독서 상태 토글 - 토글이 완독인 경우 토글버튼 색
+        toggle_Complete_Circle_Hover  : "#7A9BB7", // 독서 상태 토글 - 책 리스트 호버시 토글버튼 색
+        toggle_NoReading_Bg           : "#D9D9D9", // 독서 상태 토글 - 읽기 전 토글 배경
+        toggle_Read_Status_Bg         : "#FDFAF3", // 독서 상태 토글 - 배경
 
         /* 헤더 상단 오른쪽 닉네임 & 마이페이지 & (로그인 & 로그아웃) 관련 색 */
         header_Right_Bg                  : "#FDFAF3", // 닉네임표시배경색

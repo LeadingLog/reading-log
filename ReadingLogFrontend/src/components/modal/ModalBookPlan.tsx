@@ -108,6 +108,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       const response = await readingListAddApi( ReadingListAddApiRequestBody )
 
       if (response) {
+        triggerChange( "MyReadingList" )
         openModal( 'ModalNotice', {
           title: "내 독서 목록에 추가 되었어요!",
           subTitle: "즐거운 독서시간!",
@@ -115,7 +116,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           onlyConfirm: true,
           withMotion: true,
           onConfirm: async () => {
-            triggerChange( "MyReadingList" )
             closeAllModals()
           }
         } )
@@ -167,6 +167,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       const response = await bookStatusChangeApi( bookStatusChangeBody )
 
       if (response) {
+        triggerChange( "MyReadingList" )
         openModal( 'ModalNotice', {
           title: "독서 계획이 변경 되었어요!",
           subTitle: "즐거운 독서시간!",
@@ -174,7 +175,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           onlyConfirm: true,
           withMotion: true,
           onConfirm: async () => {
-            triggerChange( "MyReadingList" )
             closeAllModals()
           }
         } )
@@ -285,12 +285,12 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
             setModalIsLoading( true )
             const response = await bookStatusChangeApi( addInterestedRequestBody )
             if (response) {
+              triggerChange( "MyReadingList" )
               openModal( "ModalNotice", {
                 title: "관심도서로 추가되었어요!",
                 onlyClose: true,
                 withMotion: true,
                 onCancel: () => {
-                  triggerChange( "MyReadingList" )
                   closeAllModals()
                 }
               } );
@@ -346,12 +346,12 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           setModalIsLoading( true )
           const response = await deleteBookApi( DeleteBookBody )
           if (response) {
+            triggerChange( "MyReadingList" )
             openModal( "ModalNotice", {
               title: "목록에서 제거되었습니다!",
               onlyClose: true,
               withMotion: true,
               onCancel: () => {
-                triggerChange( "MyReadingList" )
                 closeAllModals()
               }
             } );
