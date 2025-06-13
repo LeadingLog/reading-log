@@ -187,11 +187,28 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
     } );
   };
 
+  // 테스트
+  const getSession = async () => {
+    try {
+      const response = await axios.get( `${serverUrl}/user/getUserSession`, {
+        withCredentials: true
+      } );
+
+      console.log( response.data );
+    } catch (error: unknown) {
+      if (axios.isAxiosError( error ) && error.response?.status === 401) {
+        resetUser();
+        localStorage.clear();
+      }
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
       <section className="flex gap-5 bg-modal_Default_Bg p-5 rounded-lg">
         <article className="flex-1 bg-modal_Logo_Bg rounded-lg">
-          로고영역
+          로고영역<br/>
+          <button onClick={() => getSession()}>세션 테스트</button>
         </article>
         <article className="flex flex-col gap-2 flex-1 p-4 bg-modal_Content_Bg rounded-lg">
           <div className="flex flex-col">
