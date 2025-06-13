@@ -109,7 +109,7 @@ public class ReadingRecordService {
 
 		for (Object[] row : rawResults) {
 
-			Long bookId = (long) ((Number) row[3]).intValue();
+			int bookId = ((Number) row[0]).intValue();
 			String bookTitle = (String) row[1];
 			String bookStatus = (String) row[2];
 			int bookTime = ((Number) row[3]).intValue();
