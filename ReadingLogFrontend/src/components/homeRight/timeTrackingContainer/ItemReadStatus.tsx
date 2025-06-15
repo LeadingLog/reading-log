@@ -26,6 +26,15 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
   const toggleSwitch = (e: React.MouseEvent) => {
     e.stopPropagation(); // 해당 부분 클릭하면 부모요소 클릭 이벤트가 실행되지 않도록 방지 요소
 
+    if (bookId === readingBookId) {
+      openModal( 'ModalNotice', {
+        title: "현재 독서중인 도서입니다",
+        subTitle: "독서종료 후 변경 가능합니다.",
+        withMotion: true,
+        onlyClose: true
+      } )
+      return;
+    }
     const bookStatusChangeBodyValue: bookStatusChangeBody = {
       userId: userId,
       bookId: bookId ?? null,

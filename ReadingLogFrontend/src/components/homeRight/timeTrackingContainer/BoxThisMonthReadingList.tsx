@@ -30,8 +30,15 @@ export default function BoxThisMonthReadingList() {
 
   /* 독서 타임 트래킹 모달 오픈 */
   const openModalTrackingPlan = (item: monthReadingListItem) => {
-
-    if (params.TimeTracking?.tab !== "onlyMonthReadingList") {
+    if (item.bookId === readingBookId) {
+      openModal( 'ModalNotice', {
+        title: "현재 독서중인 도서입니다",
+        subTitle: "독서종료 후 확인 가능합니다",
+        withMotion: true,
+        onlyClose: true
+      } )
+      return;
+    } else if (params.TimeTracking?.tab !== "onlyMonthReadingList") {
       openModal( 'ModalNotice', {
         title: "독서중인 도서가 있습니다",
         subTitle: "독서종료 후 확인 가능합니다",
