@@ -195,6 +195,9 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
       } );
 
       console.log( response.data );
+
+
+
     } catch (error: unknown) {
       if (axios.isAxiosError( error ) && error.response?.status === 401) {
         resetUser();

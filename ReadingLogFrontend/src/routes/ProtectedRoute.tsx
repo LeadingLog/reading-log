@@ -16,14 +16,26 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     (async () => {
 
       try {
-        await axios.get( `${serverUrl}/user/getUserSession`, {
+        const response = await axios.get( `${serverUrl}/user/getUserSession`, {
           withCredentials: true
         } );
-        setAuthorized( true );
+        console.log("=== ProtectedRoute ===")
+        console.log( response.data );
+
+        if (response.data.sessionLoginUserId !== null) {
+          setAuthorized( true );
+        } else {
+          setAuthorized( false );
+          resetUser();
+          localStorage.clear();
+        }
+
       } catch (error: unknown) {
         if (axios.isAxiosError( error ) && error.response?.status === 401) {
           resetUser();
           localStorage.clear();
+        } else {
+          console.error("서버 오류 발생", error);
         }
         setAuthorized( false );
       }
