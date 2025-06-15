@@ -8,7 +8,8 @@ export async function bookStatusChangeApi(bookStatusChangeBody: bookStatusChange
     `${serverUrl}/readinglist/update`, bookStatusChangeBody, {
       headers: {
         "Content-Type": "application/json"
-      }
+      },
+      withCredentials: true
     }
   );
 
