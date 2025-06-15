@@ -132,9 +132,11 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
     <>
       {currentStatus !== "NOT_STARTED" ? (
           bookId === readingBookId ? (
-            <div className="flex items-center border-2 border-toggle_Read_Status_Bg px-2 w-[70px] text-[13px] rounded-full font-semibold text-toggle_ReadingStart_Text_Color">
+            <button
+              onClick={toggleSwitch}
+              className="flex items-center border-2 border-toggle_Read_Status_Bg px-2 w-[70px] text-[13px] rounded-full font-semibold text-toggle_ReadingStart_Text_Color">
               독서중<span>{dotCount}</span>
-            </div>
+            </button>
           ) : (
             <button
               onClick={toggleSwitch}
