@@ -1,29 +1,30 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+localStorage.removeItem( 'reading-book' );
+
 interface ReadingBookState {
   readingBookId: number;
   setReadingBookId: (id: number) => void;
-  endReadingBook: () => void; // 이름 변경 및 로컬스토리지 삭제
+  endReadingBook: () => void;
 }
 
 export const useReadingBookStore = create<ReadingBookState>()(
-  persist(
+  persist<ReadingBookState>(
     (set) => ({
       readingBookId: 0,
-      setReadingBookId: (id) => set({ readingBookId: id }),
+      setReadingBookId: (id) => set( { readingBookId: id } ),
       endReadingBook: () => {
-        set({ readingBookId: 0 });
-        localStorage.removeItem('reading-book');
+        set( { readingBookId: 0 } );
+        localStorage.removeItem( 'reading-book' );
       },
     }),
     {
       name: 'reading-book',
-      /* 새고고침 하거나 홈에 접속했을 때 bookId값이 로컬에 남아있으면 지운다 */
-      onRehydrateStorage: () => (state) => {
-        if (state?.readingBookId !== 0) {
-          localStorage.removeItem('reading-book');
-        }
+      skipHydration: true,
+      onRehydrateStorage: () => () => {
+        // 무조건 로컬스토리지 제거
+        localStorage.removeItem( 'reading-book' );
       },
     }
   )

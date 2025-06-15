@@ -5,38 +5,38 @@
     "monthlyReadingList": [
       {
         "bookId": 1,
-        "title": "어떻게 죽을 것인가",
+        "bookTitle": "어떻게 죽을 것인가",
         "bookStatus": "NOT_STARTED",
-        "bookTime": 0
+        "bookTime": 60
       },
       {
         "bookId": 2,
-        "title": "30개 도시로 읽는 영국사 1",
+        "bookTitle": "30개 도시로 읽는 영국사 1",
         "bookStatus": "IN_PROGRESS",
         "bookTime": 1500
       },
       {
         "bookId": 3,
-        "title": "30개 도시로 읽는 영국사 1",
+        "bookTitle": "30개 도시로 읽는 영국사 1",
         "bookStatus": "IN_PROGRESS",
         "bookTime": 4500
       },
       {
         "bookId": 4,
-        "title": "30개 도시로 읽는 영국사 1",
+        "bookTitle": "30개 도시로 읽는 영국사 1",
         "bookStatus": "IN_PROGRESS",
         "bookTime": 6500
       },
       {
         "bookId": 5,
-        "title": "삶이 흐르는 대로",
+        "bookTitle": "삶이 흐르는 대로",
         "bookStatus": "COMPLETED",
         "bookTime": 4500
       },
       {
         "bookId": 6,
-        "title": "인생의 방향은 언제든 바뀔 수 있다",
-        "bookStatus": "INTERESTED",
+        "bookTitle": "인생의 방향은 언제든 바뀔 수 있다",
+        "bookStatus": "NOT_STARTED",
         "bookTime": 0
       }
     ]
