@@ -20,26 +20,32 @@ const TooltipInfo = () => {
   if (!hoverContent) return null;
 
   return (
-    <div
-      className={`
-      ${pageData?.bookStatus === "IN_PROGRESS" && "border-tooltip_border_Reading"}
-      ${pageData?.bookStatus === "COMPLETED" && "border-tooltip_border_Complete"}
-      ${pageData?.bookStatus === "NOT_STARTED" && "border-tooltip_border_No_Reading"}
-      fixed p-3 border-4 border-tooltip_border rounded-lg bg-gray-100 text-sm bg-tooltip_bg`}
-      style={{ top: mouseY, left: mouseX ,transform: 'translateX(-100%)', pointerEvents: 'none',}}
-    >
-      {pageData ? (
-        <ul className="max-w-64">
-          <li>{pageData.bookTitle}</li>
-          <li>
-            독서상태: {pageData.bookStatus === "IN_PROGRESS" ? "독서중" : pageData.bookStatus === "COMPLETED" ? "완독" : "읽기전"}
-          </li>
-          <li>독서시간: {String( monthlyTimeHour ).padStart( 2, '0' )}:{String( monthlyTimeMin ).padStart( 2, '0' )}:{String( monthlyTimeSec ).padStart( 2, '0' )}</li>
-        </ul>
+    <>
+      {hoverContent === "StatsMonthBookTimeGraph" ? (
+        <div
+          className={`
+          ${pageData?.bookStatus === "IN_PROGRESS" && "border-tooltip_border_Reading"}
+          ${pageData?.bookStatus === "COMPLETED" && "border-tooltip_border_Complete"}
+          ${pageData?.bookStatus === "NOT_STARTED" && "border-tooltip_border_No_Reading"}
+          fixed p-3 border-4 border-tooltip_border rounded-lg bg-gray-100 text-sm bg-tooltip_bg`}
+          style={{ top: mouseY, left: mouseX ,transform: 'translateX(-100%)', pointerEvents: 'none',}}
+        >
+          {pageData ? (
+            <ul className="max-w-64">
+              <li>{pageData.bookTitle}</li>
+              <li>
+                독서상태: {pageData.bookStatus === "IN_PROGRESS" ? "독서중" : pageData.bookStatus === "COMPLETED" ? "완독" : "읽기전"}
+              </li>
+              <li>독서시간: {String( monthlyTimeHour ).padStart( 2, '0' )}:{String( monthlyTimeMin ).padStart( 2, '0' )}:{String( monthlyTimeSec ).padStart( 2, '0' )}</li>
+            </ul>
+          ) : (
+            <div className="text-gray-500 mt-2">pageData 없음</div>
+          )}
+        </div>
       ) : (
-        <div className="text-gray-500 mt-2">pageData 없음</div>
+        <div>아직 없음</div>
       )}
-    </div>
+    </>
   );
 };
 

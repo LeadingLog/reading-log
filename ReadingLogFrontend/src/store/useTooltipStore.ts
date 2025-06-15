@@ -8,10 +8,12 @@ type HoverContentType =
   | "";
 
 type PageData = {
-  bookId: number;
-  bookTitle: string;
-  bookStatus: string;
-  bookTime: number;
+  bookId?: number;
+  bookTitle?: string;
+  bookStatus?: string;
+  bookTime?: number;
+  month?: number;
+  complete?: number
 };
 
 type TooltipStore = {
@@ -27,16 +29,16 @@ type TooltipStore = {
   ) => void;
 };
 
-export const useTooltipStore = create<TooltipStore>((set) => ({
+export const useTooltipStore = create<TooltipStore>( (set) => ({
   hoverContent: "",
   pageData: null,
   mouseX: 0,
   mouseY: 0,
   setHoverContent: (content, pageData = null, mouseX = 0, mouseY = 0) =>
-    set({
+    set( {
       hoverContent: content,
       pageData,
       mouseX,
       mouseY,
-    }),
-}));
+    } ),
+}) );

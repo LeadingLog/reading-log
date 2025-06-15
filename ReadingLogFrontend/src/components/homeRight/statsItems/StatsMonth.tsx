@@ -3,7 +3,7 @@ import IconReadComplete from "../../../assets/Icon-readcomplete.svg?react"
 import MonthBookImgList from "../../common/MonthBookImgList.tsx";
 import CustomScrollbar from "../../common/CustomScrollbar.tsx";
 import MonthSlideBar from "../../common/MonthSlideBar.tsx"
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchStatsMonthApi } from "../../../api/statsMonthApi.ts";
 import { fetchStatsMonthApiParams, StatsMonthList } from "../../../types/statsMonth.ts";
 import { useDateStore } from "../../../store/useDateStore.ts";
@@ -22,6 +22,7 @@ export default function StatsMonth() {
   const setHoverContent = useTooltipStore((state) => state.setHoverContent);
 
   const handleMouseOver = (e: React.MouseEvent, item: StatsMonthList) => {
+
     const { clientX, clientY } = e;
     setHoverContent("StatsMonthBookTimeGraph", item, clientX, clientY);
   };
