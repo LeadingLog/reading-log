@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "toTalReadingTime": 5000,
+    "totalReadingTime": 5000,
     "monthlyReadingList":[
       {
         "month": 1,
