@@ -12,7 +12,7 @@ on:
       - 'F-ThisMonthReadingList_Dev'
       - 'F-StatsMonth_Dev'
       - 'F-StatsYear_Dev'
-      - 'F-UserLogin'
+      - 'F-UserLogin' 
       - 'F-Stopwatch'
       - 'F-ModalBookPlan_Dev'
       - 'frontdev'
