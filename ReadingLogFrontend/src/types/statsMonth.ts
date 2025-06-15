@@ -11,4 +11,5 @@ export interface StatsMonthList {
   bookTitle: string;
   bookStatus: string;
   bookTime: number;
+  graphHeight: number;
 }

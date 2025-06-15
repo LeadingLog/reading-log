@@ -1,19 +1,40 @@
 import { useTooltipStore } from "../../store/useTooltipStore.ts";
+import { useState, useEffect } from "react";
 
 const TooltipInfo = () => {
-  const { hoverContent, pageData } = useTooltipStore();
-  if (!hoverContent) return
-  return (
-    <div className="absolute p-4 border rounded bg-gray-100 text-sm">
-      <h2 className="font-bold mb-2">Tooltip 상태 보기</h2>
-      <div>hoverContent: <strong>{hoverContent || '없음'}</strong></div>
+  const { hoverContent, pageData, mouseX, mouseY } = useTooltipStore();
 
+  const [monthlyTimeHour, setMonthlyTimeHour] = useState<number>(0);
+  const [monthlyTimeMin, setMonthlyTimeMin] = useState<number>(0);
+  const [monthlyTimeSec, setMonthlyTimeSec] = useState<number>(0);
+
+  // ✅ 렌더링 이후에 bookTime이 변할 때만 상태 업데이트
+  useEffect(() => {
+    if (pageData?.bookTime) {
+      setMonthlyTimeHour(Math.floor(pageData.bookTime / 3600));
+      setMonthlyTimeMin(Math.floor((pageData.bookTime % 3600) / 60));
+      setMonthlyTimeSec(Math.floor(pageData.bookTime % 60));
+    }
+  }, [pageData?.bookTime]); // ✅ 의존성 배열
+
+  if (!hoverContent) return null;
+
+  return (
+    <div
+      className={`
+      ${pageData?.bookStatus === "IN_PROGRESS" && "border-tooltip_border_Reading"}
+      ${pageData?.bookStatus === "COMPLETED" && "border-tooltip_border_Complete"}
+      ${pageData?.bookStatus === "NOT_STARTED" && "border-tooltip_border_No_Reading"}
+      fixed p-3 border-4 border-tooltip_border rounded-lg bg-gray-100 text-sm bg-tooltip_bg`}
+      style={{ top: mouseY, left: mouseX ,transform: 'translateX(-100%)', pointerEvents: 'none',}}
+    >
       {pageData ? (
-        <ul className="mt-2 list-disc pl-5">
-          <li>bookId: {pageData.bookId}</li>
-          <li>bookTitle: {pageData.bookTitle}</li>
-          <li>bookStatus: {pageData.bookStatus}</li>
-          <li>bookTime: {pageData.bookTime}분</li>
+        <ul className="max-w-64">
+          <li>{pageData.bookTitle}</li>
+          <li>
+            독서상태: {pageData.bookStatus === "IN_PROGRESS" ? "독서중" : pageData.bookStatus === "COMPLETED" ? "완독" : "읽기전"}
+          </li>
+          <li>독서시간: {String( monthlyTimeHour ).padStart( 2, '0' )}:{String( monthlyTimeMin ).padStart( 2, '0' )}:{String( monthlyTimeSec ).padStart( 2, '0' )}</li>
         </ul>
       ) : (
         <div className="text-gray-500 mt-2">pageData 없음</div>
