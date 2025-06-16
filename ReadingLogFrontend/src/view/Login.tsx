@@ -4,14 +4,14 @@ import NaverLoginBtn from "../assets/login/naver_login_btn.png";
 const handleSocialLogin = (provider: string) => {
   const NAVER_CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID;
   const NAVER_REDIRECT_URI = import.meta.env.VITE_NAVER_REDIRECT_URI;
-  const state = Math.random().toString(36).substring(2);
+  const state = Math.random().toString( 36 ).substring( 2 );
   const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?client_id=${NAVER_CLIENT_ID}&redirect_uri=${NAVER_REDIRECT_URI}&response_type=code&state=${state}`;
 
   const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_CLIENT_ID;
   const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code&state=${state}`;
 
-  localStorage.setItem("state", state);
+  localStorage.setItem( "state", state );
   if (provider === "naver") {
     window.location.href = NAVER_AUTH_URL;
   } else if (provider === "kakao") {
@@ -28,7 +28,7 @@ export default function Login() {
       <article className="flex flex-col gap-[20px]">
         <button
           type="button"
-          onClick={() => handleSocialLogin("kakao")}
+          onClick={() => handleSocialLogin( "kakao" )}
           className="bg-social_Bg text-[40px] w-[400px] h-[65px] rounded-xl">
           <img
             src={KaKaoLoginBtn}
@@ -38,7 +38,7 @@ export default function Login() {
         </button>
         <button
           type="button"
-          onClick={() => handleSocialLogin("naver")}
+          onClick={() => handleSocialLogin( "naver" )}
           className="bg-social_Bg  text-[40px] w-[400px] h-[65px] rounded-lg">
           <img
             src={NaverLoginBtn}

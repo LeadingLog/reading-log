@@ -1,0 +1,68 @@
+{
+  "success": true,
+  "readingCountByMonth": [
+    {
+      "completed": 2,
+      "inProgress": 2,
+      "month": 1,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 1,
+      "inProgress": 0,
+      "month": 2,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 3,
+      "month": 3,
+      "notStarted": 1,
+      "year": 2025
+    },
+    {
+      "completed": 1,
+      "inProgress": 2,
+      "month": 4,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 4,
+      "month": 5,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 4,
+      "month": 7,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 4,
+      "month": 10,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 4,
+      "month": 11,
+      "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 0,
+      "inProgress": 4,
+      "month": 12,
+      "notStarted": 0,
+      "year": 2025
+    }
+  ]
+}

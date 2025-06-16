@@ -1,10 +1,8 @@
-import {create} from "zustand";
-import {persist} from "zustand/middleware";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface UserState {
-  token: string | null;
-  expiresAt: number | null;
-  user_id: string | null;
+  userId: number | null;
   nickname: string | null;
   email: string | null;
   provider: string | null;
@@ -16,28 +14,24 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      token: null,
-      expiresAt: 0,
-      user_id: null,
+      userId: 0,
       nickname: null,
       email: null,
       provider: null,
 
       setUser: (user) =>
-        set((state) => ({
+        set( (state) => ({
           ...state,
           ...user,
-        })),
+        }) ),
 
       resetUser: () =>
-        set({
-          token: null,
-          expiresAt: 0,
-          user_id: null,
+        set( {
+          userId: 0,
           nickname: null,
           email: null,
           provider: null,
-        }),
+        } ),
     }),
     {
       name: "user-storage",
