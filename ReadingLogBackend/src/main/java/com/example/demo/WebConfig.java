@@ -31,8 +31,8 @@ public class WebConfig {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-                                        .allowedOrigins("https://reading-log-zeta.vercel.app")  // 정확한 origin!
-                                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                                        .allowedOrigins("https://reading-log-zeta.vercel.app") 
+                                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                                         .allowCredentials(true)
                                         .allowedHeaders("*")
                                         .maxAge(3600);
