@@ -14,6 +14,8 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
   const [isEditing, setIsEditing] = useState( false ); // 수정 모드 여부 (true: 수정 중, false: 완료)
   const [tempNickname, setTempNickname] = useState( nickname ); // 수정 중 닉네임
   const [tempEmail, setTempEmail] = useState( email ); // 수정 중 이메일
+  const [isLoading, setIsLoading] = useState<boolean>( false ); // 닉네임 수정 요청 시 로딩
+  const setModalIsLoading = useModalStore( state => state.setModalIsLoading ); // 알림 모달 로딩 표시 용
 
   // 수정 모드 리셋 및 내 정보 모달 닫기
   const resetEditState = () => {
@@ -67,6 +69,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
     formData.append( "nickname", tempNickname ? tempNickname.trim() : "" );
 
     try {
+      setIsLoading( true )
       const response = await axios.post( `${serverUrl}/user/${userId}/modified`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -92,6 +95,8 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
       console.error( "회원 정보 수정 실패:", err );
       handleEditFail( "서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요." );
       return false;
+    } finally {
+      setIsLoading( false )
     }
   }
 
@@ -128,6 +133,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
   // 회원 탈퇴 처리
   const handleAccountDeletion = async () => {
     try {
+      setModalIsLoading( true )
       const response = await axios.delete( `${serverUrl}/user/${userId}/delete`, {
         data: { userId }
       } );
@@ -150,24 +156,26 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
     } catch (err) {
       console.error( "회원 탈퇴 실패:", err );
       handleDeleteFail( "서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요." );
+    } finally {
+      setModalIsLoading( false )
     }
   };
 
   // 회원 탈퇴 클릭
   const handleDeleteConfirmModal = () => {
-    const openDeleteAccount = openModal( "ModalNotice", {
+    openModal( "ModalNotice", {
       title: "탈퇴 시 모든 정보가 삭제됩니다.",
       subTitle: "본인 확인을 위해 이메일을 입력해주세요.",
       cancelText: "아니요 조금 더 이용할래요!",
       confirmText: "예",
       reverseBtn: true,
       showInput: true,
+      loadingMessage: "탈퇴중",
       onConfirm: async (inputValue?: string) => {
         console.log( "사용자 입력값:", inputValue, " email:", email );
         if (email !== inputValue) {
           handleDeleteFail( "이메일이 일치하지 않습니다." );
         } else {
-          closeModal( openDeleteAccount );
           await handleAccountDeletion();
         }
       }
@@ -176,6 +184,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
 
   // 회원 탈퇴 실패 시 공통 모달 표시
   const handleDeleteFail = (message?: string, title?: string) => {
+
     const deleteFailModal = openModal( "ModalNotice", {
       title: title || "회원 탈퇴 실패",
       subTitle: message || "회원 탈퇴에 실패하였습니다. 다시 시도해주세요.",
@@ -198,10 +207,20 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
             <div className="flex justify-between">
               <h2>닉네임</h2>
               <span
-                className="text-myPage_Update_Complete_Text hover:cursor-pointer hover:text-myPage_Update_Complete_Text_Hover"
+                className="flex items-center gap-1 text-myPage_Update_Complete_Text hover:cursor-pointer hover:text-myPage_Update_Complete_Text_Hover"
                 onClick={toggleEditMode}
               >
-            {isEditing ? <>완료</> : <>수정</>}
+            {isEditing ?
+              <>
+                {!isLoading ? (
+                  <span>완료</span>
+                ) : (
+                  <span
+                    className="w-5 h-5 border-4 border-loadingBg border-t-loadingSpinner rounded-full animate-spin"></span>
+                )}
+              </>
+              : <>수정</>}
+
           </span>
             </div>
             {isEditing ? (

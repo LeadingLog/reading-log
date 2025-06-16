@@ -15,6 +15,7 @@ on:
       - 'F-UserLogin'
       - 'F-Stopwatch'
       - 'F-ModalBookPlan_Dev'
+      - 'F-AccountSettings'
       - 'frontdev'
       # - 'main'
 
