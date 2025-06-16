@@ -37,9 +37,19 @@ jobs:
       # 3. 의존성 설치 및 빌드
       - name: Install & Build
         working-directory: ReadingLogFrontend
+        env:
+          VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
+          VITE_NAVER_CLIENT_ID: ${{ secrets.VITE_NAVER_CLIENT_ID }}
+          VITE_NAVER_REDIRECT_URI: ${{ secrets.VITE_NAVER_REDIRECT_URI }}
+          VITE_KAKAO_CLIENT_ID: ${{ secrets.VITE_KAKAO_CLIENT_ID }}
+          VITE_KAKAO_REDIRECT_URI: ${{ secrets.VITE_KAKAO_REDIRECT_URI }}
         run: |
           npm install
           npm run build
+
+      # 3.5. vercel.json 복사 (dist 안으로)
+      - name: Copy vercel.json to dist
+        run: cp ReadingLogFrontend/vercel.json ReadingLogFrontend/dist/
 
       # 4. 빌드 결과물을 다른 저장소로 푸시
       - name: Push to Vercel Repo
