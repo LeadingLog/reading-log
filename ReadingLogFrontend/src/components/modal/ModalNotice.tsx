@@ -65,7 +65,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
         <div className={`${reverseBtn ? 'flex-row-reverse' : ''} flex justify-between gap-10`}>
           {!onlyConfirm && (
             <button
-              className={`${reverseBtn ? 'bg-modal_Right_Btn_Bg' : 'border-modal_Left_Btn_Border border-4'} flex-1 min-w-fit px-2 py-1 rounded-lg`}
+              className={`${reverseBtn ? 'bg-modal_Right_Btn_Bg hover:invert-[3%]' : 'border-modal_Left_Btn_Border border-4 hover:brightness-[95%]'} active:scale-95 duration-200 flex-1 min-w-fit px-2 py-1 rounded-lg`}
               disabled={modalIsLoading}
               onClick={handleClose}
             >
@@ -74,7 +74,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
           )}
           {!onlyClose && (
             <button
-              className={`${reverseBtn ? 'text-modal_Quit_Text' : 'bg-modal_Right_Btn_Bg'} flex flex-1 justify-center items-center gap-1 min-w-fit px-2 py-1 rounded-lg`}
+              className={`${reverseBtn ? 'text-modal_Quit_Text hover:backdrop-brightness-95 duration-100' : 'bg-modal_Right_Btn_Bg duration-200'} hover:invert-[3%] active:scale-95  flex flex-1 justify-center items-center gap-1 min-w-fit px-2 py-1 rounded-lg`}
               disabled={modalIsLoading}
               onClick={() => {
                 if (showInput) {

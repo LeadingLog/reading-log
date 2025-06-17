@@ -102,6 +102,10 @@ export const readingListHandlers = [
       return HttpResponse.json( myReadingList_complete )
     } else if (page === 1 && tabType === 3) {
       return HttpResponse.json( myReadingList_complete2 )
+    } else if (page === 0 && tabType === 4) {
+      return HttpResponse.json( myReadingList_complete )
+    } else if (page === 1 && tabType === 4) {
+      return HttpResponse.json( myReadingList_complete2 )
     } else {
       return HttpResponse.json( {
         readingList: [],

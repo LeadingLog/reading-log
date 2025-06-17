@@ -204,10 +204,10 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
         </article>
         <article className="flex flex-col gap-2 flex-1 p-4 bg-modal_Content_Bg rounded-lg">
           <div className="flex flex-col">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <h2>닉네임</h2>
               <span
-                className="flex items-center gap-1 text-myPage_Update_Complete_Text hover:cursor-pointer hover:text-myPage_Update_Complete_Text_Hover"
+                className="hover:backdrop-brightness-95 rounded-lg px-1 py-0.5 flex items-center gap-1 text-myPage_Update_Complete_Text hover:cursor-pointer hover:text-myPage_Update_Complete_Text_Hover"
                 onClick={toggleEditMode}
               >
             {isEditing ?
@@ -255,13 +255,13 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
 
           <div className="flex justify-between">
             <button
-              className="text-xs text-modal_Quit_Text px-1 py-0.5 rounded-lg bg-modal_Quit_Bg"
+              className="hover:brightness-90 active:scale-95 text-xs text-modal_Quit_Text px-2 py-0.5 rounded-lg bg-modal_Quit_Bg"
               onClick={handleDeleteConfirmModal}
             >
               회원탈퇴
             </button>
             <button
-              className="px-2 py-1 bg-modal_Right_Btn_Bg rounded-lg"
+              className="hover:invert-[3%] active:scale-95 px-2 py-1 bg-modal_Right_Btn_Bg rounded-lg"
               onClick={() => {
                 resetEditState();
               }}

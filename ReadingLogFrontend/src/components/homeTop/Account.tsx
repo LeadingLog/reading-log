@@ -55,7 +55,7 @@ export default function Account() {
         className="flex h-[50px] gap-3.5 items-center border-8 bg-header_Right_Bg border-header_Right_Border rounded-full">
         <span className="pl-2">{nickname || "사용자"}님 환영합니다</span>
         <article
-          className="flex h-full py-1 overflow-hidden bg-myPage_LogOut_Bg divide-rou divide-x-2 divide-header_Right_Icon_Divide_Color">
+          className="flex h-full overflow-hidden bg-myPage_LogOut_Bg divide-rou divide-x-2 divide-header_Right_Icon_Divide_Color">
           {/* MyPage 버튼 */}
           <button
             className="flex justify-center items-center text-myPage_Icon_Color px-3"

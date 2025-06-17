@@ -39,17 +39,17 @@ export default function YearSlideBar() {
         onClick={decreaseMonth}
         className="flex flex-1 items-center cursor-pointer group h-full pl-8"
       >
-        <span className="flex-1 text-right text-yearSlide_PrevNext_Text">
+        <span className="group-hover:text-black flex-1 text-right text-yearSlide_PrevNext_Text">
           {getPrevMonthText()}
         </span>
-        <button className="flex-1 text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover rotate-180">
+        <button className="group-active:translate-x-[-3%] duration-100 flex-1 text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover rotate-180">
           <IconTriangle/>
         </button>
       </div>
 
       <span
         onClick={nowYear}
-        className="text-3xl items-center cursor-pointer h-full text-yearSlide_ThisYear_Text font-bold"
+        className="hover:brightness-95 text-3xl items-center cursor-pointer h-full text-yearSlide_ThisYear_Text font-bold"
       >
         {year}.{String( month ).padStart( 2, '0' )}
       </span>
@@ -58,10 +58,10 @@ export default function YearSlideBar() {
         onClick={increaseMonth}
         className="flex flex-1 items-center cursor-pointer group h-full pr-8"
       >
-        <button className="flex-1 text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+        <button className="group-active:translate-x-[3%] duration-100 flex-1 text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
           <IconTriangle/>
         </button>
-        <span className="flex-1 text-left text-yearSlide_PrevNext_Text">
+        <span className="group-hover:text-black flex-1 text-left text-yearSlide_PrevNext_Text">
           {getNextMonthText()}
         </span>
       </div>

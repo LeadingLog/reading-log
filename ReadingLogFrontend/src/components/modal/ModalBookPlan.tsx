@@ -454,7 +454,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
             <div className="flex flex-col flex-1">
               <p className="text-modal_BookPlan_StartEnd_Month_Text">시작 달</p>
               <button
-                className={`${monthReadingList ? 'cursor-default' : ''} flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg`}
+                className={`${monthReadingList ? 'cursor-default' : 'hover:brightness-[97%] duration-100'} group flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg`}
                 disabled={isLoading}
                 onClick={() => {
                   openCalendar( { startOrEnd: "시작 달" } )
@@ -464,7 +464,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                   {pickStartYear}.{String( pickStartMonth ).padStart( 2, '0' )}.01
                 </span>
                 {!monthReadingList && (
-                  <span className="w-3 text-modal_BookPlan_Calendar_Icon_Color">
+                  <span className="w-3 group-active:scale-90 duration-100 text-modal_BookPlan_Calendar_Icon_Color">
                     <IconCalendar width="100%" height="100%"/>
                   </span>
                 )}
@@ -474,7 +474,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
             <div className="flex flex-col flex-1">
               <p className="text-modal_BookPlan_StartEnd_Month_Text">종료 달</p>
               <button
-                className={`${monthReadingList ? 'cursor-default' : ''} flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg`}
+                className={`${monthReadingList ? 'cursor-default ' : 'hover:brightness-[97%] duration-100'} group flex justify-between py-1 px-2 bg-modal_BookPlan_Calendar_Bg rounded-lg`}
                 disabled={isLoading}
                 onClick={() => {
                   openCalendar( { startOrEnd: "종료 달" } )
@@ -484,7 +484,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                   {pickEndYear}.{String( pickEndMonth ).padStart( 2, '0' )}.{getLastDateOfMonth( pickEndYear, pickEndMonth )}
                 </span>
                 {!monthReadingList && (
-                  <span className="w-3 text-modal_BookPlan_Calendar_Icon_Color">
+                  <span className="w-3 group-active:scale-90 duration-100 text-modal_BookPlan_Calendar_Icon_Color">
                     <IconCalendar width="100%" height="100%"/>
                   </span>
                 )}
@@ -497,7 +497,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
               onClick={() => {
                 closeAllModals()
               }}
-              className="flex-1 min-w-[130px] px-4 py-1 border-4 border-modal_Left_Btn_Border rounded-lg"
+              className="hover:brightness-[95%] active:scale-95 duration-100 flex-1 min-w-[130px] px-4 py-1 border-4 border-modal_Left_Btn_Border rounded-lg"
               disabled={isLoading}
             >
               {cancelText || '닫기'}
@@ -507,7 +507,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                 onClick={() => {
                   completeBookPlan();      // 현재 페이지 관련 초기화 작업
                 }}
-                className="flex-1 min-w-[130px] justify-center items-center gap-1 flex px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
+                className="hover:brightness-[95%] active:scale-95 duration-100 flex-1 min-w-[130px] justify-center items-center gap-1 flex px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
                 disabled={isLoading}
               >
 

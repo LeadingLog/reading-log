@@ -24,7 +24,7 @@
     },
     {
       "completed": 1,
-      "inProgress": 2,
+      "inProgress": 2000,
       "month": 4,
       "notStarted": 0,
       "year": 2025
@@ -34,6 +34,13 @@
       "inProgress": 4,
       "month": 5,
       "notStarted": 0,
+      "year": 2025
+    },
+    {
+      "completed": 100,
+      "inProgress": 4,
+      "month": 6,
+      "notStarted": 100,
       "year": 2025
     },
     {

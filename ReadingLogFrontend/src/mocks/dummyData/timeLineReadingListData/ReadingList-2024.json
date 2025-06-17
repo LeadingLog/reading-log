@@ -17,6 +17,20 @@
     },
     {
       "completed": 2,
+      "inProgress": 1,
+      "month": 3,
+      "notStarted": 0,
+      "year": 2024
+    },
+    {
+      "completed": 2,
+      "inProgress": 1,
+      "month": 4,
+      "notStarted": 0,
+      "year": 2024
+    },
+    {
+      "completed": 2,
       "inProgress": 3,
       "month": 5,
       "notStarted": 0,
@@ -26,7 +40,7 @@
       "completed": 1,
       "inProgress": 6,
       "month": 6,
-      "notStarted": 0,
+      "notStarted": 2,
       "year": 2024
     },
     {
@@ -39,7 +53,28 @@
     {
       "completed": 2,
       "inProgress": 2,
+      "month": 8,
+      "notStarted": 0,
+      "year": 2024
+    },
+    {
+      "completed": 2,
+      "inProgress": 2,
+      "month": 9,
+      "notStarted": 0,
+      "year": 2024
+    },
+    {
+      "completed": 2,
+      "inProgress": 2,
       "month": 10,
+      "notStarted": 0,
+      "year": 2024
+    },
+    {
+      "completed": 2,
+      "inProgress": 2,
+      "month": 11,
       "notStarted": 0,
       "year": 2024
     },

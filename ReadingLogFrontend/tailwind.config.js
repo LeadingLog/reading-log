@@ -15,6 +15,7 @@ export default {
         // 토글   > toggle
         // 모달   > modal
         // 버튼   > btn
+        // 밑줄   > underLine
         
         /* 총 사용 색상 */
         ivory      : "#FDFAF3", // 아이보리색
@@ -33,27 +34,32 @@ export default {
         dark_Sky_hover : "#7A9BB7", // 진한 하늘 호버시
         
         /* 탭 관련 색 */
-        leftPage_ActiveTab_Border  : "#C9A89F", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시
-        leftPage_InActiveTab_Border: "#EEE6E3", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 비활성화 시
+        leftPage_Tab_Text          : "#A1A1A1", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시 텍스트 색
+        leftPage_Tab_Hover_Text    : "#000000", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 호버 시
+        leftPage_ActiveTab_Border  : "#C9A89F", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시 보더색
+        leftPage_InActiveTab_Border: "#EEE6E3", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 비활성화 보더색
         myBookList_ActiveTab_Bg    : "#E5CEC8", // 탭 - 내 독서 목록 탭 중 활성화 배경
         myBookList_InActiveTab_Bg  : "#EEE6E3", // 탭 - 내 독서 목록 탭 중 비활성화 배경
-        myBookList_ActiveTab_Text  : "#000000", // 탭 - 내 독서 목록 탭 중 활성화 배경
+        myBookList_ActiveTab_Text  : "#000000", // 탭 - 내 독서 목록 탭 중 활성화 배경`
         myBookList_InActiveTab_Text: "#FDFAF3", // 탭 - 내 독서 목록 탭 중 활성화 배경
         /* 타임라인 -> 총 독서 시간 관련 */
         allReadingTime_Bg  : "#E5CEC8", // 총 독서 시간 표시 배경
         allReadingTime_Text: "#000000", // 총 독서 시간 표시 폰트
         
         /* 타임라인 화면 */
-        timeLineBorder          : "#96B2C8", // 타임라인 경로 색
-        timeLineMonthCircle     : "#C9A89F", // 월 표시 원
-        timeLineMonthHoverCircle: "#E5CEC8", // 월 표시 호버서 시 색
-        timeLineMonthText       : "#FFFFFF", // 월 표시 텍스트 색
-        timeLineNoReadText      : "#FFFFFF", // 읽기전 텍스트 색
-        timeLineNoReadBg        : "#D9D9D9", // 읽기전 배경 색
-        timeLineReadingText     : "#FFFFFF", // 독서중 텍스트 색
-        timeLineReadingBg       : "#C9A89F", // 독서중 배경 색
-        timeLineCompleteText    : "#FFFFFF", // 완독 텍스트 색
-        timeLineCompleteBg      : "#96B2C8", // 완독 배경 색
+        timeLineBorder                        : "#96B2C8", // 타임라인 경로 색
+        timeLineMonthCircle                   : "#C9A89F", // 월 표시 원
+        timeLineMonthHoverCircle              : "#E5CEC8", // 월 표시 호버서 시 색
+        timeLineMonthText                     : "#FFFFFF", // 월 표시 텍스트 색
+        timeLineNoReadText                    : "#FFFFFF", // 읽기전 텍스트 색
+        timeLineNoReadBg                      : "#D9D9D9", // 읽기전 배경 색
+        timeLineReadingText                   : "#FFFFFF", // 독서중 텍스트 색
+        timeLineReadingBg                     : "#C9A89F", // 독서중 배경 색
+        timeLineCompleteText                  : "#FFFFFF", // 완독 텍스트 색
+        timeLineCompleteBg                    : "#96B2C8", // 완독 배경 색
+        timeLine_StatsYear_Btn_Hover_UnderLine: "#C9A89F", // 연별통계로 이동 버튼 호버시 밑줄 색
+        timeLine_ThisMonth_Btn_Hover_UnderLine: "#C9A89F", // 이번 달 독서 리스트로 이동 버튼 호버시 밑줄 색
+        
         
         /* 년도 슬라이드 관련 */
         yearSlide_Bg           : "#E5CEC8", // 년도 슬라이드 - 배경
@@ -106,6 +112,7 @@ export default {
         page_Bg: "#FDFAF3", // page 배경
         /* 이미지로 표시하는 책 리스트 내부 아이콘 관련 */
         imgBook_Item_Bg         : "#E5CEC850", // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 썸네일 없을 때 배경
+        imgBook_Item_Hover_Bg   : "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 리스트 호버시 배경색
         imgBook_Item_Reading_Bg : "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (독서중) 상태 표시 배경
         imgBook_Item_NoRead_Bg  : "#D9D9D9",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (읽기전) 상태 표시 배경
         imgBook_Item_Complete_Bg: "#96B2C8",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (완 독) 상태 표시 배경
@@ -147,8 +154,8 @@ export default {
         
         modal_BookPlan_Book_Title_Text       : "#000000",   // 독서 계획 - 책 제목 텍스트 색
         modal_BookPlan_Book_Sub_Title_Text   : "#A1A1A1",   // 독서 계획 - 책 저자 텍스트 색
-        modal_BookPlan_Book_DeleteBook_Text  : "#A1A1A1",   // 독서 계획 - 책 저자 텍스트 색
-        modal_BookPlan_Book_DeleteBook_Border: "#E5CEC8",   // 독서 계획 - 책 저자 텍스트 색
+        modal_BookPlan_Book_DeleteBook_Text  : "#A1A1A1",   // 독서 계획 - 책 삭제 텍스트 색
+        modal_BookPlan_Book_DeleteBook_Border: "#E5CEC8",   // 독서 계획 - 책 삭제 보더 색
         modal_BookPlan_StartEnd_Month_Text   : "#000000",   // 독서 계획 - 시작 & 종료 타이틀 텍스트 색
         modal_BookPlan_Calendar_Date_Text    : "#000000",   // 독서 계획 - 달력 표시 날짜 텍스트 색 색
         modal_BookPlan_Calendar_Bg           : "#EEE6E3",   // 독서 계획 - 달력 표시 배경
@@ -156,17 +163,17 @@ export default {
         modal_BookPlan_loadingBg             : "#FDFAF3",   // 독서 계획 - 로딩 중일 때 배경 색
         modal_BookPlan_loadingSpinner        : "#96B2C8",   // 독서 계획 - 로딩 스피너 색
         
-        /* 연도 및 월 선택 모달 */
-        modal_Pick_Calendar_Back_Bg          : "#96B2C8",   // 연도 선택 모달 - 배경 색
-        modal_Pick_Calendar_Content_Bg       : "#FDFAF3",   // 연도 선택 모달 - 컨텐츠 배경 색
-        modal_Pick_Calendar_Title_Text       : "#000000",   // 연도 선택 모달 - 시작 달 인지 종료달 인지 표시 타이틀 텍스트 색
-        modal_Pick_Calendar_Year_Text        : "#000000",   // 연도 선택 모달 - 년 표시 텍스트 색
-        modal_Pick_Calendar_Year_Handler_Text: "#000000",   // 연도 선택 모달 - 년도 변경 요소 색
-        modal_Pick_Calendar_Month_Bg         : "#E5CEC8",   // 연도 선택 모달 - 월 선택 리스트 배경 색
-        modal_Pick_Calendar_Month_Text       : "#000000",   // 연도 선택 모달 - 월 선택 리스트 텍스트 색
-        modal_Pick_Calendar_Month_Hover      : "#E5CEC890",   // 연도 선택 모달 - 월 선택 리스트 텍스트 색
-        modal_Pick_Calendar_Month_active     : "#EEE6E3",   // 연도 선택 모달 - 월 선택 리스트 텍스트 색
-        modal_Pick_Calendar_Cancel_Text      : "#000000",  // 연도 선택 모달 - 닫기 텍스트 색
+        modal_Pick_Calendar_Back_Bg                : "#96B2C8",   // 연도 선택 모달 - 배경 색
+        modal_Pick_Calendar_Content_Bg             : "#FDFAF3",   // 연도 선택 모달 - 컨텐츠 배경 색
+        modal_Pick_Calendar_Title_Text             : "#000000",   // 연도 선택 모달 - 시작 달 인지 종료달 인지 표시 타이틀 텍스트 색
+        modal_Pick_Calendar_Year_Text              : "#C9A89F",   // 연도 선택 모달 - 년 표시 텍스트 색
+        modal_Pick_Calendar_Year_Handler_Text      : "#E5CEC8",   // 연도 선택 모달 - 년도 변경 요소 색
+        modal_Pick_Calendar_Year_Handler_Text_hover: "#C9A89F",   // 연도 선택 모달 - 년도 변경 요소 색
+        modal_Pick_Calendar_Month_Bg               : "#E5CEC8",   // 연도 선택 모달 - 월 선택 리스트 배경 색
+        modal_Pick_Calendar_Month_Text             : "#000000",   // 연도 선택 모달 - 월 선택 리스트 텍스트 색
+        modal_Pick_Calendar_Month_Hover            : "#E5CEC890",   // 연도 선택 모달 - 월 선택 리스트 텍스트 색
+        modal_Pick_Calendar_Month_active           : "#EEE6E3",   // 연도 선택 모달 - 월 선택 리스트 텍스트 색
+        modal_Pick_Calendar_Cancel_Text            : "#000000",  // 연도 선택 모달 - 닫기 텍스트 색
         
         /* 독서 상태 토글 관련 색 */
         toggle_ReadingStart_Text_Color: "#ffffff", // 독서 상태 토글 - 토글이 완독인 경우 텍스트 색
