@@ -92,10 +92,10 @@ export default function TimeLine() {
       notStarted: 0,
       inProgress: 0,
       completed: 0,
-      top: '-11px',
+      top: 'unset',
       left: '50%',
       right: 'unset',
-      bottom: '11px',
+      bottom: 'calc(100% - 21px)',
       transform: 'translateX(-50%)'
     },
     {
@@ -106,10 +106,10 @@ export default function TimeLine() {
       notStarted: 0,
       inProgress: 0,
       completed: 0,
-      top: '-11px',
+      top: 'unset',
       left: '50%',
       right: 'unset',
-      bottom: 'unset',
+      bottom: 'calc(100% - 21px)',
       transform: 'translateX(-50%)'
     },
     {
@@ -348,8 +348,9 @@ export default function TimeLine() {
             className="flex gap-2 justify-end items-center group"
             onClick={() => statsYear()}
           >
-            <span><span>{year}</span> 년 리딩로그 보러가기</span>
-            <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+            <span className="group-hover:underline underline-offset-4 decoration-2 decoration-timeLine_StatsYear_Btn_Hover_UnderLine"><span>{year}</span> 년 리딩로그 보러가기</span>
+            <span
+              className="group-active:translate-x-[10%] duration-100 text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
             <IconTriangle/>
           </span>
           </button>
@@ -358,8 +359,8 @@ export default function TimeLine() {
             className="flex gap-2 justify-end items-center group"
             onClick={() => thisMonthReadingList()}
           >
-            이번 달 독서 리스트 보기
-            <span className="text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
+            <span className="group-hover:underline underline-offset-4 decoration-2 decoration-timeLine_ThisMonth_Btn_Hover_UnderLine">이번 달 독서 리스트 보기</span>
+            <span className="group-active:translate-x-[10%] text-yearSlide_Icon group-hover:text-yearSlide_Icon_Hover">
             <IconTriangle/>
           </span>
           </button>
@@ -422,43 +423,44 @@ export default function TimeLine() {
                   bottom: item.bottom,
                   transform: item.transform
                 }}
-                className={`
-                hover:before:-inset-1.5 hover:before:opacity-100 hover:border-timeLineMonthHoverCircle
-                  ${item.month === nowMonth && year === nowYear ? 'before:-inset-0.5 before:opacity-100' : 'before:inset-1 before:opacity-0'}
-                  before:absolute before:border-timeLineMonthHoverCircle before:border-[6px] before:rounded-[inherit] before:transition-all before:duration-200 before:ease-in-out
-                  group absolute w-8 h-8 rounded-full bg-timeLineMonthCircle transition-all duration-200 ease-in-out
+                className={`hover:w-10 hover:h-10 hover:border-[6px]
+                  group absolute rounded-full bg-timeLineMonthCircle border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
+                  ${item.month === nowMonth && year === nowYear ? 'w-10 h-10 border-[6px]' : 'w-8 h-8'}
                   `}
               >
-                <span className="">{item.month}</span>
+                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">{item.month}</span>
                 <div
-                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out left-1/2 transform -translate-x-1/2
+                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out left-1/2 -translate-x-1/2
                     ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[0%] py-2 pr-8 pl-2 group-hover:top-[50%] group-hover:pr-12' :
                     item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[100%] py-2 pr-2 pl-8 group-hover:top-[50%] group-hover:pl-12' :
-                      item.month === 11 || item.month === 12 ? 'bottom-[100%] p-1 group-hover:p-2' : 'p-2 group-hover:pt-4'}
+                      item.month === 11 || item.month === 12 ? 'bottom-[100%] p-1 group-hover:p-2' : 'p-5 group-hover:pt-8'}
                   `}
                 >
                   {item.notStarted > 0 && (
                     <span
-                      className="group-hover:w-5 flex justify-center items-center aspect-square bg-timeLineNoReadBg rounded-full"
+                      className={`group-hover:w-5 group-hover:text-timeLineNoReadText
+                      ${item.month === nowMonth && year === nowYear ? "w-5" : "text-transparent"}
+                      flex w-4 text-xs justify-center items-center aspect-square bg-timeLineNoReadBg rounded-full`}
                     >
-                      <p
-                        className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.notStarted}</p>
+                      {item.notStarted}
                     </span>
                   )}
                   {item.inProgress > 0 && (
                     <span
-                      className="group-hover:w-5 flex justify-center items-center aspect-square bg-timeLineReadingBg rounded-full"
+                      className={`group-hover:w-5 group-hover:text-timeLineReadingText
+                      ${item.month === nowMonth && year === nowYear ? "w-5" : "text-transparent"}
+                      flex w-4 text-xs justify-center items-center aspect-square bg-timeLineReadingBg rounded-full`}
                     >
-                      <p
-                        className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.inProgress}</p>
+                      {item.inProgress}
                     </span>
                   )}
                   {item.completed > 0 && (
                     <span
-                      className="group-hover:w-5 flex justify-center items-center aspect-square bg-timeLineCompleteBg rounded-full"
+                      className={`group-hover:w-5 group-hover:text-timeLineCompleteText 
+                      ${item.month === nowMonth && year === nowYear ? "w-5" : "text-transparent"}
+                      flex w-4 text-xs justify-center items-center aspect-square bg-timeLineCompleteBg rounded-full`}
                     >
-                      <p
-                        className={`${item.month === nowMonth && year === nowYear ? "opacity-100 w-5" : "w-4"} group-hover:opacity-100 opacity-0 text-xs`}>{item.completed}</p>
+                      {item.completed}
                     </span>
                   )}
                 </div>
