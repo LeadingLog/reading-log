@@ -34,13 +34,13 @@ export default {
         dark_Sky_hover : "#7A9BB7", // 진한 하늘 호버시
         
         /* 탭 관련 색 */
-        leftPage_Tab_Text          : "#A1A1A1", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시
-        leftPage_Tab_Hover_Text    : "#000000", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시
-        leftPage_ActiveTab_Border  : "#C9A89F", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시
-        leftPage_InActiveTab_Border: "#EEE6E3", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 비활성화 시
+        leftPage_Tab_Text          : "#A1A1A1", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시 텍스트 색
+        leftPage_Tab_Hover_Text    : "#000000", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 호버 시
+        leftPage_ActiveTab_Border  : "#C9A89F", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시 보더색
+        leftPage_InActiveTab_Border: "#EEE6E3", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 비활성화 보더색
         myBookList_ActiveTab_Bg    : "#E5CEC8", // 탭 - 내 독서 목록 탭 중 활성화 배경
         myBookList_InActiveTab_Bg  : "#EEE6E3", // 탭 - 내 독서 목록 탭 중 비활성화 배경
-        myBookList_ActiveTab_Text  : "#000000", // 탭 - 내 독서 목록 탭 중 활성화 배경
+        myBookList_ActiveTab_Text  : "#000000", // 탭 - 내 독서 목록 탭 중 활성화 배경`
         myBookList_InActiveTab_Text: "#FDFAF3", // 탭 - 내 독서 목록 탭 중 활성화 배경
         /* 타임라인 -> 총 독서 시간 관련 */
         allReadingTime_Bg  : "#E5CEC8", // 총 독서 시간 표시 배경
@@ -112,7 +112,7 @@ export default {
         page_Bg: "#FDFAF3", // page 배경
         /* 이미지로 표시하는 책 리스트 내부 아이콘 관련 */
         imgBook_Item_Bg         : "#E5CEC850", // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 썸네일 없을 때 배경
-        imgBook_Item_Hover_Bg   : "#C9A89F", // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 썸네일 없을 때 배경
+        imgBook_Item_Hover_Bg   : "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 리스트 호버시 배경색
         imgBook_Item_Reading_Bg : "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (독서중) 상태 표시 배경
         imgBook_Item_NoRead_Bg  : "#D9D9D9",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (읽기전) 상태 표시 배경
         imgBook_Item_Complete_Bg: "#96B2C8",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (완 독) 상태 표시 배경
