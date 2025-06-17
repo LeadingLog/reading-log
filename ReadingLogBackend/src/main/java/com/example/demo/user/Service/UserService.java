@@ -233,9 +233,9 @@ public class UserService {
         if (uuid.size() == 1) { // 회원일 경우
             extendSession(userId, request);
 
-//            session = request.getSession();
-//            session.setMaxInactiveInterval(604800); // 7일
-//            session.setAttribute("loginUserId", userId);
+            session = request.getSession();
+            session.setMaxInactiveInterval(604800); // 7일
+            session.setAttribute("loginUserId", userId);
 //            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
         } else {
             return 0;
@@ -359,6 +359,7 @@ public class UserService {
     }
 
 
+    @Transactional
     // 내부 회원 탈퇴
     public Map<String,Object> deleteInternalUser(Integer userId, HttpServletRequest request) {
 
