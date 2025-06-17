@@ -218,14 +218,14 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
                   closeModal( modalId );
                 }
               }} // 클릭 시 모달 닫기
-              className="flex-1 min-w-[120px] px-4 py-1 border-4 border-modal_Left_Btn_Border rounded-lg"
+              className="hover:brightness-[95%] duration-100 active:scale-95 flex-1 min-w-[120px] px-4 py-1 border-4 border-modal_Left_Btn_Border rounded-lg"
             >
               {cancelText || "다음에 읽기"}
             </button>
             {!onlyClose && (
               <button
                 onClick={() => readingStart()}
-                className="flex-1 gap-1 flex justify-center items-center min-w-[120px] px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
+                className="hover:brightness-[97%] duration-100 active:scale-95 flex-1 gap-1 flex justify-center items-center min-w-[120px] px-4 py-1 bg-modal_Right_Btn_Bg rounded-lg"
               >
 
                 {isLoading ? (

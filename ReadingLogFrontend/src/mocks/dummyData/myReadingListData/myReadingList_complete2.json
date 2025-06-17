@@ -10,8 +10,8 @@
       "tabType": 3,
       "bookStatus": "COMPLETED",
       "isFavorite": true,
-      "readStartDt" : "2025-05-01",
-      "readEndDt" : "2025-06-30"
+      "readStartDt": "2025-05-01",
+      "readEndDt": "2025-06-30"
     },
     {
       "bookTitle": "생태시민을 위한 동물지리와 환경 이야기",
@@ -22,8 +22,8 @@
       "tabType": 3,
       "bookStatus": "COMPLETED",
       "isFavorite": true,
-      "readStartDt" : "2025-05-01",
-      "readEndDt" : "2025-06-30"
+      "readStartDt": "2025-05-01",
+      "readEndDt": "2025-06-30"
     },
     {
       "bookTitle": "오후에는 출근합니다",
@@ -34,8 +34,8 @@
       "tabType": 3,
       "bookStatus": "COMPLETED",
       "isFavorite": true,
-      "readStartDt" : "2025-05-01",
-      "readEndDt" : "2025-06-30"
+      "readStartDt": "2025-05-01",
+      "readEndDt": "2025-06-30"
     },
     {
       "bookTitle": "파리 골목마다 백년 가게",
@@ -46,8 +46,8 @@
       "tabType": 3,
       "bookStatus": "COMPLETED",
       "isFavorite": true,
-      "readStartDt" : "2025-05-01",
-      "readEndDt" : "2025-06-30"
+      "readStartDt": "2025-05-01",
+      "readEndDt": "2025-06-30"
     },
     {
       "bookTitle": "당신 옆을 스쳐간 그 소녀의 이름은",
@@ -58,8 +58,8 @@
       "tabType": 3,
       "bookStatus": "COMPLETED",
       "isFavorite": true,
-      "readStartDt" : "2025-05-01",
-      "readEndDt" : "2025-06-30"
+      "readStartDt": "2025-05-01",
+      "readEndDt": "2025-06-30"
     },
     {
       "bookTitle": "비가 오면 열리는 상점",
@@ -70,8 +70,8 @@
       "tabType": 3,
       "bookStatus": "COMPLETED",
       "isFavorite": true,
-      "readStartDt" : "2025-05-01",
-      "readEndDt" : "2025-06-30"
+      "readStartDt": "2025-05-01",
+      "readEndDt": "2025-06-30"
     },
     {
       "bookTitle": "현명한 사람은 삶의 무게를 분산한다 - 휘청이는 삶을 다잡아 주는 공자와 장자의 지혜",
@@ -82,8 +82,8 @@
       "tabType": 3,
       "bookStatus": "COMPLETED",
       "isFavorite": true,
-      "readStartDt" : "2025-05-01",
-      "readEndDt" : "2025-06-30"
+      "readStartDt": "2025-05-01",
+      "readEndDt": "2025-06-30"
     },
     {
       "bookTitle": "관계력 - 오롯이 혼자 설 수 있을 때 비로소 가질 수 있는 것",
@@ -94,8 +94,8 @@
       "tabType": 3,
       "bookStatus": "COMPLETED",
       "isFavorite": true,
-      "readStartDt" : "2025-05-01",
-      "readEndDt" : "2025-06-30"
+      "readStartDt": "2025-05-01",
+      "readEndDt": "2025-06-30"
     },
     {
       "bookTitle": "아직도 정신과 앞에서 머뭇거리는 당신에게 - 마음의 병, 정신질환에 대한 이해와 공감의 지침서",
@@ -106,8 +106,8 @@
       "tabType": 3,
       "bookStatus": "COMPLETED",
       "isFavorite": true,
-      "readStartDt" : "2025-05-01",
-      "readEndDt" : "2025-06-30"
+      "readStartDt": "2025-05-01",
+      "readEndDt": "2025-06-30"
     }
   ],
   "page": {
