@@ -86,7 +86,7 @@ export default function MyFavoriteList() {
         <li
           key={item.bookId}
           onClick={() => openModalBookPlan( item )}
-          className="relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
+          className="hover:bg-imgBook_Item_Hover_Bg p-1.5 relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
         >
           <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
         </li>

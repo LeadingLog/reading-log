@@ -147,7 +147,7 @@ export default function BoxThisMonthReadingList() {
       ) : thisMonthReadingList.map( (item) => (
         <li
           key={item.bookId}
-          className={`cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background] duration-100 p-3 rounded-xl bg-readingList_Bg group
+          className={`active:scale-[99%] cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background, scale] duration-100 p-3 rounded-xl bg-readingList_Bg group
           ${readingBookId === item.bookId ? "border-4 border-readingList_Bg bg-readingList_Hover" : ""}`}
           onClick={() => openModalTrackingPlan( item )}
         >

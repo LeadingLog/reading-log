@@ -15,6 +15,8 @@ on:
       - 'F-UserLogin' 
       - 'F-Stopwatch'
       - 'F-ModalBookPlan_Dev'
+      - 'F-AccountSettings'
+      - 'F-UI_UX'
       - 'frontdev'
       # - 'main'
 
@@ -49,7 +51,6 @@ jobs:
       # 3.5. vercel.json 복사 (dist 안으로)
       - name: Copy vercel.json to dist
         run: cp ReadingLogFrontend/vercel.json ReadingLogFrontend/dist/
-
 
       # 4. 빌드 결과물을 다른 저장소로 푸시
       - name: Push to Vercel Repo

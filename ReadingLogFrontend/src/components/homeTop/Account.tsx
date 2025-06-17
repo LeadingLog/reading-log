@@ -9,12 +9,14 @@ export default function Account() {
   const navigate = useNavigate();
   const { openModal, closeAllModals } = useModalStore(); // Zustand의 openModal 가져오기
   const { nickname, resetUser } = useUserStore();
+  const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
 
   // 로그아웃 처리
   const handleLogout = async () => {
     const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
 
     try {
+      setModalIsLoading( true )
       await axios.post( `${serverUrl}/user/logout` );
 
       openModal( "ModalNotice", { // 로그아웃 성공 시 모달 표시
@@ -28,9 +30,11 @@ export default function Account() {
           closeAllModals();
         },
       } );
-    } catch (err) {
-      console.error( "로그아웃 실패:", err );
+    } catch (error) {
+      console.error( "로그아웃 실패:", error );
       handleLogoutFail( "서버와의 연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요." );
+    } finally {
+      setModalIsLoading( false )
     }
   };
 
@@ -51,7 +55,7 @@ export default function Account() {
         className="flex h-[50px] gap-3.5 items-center border-8 bg-header_Right_Bg border-header_Right_Border rounded-full">
         <span className="pl-2">{nickname || "사용자"}님 환영합니다</span>
         <article
-          className="flex h-full py-1 overflow-hidden bg-myPage_LogOut_Bg divide-rou divide-x-2 divide-header_Right_Icon_Divide_Color">
+          className="flex h-full overflow-hidden bg-myPage_LogOut_Bg divide-rou divide-x-2 divide-header_Right_Icon_Divide_Color">
           {/* MyPage 버튼 */}
           <button
             className="flex justify-center items-center text-myPage_Icon_Color px-3"
@@ -67,6 +71,7 @@ export default function Account() {
                 title: "로그아웃 하시겠어요?",
                 cancelText: "닫기",
                 confirmText: "로그아웃",
+                loadingMessage: "로그아웃중",
                 onConfirm: handleLogout, // 로그아웃 로직 전달
               } )
             }

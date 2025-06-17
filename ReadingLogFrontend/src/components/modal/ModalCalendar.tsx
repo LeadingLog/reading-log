@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useModalStore } from "../../store/modalStore.ts";
 import { ModalCalendarProps } from "../../types/modal.ts";
 import { motion, AnimatePresence } from "framer-motion";
+import IconTriangle from "../../assets/Icon-triangle.svg?react";
 
 const ModalCalendar: React.FC<ModalCalendarProps> = ({
                                                        modalId,
@@ -51,31 +52,31 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
             {startOrEnd}
           </div>
           {/* 년도 및 월 선택 */}
-          <div className="flex flex-col gap-2 p-3 bg-modal_Pick_Calendar_Content_Bg rounded-lg">
+          <div className="flex flex-col gap-4 p-3 bg-modal_Pick_Calendar_Content_Bg rounded-lg">
             <div className="flex justify-center items-center gap-5 ">
               <button
-                className="flex-1 text-modal_Pick_Calendar_Year_Handler_Text"
+                className="active:translate-x-[-3%] duration-100 hover:text-modal_Pick_Calendar_Year_Handler_Text_hover text-center flex flex-1 justify-center items-center text-modal_Pick_Calendar_Year_Handler_Text rotate-180"
                 onClick={() => {
                   if (modalYear !== undefined) {
                     setModalYear( (prev) => prev - 1 )
                   }
                 }}
               >
-                &lt;
+                <IconTriangle/>
               </button>
               <span
-                className="flex-1 text-modal_Pick_Calendar_Year_Text text-xl text-center cursor-pointer"
+                className="hover:brightness-95 flex-1 text-modal_Pick_Calendar_Year_Text text-3xl text-center cursor-pointer font-bold"
                 onClick={() => setModalYear(new Date().getFullYear())}
               >
                 {modalYear}
               </span>
               <button
-                className="flex-1 text-modal_Pick_Calendar_Year_Handler_Text"
+                className="active:translate-x-[3%] duration-100 hover:text-modal_Pick_Calendar_Year_Handler_Text_hover text-center flex flex-1 justify-center items-center text-modal_Pick_Calendar_Year_Handler_Text"
                 onClick={() => {
                   setModalYear( (prev) => prev + 1 )
                 }}
               >
-                &gt;
+                <IconTriangle/>
               </button>
             </div>
             <ul
@@ -84,8 +85,8 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
                 <li
                   key={i}
                   className="flex cursor-pointer justify-center items-center bg-modal_Pick_Calendar_Month_Bg p-2 rounded-lg
-                  hover:brightness-95
-                  active:brightness-90 active:scale-90 transition-[transform, background] duration-100 ease-in-out"
+                  hover:brightness-[97%]
+                  active:brightness-[93%] active:scale-90 transition-[transform, background] duration-100 ease-in-out"
                   onClick={() => handleMonthClick( monthItem )}
                 >
                   {monthItem}월
@@ -94,7 +95,7 @@ const ModalCalendar: React.FC<ModalCalendarProps> = ({
             </ul>
           </div>
           <div
-            className="text-center font-semibold text-modal_Pick_Calendar_Cancel_Text cursor-pointer bg-modal_Pick_Calendar_Content_Bg p-2 rounded-lg"
+            className="hover:brightness-[98%] active:scale-95 duration-100 text-center font-semibold text-modal_Pick_Calendar_Cancel_Text cursor-pointer bg-modal_Pick_Calendar_Content_Bg p-2 rounded-lg"
             onClick={handleClose}
           >닫기
           </div>
