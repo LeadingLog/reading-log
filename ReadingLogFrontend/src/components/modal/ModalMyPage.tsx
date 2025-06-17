@@ -196,7 +196,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
     } );
   };
 
-  // 테스트
+  // get session 테스트
   const getSession = async () => {
     try {
       const response = await axios.get( `${serverUrl}/user/getUserSession`, {
@@ -204,9 +204,6 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
       } );
 
       console.log( response.data );
-
-
-
     } catch (error: unknown) {
       if (axios.isAxiosError( error ) && error.response?.status === 401) {
         resetUser();
