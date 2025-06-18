@@ -47,7 +47,6 @@ export default function ItemStopWatch() {
         newMinute = 0;
         newHour++;
       }
-      // console.log(`${newHour}, ${newMinute}, ${newSecond}`);
       return { hour: newHour, minute: newMinute, second: newSecond };
     } )
   }
@@ -148,20 +147,17 @@ export default function ItemStopWatch() {
     }
     const now = new Date();
     setStartTimestamp( now );
-    console.log( "스탑워치 시작 시간:", now );
   };
 
   WarningScreen()
   // 모달이 열리면서 독서 시작
   useEffect( () => {
     startTime();
-    console.log( '독서 시작' );
   }, [] );
 
   // 시간 경과 시 세션 연장 요청
   useEffect( () => {
     if (time.hour > 0) {
-      console.log( `스톱워치 :${time.hour}시간으로 바뀜 → 세션 연장 요청` );
 
       const extendSession = async () => {
         try {
@@ -169,7 +165,7 @@ export default function ItemStopWatch() {
           if (response.data.success) {
             console.log( `${response.data.success}, 세션 연장 성공` );
           } else {
-            console.log( `${response.data.success}, 세션 연장 실패` );
+            console.error( `${response.data.success}, 세션 연장 실패` );
           }
         } catch (err) {
           console.error( '세션 연장 실패:', err );
