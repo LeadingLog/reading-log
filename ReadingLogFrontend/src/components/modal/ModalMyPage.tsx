@@ -217,7 +217,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
       <section className="flex gap-5 bg-modal_Default_Bg p-5 rounded-lg">
         <article className="flex-1 bg-modal_Logo_Bg rounded-lg">
           로고영역<br/>
-          <button onClick={() => getSession()}>세션 테스트</button>
+          <a onClick={() => getSession()}>세션 테스트</a>
         </article>
         <article className="flex flex-col gap-2 flex-1 p-4 bg-modal_Content_Bg rounded-lg">
           <div className="flex flex-col">
