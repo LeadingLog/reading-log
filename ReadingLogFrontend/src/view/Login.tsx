@@ -24,8 +24,8 @@ export default function Login() {
   return (
     <section
       className="absolute flex flex-col gap-6 p-8 border-l-[15px] border-Login_Left_Border justify-start items-center left-1/2 w-[450px] transform -translate-x-1/2 top-[20%] bottom-[20%] bg-Login_bg rounded-r-2xl">
-      <div className="flex flex-1 w-full max-h-36 bg-Login_Logo_bg justify-center px-2 items-center rounded-xl">
-        <Logo className="w-[80%]"/>
+      <div className="flex-1 w-full max-h-36 px-10 bg-Login_Logo_bg justify-center items-center rounded-xl">
+        <Logo className="w-full h-full" />
       </div>
       <article className="flex flex-1 justify-center flex-col gap-6">
         <button
