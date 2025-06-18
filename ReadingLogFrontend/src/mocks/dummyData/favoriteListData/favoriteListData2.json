@@ -10,8 +10,8 @@
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
       "tabType": 4,
       "bookStatus": "INTERESTED",
-      "readStartDt": "",
-      "readEndDt": ""
+      "readStartDt": null,
+      "readEndDt": null
     },
     {
       "bookId": 23,
@@ -22,8 +22,8 @@
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
       "tabType": 4,
       "bookStatus": "INTERESTED",
-      "readStartDt": "",
-      "readEndDt": ""
+      "readStartDt": null,
+      "readEndDt": null
     },
     {
       "bookId": 24,
@@ -34,8 +34,8 @@
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
       "tabType": 4,
       "bookStatus": "INTERESTED",
-      "readStartDt": "",
-      "readEndDt": ""
+      "readStartDt": null,
+      "readEndDt": null
     },
     {
       "bookId": 25,
@@ -46,8 +46,8 @@
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
       "tabType": 4,
       "bookStatus": "INTERESTED",
-      "readStartDt": "",
-      "readEndDt": ""
+      "readStartDt": null,
+      "readEndDt": null
     },
     {
       "bookId": 26,
@@ -58,8 +58,8 @@
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
       "tabType": 4,
       "bookStatus": "INTERESTED",
-      "readStartDt": "",
-      "readEndDt": ""
+      "readStartDt": null,
+      "readEndDt": null
     },
     {
       "bookId": 27,
@@ -70,8 +70,8 @@
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
       "tabType": 4,
       "bookStatus": "NOT_STARTED",
-      "readStartDt": "",
-      "readEndDt": ""
+      "readStartDt": null,
+      "readEndDt": null
     },
     {
       "bookId": 28,
@@ -82,8 +82,8 @@
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
       "tabType": 4,
       "bookStatus": "NOT_STARTED",
-      "readStartDt": "",
-      "readEndDt": ""
+      "readStartDt": null,
+      "readEndDt": null
     },
     {
       "bookId": 29,
@@ -94,8 +94,8 @@
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
       "tabType": 4,
       "bookStatus": "NOT_STARTED",
-      "readStartDt": "",
-      "readEndDt": ""
+      "readStartDt": null,
+      "readEndDt": null
     },
     {
       "bookId": 30,
@@ -106,8 +106,8 @@
       "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=289088021&amp;partner=openAPI&amp;start=api",
       "tabType": 4,
       "bookStatus": "NOT_STARTED",
-      "readStartDt": "",
-      "readEndDt": ""
+      "readStartDt": null,
+      "readEndDt": null
     }
   ],
   "page": {

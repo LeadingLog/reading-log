@@ -49,6 +49,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth() + 1;
+  console.log(currentMonth)
 
   /* 종료 달 부분에 그 달의 마지막 날을 표시 하기 위한 것 */
   const getLastDateOfMonth = (currentYear: number, currentMonth: number): string => {
@@ -423,7 +424,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           />
           {bookId && bookStatus !== "INTERESTED" && (
             <button
-              className="absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-unFavorite_Icon_Bg rounded-full p-1.5"
+              className="hover:brightness-[95%] duration-100 active:scale-90 absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-unFavorite_Icon_Bg rounded-full p-1.5"
               onClick={(e) => {
                 e.preventDefault();  // 이벤트 버블링 방지
                 e.stopPropagation(); // <a>의 기본 링크 동작 방지
@@ -444,7 +445,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                 className="text-lg font-semibold break-keep text-modal_BookPlan_Book_Title_Text ml-2">{bookTitle}</span>
               {bookId && (
                 <button onClick={() => deleteBook()}
-                        className="min-w-fit max-h-9 text-modal_BookPlan_Book_DeleteBook_Text border-4 border-modal_BookPlan_Book_DeleteBook_Border px-2 rounded-lg">삭제</button>
+                        className="hover:brightness-[95%] duration-100 active:scale-95 min-w-fit max-h-9 text-modal_BookPlan_Book_DeleteBook_Text border-4 border-modal_BookPlan_Book_DeleteBook_Border px-2 rounded-lg">삭제</button>
               )}
             </span>
             <p className="text-modal_BookPlan_Book_Sub_Title_Text">{author}</p>

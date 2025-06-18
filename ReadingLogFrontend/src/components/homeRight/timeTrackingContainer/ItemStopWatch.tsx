@@ -112,8 +112,8 @@ export default function ItemStopWatch() {
     try {
       const data = await saveReadingRecordApi( readingRecord );
       if (data.success) {
+        triggerChange( 'TimeSave' )
         endReadingBook()
-        triggerChange( 'MyReadingList' )
         openModal( "ModalNotice", {
           title: "독서시간 저장 완료",
           subTitle: "수고하셨어요",
@@ -220,7 +220,7 @@ export default function ItemStopWatch() {
         </div>
         <div className="flex gap-5 flex-1 justify-center items-center">
           <button
-            className="hover:text-icon_TimeIcon_Hover hover:border-icon_TimeIcon_Hover p-3.5 flex justify-center items-center rounded-full w-16 h-16 text-icon_Play border-4 border-icon_pause_Border"
+            className="active:scale-95 duration-100 hover:text-icon_TimeIcon_Hover hover:border-icon_TimeIcon_Hover p-3.5 flex justify-center items-center rounded-full w-16 h-16 text-icon_Play border-4 border-icon_pause_Border"
             onClick={() => {
               playOrPause()
             }}
@@ -228,7 +228,7 @@ export default function ItemStopWatch() {
             {play ? <IconPause width="100%" height="100%"/> : <IconPlay width="100%" height="100%"/>}
           </button>
           <button
-            className="hover:text-icon_TimeIcon_Hover hover:border-icon_TimeIcon_Hover p-3.5 flex justify-center items-center rounded-full w-16 h-16 text-icon_stop border-4 border-icon_pause"
+            className="active:scale-95 duration-100 hover:text-icon_TimeIcon_Hover hover:border-icon_TimeIcon_Hover p-3.5 flex justify-center items-center rounded-full w-16 h-16 text-icon_stop border-4 border-icon_pause"
             onClick={() => {
               stopTimer()
             }}

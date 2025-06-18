@@ -18,33 +18,12 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const readingListHandlers = [
 
-  // 사용자의 관심 도서 목록 (즐겨찾기) 조회
-  http.get( `${serverUrl}/readinglist/fvrts`, async ({ request }) => {
-    const url = new URL( request.url );
-    const userId = parseInt( url.searchParams.get( 'userId' ) || '1', 10 );
-    const page = parseInt( url.searchParams.get( 'page' ) || '0', 10 );
-    const size = parseInt( url.searchParams.get( 'size' ) || '21', 10 );
-
-    console.log( `✅ [Mock API] 사용자의 관심 도서 목록 (즐겨찾기) 조회 userId: ${userId}, page: ${page}, size: ${size}` );
-
-    if (page === 0) {
-      return HttpResponse.json( favoriteListData ); // 0페이지 데이터
-    } else if (page === 1) {
-      return HttpResponse.json( favoriteListData2 ); // 그 외 페이지 데이터
-    } else {
-      return HttpResponse.json( {
-        favoriteList: [],
-      } );
-    }
-  } ),
-
   // 타임라인에 보여 질 년&월 도서 수
   http.get( `${serverUrl}/readinglist/timeline/yymm`, async ({ request }) => {
     const url = new URL( request.url );
-    const userId = parseInt( url.searchParams.get( 'userId' ) || '1', 10 );
     const year = parseInt( url.searchParams.get( 'year' ) || '2025', 10 );
 
-    console.log( `✅ [Mock API] 타임라인에 보여 질 년&월 도서 수 : userId: ${userId}, year: ${year}` );
+    console.log( `✅ [Mock API] 타임라인에 보여 질 년 & 월 도서 수 요청` );
 
     if (year === 2025) {
       return HttpResponse.json( readingList_2025 );
@@ -57,15 +36,12 @@ export const readingListHandlers = [
     }
   } ),
 
-  // 이번 달 독서 리스트
+  // 이번 달 독서 리스트 OR 월별 통계(하단 리스트)
   http.get( `${serverUrl}/readinglist/yymm`, async ({ request }) => {
     const url = new URL( request.url );
-    const userId = parseInt( url.searchParams.get( 'userId' ) || '1', 10 );
-    const yearMonth = parseInt( url.searchParams.get( 'yearMonth' ) || '2025.05', 10 );
     const page = parseInt( url.searchParams.get( 'page' ) || '0', 10 );
-    const size = parseInt( url.searchParams.get( 'size' ) || '20', 10 );
 
-    console.log( `✅ [Mock API] 이번 달 독서 리스트 : userId: ${userId}, yearMonth: ${yearMonth} page: ${page}, size: ${size}` );
+    console.log( `✅ [Mock API] 이번 달 독서 리스트 OR 월별 통계(하단 리스트) 요청` );
 
     if (page === 0) {
       return HttpResponse.json( thisMonthReadingList ); // 0페이지 데이터
@@ -78,14 +54,12 @@ export const readingListHandlers = [
     }
   } ),
 
-  // 내 도서 목록 전체 조회
+  // 내 도서 목록 전체 조회 (관심도서 목록 포함)
   http.get( `${serverUrl}/readinglist/readingList`, async ({ request }) => {
     const url = new URL( request.url );
-    const userId = parseInt( url.searchParams.get( 'userId' ) || '1', 10 );
     const tabType = parseInt( url.searchParams.get( 'tabType' ) || '0', 10 );
     const page = parseInt( url.searchParams.get( 'page' ) || '0', 10 );
-    const size = parseInt( url.searchParams.get( 'size' ) || '21', 10 );
-    console.log( `✅ [Mock API] 내 도서 목록 리스트 userId: ${userId}, tabType: ${tabType} page: ${page}, size: ${size}` );
+    console.log( `✅ [Mock API] 내 독서 목록 리스트 요청` );
     if (page === 0 && tabType === 0) {
       return HttpResponse.json( myReadingList_all )
     } else if (page === 1 && tabType === 0) {
@@ -103,9 +77,9 @@ export const readingListHandlers = [
     } else if (page === 1 && tabType === 3) {
       return HttpResponse.json( myReadingList_complete2 )
     } else if (page === 0 && tabType === 4) {
-      return HttpResponse.json( myReadingList_complete )
+      return HttpResponse.json( favoriteListData )
     } else if (page === 1 && tabType === 4) {
-      return HttpResponse.json( myReadingList_complete2 )
+      return HttpResponse.json( favoriteListData2 )
     } else {
       return HttpResponse.json( {
         readingList: [],
@@ -116,10 +90,8 @@ export const readingListHandlers = [
   // 내 독서 목록 내부 검색 (제목 + 저자)
   http.get( `${serverUrl}/readinglist/search`, async ({ request }) => {
     const url = new URL( request.url );
-    const userId = parseInt( url.searchParams.get( 'userId' ) || '1', 10 );
-    const tabType = parseInt( url.searchParams.get( 'tabType' ) || '0', 10 );
     const query = url.searchParams.get( 'query' ) || '0';
-    console.log( `✅ [Mock API] 내 도서 목록 리스트 userId: ${userId}, tabType: ${tabType} query: ${query}` );
+    console.log( `✅ [Mock API] 내 독서 목록 내부 검색 요청` );
 
     if (query !== '') {
       return HttpResponse.json( myReadingList_all )
@@ -127,17 +99,16 @@ export const readingListHandlers = [
   } ),
 
   // 독서 계획 추가
-  http.post(`${serverUrl}/readinglist/add`, async ({request}) => {
-    const body = await request.json();
-    console.log(body);
+  http.post( `${serverUrl}/readinglist/add`, async () => {
+    console.log( `✅ [Mock API] 독서 계획 추가 요청` );
 
-    return HttpResponse.json({
+    return HttpResponse.json( {
       success: true,
-    });
-  }),
+    } );
+  } ),
 
-  // 관심 도서 추가
-  http.post( `${serverUrl}/readinglist/update`, async ({ request }) => {
+  // 도서 상태 변경 (내 도서 -> 관심도서로 변경, 관심도서 -> 내 독서 목록으로 변경, 이번 달 독서리스트 독서 상태 토글 변경, 독서 타임 트래킹 시작 요청 도서가 읽기전인 경우)
+  http.patch( `${serverUrl}/readinglist/update`, async ({ request }) => {
     const body = await request.json();
     console.log( body );
 
@@ -147,9 +118,8 @@ export const readingListHandlers = [
   } ),
 
   // 관심 도서 삭제
-  http.post( `${serverUrl}/readinglist/delete`, async ({ request }) => {
-    const body = await request.json();
-    console.log( body );
+  http.post( `${serverUrl}/readinglist/delete`, async () => {
+    console.log( `✅ [Mock API] 관심 도서 삭제 요청` );
 
     return HttpResponse.json( {
       success: true,

@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
 import { fetchTodayReadingTime } from "../../api/todayReadingTimeApi.ts";
 import { fetchTodayReadingTimeApiParams } from "../../types/todayReadingTime.ts";
-import { usePageStore } from "../../store/pageStore.ts";
+// import { usePageStore } from "../../store/pageStore.ts";
 import { useUserStore } from "../../store/userStore.ts";
+import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 
 export default function TodayReadingTime() {
 
-  const { params } = usePageStore()
   const { userId } = useUserStore()
   const today = new Date();
 
   const [todayReadingTimeHour, setTodayReadingTimeHour] = useState( 0 )
   const [todayReadingTimeMin, setTodayReadingTimeMin] = useState( 0 )
   const [todayReadingTimeSecond, setTodayReadingTimeSecond] = useState( 0 )
+
+  const { triggers } = useGlobalChangeStore.getState();
+
+
 
   const searchTodayReadingTime = async (userId: fetchTodayReadingTimeApiParams) => {
     try {
@@ -37,7 +41,7 @@ export default function TodayReadingTime() {
 
   useEffect( () => {
     searchTodayReadingTime( { userId } )
-  }, [params] );
+  }, [triggers.TimeSave] );
 
   return (
     <span className="relative flex items-end pr-2 text-sm">

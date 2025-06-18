@@ -8,6 +8,7 @@ import { createReadingRecord } from "../../../utils/createReadingRecord.ts";
 import { saveReadingRecordApi } from "../../../api/readingRecord.ts";
 import { useReadingBookStore } from "../../../store/useReadingInfoStore.ts";
 import { WarningScreen } from "../../common/WarningScreen.tsx";
+import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
 
 export default function ItemTimer() {
   const { openModal, closeModal, closeAllModals } = useModalStore();
@@ -24,6 +25,8 @@ export default function ItemTimer() {
   const circumference = 2 * Math.PI * radius;
 
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
+
+  const { triggerChange } = useGlobalChangeStore.getState();
 
   const { endReadingBook } = useReadingBookStore();
 
@@ -93,6 +96,7 @@ export default function ItemTimer() {
     try {
       const data = await saveReadingRecordApi( readingRecord );
       if (data.success) {
+        triggerChange( "TimeSave" )
         endReadingBook()
         openModal( "ModalNotice", {
           title: "독서시간 저장 완료",
@@ -189,7 +193,7 @@ export default function ItemTimer() {
         {/* 정지 버튼 */}
         <div className="flex flex-1 mb-4 gap-5 justify-center items-center ">
           <button
-            className=" hover:text-timeIconHover z-[1] hover:border-timeIconHover flex justify-center items-center rounded-full w-16 h-16 p-3.5 text-icon_stop border-4 border-stopIconBorder"
+            className="active:scale-95 duration-100 hover:text-icon_TimeIcon_Hover hover:border-icon_TimeIcon_Hover z-[1] flex justify-center items-center rounded-full w-16 h-16 p-3.5 text-icon_stop border-4 border-stopIconBorder"
             onClick={() => {
               stopTimer()
             }}

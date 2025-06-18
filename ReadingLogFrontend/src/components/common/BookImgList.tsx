@@ -21,7 +21,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   // 내 독서 목록 내부 검색 시 코드
   const [isSearching, setIsSearching] = useState( false );
 
-  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
+  const { triggers } = useGlobalChangeStore.getState();
 
   const searchBook = async (query: string) => {
     if (isFetching) return;
@@ -156,7 +156,8 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     if (isSearching) return;
     setPage( 0 )
     loadMyReadingList( { userId, MyReadingListTabType, page: 0, size: 12 } );
-  }, [myReadingListTrigger] );
+
+  }, [triggers.MyReadingList] );
 
   // Intersection Observer 설정 스크롤 시 마지막 부분을 확인용
 

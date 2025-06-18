@@ -22,7 +22,7 @@ export default function BookImgList() {
 
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
-  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
+  const { triggers } = useGlobalChangeStore.getState();
 
   const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
@@ -54,7 +54,7 @@ export default function BookImgList() {
     setHasMore( true );
     // 직접 호출
     searchThisMonthReadingList( { userId, year, month, page: 0, size: 9 } );
-  }, [month, year, myReadingListTrigger] );
+  }, [month, year, triggers.MyReadingList] );
 
   const openModalBookPlan = (item: monthReadingListItem) => {
     openModal( "ModalBookPlan", {

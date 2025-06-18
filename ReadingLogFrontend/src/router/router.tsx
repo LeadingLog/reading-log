@@ -28,13 +28,13 @@ export default function Router() {
       {/*/>*/}
       <Route
         path="/"
-        element={(userId === 0) ? <Navigate to="/login" replace/> : <Main/>}
+        element={(userId) ? <Navigate to="/login" replace/> : <Main/>}
       />
 
       {/*로그인 페이지는 로그인되어있으면 메인으로 리다이렉트*/}
       <Route
         path="/login"
-        element={(userId !== 0) ? <Navigate to="/" replace/> : <Login/>}
+        element={(!userId) ? <Navigate to="/" replace/> : <Login/>}
       />
     </Routes>
   );

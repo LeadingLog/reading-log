@@ -8,9 +8,7 @@ import { fetchStatsMonthApi } from "../../../api/statsMonthApi.ts";
 import { fetchStatsMonthApiParams, StatsMonthList } from "../../../types/statsMonth.ts";
 import { useDateStore } from "../../../store/useDateStore.ts";
 import { useUserStore } from "../../../store/userStore.ts";
-import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
 import { useTooltipStore } from "../../../store/useTooltipStore.ts";
-// import { useTooltipStore } from "../../../store/useTooltipStore.ts";
 
 export default function StatsMonth() {
 
@@ -19,18 +17,16 @@ export default function StatsMonth() {
   const [bookGraphList, setBookGraphList] = useState<StatsMonthList[]>( [] )
 
   /* 통계 마우스 호버시 도서 정보 표시 팝업 관련 */
-  const setHoverContent = useTooltipStore((state) => state.setHoverContent);
+  const setHoverContent = useTooltipStore( (state) => state.setHoverContent );
 
   const handleMouseOver = (e: React.MouseEvent, item: StatsMonthList) => {
 
     const { clientX, clientY } = e;
-    setHoverContent("StatsMonthBookTimeGraph", item, clientX, clientY);
+    setHoverContent( "StatsMonthBookTimeGraph", item, clientX, clientY );
   };
   const handleMouseOut = () => {
-    setHoverContent("", null, 0, 0);
+    setHoverContent( "", null, 0, 0 );
   };
-
-  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
 
   const searchStatsMonthList = async ({ userId, year, month }: fetchStatsMonthApiParams) => {
     try {
@@ -80,7 +76,7 @@ export default function StatsMonth() {
 
   useEffect( () => {
     searchStatsMonthList( { userId, year, month } )
-  }, [year, month, myReadingListTrigger] );
+  }, [year, month] );
 
   return (
     /* 월별 통계  */
@@ -102,10 +98,10 @@ export default function StatsMonth() {
         {bookGraphList.map( (item) => (
             <li
               key={item.bookId}
-              onMouseEnter={(e) => handleMouseOver(e, item)}
+              onMouseEnter={(e) => handleMouseOver( e, item )}
               onMouseLeave={handleMouseOut}
               className={`relative h-[40%] flex cursor-pointer flex-col self-end gap-1 px-1 pt-1 border-t-2 border-x-2 -mr-0.5 border-stats_Month_Graph_Book_Border bg-stats_Month_Graph_Book_Bg`}
-              style={{ height: `${Math.max(item.graphHeight * 100, 15)}%` }}
+              style={{ height: `${Math.max( item.graphHeight * 100, 15 )}%` }}
             >
               <span
                 className={`

@@ -16,7 +16,7 @@ on:
       - 'F-Stopwatch'
       - 'F-ModalBookPlan_Dev'
       - 'F-AccountSettings'
-      - 'F-UI_UX'
+#      - 'F-UI_UX'
       - 'frontdev'
       # - 'main'
 
