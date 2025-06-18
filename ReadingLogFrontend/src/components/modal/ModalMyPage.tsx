@@ -197,6 +197,22 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
     } );
   };
 
+  // get session 테스트
+  const getSession = async () => {
+    try {
+      const response = await axios.get( `${serverUrl}/user/getUserSession`, {
+        withCredentials: true
+      } );
+
+      console.log( response.data );
+    } catch (error: unknown) {
+      if (axios.isAxiosError( error ) && error.response?.status === 401) {
+        resetUser();
+        localStorage.clear();
+      }
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
       <section className="flex flex-col gap-5 bg-modal_Default_Bg p-5 rounded-lg">
@@ -206,7 +222,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
         <article className="flex flex-col gap-2 flex-1 p-4 bg-modal_Content_Bg rounded-lg">
           <div className="flex flex-col">
             <div className="flex justify-between items-center">
-              <h2>닉네임</h2>
+              <h2>닉네임<a onClick={() => getSession()}> 세션</a></h2>
               <span
                 className="hover:backdrop-brightness-95 rounded-lg px-1 py-0.5 flex items-center gap-1 text-myPage_Update_Complete_Text hover:cursor-pointer hover:text-myPage_Update_Complete_Text_Hover"
                 onClick={toggleEditMode}
