@@ -57,7 +57,8 @@ export default function OAuthCallbackHandler({
 
 
       const response = await axios.post( `${serverUrl}${apiEndpoint}`, loginData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        withCredentials: true
       } );
 
       const data = response.data;
