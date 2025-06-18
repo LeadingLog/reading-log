@@ -192,7 +192,13 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
               onClick={() => openModalBookPlan( item )}
             >
               <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl overflow-hidden">
-                <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+                {item.coverImgUrl ? (
+                    <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+                  ) :
+                  <div className="flex w-full justify-center relative px-2 h-full items-center bg-imgBook_Item_Bg">
+                    <span className="text-xl font-bold text-imgBook_Item_No_Img_Text">No Image</span>
+                  </div>
+                }
               </div>
               <div className="flex flex-col flex-1 self-start">
                 <p

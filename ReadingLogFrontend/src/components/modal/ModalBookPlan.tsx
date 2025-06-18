@@ -49,7 +49,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth() + 1;
-  console.log(currentMonth)
 
   /* 종료 달 부분에 그 달의 마지막 날을 표시 하기 위한 것 */
   const getLastDateOfMonth = (currentYear: number, currentMonth: number): string => {
@@ -404,7 +403,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       setImageHeight( 0 )
     };
   }, [] );
-
   /* 유동적인 이미지 높이 값을 설정하기 위해 오른쪽 독서계획 영역의 높이 값을 추적함 수 END ----------------*/
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
@@ -416,12 +414,18 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           rel="noopener noreferrer"
           className="relative min-w-fit bg-modal_BookImg_Bg"
         >
-          <img
-            src={cover}
-            alt={title}
-            className={`object-contain min-w-fit`}
-            style={{ height: `${imageHeight}px` }}
-          />
+          {cover ? (
+            <img
+              src={cover}
+              alt={title}
+              className="object-contain min-w-fit"
+              style={{ height: `${imageHeight}px` }}
+            />
+          ) : (
+            <div className="flex w-full justify-center relative px-2 h-full items-center bg-imgBook_Item_Bg">
+              <span className="text-2xl font-bold text-imgBook_Item_No_Img_Text">No Image</span>
+            </div>
+          )}
           {bookId && bookStatus !== "INTERESTED" && (
             <button
               className="hover:brightness-[95%] duration-100 active:scale-90 absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-unFavorite_Icon_Bg rounded-full p-1.5"

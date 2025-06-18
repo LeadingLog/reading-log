@@ -116,9 +116,17 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
         {/* 책 표지 */}
         <a href={`${bookLink}`} target="_blank"
            className="flex justify-center items-center max-h-96 relative aspect-square overflow-hidden rounded-lg">
-          <img src={cover} alt={bookTitle}
-               className="relative drop-shadow-[2px_4px_6px_#00000080] z-10 h-[90%] object-contain"/>
-          <img src={cover} alt={bookTitle} className="absolute inset-0 w-full h-full object-cover opacity-90 blur-sm"/>
+          {cover ? (
+            <>
+              <img src={cover} alt={bookTitle}
+                   className="relative drop-shadow-[2px_4px_6px_#00000080] z-10 h-[90%] object-contain"/>
+              <img src={cover} alt={bookTitle} className="absolute inset-0 w-full h-full object-cover opacity-90 blur-sm"/>
+            </>
+          ) : (
+            <div className="flex w-full justify-center relative px-2 h-full items-center bg-modal_Tracking_Time_No_Img_bg">
+              <span className="text-3xl font-bold text-imgBook_Item_No_Img_Text">No Image</span>
+            </div>
+          )}
         </a>
         <article className="flex flex-col gap-2 bg-modal_Content_Bg p-2.5 rounded-lg">
           <div className="flex flex-col gap-1 relative">

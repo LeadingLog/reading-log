@@ -6,6 +6,7 @@ import { fetchMyFavoriteList } from "../../api/myFavoriteListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 import { BookListType } from "../../types/commonBookListType.ts"
 import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
+import Logo from "../../assets/LOGO.svg?react";
 
 export default function MyFavoriteList() {
   const [page, setPage] = useState<number>( 0 );
@@ -16,7 +17,7 @@ export default function MyFavoriteList() {
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
 
-  const myReadingListTrigger = useGlobalChangeStore((state) => state.triggers.MyReadingList);
+  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
 
   const openModalBookPlan = ((item: BookListType) => {
     openModal( "ModalBookPlan", {
@@ -86,9 +87,16 @@ export default function MyFavoriteList() {
         <li
           key={item.bookId}
           onClick={() => openModalBookPlan( item )}
-          className="hover:bg-imgBook_Item_Hover_Bg p-1.5 relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
+          className="hover:border-imgBook_Item_Hover_Border border-[6px] border-imgBook_Item_Border relative aspect-square cursor-pointer"
         >
-          <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+          {item.coverImgUrl ? (
+              <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+            ) :
+            <div className="flex w-full justify-center relative px-2 h-full items-center bg-imgBook_Item_Bg">
+              <Logo className="absolute top-3 left-1/2 -translate-x-1/2 max-h-fit w-[50%]"/>
+              <span className="text-2xl font-bold text-imgBook_Item_No_Img_Text">No Image</span>
+            </div>
+          }
         </li>
       ) )}
 
