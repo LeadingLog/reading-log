@@ -98,7 +98,7 @@ export default function BookImgList() {
         <li
           key={item.bookId}
           onClick={() => openModalBookPlan( item )}
-          className="hover:border-imgBook_Item_Hover_Border border-[6px] border-imgBook_Item_Border relative aspect-square cursor-pointer"
+          className="active:scale-[97%] duration-100 hover:border-imgBook_Item_Hover_Border border-[6px] border-imgBook_Item_Border relative aspect-square cursor-pointer"
         >
           {item.coverImgUrl ? (
               <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
