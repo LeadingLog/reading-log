@@ -1,5 +1,3 @@
-import KaKaoLoginBtn from "../assets/login/kakao_login_btn.png";
-import NaverLoginBtn from "../assets/login/naver_login_btn.png";
 import Logo from "../assets/LOGO.svg?react";
 import KakaoLogo from "../assets/login/KaKao_Logo.svg?react";
 import NaverLogo from "../assets/login/Naver_Logo.svg?react";
