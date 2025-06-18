@@ -3,6 +3,7 @@ package com.example.demo.user.Service;
 //import com.example.demo.user.Member;
 //import com.example.demo.repository.MemberRepository;
 
+import com.example.demo.code.Provider;
 import com.example.demo.response.ResponseService;
 import com.example.demo.user.Entity.*;
 import com.example.demo.user.Repository.RefreshTokenRepository;
@@ -62,14 +63,12 @@ public class UserService {
 
     // 1. callback 이후 접근 신규 토큰 발급 요청
     @Transactional
-    public NaverTokenResponse getNewNaverAccessToken(String code, String state, String platform) {
+    public NaverTokenResponse getNewNaverAccessToken(String code, String state) {
         Map<String, Object> result = new HashMap<>();
 
-//        if (platform.equals("NAVER")) {
         String clientId = apiKey.getNaver_client_id();
         String clientSecret = apiKey.getNaver_client_secret();
 
-//        String header = "Bearer" + token;
         try {
             StringBuilder apiURL = new StringBuilder();
             apiURL.append("https://nid.naver.com/oauth2.0/token?");
@@ -265,11 +264,11 @@ public class UserService {
         RefreshToken refreshToken = refreshTokenService.findByUserId(userId);
 //        String token = String.valueOf(refreshTokens.get(0).getToken());
         String token = refreshToken.getToken();
-        String provider = refreshToken.getProvider();
+        Provider provider = refreshToken.getProvider();
 
         Map<String, Object> result = new HashMap<>();
 
-        if (provider.equals("Naver")) {
+        if (provider == Provider.NAVER) {
             // 네이버 토큰 재발급
             NaverTokenResponse naverTokenResponse = refreshTokenService.getNaverAccessTokenByRefreshToken(token);
             String accessToken = naverTokenResponse.getAccessToken();
@@ -300,7 +299,7 @@ public class UserService {
                 result.put("status", "error");
                 result.put("message", "네이버 연동 해제 실패");
             }
-        } else if (provider.equals("Kakao")) {
+        } else if (provider == Provider.KAKAO) {
             // 카카오 토큰 재발급, aminKey 를 이용하는 방식 선택하여 필요없음.
 //            KakaoTokenResponse kakaoTokenResponse = refreshTokenService.getKakaoAccessTokenByRefreshToken(token);
 //            String accessToken = kakaoTokenResponse.getAccessToken();
@@ -368,7 +367,7 @@ public class UserService {
             userRepository.deleteById(userId);
 
             // todo 갱신토큰 삭제
-            refreshTokenService.deleteToken(userId, "Naver");
+            refreshTokenService.deleteToken(userId, Provider.NAVER);
 
             // Todo 탈퇴 성공 시
             // 로그인 세션 삭제

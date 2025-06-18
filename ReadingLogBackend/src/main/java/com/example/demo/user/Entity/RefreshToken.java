@@ -1,5 +1,6 @@
 package com.example.demo.user.Entity;
 
+import com.example.demo.code.Provider;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,8 +27,9 @@ public class RefreshToken {
     @Column(name = "user_id", nullable = false)
     private Integer userId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "provider", nullable = false)
-    private String provider;
+    private Provider provider;
 
     @Column(name = "token", nullable = false)
     private String token;

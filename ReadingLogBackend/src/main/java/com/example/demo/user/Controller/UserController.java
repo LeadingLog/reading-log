@@ -3,6 +3,7 @@ package com.example.demo.user.Controller;
 //import com.example.demo.user.Member;
 //import com.example.demo.service.MemberService;
 
+import com.example.demo.code.Provider;
 import com.example.demo.response.ResponseService;
 import com.example.demo.user.Entity.*;
 import com.example.demo.user.Service.ApiKeyService;
@@ -128,7 +129,7 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> findUserById(@PathVariable("userId") Integer userId) {
         Map<String, Object> rtn = new HashMap<>();
         User user = userService.findUserById(userId);
-        String socialInfo = tokenService.findProviderByUserId(userId);
+        Provider socialInfo = tokenService.findProviderByUserId(userId);
         if (!user.getNickname().isEmpty()) {
             rtn.put("success", true);
             rtn.put("user", user);
@@ -181,7 +182,7 @@ public class UserController {
         Map<String, Object> rtn = new HashMap<>();
 
         // 1. 접근 토큰 신규 발급
-        NaverTokenResponse accessTokenResult = userService.getNewNaverAccessToken(code, state, "Naver");
+        NaverTokenResponse accessTokenResult = userService.getNewNaverAccessToken(code, state);
         System.out.println("accessToken="+accessTokenResult);
 
         // 접근 토큰 에러 시 리턴
@@ -213,7 +214,7 @@ public class UserController {
             // 회원 추가
             Integer userId = userService.joinUser(naverUserInfo, null);
             // 갱신 토큰 저장
-            RefreshToken refreshToken = new RefreshToken(null, userId, "Naver", accessTokenResult.getRefreshToken());
+            RefreshToken refreshToken = new RefreshToken(null, userId, Provider.NAVER, accessTokenResult.getRefreshToken());
             RefreshToken result = tokenService.addToken(refreshToken);
 
             // 토큰 저장 불가 에러 발생 시 회원 삭제
@@ -271,7 +272,7 @@ public class UserController {
             // 회원 추가
             Integer userId = userService.joinUser(null, kakaoUserInfo);
             // 갱신 토큰 저장
-            RefreshToken refreshToken = new RefreshToken(null, userId, "Kakao", accessTokenResult.getRefreshToken());
+            RefreshToken refreshToken = new RefreshToken(null, userId, Provider.KAKAO, accessTokenResult.getRefreshToken());
             RefreshToken result = tokenService.addToken(refreshToken);
 
             if (result == null) {
