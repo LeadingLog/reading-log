@@ -20,6 +20,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
 
   const { triggerChange } = useGlobalChangeStore.getState();
 
+  /* 관심도서 클릭 시 도서 리스트 클릭 효과 제어 */
+  const [noneListClick, setNoneListClick] = useState<boolean>(false)
+
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const [favorite, setFavorite] = useState<string[]>( [] );
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
@@ -146,7 +149,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
         },
       } );
     }
-    if (item.bookStatus !== "INTERESTED" && !favorite.includes(item.isbn13)) {
+    if (item.bookStatus !== "INTERESTED" && !favorite.includes( item.isbn13 )) {
       addInterestedModal()
     }
   }
@@ -165,7 +168,6 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
     } )
   }
   /* 책 리스트를 클릭하면 책 계획 모달이 뜨는 경우 END ------------- */
-
 
   return (
     <>
@@ -186,11 +188,17 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
           {moreBookList.map( (item) => (
             <li
               key={item.isbn13}
-              className="cursor-pointer flex gap-2 basis-[calc(50%-8px)] transition-[border] p-1 border-2 border-transparent items-center hover:border-main_SearchBar_Border rounded-lg"
+              className={`${!noneListClick ? "active:scale-[99%]" : ""} duration-100 cursor-pointer flex gap-2 basis-[calc(50%-8px)] transition-[border, scale] p-1 border-2 border-transparent items-center hover:border-main_SearchBar_Border rounded-lg`}
               onClick={() => openModalBookPlan( item )}
             >
               <div className="w-32 aspect-square bg-imgBook_Item_Bg rounded-xl overflow-hidden">
-                <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+                {item.coverImgUrl ? (
+                    <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+                  ) :
+                  <div className="flex w-full justify-center relative px-2 h-full items-center bg-imgBook_Item_Bg">
+                    <span className="text-xl font-bold text-imgBook_Item_No_Img_Text">No Image</span>
+                  </div>
+                }
               </div>
               <div className="flex flex-col flex-1 self-start">
                 <p
@@ -213,17 +221,20 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
                   {item.author}
                 </p>
               </div>
-              <div className="w-12 aspect-square relative">
+              <div className="group w-12 aspect-square relative">
                 <div
+                  onMouseDown={() => setNoneListClick(true)}
+                  onMouseUp={() => setNoneListClick(false)}
+                  onMouseLeave={() => setNoneListClick(false)}
                   className={`${
-                    item.bookStatus === "INTERESTED" || favorite.includes( item.isbn13 ) ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg'
-                  } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-favorite_Icon_Color rounded-full p-2`}
+                    item.bookStatus === "INTERESTED" || favorite.includes( item.isbn13 ) ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg group-hover:bg-unFavorite_Icon_Hover_Bg duration-100 group-active:active:scale-95'
+                  } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full p-2`}
                   onClick={(e) => {
                     e.stopPropagation();
                     addInterested( item );
                   }}
                 >
-                  <IconFavorite width="100%" height="100%"/>
+                  <IconFavorite className="text-favorite_Icon_Color" width="100%" height="100%"/>
                 </div>
               </div>
             </li>

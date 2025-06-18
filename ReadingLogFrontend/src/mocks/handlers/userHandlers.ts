@@ -13,9 +13,12 @@ export const userHandlers = [
     console.log( `code: ${code}, state: ${state}` );
 
     return HttpResponse.json( {
-      userId: 'mocked-kakao-id',
-      nickname: 'MockKakaoUser',
-      email: 'mocKakao@example.com',
+      insDate: "2025-06-12T06:59:21.011+00:00",
+      nickname: "mockKakaoUser",
+      updDate: "2025-06-12T06:59:21.011+00:00",
+      userEmail: "mockKakao@example.com",
+      userId: -1,
+      userUUID: "4277843147"
     } );
   } ),
 
@@ -88,28 +91,4 @@ export const userHandlers = [
     } );
   } ),
 
-  // GET - 쿼리 파라미터 테스트
-  http.get( `${serverUrl}/test/query`, ({ request }) => {
-    const url = new URL( request.url );
-    const name = url.searchParams.get( 'name' );
-    const age = url.searchParams.get( 'age' );
-
-    return HttpResponse.json( {
-      message: '쿼리 파라미터 받음',
-      name,
-      age,
-    } );
-  } ),
-
-  // POST - 바디 테스트
-  http.post( `${serverUrl}/test/body`, async ({ request }) => {
-    const body = await request.json();
-    console.log( body );
-
-    return HttpResponse.json( {
-      message: '바디 데이터 받음',
-      hobby: "취미",
-      level: "레벨",
-    } );
-  } ),
 ];

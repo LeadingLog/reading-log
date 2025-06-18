@@ -3,6 +3,7 @@ import { fetchStatsMonthApiParams } from "../types/statsMonth.ts";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
+// 월별 통계
 export const fetchStatsMonthApi = async ({ userId, year, month }: fetchStatsMonthApiParams) => {
   const { data } = await axios.get(
     `${serverUrl}/api/readingrecord/stats/time/yymm/book_id`,

@@ -19,6 +19,9 @@ export default function BoxThisMonthReadingList() {
   const year = now.getFullYear()
   const month = now.getMonth() + 1
 
+  /* 도서상태 토글 클릭 시 도서 리스트 클릭 효과 제어 */
+  const [noneListClick, setNoneListClick] = useState<boolean>( false )
+
   const [page, setPage] = useState<number>( 0 );
   const [hasMore, setHasMore] = useState( true ); // 더 불러올 데이터가 있는지 여부
   const [isLoading, setIsLoading] = useState( false ); // 로딩 상태 추가
@@ -101,6 +104,7 @@ export default function BoxThisMonthReadingList() {
   }, [] );
   // 📌 1. 스크롤에 따른 페이지 증가
   useEffect( () => {
+    if (page === 0) return;
     searchThisMonthReadingList( { userId, year, month, page, size: 21 } );
   }, [page] );
 
@@ -147,7 +151,7 @@ export default function BoxThisMonthReadingList() {
       ) : thisMonthReadingList.map( (item) => (
         <li
           key={item.bookId}
-          className={`active:scale-[99%] cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background, scale] duration-100 p-3 rounded-xl bg-readingList_Bg group
+          className={`${!noneListClick ? "active:scale-[99%]" : ""} cursor-pointer gap-2 flex justify-between hover:bg-readingList_Hover transition-[background, scale] duration-100 p-3 rounded-xl bg-readingList_Bg group
           ${readingBookId === item.bookId ? "border-4 border-readingList_Bg bg-readingList_Hover" : ""}`}
           onClick={() => openModalTrackingPlan( item )}
         >
@@ -155,7 +159,7 @@ export default function BoxThisMonthReadingList() {
           ${readingBookId === item.bookId ? "text-white" : "text-black"}`}>
             {item.bookTitle}
           </span>
-          <ItemReadStatus bookId={item.bookId} bookStatus={item.bookStatus}/>
+          <ItemReadStatus bookId={item.bookId} bookStatus={item.bookStatus} noneListClick={setNoneListClick}/>
         </li>
       ) )}
       {isLoading && (

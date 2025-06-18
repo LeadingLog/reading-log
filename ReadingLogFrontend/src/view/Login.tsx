@@ -1,5 +1,6 @@
-import KaKaoLoginBtn from "../assets/login/kakao_login_btn.png";
-import NaverLoginBtn from "../assets/login/naver_login_btn.png";
+import Logo from "../assets/LOGO.svg?react";
+import KakaoLogo from "../assets/login/KaKao_Logo.svg?react";
+import NaverLogo from "../assets/login/Naver_Logo.svg?react";
 
 const handleSocialLogin = (provider: string) => {
   const NAVER_CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID;
@@ -22,29 +23,29 @@ const handleSocialLogin = (provider: string) => {
 export default function Login() {
   return (
     <section
-      className="absolute flex flex-col gap-[85px] justify-center items-center w-[1325px] left-1/2 transform -translate-x-1/2 top-[10%] bottom-[10%] bg-book_Bg rounded-lg">
-      <p className="text-white text-[40px]">My Reading LOG</p>
-      <div className="text-white text-[40px]">로고 자리</div>
-      <article className="flex flex-col gap-[20px]">
+      className="absolute flex flex-col gap-6 p-8 border-l-[15px] border-Login_Left_Border justify-start items-center left-1/2 w-[450px] transform -translate-x-1/2 top-[20%] bottom-[20%] bg-Login_bg rounded-r-2xl">
+      <div className="flex-1 w-full max-h-36 px-10 bg-Login_Logo_bg justify-center items-center rounded-xl">
+        <Logo className="w-full h-full" />
+      </div>
+      <article className="flex flex-1 justify-center flex-col gap-6">
         <button
           type="button"
           onClick={() => handleSocialLogin( "kakao" )}
-          className="bg-social_Bg text-[40px] w-[400px] h-[65px] rounded-xl">
-          <img
-            src={KaKaoLoginBtn}
-            alt={"카카오 로그인"}
-            className={"hover:brightness-90"}
-          />
+          className="hover:brightness-[96%] flex gap-4 items-center bg-Login_Kakao_bg p-4 rounded-xl">
+          <span className="w-6">
+            <KakaoLogo width="100%" height="100%"/>
+          </span>
+          <span className="text-nowrap">카카오 로그인</span>
+
         </button>
         <button
           type="button"
           onClick={() => handleSocialLogin( "naver" )}
-          className="bg-social_Bg  text-[40px] w-[400px] h-[65px] rounded-lg">
-          <img
-            src={NaverLoginBtn}
-            alt={"네이버 로그인"}
-            className={"hover:brightness-90"}
-          />
+          className="hover:brightness-[96%] flex gap-4 items-center bg-Login_Naver_bg p-4 rounded-xl">
+          <span className="w-6">
+            <NaverLogo width="100%" height="100%"/>
+          </span>
+          <span className="text-nowrap text-white">네이버 로그인</span>
         </button>
       </article>
     </section>

@@ -403,7 +403,6 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       setImageHeight( 0 )
     };
   }, [] );
-
   /* 유동적인 이미지 높이 값을 설정하기 위해 오른쪽 독서계획 영역의 높이 값을 추적함 수 END ----------------*/
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
@@ -415,15 +414,21 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           rel="noopener noreferrer"
           className="relative min-w-fit bg-modal_BookImg_Bg"
         >
-          <img
-            src={cover}
-            alt={title}
-            className={`object-contain min-w-fit`}
-            style={{ height: `${imageHeight}px` }}
-          />
+          {cover ? (
+            <img
+              src={cover}
+              alt={title}
+              className="object-contain min-w-fit"
+              style={{ height: `${imageHeight}px` }}
+            />
+          ) : (
+            <div className="flex w-full justify-center relative px-2 h-full items-center bg-imgBook_Item_Bg">
+              <span className="text-2xl font-bold text-imgBook_Item_No_Img_Text">No Image</span>
+            </div>
+          )}
           {bookId && bookStatus !== "INTERESTED" && (
             <button
-              className="absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-unFavorite_Icon_Bg rounded-full p-1.5"
+              className="hover:brightness-[95%] duration-100 active:scale-90 absolute w-8 h-8 left-2 top-2 text-favorite_Icon_Color bg-unFavorite_Icon_Bg rounded-full p-1.5"
               onClick={(e) => {
                 e.preventDefault();  // 이벤트 버블링 방지
                 e.stopPropagation(); // <a>의 기본 링크 동작 방지
@@ -444,7 +449,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
                 className="text-lg font-semibold break-keep text-modal_BookPlan_Book_Title_Text ml-2">{bookTitle}</span>
               {bookId && (
                 <button onClick={() => deleteBook()}
-                        className="min-w-fit max-h-9 text-modal_BookPlan_Book_DeleteBook_Text border-4 border-modal_BookPlan_Book_DeleteBook_Border px-2 rounded-lg">삭제</button>
+                        className="hover:brightness-[95%] duration-100 active:scale-95 min-w-fit max-h-9 text-modal_BookPlan_Book_DeleteBook_Text border-4 border-modal_BookPlan_Book_DeleteBook_Border px-2 rounded-lg">삭제</button>
               )}
             </span>
             <p className="text-modal_BookPlan_Book_Sub_Title_Text">{author}</p>

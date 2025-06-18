@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Logo from "../../assets/LOGO.svg?react";
 import { useModalStore } from "../../store/modalStore";
 import { ModalMyPageProps } from "../../types/modal.ts";
 import { useNavigate } from "react-router-dom";
@@ -198,9 +199,9 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-modal_Container_bg z-50">
-      <section className="flex gap-5 bg-modal_Default_Bg p-5 rounded-lg">
-        <article className="flex-1 bg-modal_Logo_Bg rounded-lg">
-          로고영역
+      <section className="flex flex-col gap-5 bg-modal_Default_Bg p-5 rounded-lg">
+        <article className="flex-1 flex justify-center bg-modal_Logo_Bg items-center py-3 rounded-lg">
+          <Logo width="80%"/>
         </article>
         <article className="flex flex-col gap-2 flex-1 p-4 bg-modal_Content_Bg rounded-lg">
           <div className="flex flex-col">

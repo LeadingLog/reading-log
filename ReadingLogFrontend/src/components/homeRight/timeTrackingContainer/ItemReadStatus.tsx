@@ -8,7 +8,7 @@ import { useGlobalChangeStore } from "../../../store/useGlobalChangeStore.ts";
 import { useReadingBookStore } from "../../../store/useReadingInfoStore.ts";
 
 // 2. 컴포넌트 정의
-export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusParams) {
+export default function ItemReadStatus({ bookId, bookStatus, noneListClick }: itemReadStatusParams) {
 
   const { openModal, closeAllModals } = useModalStore()
   const setModalIsLoading = useModalStore( state => state.setModalIsLoading );
@@ -111,17 +111,17 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
 
   /* 독서중 도서 표시 */
 
-  const [dotCount, setDotCount] = useState<string>(".")
+  const [dotCount, setDotCount] = useState<string>( "." )
 
   if (dotCount.length > 3) {
-    setDotCount(".")
+    setDotCount( "." )
   }
 
   useEffect( () => {
     if (!readingBookId) return;
 
     const interval = setInterval( () => {
-      setDotCount(prev => prev + ".")
+      setDotCount( prev => prev + "." )
     }, 500 );
 
     return () => clearInterval( interval );
@@ -133,12 +133,18 @@ export default function ItemReadStatus({ bookId, bookStatus }: itemReadStatusPar
       {currentStatus !== "NOT_STARTED" ? (
           bookId === readingBookId ? (
             <button
+              onMouseDown={() => noneListClick( true )}
+              onMouseUp={() => noneListClick( false )}
+              onMouseLeave={() => noneListClick( false )}
               onClick={toggleSwitch}
               className="flex items-center border-2 border-toggle_Read_Status_Bg px-2 w-[70px] text-[13px] rounded-full font-semibold text-toggle_ReadingStart_Text_Color">
               독서중<span>{dotCount}</span>
             </button>
           ) : (
             <button
+              onMouseDown={() => noneListClick( true )}
+              onMouseUp={() => noneListClick( false )}
+              onMouseLeave={() => noneListClick( false )}
               onClick={toggleSwitch}
               className="relative flex items-center w-[70px] h-full rounded-full px-1 bg-toggle_Read_Status_Bg overflow-hidden"
             >

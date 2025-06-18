@@ -9,6 +9,7 @@ import { useDateStore } from "../../store/useDateStore.ts";
 import { fetchMonthReadingList } from "../../api/monthReadingListApi.ts";
 import { useUserStore } from "../../store/userStore.ts";
 import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
+import Logo from "../../assets/LOGO.svg?react";
 
 /* 월별 통계 화면 아래 북 이미지 리스트 용 */
 export default function BookImgList() {
@@ -22,7 +23,7 @@ export default function BookImgList() {
 
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
-  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
+  const { triggers } = useGlobalChangeStore.getState();
 
   const searchThisMonthReadingList = async ({ userId, year, month, page, size }: fetchMonthReadingListParams) => {
     if (isLoading) return; // 이미 로딩 중이면 API 요청을 하지 않음
@@ -54,7 +55,7 @@ export default function BookImgList() {
     setHasMore( true );
     // 직접 호출
     searchThisMonthReadingList( { userId, year, month, page: 0, size: 9 } );
-  }, [month, year, myReadingListTrigger] );
+  }, [month, year, triggers.MyReadingList] );
 
   const openModalBookPlan = (item: monthReadingListItem) => {
     openModal( "ModalBookPlan", {
@@ -97,9 +98,16 @@ export default function BookImgList() {
         <li
           key={item.bookId}
           onClick={() => openModalBookPlan( item )}
-          className="hover:bg-imgBook_Item_Hover_Bg p-1.5 relative aspect-square bg-imgBook_Item_Bg cursor-pointer"
+          className="active:scale-[97%] duration-100 hover:border-imgBook_Item_Hover_Border border-[6px] border-imgBook_Item_Border relative aspect-square cursor-pointer"
         >
-          <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+          {item.coverImgUrl ? (
+              <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
+            ) :
+            <div className="flex w-full justify-center relative px-2 h-full items-center bg-imgBook_Item_Bg">
+              <Logo className="absolute top-3 right-2 max-h-fit w-[37%]"/>
+              <span className="text-2xl font-bold text-imgBook_Item_No_Img_Text">No Image</span>
+            </div>
+          }
           <div
             className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
               ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :

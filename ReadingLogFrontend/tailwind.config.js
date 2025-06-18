@@ -33,6 +33,13 @@ export default {
         light_Red_hover: "#C9A89F", // 연한빨강호버시
         dark_Sky_hover : "#7A9BB7", // 진한 하늘 호버시
         
+        /* 로그인 페이지 */
+        Login_bg         : "#96B2C8", // 로그인 페이지 배경색
+        Login_Kakao_bg   : "#FEE500", // 로그인 페이지 카카오 배경색
+        Login_Naver_bg   : "#03C75A", // 로그인 페이지 네이버 배경색
+        Login_Left_Border: "#7A9BB7", // 로그인 페이지 배경색
+        Login_Logo_bg    : "#FDFAF3", // 로그인 페이지 로고 배경색
+        
         /* 탭 관련 색 */
         leftPage_Tab_Text          : "#A1A1A1", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시 텍스트 색
         leftPage_Tab_Hover_Text    : "#000000", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 호버 시
@@ -111,17 +118,19 @@ export default {
         // Left, right 컴포넌트 배경
         page_Bg: "#FDFAF3", // page 배경
         /* 이미지로 표시하는 책 리스트 내부 아이콘 관련 */
-        imgBook_Item_Bg         : "#E5CEC850", // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 썸네일 없을 때 배경
-        imgBook_Item_Hover_Bg   : "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 리스트 호버시 배경색
-        imgBook_Item_Reading_Bg : "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (독서중) 상태 표시 배경
-        imgBook_Item_NoRead_Bg  : "#D9D9D9",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (읽기전) 상태 표시 배경
-        imgBook_Item_Complete_Bg: "#96B2C8",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (완 독) 상태 표시 배경
-        imgBook_Icon_Color      : "#FDFAF3",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 상태 표시 아이콘 색
+        imgBook_Item_Bg          : "#E5CEC850", // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 썸네일 없을 때 배경
+        imgBook_Item_No_Img_Text : "#A1A1A1",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 썸네일 없을 때 텍스트 색
+        imgBook_Item_Hover_Border: "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 리스트 호버시 보더색
+        imgBook_Item_Border      : "#E5CEC850", // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 보더색
+        imgBook_Item_Reading_Bg  : "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (독서중) 상태 표시 배경
+        imgBook_Item_NoRead_Bg   : "#D9D9D9",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (읽기전) 상태 표시 배경
+        imgBook_Item_Complete_Bg : "#96B2C8",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (완 독) 상태 표시 배경
+        imgBook_Icon_Color       : "#FDFAF3",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 상태 표시 아이콘 색
         
         /* 모달 관련 */
         modal_Container_bg   : "#00000050", // 공통 - 모달 오픈 시 불투명 검은 색 뒷 배경
         modal_Default_Bg     : "#96B2C8",   // 공통 - 모달배경색
-        modal_Logo_Bg        : "#E5CEC8",   // 공통 - 모달 로고 표시 영역 기본 배경 색
+        modal_Logo_Bg        : "#FDFAF3",   // 공통 - 모달 로고 표시 영역 기본 배경 색
         modal_BookImg_Bg     : "#E5CEC8",   // 공통 - 모달 책 표지 표시 배경 색
         modal_Content_Bg     : "#FDFAF3",   // 공통 - 모달 컨텐츠 배경 색
         modal_Title_Text     : "#000000",   // 공통 - 공통 모달 메인 텍스트 색
@@ -143,6 +152,7 @@ export default {
         modal_Tracking_Timer_Toggle_Active_Bg     : "#E5CEC8",   // 독서 타임 트래킹 - 타이머 활성화 시 배경 색
         modal_Tracking_Timer_Toggle_InActive_Bg   : "#EEE6E3",   // 독서 타임 트래킹 - 타이머 비활성화 시 배경 색
         modal_Tracking_Time_Bg                    : "#EEE6E3",   // 독서 타임 트래킹 - 타이머 시간 선택 요소 배경
+        modal_Tracking_Time_No_Img_bg             : "#E5CEC8",   // 독서 타임 트래킹 - 이미지 없을 때 배경색
         modal_Tracking_Time_Choice_Bg             : "#FDFAF3",   // 독서 타임 트래킹 - 타이머 시간 선택 시 배경
         modal_Tracking_Time_Divide_Color          : "#000000",   // 독서 타임 트래킹 - 타이머 시간 경계선 색
         modal_Tracking_Time_Choice_Text           : "#000000",   // 독서 타임 트래킹 - 타이머 시간 선택 시 텍스트 색
@@ -225,9 +235,10 @@ export default {
         
         
         /* 관심도서 아이콘 관련 색 */
-        favorite_Icon_Color: "#FDFAF3", // 관심도서 아이콘 색
-        favorite_Icon_Bg   : "#96B2C8", // 관심도서 아이콘 배경 색
-        unFavorite_Icon_Bg : "#D9D9D9", // 관심도서 아닐 때 아이콘 배경 색
+        favorite_Icon_Color     : "#FDFAF3", // 관심도서 아이콘 색
+        favorite_Icon_Bg        : "#96B2C8", // 관심도서 아이콘 배경 색
+        unFavorite_Icon_Bg      : "#D9D9D9", // 관심도서 아닐 때 아이콘 배경 색
+        unFavorite_Icon_Hover_Bg: "#A1A1A1", // 관심도서 아닐 때 아이콘 호버시 배경 색
         /* 관심도서 리스트 설명 텍스트 관련 색 */
         favoriteList_Searching_Text    : "#000000", // 관심 도서 요청시 표시 텍스트 색
         favoriteList_Empty_Text        : "#96B2C8", // 관심 도서 요청시 표시 텍스트 색
