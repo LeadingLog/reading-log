@@ -17,7 +17,7 @@ export const userHandlers = [
       nickname: "mockKakaoUser",
       updDate: "2025-06-12T06:59:21.011+00:00",
       userEmail: "mockKakao@example.com",
-      userId: 0,
+      userId: -1,
       userUUID: "4277843147"
     } );
   } ),

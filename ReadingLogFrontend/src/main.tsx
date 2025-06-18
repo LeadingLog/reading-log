@@ -2,6 +2,7 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { StrictMode } from "react";
 
 // 개발 환경에서만 Mocking을 활성화
 async function enableMocking() {
@@ -17,9 +18,9 @@ async function enableMocking() {
 enableMocking().then( () => {
   createRoot( document.getElementById( 'root' )! ).render(
     <>
-    {/*<StrictMode>*/}
+    <StrictMode>
       <App/>
-    {/*</StrictMode>*/}
+    </StrictMode>
     </>
   )
 } )
