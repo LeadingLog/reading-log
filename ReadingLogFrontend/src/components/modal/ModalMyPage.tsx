@@ -199,7 +199,9 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
   // get session 테스트
   const getSession = async () => {
     try {
-      const response = await axios.get( `${serverUrl}/user/getUserSession` );
+      const response = await axios.get( `${serverUrl}/user/getUserSession`, {
+        withCredentials: true
+      } );
 
       console.log( response.data );
     } catch (error: unknown) {
