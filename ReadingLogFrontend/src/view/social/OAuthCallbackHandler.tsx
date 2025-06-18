@@ -52,12 +52,10 @@ export default function OAuthCallbackHandler({
         code: code || "",
         state: state || ""
       } );
-      console.log( "loginData as object:", Object.fromEntries( loginData ) );
-      console.log( `요청 url : ${serverUrl}${apiEndpoint}` );
-
 
       const response = await axios.post( `${serverUrl}${apiEndpoint}`, loginData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        withCredentials: true
       } );
 
       const data = response.data;

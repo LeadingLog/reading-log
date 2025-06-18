@@ -173,7 +173,6 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
       showInput: true,
       loadingMessage: "탈퇴중",
       onConfirm: async (inputValue?: string) => {
-        console.log( "사용자 입력값:", inputValue, " email:", email );
         if (email !== inputValue) {
           handleDeleteFail( "이메일이 일치하지 않습니다." );
         } else {

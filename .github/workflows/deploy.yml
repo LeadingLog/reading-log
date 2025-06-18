@@ -17,6 +17,7 @@ on:
       - 'F-ModalBookPlan_Dev'
       - 'F-AccountSettings'
       - 'F-UI_UX'
+      - 'F-Session'
       - 'frontdev'
       # - 'main'
 
