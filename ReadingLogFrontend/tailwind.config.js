@@ -33,6 +33,13 @@ export default {
         light_Red_hover: "#C9A89F", // 연한빨강호버시
         dark_Sky_hover : "#7A9BB7", // 진한 하늘 호버시
         
+        /* 로그인 페이지 */
+        Login_bg         : "#96B2C8", // 로그인 페이지 배경색
+        Login_Kakao_bg   : "#FEE500", // 로그인 페이지 카카오 배경색
+        Login_Naver_bg   : "#03C75A", // 로그인 페이지 네이버 배경색
+        Login_Left_Border: "#7A9BB7", // 로그인 페이지 배경색
+        Login_Logo_bg    : "#FDFAF3", // 로그인 페이지 로고 배경색
+        
         /* 탭 관련 색 */
         leftPage_Tab_Text          : "#A1A1A1", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 활성화 시 텍스트 색
         leftPage_Tab_Hover_Text    : "#000000", // 탭 - 왼쪽 페이지 최상단 컴포넌트 이동 탭 호버 시
@@ -112,9 +119,9 @@ export default {
         page_Bg: "#FDFAF3", // page 배경
         /* 이미지로 표시하는 책 리스트 내부 아이콘 관련 */
         imgBook_Item_Bg          : "#E5CEC850", // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 썸네일 없을 때 배경
-        imgBook_Item_No_Img_Text : "#A1A1A1", // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 썸네일 없을 때 배경
-        imgBook_Item_Hover_Border: "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 리스트 호버시 배경색
-        imgBook_Item_Border      : "#E5CEC850",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 리스트 호버시 배경색
+        imgBook_Item_No_Img_Text : "#A1A1A1",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 썸네일 없을 때 텍스트 색
+        imgBook_Item_Hover_Border: "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 리스트 호버시 보더색
+        imgBook_Item_Border      : "#E5CEC850", // 이미지로 표시하는 책 리스트 내부 아이콘 - 책 보더색
         imgBook_Item_Reading_Bg  : "#C9A89F",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (독서중) 상태 표시 배경
         imgBook_Item_NoRead_Bg   : "#D9D9D9",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (읽기전) 상태 표시 배경
         imgBook_Item_Complete_Bg : "#96B2C8",   // 이미지로 표시하는 책 리스트 내부 아이콘 - (완 독) 상태 표시 배경
@@ -145,7 +152,7 @@ export default {
         modal_Tracking_Timer_Toggle_Active_Bg     : "#E5CEC8",   // 독서 타임 트래킹 - 타이머 활성화 시 배경 색
         modal_Tracking_Timer_Toggle_InActive_Bg   : "#EEE6E3",   // 독서 타임 트래킹 - 타이머 비활성화 시 배경 색
         modal_Tracking_Time_Bg                    : "#EEE6E3",   // 독서 타임 트래킹 - 타이머 시간 선택 요소 배경
-        modal_Tracking_Time_No_Img_bg             : "#E5CEC8",   // 독서 타임 트래킹 - 타이머 시간 선택 요소 배경
+        modal_Tracking_Time_No_Img_bg             : "#E5CEC8",   // 독서 타임 트래킹 - 이미지 없을 때 배경색
         modal_Tracking_Time_Choice_Bg             : "#FDFAF3",   // 독서 타임 트래킹 - 타이머 시간 선택 시 배경
         modal_Tracking_Time_Divide_Color          : "#000000",   // 독서 타임 트래킹 - 타이머 시간 경계선 색
         modal_Tracking_Time_Choice_Text           : "#000000",   // 독서 타임 트래킹 - 타이머 시간 선택 시 텍스트 색
