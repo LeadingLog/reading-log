@@ -18,8 +18,7 @@ export default function ItemReadStatus({ bookId, bookStatus, noneListClick }: it
 
   const { userId } = useUserStore()
 
-  const { triggerChange } = useGlobalChangeStore.getState();
-  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
+  const { triggers, triggerChange } = useGlobalChangeStore.getState();
 
   const { readingBookId } = useReadingBookStore()
   /* 독서중 or 완독 토글*/
@@ -107,7 +106,7 @@ export default function ItemReadStatus({ bookId, bookStatus, noneListClick }: it
   }
   useEffect( () => {
     setCurrentStatus( bookStatus )
-  }, [bookStatus, myReadingListTrigger] );
+  }, [bookStatus, triggers.MyReadingList] );
 
   /* 독서중 도서 표시 */
 

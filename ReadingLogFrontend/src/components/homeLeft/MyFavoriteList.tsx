@@ -17,7 +17,7 @@ export default function MyFavoriteList() {
   const { openModal } = useModalStore();
   const { userId } = useUserStore()
 
-  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
+  const { triggers } = useGlobalChangeStore()
 
   const openModalBookPlan = ((item: BookListType) => {
     openModal( "ModalBookPlan", {
@@ -54,7 +54,7 @@ export default function MyFavoriteList() {
 
   useEffect( () => {
     searchMyFavoriteList( { userId, tabType: 4, page, size: 21 } );
-  }, [page, myReadingListTrigger] );
+  }, [page, triggers.INTERESTED] );
 
   // Intersection Observer 설정
   const myFavoriteListObserver = useRef<IntersectionObserver | null>( null );

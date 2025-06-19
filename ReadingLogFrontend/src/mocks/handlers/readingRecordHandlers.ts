@@ -27,7 +27,7 @@ export const readingRecordHandlers = [
 
   // 연별통계
   http.get( `${serverUrl}/api/readingrecord/stats/time/yylist`, async () => {
-    console.log( `✅ [Mock API] 월별 통계 요청` );
+    console.log( `✅ [Mock API] 연별 통계 요청` );
 
     return HttpResponse.json( statsYearList );
   } ),

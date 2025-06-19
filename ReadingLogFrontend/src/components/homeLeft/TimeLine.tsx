@@ -18,7 +18,7 @@ import { useModalStore } from "../../store/modalStore.ts";
 
 export default function TimeLine() {
 
-  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
+  const { triggers } = useGlobalChangeStore.getState();
 
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   const { year, setMonth } = useDateStore(); // Zustand에서 년도 정보 가져오기
@@ -96,7 +96,7 @@ export default function TimeLine() {
       left: '50%',
       right: 'unset',
       bottom: 'calc(100% - 21px)',
-      transform: 'translateX(-50%)'
+      transform: '-translate-x-1/2'
     },
     {
       name: '2월',
@@ -110,7 +110,7 @@ export default function TimeLine() {
       left: '50%',
       right: 'unset',
       bottom: 'calc(100% - 21px)',
-      transform: 'translateX(-50%)'
+      transform: '-translate-x-1/2'
     },
     {
       name: '3월',
@@ -124,7 +124,7 @@ export default function TimeLine() {
       left: 'unset',
       right: '-10px',
       bottom: 'unset',
-      transform: 'translateY(-50%)'
+      transform: '-translate-y-1/2'
     },
     {
       name: '4월',
@@ -138,7 +138,7 @@ export default function TimeLine() {
       left: '50%',
       right: 'unset',
       bottom: '-21px',
-      transform: 'translateX(-50%)'
+      transform: '-translate-x-1/2'
     },
     {
       name: '5월',
@@ -152,7 +152,7 @@ export default function TimeLine() {
       left: '50%',
       right: 'unset',
       bottom: '-21px',
-      transform: 'translateX(-50%)'
+      transform: '-translate-x-1/2'
     },
     {
       name: '6월',
@@ -166,7 +166,7 @@ export default function TimeLine() {
       left: '50%',
       right: 'unset',
       bottom: '-21px',
-      transform: 'translateX(-50%)'
+      transform: '-translate-x-1/2'
     },
     {
       name: '7월',
@@ -180,7 +180,7 @@ export default function TimeLine() {
       left: '-10px',
       right: 'unset',
       bottom: 'unset',
-      transform: 'translateY(-50%)'
+      transform: '-translate-y-1/2'
     },
     {
       name: '8월',
@@ -194,7 +194,7 @@ export default function TimeLine() {
       left: '50%',
       right: 'unset',
       bottom: '-21px',
-      transform: 'translateX(-50%)'
+      transform: '-translate-x-1/2'
     },
     {
       name: '9월',
@@ -208,7 +208,7 @@ export default function TimeLine() {
       left: '50%',
       right: 'unset',
       bottom: '-21px',
-      transform: 'translateX(-50%)'
+      transform: '-translate-x-1/2'
     },
     {
       name: '10월',
@@ -222,7 +222,7 @@ export default function TimeLine() {
       left: 'unset',
       right: '-10px',
       bottom: 'unset',
-      transform: 'translateY(-50%)'
+      transform: '-translate-y-1/2'
     },
     {
       name: '11월',
@@ -236,7 +236,7 @@ export default function TimeLine() {
       left: '50%',
       right: 'unset',
       bottom: '-21px',
-      transform: 'translateX(-50%)'
+      transform: '-translate-x-1/2'
     },
     {
       name: '12월',
@@ -250,7 +250,7 @@ export default function TimeLine() {
       left: '50%',
       right: 'unset',
       bottom: '-21px',
-      transform: 'translateX(-50%)'
+      transform: '-translate-x-1/2'
     }
   ];
 
@@ -313,11 +313,11 @@ export default function TimeLine() {
 
   useEffect( () => {
     readingTime( { userId } )
-  }, [myReadingListTrigger] );
+  }, [triggers.TimeSave] );
 
   useEffect( () => {
     searchTimeLineReadingList( { userId, year } );
-  }, [year, myReadingListTrigger] );
+  }, [year, triggers.MyReadingList] );
 
   return (
     <section className="flex flex-col gap-4 rounded-xl flex-1">
@@ -421,25 +421,24 @@ export default function TimeLine() {
                   left: item.left,
                   right: item.right,
                   bottom: item.bottom,
-                  transform: item.transform
                 }}
-                className={`hover:w-10 hover:h-10 hover:border-[6px]
-                  group absolute rounded-full bg-timeLineMonthCircle border-timeLineMonthHoverCircle transition-all duration-200 ease-in-out
-                  ${item.month === nowMonth && year === nowYear ? 'w-10 h-10 border-[6px]' : 'w-8 h-8'}
+                className={`${item.transform} hover:scale-[1.3] hover:border-[4.5px]
+                  group absolute rounded-full bg-timeLineMonthCircle border-timeLineMonthHoverCircle transition-all w-8 h-8 duration-100 ease-linear
+                  ${item.month === nowMonth && year === nowYear ? 'scale-[1.3] border-[4.5px]' : ''}
                   `}
               >
                 <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">{item.month}</span>
                 <div
-                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out left-1/2 -translate-x-1/2
-                    ${item.month === 3 || item.month === 10 ? 'flex-col top-[50%] -translate-y-1/2 left-[0%] py-2 pr-8 pl-2 group-hover:top-[50%] group-hover:pr-12' :
-                    item.month === 7 ? 'flex-col top-[50%] -translate-y-1/2 left-[100%] py-2 pr-2 pl-8 group-hover:top-[50%] group-hover:pl-12' :
-                      item.month === 11 || item.month === 12 ? 'bottom-[100%] p-1 group-hover:p-2' : 'p-5 group-hover:pt-8'}
+                  className={`absolute flex gap-1 transition-all duration-200 ease-in-out p-2
+                    ${item.month === 3 || item.month === 10 ? 'flex-col right-full top-1/2 -translate-y-1/2' :
+                    item.month === 7 ? 'flex-col top-1/2 -translate-y-1/2 left-full' :
+                      item.month === 11 || item.month === 12 ? 'bottom-full left-1/2 -translate-x-1/2' : 'left-1/2 -translate-x-1/2 pt-5'}
                   `}
                 >
                   {item.notStarted > 0 && (
                     <span
-                      className={`group-hover:w-5 group-hover:text-timeLineNoReadText
-                      ${item.month === nowMonth && year === nowYear ? "w-5" : "text-transparent"}
+                      className={`group-hover:text-timeLineNoReadText
+                      ${item.month === nowMonth && year === nowYear ? "" : "text-transparent"}
                       flex w-4 text-xs justify-center items-center aspect-square bg-timeLineNoReadBg rounded-full`}
                     >
                       {item.notStarted}
@@ -447,8 +446,8 @@ export default function TimeLine() {
                   )}
                   {item.inProgress > 0 && (
                     <span
-                      className={`group-hover:w-5 group-hover:text-timeLineReadingText
-                      ${item.month === nowMonth && year === nowYear ? "w-5" : "text-transparent"}
+                      className={`group-hover:text-timeLineReadingText
+                      ${item.month === nowMonth && year === nowYear ? "" : "text-transparent"}
                       flex w-4 text-xs justify-center items-center aspect-square bg-timeLineReadingBg rounded-full`}
                     >
                       {item.inProgress}
@@ -456,8 +455,8 @@ export default function TimeLine() {
                   )}
                   {item.completed > 0 && (
                     <span
-                      className={`group-hover:w-5 group-hover:text-timeLineCompleteText 
-                      ${item.month === nowMonth && year === nowYear ? "w-5" : "text-transparent"}
+                      className={`group-hover:text-timeLineCompleteText 
+                      ${item.month === nowMonth && year === nowYear ? "" : "text-transparent"}
                       flex w-4 text-xs justify-center items-center aspect-square bg-timeLineCompleteBg rounded-full`}
                     >
                       {item.completed}
