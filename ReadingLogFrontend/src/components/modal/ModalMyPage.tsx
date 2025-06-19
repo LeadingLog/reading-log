@@ -167,8 +167,8 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
     openModal( "ModalNotice", {
       title: "탈퇴 시 모든 정보가 삭제됩니다.",
       subTitle: "본인 확인을 위해 이메일을 입력해주세요.",
-      cancelText: "아니요 조금 더 이용할래요!",
-      confirmText: "예",
+      cancelText: "조금 더 이용할게요",
+      confirmText: "탈퇴하기",
       reverseBtn: true,
       showInput: true,
       loadingMessage: "탈퇴중",

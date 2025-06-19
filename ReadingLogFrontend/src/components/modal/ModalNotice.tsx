@@ -62,7 +62,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
           />
         )}
 
-        <div className={`${reverseBtn ? 'flex-row-reverse' : ''} flex justify-between gap-10`}>
+        <div className={`${reverseBtn ? 'flex-row-reverse' : ''} flex justify-between gap-5`}>
           {!onlyConfirm && (
             <button
               className={`${reverseBtn ? 'bg-modal_Right_Btn_Bg hover:invert-[3%]' : 'border-modal_Left_Btn_Border border-4 hover:brightness-[95%]'} active:scale-95 duration-200 flex-1 min-w-fit px-2 py-1 rounded-lg`}
