@@ -1,8 +1,7 @@
-// import { StrictMode } from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { StrictMode } from "react";
 
 // 개발 환경에서만 Mocking을 활성화
 async function enableMocking() {

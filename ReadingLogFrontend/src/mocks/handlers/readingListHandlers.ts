@@ -13,6 +13,8 @@ import myReadingList_noRead from '../dummyData/myReadingListData/myReadingList_n
 import myReadingList_noRead2 from '../dummyData/myReadingListData/myReadingList_noRead2.json';
 import myReadingList_reading from '../dummyData/myReadingListData/myReadingList_reading.json';
 import myReadingList_reading2 from '../dummyData/myReadingListData/myReadingList_reading2.json';
+import { ReadingListAddApiRequestBody } from "../../types/readingListAdd.ts";
+import { bookStatusChangeBody } from "../../types/bookStatusChange.ts";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -99,27 +101,41 @@ export const readingListHandlers = [
   } ),
 
   // 독서 계획 추가
-  http.post( `${serverUrl}/readinglist/add`, async () => {
-    console.log( `✅ [Mock API] 독서 계획 추가 요청` );
+  http.post( `${serverUrl}/readinglist/add`, async ({ request }) => {
+    const body = await request.json() as ReadingListAddApiRequestBody;
+    if ( body.bookStatus === "INTERESTED" ) {
+      console.log( `✅ [Mock API] 관심 도서 추가 요청` );
+    } else {
+      console.log( `✅ [Mock API] 독서 계획 추가 요청` );
+    }
 
     return HttpResponse.json( {
       success: true,
     } );
   } ),
 
-  // 도서 상태 변경 (내 도서 -> 관심도서로 변경, 관심도서 -> 내 독서 목록으로 변경, 이번 달 독서리스트 독서 상태 토글 변경, 독서 타임 트래킹 시작 요청 도서가 읽기전인 경우)
+  // 도서 상태 변경 (내 독서 목록 -> 관심도서로 변경, 관심도서 -> 내 독서 목록으로 변경, 이번 달 독서리스트 독서 상태 토글 변경, 독서 타임 트래킹 시작 요청 도서가 읽기전인 경우)
   http.patch( `${serverUrl}/readinglist/update`, async ({ request }) => {
-    const body = await request.json();
-    console.log( body );
+    const body = await request.json() as bookStatusChangeBody;
+    if ( body.bookStatus === "INTERESTED" ) {
+      console.log( `✅ [Mock API] 도서 상태 변경 -> 관심 도서로 변경` );
+    } else if ( body.bookStatus === "COMPLETED" && !body.readStartDt ) {
+      console.log( `✅ [Mock API] 도서 상태 변경 -> 토글 완독으로 변경` );
+    } else if ( body.bookStatus === "IN_PROGRESS" && !body.readStartDt ) {
+      console.log( `✅ [Mock API] 도서 상태 변경 -> 토글 독서중으로 변경` );
+    } else if (body.readStartDt) {
+      console.log( `✅ [Mock API] 도서 상태 변경 -> 독서 계획 변경 or 추가` );
+    }
 
     return HttpResponse.json( {
       success: true,
     } );
   } ),
 
-  // 관심 도서 삭제
-  http.post( `${serverUrl}/readinglist/delete`, async () => {
-    console.log( `✅ [Mock API] 관심 도서 삭제 요청` );
+  // 도서 삭제
+  http.delete( `${serverUrl}/readinglist/delete`, async () => {
+
+    console.log( `✅ [Mock API] 도서 삭제 요청` );
 
     return HttpResponse.json( {
       success: true,

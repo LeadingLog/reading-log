@@ -10,9 +10,9 @@ type GlobalChangeStore = {
 
 export const useGlobalChangeStore = create<GlobalChangeStore>((set) => ({
   triggers: {
-    INTERESTED: 0,
-    MyReadingList: 0,
-    TimeSave: 0
+    INTERESTED: 0, // 관심도서 추가 및 삭제 시 카운트
+    MyReadingList: 0, // 내 독서 목록 리스트 변경 시 카운트
+    TimeSave: 0 // 시간 저장 시 카운트
   },
   triggerChange: (key) =>
     set((state) => ({

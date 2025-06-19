@@ -152,6 +152,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       readStartDt: `${pickStartYear}-${String( pickStartMonth ).padStart( 2, '0' )}-01`,
       readEndDt: `${pickEndYear}-${String( pickEndMonth ).padStart( 2, '0' )}-${getLastDateOfMonth( pickEndYear, pickEndMonth )}`
     };
+
     if (readStartDt === bookStatusChangeBody.readStartDt && readEndDt === bookStatusChangeBody.readEndDt) {
       openModal( 'ModalNotice', {
         title: "기존 계획 날짜와 같습니다.",
@@ -169,7 +170,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       if (response) {
         triggerChange( "MyReadingList" )
         openModal( 'ModalNotice', {
-          title: "독서 계획이 변경 되었어요!",
+          title: `독서 계획이 ${bookStatus === "INTERESTED" ? "추가 " : "변경"} 되었어요!`,
           subTitle: "즐거운 독서시간!",
           confirmText: "닫기",
           onlyConfirm: true,
@@ -346,7 +347,12 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
           setModalIsLoading( true )
           const response = await deleteBookApi( DeleteBookBody )
           if (response) {
-            triggerChange( "MyReadingList" )
+            if (bookStatus === "INTERESTED") {
+              triggerChange( "INTERESTED" );
+            } else {
+              triggerChange( "MyReadingList" )
+            }
+
             openModal( "ModalNotice", {
               title: "목록에서 제거되었습니다!",
               onlyClose: true,

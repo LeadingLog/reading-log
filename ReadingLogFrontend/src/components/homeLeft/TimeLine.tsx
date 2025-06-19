@@ -18,7 +18,7 @@ import { useModalStore } from "../../store/modalStore.ts";
 
 export default function TimeLine() {
 
-  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
+  const { triggers } = useGlobalChangeStore.getState();
 
   const { setRightContent } = usePageStore(); // Zustand에서 상태 업데이트 함수 가져오기
   const { year, setMonth } = useDateStore(); // Zustand에서 년도 정보 가져오기
@@ -313,11 +313,11 @@ export default function TimeLine() {
 
   useEffect( () => {
     readingTime( { userId } )
-  }, [myReadingListTrigger] );
+  }, [triggers.TimeSave] );
 
   useEffect( () => {
     searchTimeLineReadingList( { userId, year } );
-  }, [year, myReadingListTrigger] );
+  }, [year, triggers.MyReadingList] );
 
   return (
     <section className="flex flex-col gap-4 rounded-xl flex-1">

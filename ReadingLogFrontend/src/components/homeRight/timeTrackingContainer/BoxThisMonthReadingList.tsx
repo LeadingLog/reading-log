@@ -27,7 +27,7 @@ export default function BoxThisMonthReadingList() {
   const [isLoading, setIsLoading] = useState( false ); // 로딩 상태 추가
   const [thisMonthReadingList, setThisMonthReadingList] = useState<monthReadingListItem[]>( [] )
 
-  const myReadingListTrigger = useGlobalChangeStore( (state) => state.triggers.MyReadingList );
+  const { triggers } = useGlobalChangeStore()
 
   const { readingBookId } = useReadingBookStore()
 
@@ -113,7 +113,7 @@ export default function BoxThisMonthReadingList() {
     setPage( 0 );
     // 페이지 초기화 후 새로 요청
     searchThisMonthReadingList( { userId, year, month, page: 0, size: 21 } );
-  }, [myReadingListTrigger] );
+  }, [triggers.MyReadingList] );
 
   // Intersection Observer 설정
   const thisMonthReadingListObserver = useRef<IntersectionObserver | null>( null );
@@ -178,7 +178,6 @@ export default function BoxThisMonthReadingList() {
       {!hasMore && thisMonthReadingList.length > 0 && (
         <li className="py-2 justify-center flex gap-1 text-sm text-favoriteList_Searching_End_Text">
           <span onClick={() => {
-            console.log( myReadingListTrigger )
           }}>이번 달 독서 리스트를 모두 불러왔습니다.</span>
         </li>
       )}

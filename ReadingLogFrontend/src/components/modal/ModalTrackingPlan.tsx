@@ -48,7 +48,7 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
     }
   };
 
-  /* 독서 시장 */
+  /* 독서 시작 */
   const readingStart = async () => {
     setIsLoading( true )
     const bookStatusChangeBodyValue: bookStatusChangeBody = {
@@ -58,9 +58,12 @@ const ModalTrackingPlan: React.FC<ModalTrackingPlanProps> = ({
     }
     try {
       /* 도서 상태가 독서중인 도서는 요청 상태 변경 요청 X */
-      if (bookStatus !== "IN_PROGRESS") await bookStatusChangeApi( bookStatusChangeBodyValue )
-      setReadingBookId(bookId ?? 0)
-      triggerChange( 'MyReadingList' )
+      if (bookStatus !== "IN_PROGRESS") {
+        await bookStatusChangeApi( bookStatusChangeBodyValue );
+        triggerChange( 'MyReadingList' )
+      }
+      setReadingBookId(bookId ?? -1)
+
       setRightContent( 'TimeTracking', {
           TimeTracking: {
             tab: isOn ? 'Timer' : 'StopWatch',
