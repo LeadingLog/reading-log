@@ -12,6 +12,7 @@ export default function MyBookList() {
 
   const changeType = (type: MyReadingListTabType) => {
     setIsActiveMyReadingListType( type )
+    setSearchValue( "" )
   }
 
   const [searchValue, setSearchValue] = useState<string>( "" )

@@ -123,13 +123,13 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
             setModalIsLoading( true )
             const response = await readingListAddApi( ReadingListAddApiRequestBody )
             if (response) {
+              triggerChange( "INTERESTED" )
               openModal( "ModalNotice", {
                 title: "관심도서에 추가되었어요!",
                 subTitle: "이 책이 마음에 드셨군요!",
                 onlyClose: true,
                 withMotion: true,
                 onCancel: () => {
-                  triggerChange( "MyReadingList" )
                   setFavorite( (prev: string[]) => [...prev, item.isbn13] );
                   closeAllModals()
                 }

@@ -153,7 +153,14 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     loadMyReadingList( { userId, MyReadingListTabType, page, size: 12 } );
   }, [page, MyReadingListTabType, isSearching] );
 
+  const didMountRef = useRef(false);
+
   useEffect( () => {
+    if (!didMountRef.current) {
+      // 최초 마운트 시에는 실행 안 함
+      didMountRef.current = true;
+      return;
+    }
     if (isSearching) return;
     setPage( 0 )
     loadMyReadingList( { userId, MyReadingListTabType, page: 0, size: 12 } );
