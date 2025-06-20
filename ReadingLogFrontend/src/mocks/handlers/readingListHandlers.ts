@@ -61,26 +61,36 @@ export const readingListHandlers = [
     const url = new URL( request.url );
     const tabType = parseInt( url.searchParams.get( 'tabType' ) || '0', 10 );
     const page = parseInt( url.searchParams.get( 'page' ) || '0', 10 );
-    console.log( `✅ [Mock API] 내 독서 목록 리스트 요청` );
+
     if (page === 0 && tabType === 0) {
+      console.log( `✅ [Mock API] 내 독서 목록 - 전체 리스트 요청` );
       return HttpResponse.json( myReadingList_all )
     } else if (page === 1 && tabType === 0) {
+      console.log( `✅ [Mock API] 내 독서 목록 - 전체 리스트 추가 요청 (스크롤)` );
       return HttpResponse.json( myReadingList_all2 )
     } else if (page === 0 && tabType === 1) {
+      console.log( `✅ [Mock API] 내 독서 목록 - 독서 중 요청` );
       return HttpResponse.json( myReadingList_reading )
     } else if (page === 1 && tabType === 1) {
+      console.log( `✅ [Mock API] 내 독서 목록 - 독서 중 추가 요청 (스크롤)` );
       return HttpResponse.json( myReadingList_reading2 )
     } else if (page === 0 && tabType === 2) {
+      console.log( `✅ [Mock API] 내 독서 목록 - 읽기 전 요청` );
       return HttpResponse.json( myReadingList_noRead )
     } else if (page === 1 && tabType === 2) {
+      console.log( `✅ [Mock API] 내 독서 목록 - 읽기 전 추가 요청 (스크롤)` );
       return HttpResponse.json( myReadingList_noRead2 )
     } else if (page === 0 && tabType === 3) {
+      console.log( `✅ [Mock API] 내 독서 목록 - 완독 요청` );
       return HttpResponse.json( myReadingList_complete )
     } else if (page === 1 && tabType === 3) {
+      console.log( `✅ [Mock API] 내 독서 목록 - 완독 추가 요청 (스크롤)` );
       return HttpResponse.json( myReadingList_complete2 )
     } else if (page === 0 && tabType === 4) {
+      console.log( `✅ [Mock API] 관심 도서 리스트 요청` );
       return HttpResponse.json( favoriteListData )
     } else if (page === 1 && tabType === 4) {
+      console.log( `✅ [Mock API] 관심 도서 리스트 추가 요청 (스크롤)` );
       return HttpResponse.json( favoriteListData2 )
     } else {
       return HttpResponse.json( {
