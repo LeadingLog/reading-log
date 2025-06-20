@@ -84,11 +84,11 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
                 }
               }}
             >
-              {modalIsLoading && loadingMessage ? (
+              {!modalIsLoading && loadingMessage ? (
                 <>
                   <span>{loadingMessage}</span>
                   <span
-                    className="w-5 h-5 border-4 border-modal_Tracking_loadingBg border-t-modal_Tracking_loadingSpinner rounded-full animate-spin"></span>
+                    className={`${reverseBtn ? 'border-modal_Tracking_Reverse_loadingBg' : 'border-modal_Tracking_loadingBg'} w-5 h-5 border-4  border-t-modal_Tracking_loadingSpinner rounded-full animate-spin`}></span>
                 </>
               ) : (
                 <span>{confirmText || "실행"}</span>
