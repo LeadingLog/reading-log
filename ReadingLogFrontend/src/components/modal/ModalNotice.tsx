@@ -84,7 +84,7 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
                 }
               }}
             >
-              {!modalIsLoading && loadingMessage ? (
+              {modalIsLoading && loadingMessage ? (
                 <>
                   <span>{loadingMessage}</span>
                   <span
