@@ -168,7 +168,11 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       const response = await bookStatusChangeApi( bookStatusChangeBody )
 
       if (response) {
-        triggerChange( "MyReadingList" )
+        if (bookStatus === "INTERESTED") {
+          triggerChange( "INTERESTED" )  
+        } else {
+          triggerChange( "MyReadingList" )
+        }
         openModal( 'ModalNotice', {
           title: `독서 계획이 ${bookStatus === "INTERESTED" ? "추가 " : "변경"} 되었어요!`,
           subTitle: "즐거운 독서시간!",
