@@ -23,11 +23,11 @@ const ModalManager = () => {
 
   return (
     <>
-      {modals.map(({ modalId, type, data }: ModalInstance) => {
+      {modals.map( ({ modalId, type, data }: ModalInstance) => {
         const ModalComponent = MODAL_COMPONENTS[type];
         if (!ModalComponent) return null;
         return <ModalComponent key={modalId} modalId={modalId} {...data} />;
-      })}
+      } )}
     </>
   );
 };

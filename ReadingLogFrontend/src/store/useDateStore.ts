@@ -20,41 +20,41 @@ interface DateStore {
 
 const now = new Date();
 
-export const useDateStore = create<DateStore>((set, get) => ({
+export const useDateStore = create<DateStore>( (set, get) => ({
   year: now.getFullYear(),
   month: now.getMonth() + 1,
   day: now.getDate(),
 
-  setDate: (year, month, day) => set({ year, month, day }),
-  setYear: (year) => set({ year }),
-  setMonth: (month) => set({ month }),
-  setDay: (day) => set({ day }),
+  setDate: (year, month, day) => set( { year, month, day } ),
+  setYear: (year) => set( { year } ),
+  setMonth: (month) => set( { month } ),
+  setDay: (day) => set( { day } ),
 
   today: () =>
-    set({
+    set( {
       year: now.getFullYear(),
       month: now.getMonth() + 1,
       day: now.getDate(),
-    }),
+    } ),
 
-  increaseYear: () => set((state) => ({ year: state.year + 1 })),
-  decreaseYear: () => set((state) => ({ year: state.year - 1 })),
+  increaseYear: () => set( (state) => ({ year: state.year + 1 }) ),
+  decreaseYear: () => set( (state) => ({ year: state.year - 1 }) ),
 
   increaseMonth: () => {
     const { year, month } = get();
     if (month === 12) {
-      set({ year: year + 1, month: 1 });
+      set( { year: year + 1, month: 1 } );
     } else {
-      set({ month: month + 1 });
+      set( { month: month + 1 } );
     }
   },
 
   decreaseMonth: () => {
     const { year, month } = get();
     if (month === 1) {
-      set({ year: year - 1, month: 12 });
+      set( { year: year - 1, month: 12 } );
     } else {
-      set({ month: month - 1 });
+      set( { month: month - 1 } );
     }
   },
-}));
+}) );
