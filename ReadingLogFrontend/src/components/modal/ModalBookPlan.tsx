@@ -169,7 +169,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
 
       if (response) {
         if (bookStatus === "INTERESTED") {
-          triggerChange( "INTERESTED" )  
+          triggerChange( "INTERESTED" )
         } else {
           triggerChange( "MyReadingList" )
         }
@@ -284,6 +284,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
         subTitle: "내 독서 목록에서 제거 됩니다.",
         cancelText: "아니요",
         confirmText: "추가하기",
+        withMotion: true,
         loadingMessage: "추가중",
         onConfirm: async () => {
           try {
