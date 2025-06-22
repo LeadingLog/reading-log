@@ -31,12 +31,12 @@ const TooltipInfo = () => {
           style={{ top: mouseY, left: mouseX ,transform: 'translateX(-100%)', pointerEvents: 'none',}}
         >
           {pageData ? (
-            <ul className="max-w-64 min-w-[150px]">
+            <ul className="max-w-64">
               <li>{pageData.bookTitle}</li>
               <li>
                 독서상태: {pageData.bookStatus === "IN_PROGRESS" ? "독서중" : pageData.bookStatus === "COMPLETED" ? "완독" : "읽기전"}
               </li>
-              <li>독서시간: {String( monthlyTimeHour ).padStart( 2, '0' )}:{String( monthlyTimeMin ).padStart( 2, '0' )}:{String( monthlyTimeSec ).padStart( 2, '0' )}</li>
+              <li className="text-nowrap">독서시간: {String( monthlyTimeHour ).padStart( 2, '0' )}:{String( monthlyTimeMin ).padStart( 2, '0' )}:{String( monthlyTimeSec ).padStart( 2, '0' )}</li>
             </ul>
           ) : (
             <div className="text-gray-500 mt-2">pageData 없음</div>
