@@ -27,11 +27,11 @@ const TooltipInfo = () => {
           ${pageData?.bookStatus === "IN_PROGRESS" && "border-tooltip_border_Reading"}
           ${pageData?.bookStatus === "COMPLETED" && "border-tooltip_border_Complete"}
           ${pageData?.bookStatus === "NOT_STARTED" && "border-tooltip_border_No_Reading"}
-          fixed p-3 border-4 border-tooltip_border rounded-lg bg-gray-100 text-sm bg-tooltip_bg`}
+          fixed z-10 p-3 border-4 border-tooltip_border rounded-lg bg-gray-100 text-sm bg-tooltip_bg`}
           style={{ top: mouseY, left: mouseX ,transform: 'translateX(-100%)', pointerEvents: 'none',}}
         >
           {pageData ? (
-            <ul className="max-w-64">
+            <ul className="max-w-64 min-w-[150px]">
               <li>{pageData.bookTitle}</li>
               <li>
                 독서상태: {pageData.bookStatus === "IN_PROGRESS" ? "독서중" : pageData.bookStatus === "COMPLETED" ? "완독" : "읽기전"}
