@@ -170,6 +170,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       if (response) {
         if (bookStatus === "INTERESTED") {
           triggerChange( "INTERESTED" )
+          triggerChange( "MyReadingList" )
         } else {
           triggerChange( "MyReadingList" )
         }
