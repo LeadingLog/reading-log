@@ -156,7 +156,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     loadMyReadingList( { userId, MyReadingListTabType, page, size: 12 } );
   }, [page, MyReadingListTabType, isSearching] );
 
-  const didMountRef = useRef(false);
+  const didMountRef = useRef( false );
 
   useEffect( () => {
     if (!didMountRef.current) {
