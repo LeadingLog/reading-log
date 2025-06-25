@@ -1,6 +1,10 @@
 import { http, HttpResponse } from 'msw';
 import statsMonthList from "../dummyData/statsMonthListData/statsMonthList.json"
-import statsYearList from "../dummyData/statsYearListData/statsYearList.json"
+import statsYearList2025 from "../dummyData/statsYearListData/statsYearList2025.json"
+import statsYearList2024 from "../dummyData/statsYearListData/statsYearList2024.json"
+import statsYearList2023 from "../dummyData/statsYearListData/statsYearList2023.json"
+import thisMonthReadingList from "../dummyData/thisMonthReadingListData/thisMonthReadingList.json";
+import thisMonthReadingList2 from "../dummyData/thisMonthReadingListData/thisMonthReadingList2.json";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -26,11 +30,23 @@ export const readingRecordHandlers = [
   } ),
 
   // 연별통계
-  http.get( `${serverUrl}/api/readingrecord/stats/time/yylist`, async () => {
-    console.log( `✅ [Mock API] 연별 통계 요청` );
+  http.get( `${serverUrl}/api/readingrecord/stats/time/yylist`, async ({ request }) => {
+    const url = new URL( request.url );
+    const year = parseInt( url.searchParams.get( 'year' ) || '2025', 10 );
 
-    return HttpResponse.json( statsYearList );
+    if (year === 2025) {
+      return HttpResponse.json( statsYearList2025 );
+    } else if (year === 2024) {
+      return HttpResponse.json( statsYearList2024 );
+    } else if (year === 2023) {
+      return HttpResponse.json( statsYearList2023 );
+    } else {
+      return HttpResponse.json( {
+        timeLineReadingList: [],
+      } );
+    }
   } ),
+
 
   // 월별 통계
   http.get( `${serverUrl}/api/readingrecord/stats/time/yymm/book_id`, async () => {

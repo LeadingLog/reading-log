@@ -1,0 +1,56 @@
+{
+  "success": true,
+  "data": {
+    "totalReadingTime": 5000,
+    "monthlyReadingList":[
+      {
+        "month": 1,
+        "complete": 6
+      },
+      {
+        "month": 2,
+        "complete": 2
+      },
+      {
+        "month": 3,
+        "complete": 15
+      },
+      {
+        "month": 4,
+        "complete": 10
+      },
+      {
+        "month": 5,
+        "complete": 20
+      },
+      {
+        "month": 6,
+        "complete": 0
+      },
+      {
+        "month": 7,
+        "complete": 8
+      },
+      {
+        "month": 8,
+        "complete": 4
+      },
+      {
+        "month": 9,
+        "complete": 6
+      },
+      {
+        "month": 10,
+        "complete": 6
+      },
+      {
+        "month": 11,
+        "complete": 12
+      },
+      {
+        "month": 12,
+        "complete": 0
+      }
+    ]
+  }
+}
