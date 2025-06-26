@@ -3,8 +3,6 @@ import statsMonthList from "../dummyData/statsMonthListData/statsMonthList.json"
 import statsYearList2025 from "../dummyData/statsYearListData/statsYearList2025.json"
 import statsYearList2024 from "../dummyData/statsYearListData/statsYearList2024.json"
 import statsYearList2023 from "../dummyData/statsYearListData/statsYearList2023.json"
-import thisMonthReadingList from "../dummyData/thisMonthReadingListData/thisMonthReadingList.json";
-import thisMonthReadingList2 from "../dummyData/thisMonthReadingListData/thisMonthReadingList2.json";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
