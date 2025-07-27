@@ -199,10 +199,13 @@ public class UserController {
 
         } else if (uuid.size() == 1) {  // 로그인
             // 로그인 처리
-            Integer loginId = userService.loginUser(naverId, request);
-            users = userService.findUserById(loginId);
-
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            users = uuid.get(0);
+            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+            return ResponseEntity.ok(jwt);
+//            Integer loginId = userService.loginUser(naverId, request);
+//            users = userService.findUserById(loginId);
+//
+//            return new ResponseEntity<>(users, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -254,6 +257,7 @@ public class UserController {
             return new ResponseEntity<>(users, HttpStatus.OK);
 
         } else if (uuid.size() == 1) {  // 로그인
+            users = uuid.get(0);
             String jwt = jwtTokenProvider.createToken(users.getUserEmail());
             return ResponseEntity.ok(jwt);
 //            Integer loginId = userService.loginUser(kakaoId, request);
