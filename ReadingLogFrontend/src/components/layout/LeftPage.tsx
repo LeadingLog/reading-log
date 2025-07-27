@@ -2,40 +2,51 @@ import React, { useState } from 'react';
 import TimeLine from '../homeLeft/TimeLine.tsx';
 import MyBookList from '../homeLeft/MyBookList';
 import MyFavoriteList from '../homeLeft/MyFavoriteList';
-import { TabName } from "../../types/tabName.ts";
+import { LeftPageTabName } from "../../types/LeftPageTabName.ts";
 
 // 탭 이름 타입 정의
 const LeftPage: React.FC = () => {
   // 활성화된 탭 상태 관리
-  const [activeTab, setActiveTab] = useState<TabName>('타임라인');
+  const [activeLeftPageTab, setActiveLeftPageTab] = useState<LeftPageTabName>( '타임라인' );
 
-  const tabList: TabName[] = ['타임라인', '내 독서 목록', '관심 도서']
+  const LeftPageTabName: LeftPageTabName[] = ['타임라인', '내 독서 목록', '관심 도서']
+
+  const leftPageTabNumber = {
+    "타임라인": 0,
+    "내 독서 목록": 33.33,
+    "관심 도서": 66.66
+  }
 
   // 탭 클릭 핸들러
-  const handleTabClick = (tab: TabName) => {
-    setActiveTab(tab);
+  const handleTabClick = (LeftPageTabName: LeftPageTabName) => {
+    setActiveLeftPageTab( LeftPageTabName );
   };
 
   return (
-    <section className="flex flex-col flex-1 overflow-hidden gap-4 h-full bg-page_Bg rounded-xl p-7">
+    <section className="flex flex-col flex-1 overflow-hidden gap-4 h-full bg-page_Bg rounded-xl p-7 pt-4">
       {/* 탭 영역 */}
-      <ul className="flex text-base ">
-        {tabList.map((tab: TabName, idx) => (
+      <ul className="flex text-base relative">
+        {LeftPageTabName.map( (tab: LeftPageTabName) => (
           <li
-            key={idx}
-            className={`flex justify-center flex-1 cursor-pointer pb-1 border-b-2  ${
-              activeTab === tab ? 'font-semibold border-b-8 border-leftPage_ActiveTab_Border' : 'border-leftPage_InActiveTab_Border'
-            }`}
-            onClick={() => handleTabClick(tab)}
+            key={tab}
+            className={`hover:text-leftPage_Tab_Hover_Text 
+            flex justify-center flex-1 cursor-pointer pb-2 border-b-4 pt-1 border-leftPage_InActiveTab_Border
+            ${activeLeftPageTab === tab ? "text-leftPage_Tab_Hover_Text" : "hover:backdrop-contrast-[96%] text-leftPage_Tab_Text"}`}
+
+            onClick={() => handleTabClick( tab )}
           >
             {tab}
           </li>
-        ))}
+        ) )}
+        <li className="absolute w-1/3 bottom-0 h-2 bg-leftPage_ActiveTab_Border duration-200"
+            style={{ left: `${leftPageTabNumber[activeLeftPageTab]}%` }}
+        >
+        </li>
       </ul>
       {/* 탭 콘텐츠 영역 */}
-      {activeTab === '타임라인' && <TimeLine />}
-      {activeTab === '내 독서 목록' && <MyBookList />}
-      {activeTab === '관심 도서' && <MyFavoriteList activeTab={activeTab}/>}
+      {activeLeftPageTab === '타임라인' && <TimeLine/>}
+      {activeLeftPageTab === '내 독서 목록' && <MyBookList/>}
+      {activeLeftPageTab === '관심 도서' && <MyFavoriteList/>}
     </section>
   );
 };

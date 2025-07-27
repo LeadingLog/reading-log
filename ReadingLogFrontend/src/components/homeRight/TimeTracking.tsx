@@ -7,7 +7,7 @@ import CustomScrollbar from "../common/CustomScrollbar.tsx";
 
 export default function TimeTracking() {
 
-  const {params} = usePageStore();
+  const { params } = usePageStore();
 
   return (
     <section className="flex flex-1 flex-col justify-start overflow-hidden">
@@ -22,7 +22,7 @@ export default function TimeTracking() {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="flex flex-col justify-end overflow-hidden"
           >
-            <BoxStopWatch />
+            <BoxStopWatch/>
           </motion.section>
         )}
       </AnimatePresence>
@@ -37,7 +37,7 @@ export default function TimeTracking() {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="flex flex-col justify-end overflow-hidden"
           >
-            <BoxTimer />
+            <BoxTimer/>
           </motion.section>
         )}
       </AnimatePresence>

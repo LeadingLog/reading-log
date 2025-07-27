@@ -1,1 +1,0 @@
-export type TabName = '타임라인' | '내 독서 목록' | '관심 도서';

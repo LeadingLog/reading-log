@@ -13,22 +13,28 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
                                                    onlyConfirm,
                                                    reverseBtn,
                                                    onConfirm,
+                                                   onCancel,
                                                    showInput,
                                                    withMotion,
+                                                   loadingMessage
                                                  }) => {
   const { closeModal } = useModalStore();
-  const [inputValue, setInputValue] = useState('');
-  const [isVisible, setIsVisible] = useState(true);
+  const modalIsLoading = useModalStore( (state) => state.modalIsLoading );
+  const [inputValue, setInputValue] = useState( '' );
+  const [isVisible, setIsVisible] = useState( true );
 
   /* withMotion 사용 시 모션 표시 위한 부분*/
   const handleClose = () => {
+    if (onCancel) { // 취소 콜백 먼저 실행
+      onCancel();
+    }
     if (withMotion) {
-      setIsVisible(false);
-      setTimeout(() => {
-        if (modalId) closeModal(modalId);
-      }, 150);
+      setIsVisible( false );
+      setTimeout( () => {
+        if (modalId) closeModal( modalId );
+      }, 150 );
     } else {
-      if (modalId) closeModal(modalId);
+      if (modalId) closeModal( modalId );
     }
   };
 
@@ -36,9 +42,9 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
     <section
       className="flex gap-5 bg-modal_Default_Bg p-3 rounded-lg"
     >
-      <article className="flex flex-col gap-2 flex-1 p-3 min-w-60 bg-modal_Content_Bg rounded-lg">
-        <div className={`${onlyConfirm || onlyClose ? 'text-center' : ''} flex flex-col`}>
-          <span className="text-lg text-modal_Title_Text font-semibold">
+      <article className="flex flex-col gap-3 flex-1 p-3 min-w-60 max-w-80 bg-modal_Content_Bg rounded-lg">
+        <div className={`text-center flex flex-col gap-2`}>
+          <span className="text-lg break-keep whitespace-pre-line text-modal_Title_Text font-semibold">
             {title || "전달할 메세지를 작성 안했어요"}
           </span>
           {subTitle && (
@@ -50,16 +56,17 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => setInputValue( e.target.value )}
             className="bg-modal_Content_Bg border-0 border-b-2 border-myPage_Update_Line focus:outline-none focus:border-b-2 focus:border-myPage_Update_Line_Focus"
             placeholder="입력하세요"
           />
         )}
 
-        <div className={`${reverseBtn ? 'flex-row-reverse' : ''} flex justify-between gap-10`}>
+        <div className={`${reverseBtn ? 'flex-row-reverse' : ''} flex justify-between gap-5`}>
           {!onlyConfirm && (
             <button
-              className={`${reverseBtn ? 'bg-modal_Right_Btn_Bg' : 'border-modal_Left_Btn_Border border-4'} flex-1 min-w-fit px-2 py-1 rounded-lg`}
+              className={`${reverseBtn ? 'bg-modal_Right_Btn_Bg hover:invert-[3%]' : 'border-modal_Left_Btn_Border border-4 hover:brightness-[95%]'} active:scale-95 duration-200 flex-1 min-w-fit px-2 py-1 rounded-lg`}
+              disabled={modalIsLoading}
               onClick={handleClose}
             >
               {cancelText || "닫기"}
@@ -67,16 +74,25 @@ const ModalNotice: React.FC<ModalNoticeProps> = ({
           )}
           {!onlyClose && (
             <button
-              className={`${reverseBtn ? 'text-modal_Quit_Text' : 'bg-modal_Right_Btn_Bg'} flex flex-1 justify-center items-center min-w-fit px-2 py-1 rounded-lg`}
+              className={`${reverseBtn ? 'text-modal_Quit_Text hover:backdrop-brightness-95 duration-100' : 'bg-modal_Right_Btn_Bg duration-200'} hover:invert-[3%] active:scale-95  flex flex-1 justify-center items-center gap-1 min-w-fit px-2 py-1 rounded-lg`}
+              disabled={modalIsLoading}
               onClick={() => {
                 if (showInput) {
-                  onConfirm?.(inputValue);
+                  onConfirm?.( inputValue );
                 } else {
                   onConfirm?.();
                 }
               }}
             >
-              {confirmText || "실행"}
+              {modalIsLoading && loadingMessage ? (
+                <>
+                  <span>{loadingMessage}</span>
+                  <span
+                    className={`${reverseBtn ? 'border-modal_Tracking_Reverse_loadingBg' : 'border-modal_Tracking_loadingBg'} w-5 h-5 border-4  border-t-modal_Tracking_loadingSpinner rounded-full animate-spin`}></span>
+                </>
+              ) : (
+                <span>{confirmText || "실행"}</span>
+              )}
             </button>
           )}
         </div>
