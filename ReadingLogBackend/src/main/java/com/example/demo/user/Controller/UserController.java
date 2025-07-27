@@ -68,7 +68,7 @@ public class UserController {
 
     // 회원 탈퇴
     @DeleteMapping("/{userId}/delete")
-    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("userId") Integer userId, HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("userId") Integer userId) throws JsonProcessingException {
         Map<String, Object> serviceResult;
         Map<String, Object> finalResult = new HashMap<>();
         HttpStatus httpStatus;

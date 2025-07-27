@@ -15,10 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -235,7 +232,6 @@ public class UserService {
     public Map<String, Object> deleteUser(Integer userId) throws JsonProcessingException {
 
         // 갱신 토큰 조회
-//        ArrayList<RefreshToken> refreshTokens = refreshTokenService.getToken(userId, "Naver");
         RefreshToken refreshToken = refreshTokenService.findByUserId(userId);
 //        String token = String.valueOf(refreshTokens.get(0).getToken());
         String token = refreshToken.getToken();
