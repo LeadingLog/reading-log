@@ -2,13 +2,11 @@ package com.example.demo.user.Entity;
 
 import com.example.demo.code.Provider;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
+@Builder
 @Entity
 @Table(name = "refresh_token")
 //@IdClass(RefreshTokenId.class)

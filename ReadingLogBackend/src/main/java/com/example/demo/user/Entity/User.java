@@ -6,15 +6,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 
+
+@Builder
 @Entity
 @Table(name = "users")
 @Getter
@@ -27,6 +26,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto Increment 설정
     @Column(name = "user_id")
     private Integer userId;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "user_uuid", nullable = false)
     private String userUUID;
