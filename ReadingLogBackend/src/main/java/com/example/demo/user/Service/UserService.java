@@ -3,6 +3,7 @@ package com.example.demo.user.Service;
 //import com.example.demo.user.Member;
 //import com.example.demo.repository.MemberRepository;
 
+import com.example.demo.code.Provider;
 import com.example.demo.response.ResponseService;
 import com.example.demo.user.Entity.*;
 import com.example.demo.user.Repository.RefreshTokenRepository;
@@ -14,10 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -32,29 +30,13 @@ import java.util.*;
 @Service
 public class UserService {
 
-//    private final MemberRepository memberRepository;
-//
-//    public MemberService(MemberRepository memberRepository) {
-//        this.memberRepository = memberRepository;
-//    }
-
-//    @Transactional
-//    public Member addMember(Long userId, String userName) {
-//        Member member = new Member();
-//        member.setUserId(userId);
-////        member.setUserName(userName);
-//        return memberRepository.save(member);
-//    }
-
-    private final UserRepository userRepository;
-    private final RefreshTokenRepository tokenRepository;
     private final ApiKeyService apiKey;
+    private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
     private final ResponseService responseService;
 
     public UserService(UserRepository userRepository, RefreshTokenRepository tokenRepository, ApiKeyService apiKey, RefreshTokenService refreshTokenService, ResponseService responseService) {
         this.userRepository = userRepository;
-        this.tokenRepository = tokenRepository;
         this.apiKey = apiKey;
         this.refreshTokenService = refreshTokenService;
         this.responseService = responseService;
@@ -62,14 +44,12 @@ public class UserService {
 
     // 1. callback 이후 접근 신규 토큰 발급 요청
     @Transactional
-    public NaverTokenResponse getNewNaverAccessToken(String code, String state, String platform) {
+    public NaverTokenResponse getNewNaverAccessToken(String code, String state) {
         Map<String, Object> result = new HashMap<>();
 
-//        if (platform.equals("NAVER")) {
         String clientId = apiKey.getNaver_client_id();
         String clientSecret = apiKey.getNaver_client_secret();
 
-//        String header = "Bearer" + token;
         try {
             StringBuilder apiURL = new StringBuilder();
             apiURL.append("https://nid.naver.com/oauth2.0/token?");
@@ -90,18 +70,6 @@ public class UserService {
             System.out.println("접근 토큰11 : " + response.getBody());
             System.out.println("naverTokenResponse : "+ naverTokenResponse);
 
-
-
-            // accessToken 반환
-//            if (responseBody.isEmpty()) {
-//                result.put("error", naverTokenResponse.getError());
-//                result.put("error_description", naverTokenResponse.getErrorDescription());
-//                return result;   // error 발생 시 에러 반환
-//            }
-//            result.put("access_token", naverTokenResponse.getAccessToken());
-//            result.put("refresh_token", naverTokenResponse.getRefreshToken());
-//            result.put("token_type", naverTokenResponse.getTokenType());
-//            result.put("expires_in", naverTokenResponse.getExpiresIn());
             return naverTokenResponse;
 
             // TODO 요청 실패 시 처리 필요
@@ -155,6 +123,7 @@ public class UserService {
         }
 
         User user = new User();
+        user.setPassword(UUID.randomUUID().toString()); // 임의의 비밀번호 설정
 
         if (naverUserInfo != null && kakaoUserInfo == null){
             System.out.println("네이버 회원 정보 처리");
@@ -237,6 +206,8 @@ public class UserService {
             session.setMaxInactiveInterval(604800); // 7일
             session.setAttribute("loginUserId", userId);
 //            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
+
+            System.out.println("ㅣㅣ야루" + request.getSession().getAttribute("loginUserId"));
         } else {
             return 0;
         }
@@ -258,18 +229,17 @@ public class UserService {
 
     // 회원 탈퇴
     @Transactional
-    public Map<String, Object> deleteUser(Integer userId, HttpServletRequest request) throws JsonProcessingException {
+    public Map<String, Object> deleteUser(Integer userId) throws JsonProcessingException {
 
         // 갱신 토큰 조회
-//        ArrayList<RefreshToken> refreshTokens = refreshTokenService.getToken(userId, "Naver");
         RefreshToken refreshToken = refreshTokenService.findByUserId(userId);
 //        String token = String.valueOf(refreshTokens.get(0).getToken());
         String token = refreshToken.getToken();
-        String provider = refreshToken.getProvider();
+        Provider provider = refreshToken.getProvider();
 
         Map<String, Object> result = new HashMap<>();
 
-        if (provider.equals("Naver")) {
+        if (provider == Provider.NAVER) {
             // 네이버 토큰 재발급
             NaverTokenResponse naverTokenResponse = refreshTokenService.getNaverAccessTokenByRefreshToken(token);
             String accessToken = naverTokenResponse.getAccessToken();
@@ -294,13 +264,13 @@ public class UserService {
             System.out.println("naverTOkenRefreshResponse : " + naverDeleteResponse);
 
             if (naverDeleteResponse != null && "success".equals(naverDeleteResponse.getResult())) {
-                result = deleteInternalUser(userId, request);
+                result = deleteInternalUser(userId);
             } else {
                 // 네이버 탈퇴 실패 처리
                 result.put("status", "error");
                 result.put("message", "네이버 연동 해제 실패");
             }
-        } else if (provider.equals("Kakao")) {
+        } else if (provider == Provider.KAKAO) {
             // 카카오 토큰 재발급, aminKey 를 이용하는 방식 선택하여 필요없음.
 //            KakaoTokenResponse kakaoTokenResponse = refreshTokenService.getKakaoAccessTokenByRefreshToken(token);
 //            String accessToken = kakaoTokenResponse.getAccessToken();
@@ -338,7 +308,7 @@ public class UserService {
             }
 
             if (userIdFromKakao != null) {
-                result = deleteInternalUser(userId, request);
+                result = deleteInternalUser(userId);
             } else {
                 // 카카오 탈퇴 실패 처리
                 result.put("status", "error");
@@ -348,7 +318,7 @@ public class UserService {
             System.out.println("접근 토큰22 by refreshToken : " + response.getBody());
             System.out.println("kakaoTokenResponse : " + userIdFromKakao);
 
-            deleteInternalUser(userId, request);
+            deleteInternalUser(userId);
 
         } else {
             // 지원하지 않는 Provider
@@ -361,21 +331,21 @@ public class UserService {
 
     @Transactional
     // 내부 회원 탈퇴
-    public Map<String,Object> deleteInternalUser(Integer userId, HttpServletRequest request) {
+    public Map<String,Object> deleteInternalUser(Integer userId) {
 
         try {
             // 회원 삭제
             userRepository.deleteById(userId);
 
             // todo 갱신토큰 삭제
-            refreshTokenService.deleteToken(userId, "Naver");
+            refreshTokenService.deleteToken(userId, Provider.NAVER);
 
             // Todo 탈퇴 성공 시
             // 로그인 세션 삭제
-            HttpSession session = request.getSession();
-            if (session != null) {
-                session.removeAttribute("loginUserId");
-            }
+//            HttpSession session = request.getSession();
+//            if (session != null) {
+//                session.removeAttribute("loginUserId");
+//            }
 
             // 성공 응답 데이터 맵 생성
             Map<String, Object> successResponse = new HashMap<>();
@@ -438,9 +408,9 @@ public class UserService {
 
     }
 
-    // 회원 정보 수정 (userId)
-
-
-
+    // 이메일로 사용자를 찾는 서비스 메서드 추가
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByUserEmail(email);
+    }
 
 }

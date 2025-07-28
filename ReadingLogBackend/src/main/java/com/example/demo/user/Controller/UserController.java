@@ -3,8 +3,10 @@ package com.example.demo.user.Controller;
 //import com.example.demo.user.Member;
 //import com.example.demo.service.MemberService;
 
+import com.example.demo.code.Provider;
 import com.example.demo.response.ResponseService;
 import com.example.demo.user.Entity.*;
+import com.example.demo.user.Security.JwtTokenProvider;
 import com.example.demo.user.Service.ApiKeyService;
 import com.example.demo.user.Service.KakaoService;
 import com.example.demo.user.Service.RefreshTokenService;
@@ -13,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -24,28 +27,20 @@ import java.util.*;
 @RequestMapping("/user")
 public class UserController {
 
-//    private final MemberService memberService;
-
-//    public MemberController(MemberService memberService) {
-//        this.memberService = memberService;
-//    }
-//
-//    @PostMapping("/add")
-//    public Member addMember(@RequestParam("userId") String userId,
-//                            @RequestParam("userName") String userName) {
-//        return memberService.addMember(userId, userName);
-//    }
-
     private final UserService userService;
     private final RefreshTokenService tokenService;
     private final ResponseService responseService;
     private final KakaoService kakaoService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService, ResponseService responseService, KakaoService kakaoService) {
+    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService, ResponseService responseService, KakaoService kakaoService, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.tokenService = tokenService;
         this.responseService = responseService;
         this.kakaoService = kakaoService;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // 회원 세션 시간 조회
@@ -59,19 +54,11 @@ public class UserController {
     @GetMapping("/extend_session")
     public ResponseEntity<Map<String,Object>> extendSession(HttpServletRequest request, Integer userId) {
         try {
-            // 테스트용
-            // @RequestParam(required = false) Boolean fail
-//            if (fail != null && fail) {
-//                return responseService.responseData(false, "extend session failed");
-//            }
-
             return userService.extendSession(userId, request);
         } catch (Exception e) {
             return responseService.responseData(false, "extend session failed");
         }
     }
-
-
 
     // 로그아웃
     @PostMapping("/logout")
@@ -79,16 +66,15 @@ public class UserController {
         userService.logoutUser(request);
     }
 
-
     // 회원 탈퇴
     @DeleteMapping("/{userId}/delete")
-    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("userId") Integer userId, HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("userId") Integer userId) throws JsonProcessingException {
         Map<String, Object> serviceResult;
         Map<String, Object> finalResult = new HashMap<>();
         HttpStatus httpStatus;
 
         try {
-            serviceResult = userService.deleteUser(userId, request);
+            serviceResult = userService.deleteUser(userId);
 
             if ("success".equals(serviceResult.get("status"))) {
                 httpStatus = HttpStatus.OK;
@@ -102,8 +88,6 @@ public class UserController {
             Map<String, Object> errorResponse = new HashMap<>();
             finalResult.put("success", false);
             finalResult.put("message", "회원 탈퇴 처리 중 데이터 형식 오류 발생");
-//            errorResponse.put("status", "error");
-//            errorResponse.put("message", "회원 탈퇴 처리 중 데이터 형식 오류 발생");
 
             finalResult = errorResponse;
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -128,7 +112,7 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> findUserById(@PathVariable("userId") Integer userId) {
         Map<String, Object> rtn = new HashMap<>();
         User user = userService.findUserById(userId);
-        String socialInfo = tokenService.findProviderByUserId(userId);
+        Provider socialInfo = tokenService.findProviderByUserId(userId);
         if (!user.getNickname().isEmpty()) {
             rtn.put("success", true);
             rtn.put("user", user);
@@ -166,12 +150,6 @@ public class UserController {
     }
 
 
-
-
-
-
-
-
     // 네이버 회원가입 및 로그인
     // callback 이후 접근 토큰 발급 요청
     @ResponseBody
@@ -181,7 +159,7 @@ public class UserController {
         Map<String, Object> rtn = new HashMap<>();
 
         // 1. 접근 토큰 신규 발급
-        NaverTokenResponse accessTokenResult = userService.getNewNaverAccessToken(code, state, "Naver");
+        NaverTokenResponse accessTokenResult = userService.getNewNaverAccessToken(code, state);
         System.out.println("accessToken="+accessTokenResult);
 
         // 접근 토큰 에러 시 리턴
@@ -193,13 +171,6 @@ public class UserController {
 
             return ResponseEntity.badRequest().body(rtn);
         }
-
-        // accessToken 만료 시 재발급
-//        int expires_in = Integer.parseInt(accessTokenResult.getExpiresIn());
-//        if ( expires_in <= 0) {
-//            accessTokenResult = tokenService.getAccessTokenByRefreshToken(String );
-//        }
-
 
         // 2. 네이버 프로필 정보 조회
         String accessToken = accessTokenResult.getAccessToken();
@@ -213,12 +184,12 @@ public class UserController {
             // 회원 추가
             Integer userId = userService.joinUser(naverUserInfo, null);
             // 갱신 토큰 저장
-            RefreshToken refreshToken = new RefreshToken(null, userId, "Naver", accessTokenResult.getRefreshToken());
+            RefreshToken refreshToken = new RefreshToken(null, userId, Provider.NAVER, accessTokenResult.getRefreshToken());
             RefreshToken result = tokenService.addToken(refreshToken);
 
             // 토큰 저장 불가 에러 발생 시 회원 삭제
             if (result == null) {
-                userService.deleteUser(userId, request);
+                userService.deleteUser(userId);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
             }
             // 회원가입한 회원 조회
@@ -228,10 +199,13 @@ public class UserController {
 
         } else if (uuid.size() == 1) {  // 로그인
             // 로그인 처리
-            Integer loginId = userService.loginUser(naverId, request);
-            users = userService.findUserById(loginId);
-
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            users = uuid.get(0);
+            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+            return ResponseEntity.ok(jwt);
+//            Integer loginId = userService.loginUser(naverId, request);
+//            users = userService.findUserById(loginId);
+//
+//            return new ResponseEntity<>(users, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -243,7 +217,7 @@ public class UserController {
     @ResponseBody
     @PostMapping("/kakaologin")
     // 카카오 회원가입 및 로그인
-    public ResponseEntity<?> kakaoLogin(String code, HttpServletRequest request) throws IOException, URISyntaxException {
+    public ResponseEntity<?> kakaoLogin(String code) throws IOException, URISyntaxException {
         User users = null;
         Map<String, Object> rtn = new HashMap<>();
 
@@ -271,11 +245,11 @@ public class UserController {
             // 회원 추가
             Integer userId = userService.joinUser(null, kakaoUserInfo);
             // 갱신 토큰 저장
-            RefreshToken refreshToken = new RefreshToken(null, userId, "Kakao", accessTokenResult.getRefreshToken());
+            RefreshToken refreshToken = new RefreshToken(null, userId, Provider.KAKAO, accessTokenResult.getRefreshToken());
             RefreshToken result = tokenService.addToken(refreshToken);
 
             if (result == null) {
-                userService.deleteUser(userId, request);
+                userService.deleteUser(userId);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
             }
 
@@ -283,24 +257,44 @@ public class UserController {
             return new ResponseEntity<>(users, HttpStatus.OK);
 
         } else if (uuid.size() == 1) {  // 로그인
-            Integer loginId = userService.loginUser(kakaoId, request);
-            users = userService.findUserById(loginId);
+            users = uuid.get(0);
+            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+            return ResponseEntity.ok(jwt);
+//            Integer loginId = userService.loginUser(kakaoId, request);
+//            users = userService.findUserById(loginId);
 
-            return new ResponseEntity<>(users, HttpStatus.OK);
+//            return new ResponseEntity<>(users, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-
     }
 
 
+    // 테스트용 컨트롤러
+    @PostMapping("/login")
+    public ResponseEntity<?> loginTest(@RequestBody Map<String, String> loginRequest) throws IOException, URISyntaxException {
+        String email = loginRequest.get("userEmail");
+        String password = loginRequest.get("password");
 
+        // UserService에 이메일로 사용자를 찾는 기능이 필요합니다. (2단계 참고)
+        Optional<User> userOptional = userService.findUserByEmail(email);
 
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 사용자입니다.");
+        }
 
+        User user = userOptional.get();
 
-
-
-
+        // 비밀번호 일치 여부 확인
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            // 로그인 성공: JWT 토큰 생성
+            String token = jwtTokenProvider.createToken(user.getUserEmail());
+            return ResponseEntity.ok(token);
+        } else {
+            // 로그인 실패: 비밀번호 불일치
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않습니다.");
+        }
+    }
 
 
 
