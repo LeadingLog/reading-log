@@ -54,12 +54,13 @@ export default function OAuthCallbackHandler({
       } );
 
       const response = await axios.post( `${serverUrl}${apiEndpoint}`, loginData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        withCredentials: true
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       } );
 
       const data = response.data;
       if (response.status === 200) { // 로그인에 성공하면 사용자 정보를 저장한다.
+        console.log("===== 로그인 성공 =====");
+        console.log(data);
         useUserStore.getState().setUser( {
           userId: data.userId,
           nickname: data.nickname,
