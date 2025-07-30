@@ -23,6 +23,7 @@ export default function Account() {
         title: "로그아웃 완료!",
         subTitle: "다음에 또 봐요!",
         confirmText: "확인",
+        withMotion: true,
         onlyConfirm: true,
         onConfirm: () => {
           resetUser(); // localStorage 초기화
@@ -44,6 +45,7 @@ export default function Account() {
       title: title || "로그아웃 실패",
       subTitle: message || "로그아웃에 실패하였습니다. 다시 시도해주세요.",
       onlyClose: true,
+      withMotion: true,
       cancelText: "확인",
     } );
   };
@@ -71,6 +73,7 @@ export default function Account() {
                 title: "로그아웃 하시겠어요?",
                 cancelText: "닫기",
                 confirmText: "로그아웃",
+                withMotion: true,
                 loadingMessage: "로그아웃중",
                 onConfirm: handleLogout, // 로그아웃 로직 전달
               } )

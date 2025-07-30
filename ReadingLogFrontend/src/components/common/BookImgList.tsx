@@ -10,6 +10,7 @@ import { useUserStore } from "../../store/userStore.ts";
 import { BookListType } from "../../types/commonBookListType.ts";
 import { useGlobalChangeStore } from "../../store/useGlobalChangeStore.ts";
 import Logo from "../../assets/LOGO.svg?react";
+import { useReadingBookStore } from "../../store/useReadingInfoStore";
 
 export default function BookImgList({ MyReadingListTabType, query = '', inputRef }: BookImgListProps) {
   const [page, setPage] = useState<number>( 0 );
@@ -23,6 +24,8 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
   const [isSearching, setIsSearching] = useState( false );
 
   const { triggers } = useGlobalChangeStore.getState();
+
+  const { readingBookId } = useReadingBookStore()
 
   const searchBook = async (query: string) => {
     if (isFetching) return;
@@ -153,7 +156,7 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     loadMyReadingList( { userId, MyReadingListTabType, page, size: 12 } );
   }, [page, MyReadingListTabType, isSearching] );
 
-  const didMountRef = useRef(false);
+  const didMountRef = useRef( false );
 
   useEffect( () => {
     if (!didMountRef.current) {
@@ -196,13 +199,33 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
     [isLoading, hasMore]
   );
 
+  /* 독서중 도서 표시 */
+
+  const [dotCount, setDotCount] = useState<string>( "." )
+
+  if (dotCount.length > 3) {
+    setDotCount( "." )
+  }
+
+  useEffect( () => {
+    if (!readingBookId) return;
+
+    const interval = setInterval( () => {
+      setDotCount( prev => prev + "." )
+    }, 500 );
+
+    return () => clearInterval( interval );
+  }, [readingBookId] );
+
+
   return (
     <>
       {myReadingList.map( (item) => (
         <li
           key={item.bookId}
           onClick={() => openModalBookPlan( item )}
-          className="active:scale-[97%] duration-100 hover:border-imgBook_Item_Hover_Border border-[6px] border-imgBook_Item_Border bg-imgBook_Item_Bg relative aspect-square cursor-pointer"
+          className={`${item.bookId === readingBookId ? "border-imgBook_Item_Hover_Border" : "hover:border-imgBook_Item_Hover_Border"}
+          active:scale-[97%] duration-100 border-[6px] border-imgBook_Item_Border bg-imgBook_Item_Bg relative aspect-square cursor-pointer`}
         >
           {item.coverImgUrl ? (
               <img src={item.coverImgUrl} alt={item.bookTitle} className="w-full h-full object-cover"/>
@@ -212,18 +235,29 @@ export default function BookImgList({ MyReadingListTabType, query = '', inputRef
               <span className="text-2xl font-bold text-imgBook_Item_No_Img_Text">No Image</span>
             </div>
           }
-          <div
-            className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
-              ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :
-              item.bookStatus === 'COMPLETED' ? 'bg-imgBook_Item_Complete_Bg' :
-                'bg-imgBook_Item_NoRead_Bg'}`}
-          >
-            <span className="text-xs">{readStatus[item.bookStatus as ReadStatus] || "오류"}</span>
-            <span className="flex justify-center items-center text-imgBook_Icon_Color mt-[1px]">
-              {item.bookStatus === 'IN_PROGRESS' && <IconReading className="text-imgBook_Icon_Color"/>}
-              {item.bookStatus === 'COMPLETED' && <IconReadComplete className="text-imgBook_Icon_Color"/>}
-            </span>
-          </div>
+          {item.bookId === readingBookId ? (
+            <div
+              className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
+                ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :
+                item.bookStatus === 'COMPLETED' ? 'bg-imgBook_Item_Complete_Bg' :
+                  'bg-imgBook_Item_NoRead_Bg'}`}
+            >
+              <span className="text-xs text-imgBook_Item_ReadingStart_Text_Color">독서중{dotCount}</span>
+            </div>
+          ) : (
+            <div
+              className={`absolute left-2 top-2 gap-1 flex justify-center items-center px-2 py-1 rounded-lg 
+                ${item.bookStatus === 'IN_PROGRESS' ? 'bg-imgBook_Item_Reading_Bg' :
+                item.bookStatus === 'COMPLETED' ? 'bg-imgBook_Item_Complete_Bg' :
+                  'bg-imgBook_Item_NoRead_Bg'}`}
+            >
+              <span className="text-xs">{readStatus[item.bookStatus as ReadStatus] || "오류"}</span>
+              <span className="flex justify-center items-center text-imgBook_Icon_Color mt-[1px]">
+                {item.bookStatus === 'IN_PROGRESS' && <IconReading className="text-imgBook_Icon_Color"/>}
+                {item.bookStatus === 'COMPLETED' && <IconReadComplete className="text-imgBook_Icon_Color"/>}
+              </span>
+            </div>
+          )}
         </li>
       ) )}
       {isLoading && (

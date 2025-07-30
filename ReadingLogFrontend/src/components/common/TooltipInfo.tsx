@@ -27,7 +27,7 @@ const TooltipInfo = () => {
           ${pageData?.bookStatus === "IN_PROGRESS" && "border-tooltip_border_Reading"}
           ${pageData?.bookStatus === "COMPLETED" && "border-tooltip_border_Complete"}
           ${pageData?.bookStatus === "NOT_STARTED" && "border-tooltip_border_No_Reading"}
-          fixed p-3 border-4 border-tooltip_border rounded-lg bg-gray-100 text-sm bg-tooltip_bg`}
+          fixed z-10 p-3 border-4 border-tooltip_border rounded-lg bg-gray-100 text-sm bg-tooltip_bg`}
           style={{ top: mouseY, left: mouseX ,transform: 'translateX(-100%)', pointerEvents: 'none',}}
         >
           {pageData ? (
@@ -36,7 +36,7 @@ const TooltipInfo = () => {
               <li>
                 독서상태: {pageData.bookStatus === "IN_PROGRESS" ? "독서중" : pageData.bookStatus === "COMPLETED" ? "완독" : "읽기전"}
               </li>
-              <li>독서시간: {String( monthlyTimeHour ).padStart( 2, '0' )}:{String( monthlyTimeMin ).padStart( 2, '0' )}:{String( monthlyTimeSec ).padStart( 2, '0' )}</li>
+              <li className="text-nowrap">독서시간: {String( monthlyTimeHour ).padStart( 2, '0' )}:{String( monthlyTimeMin ).padStart( 2, '0' )}:{String( monthlyTimeSec ).padStart( 2, '0' )}</li>
             </ul>
           ) : (
             <div className="text-gray-500 mt-2">pageData 없음</div>

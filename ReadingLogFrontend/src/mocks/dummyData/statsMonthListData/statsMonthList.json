@@ -38,6 +38,114 @@
         "bookTitle": "인생의 방향은 언제든 바뀔 수 있다",
         "bookStatus": "NOT_STARTED",
         "bookTime": 0
+      },
+      {
+        "bookId": 7,
+        "bookTitle": "어떻게 죽을 것인가",
+        "bookStatus": "NOT_STARTED",
+        "bookTime": 60
+      },
+      {
+        "bookId": 8,
+        "bookTitle": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 1500
+      },
+      {
+        "bookId": 9,
+        "bookTitle": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 4500
+      },
+      {
+        "bookId": 10,
+        "bookTitle": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 6500
+      },
+      {
+        "bookId": 11,
+        "bookTitle": "삶이 흐르는 대로",
+        "bookStatus": "COMPLETED",
+        "bookTime": 4500
+      },
+      {
+        "bookId": 12,
+        "bookTitle": "인생의 방향은 언제든 바뀔 수 있다",
+        "bookStatus": "NOT_STARTED",
+        "bookTime": 0
+      },
+      {
+        "bookId": 13,
+        "bookTitle": "어떻게 죽을 것인가",
+        "bookStatus": "NOT_STARTED",
+        "bookTime": 60
+      },
+      {
+        "bookId": 14,
+        "bookTitle": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 1500
+      },
+      {
+        "bookId": 15,
+        "bookTitle": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 4500
+      },
+      {
+        "bookId": 16,
+        "bookTitle": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 6500
+      },
+      {
+        "bookId": 17,
+        "bookTitle": "삶이 흐르는 대로",
+        "bookStatus": "COMPLETED",
+        "bookTime": 4500
+      },
+      {
+        "bookId": 18,
+        "bookTitle": "인생의 방향은 언제든 바뀔 수 있다",
+        "bookStatus": "NOT_STARTED",
+        "bookTime": 0
+      },
+      {
+        "bookId": 19,
+        "bookTitle": "어떻게 죽을 것인가",
+        "bookStatus": "NOT_STARTED",
+        "bookTime": 60
+      },
+      {
+        "bookId": 20,
+        "bookTitle": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 1500
+      },
+      {
+        "bookId": 21,
+        "bookTitle": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 4500
+      },
+      {
+        "bookId": 22,
+        "bookTitle": "30개 도시로 읽는 영국사 1",
+        "bookStatus": "IN_PROGRESS",
+        "bookTime": 6500
+      },
+      {
+        "bookId": 23,
+        "bookTitle": "삶이 흐르는 대로",
+        "bookStatus": "COMPLETED",
+        "bookTime": 4500
+      },
+      {
+        "bookId": 24,
+        "bookTitle": "인생의 방향은 언제든 바뀔 수 있다",
+        "bookStatus": "NOT_STARTED",
+        "bookTime": 0
       }
     ]
   }

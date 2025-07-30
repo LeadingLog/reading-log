@@ -168,7 +168,12 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
       const response = await bookStatusChangeApi( bookStatusChangeBody )
 
       if (response) {
-        triggerChange( "MyReadingList" )
+        if (bookStatus === "INTERESTED") {
+          triggerChange( "INTERESTED" )
+          triggerChange( "MyReadingList" )
+        } else {
+          triggerChange( "MyReadingList" )
+        }
         openModal( 'ModalNotice', {
           title: `독서 계획이 ${bookStatus === "INTERESTED" ? "추가 " : "변경"} 되었어요!`,
           subTitle: "즐거운 독서시간!",
@@ -280,6 +285,7 @@ const ModalBookPlan: React.FC<ModalBookPlanProps> = ({
         subTitle: "내 독서 목록에서 제거 됩니다.",
         cancelText: "아니요",
         confirmText: "추가하기",
+        withMotion: true,
         loadingMessage: "추가중",
         onConfirm: async () => {
           try {

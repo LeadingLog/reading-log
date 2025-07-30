@@ -1,5 +1,7 @@
 package com.example.demo.user.Service;
 
+import com.example.demo.code.Provider;
+import com.example.demo.user.Entity.KakaoTokenResponse;
 import com.example.demo.user.Entity.NaverTokenResponse;
 import com.example.demo.user.Entity.RefreshToken;
 import com.example.demo.user.Repository.RefreshTokenRepository;
@@ -7,14 +9,15 @@ import com.example.demo.user.Repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class RefreshTokenService {
@@ -35,7 +38,7 @@ public class RefreshTokenService {
     }
 
     // 갱신 토큰 조회
-    public ArrayList<RefreshToken>  getToken(Integer userId, String provider) {
+    public ArrayList<RefreshToken>  getToken(Integer userId, Provider provider) {
         ArrayList<RefreshToken>  refreshToken = null;
         refreshToken = tokenRepository.findByUserIdAndProvider(userId, provider);
 
@@ -43,8 +46,12 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
+    public RefreshToken findByUserId(Integer userId) {
+        return tokenRepository.findByUserId(userId);
+    }
+
     // 갱신 토큰으로 접근 토큰 재발급 요청
-    public NaverTokenResponse getAccessTokenByRefreshToken(String refreshToken){
+    public NaverTokenResponse getNaverAccessTokenByRefreshToken(String refreshToken){
 
         // apiKey 값 전달받기
         String clientId = apiKey.getNaver_client_id();
@@ -76,17 +83,63 @@ public class RefreshTokenService {
 
     }
 
+    public KakaoTokenResponse getKakaoAccessTokenByRefreshToken(String refreshToken) throws JsonProcessingException {
+        String kakaoApiKey = apiKey.getKakao_api_key();
+        String redirectUri = apiKey.getKakao_redirect_uri();
+        String clientSecret = apiKey.getNaver_client_secret();
+
+        String kakaoTokenUrl = "https://kauth.kakao.com/oauth/token";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "refresh_token"); // 발급
+        params.add("client_id", kakaoApiKey);
+        params.add("redirect_uri", redirectUri);
+        params.add("refresh_token", refreshToken);
+        params.add("client_secret", clientSecret);
+
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        // TODO 경로 requestentity 로 옮겨주기
+        ResponseEntity<String> response = restTemplate
+                .exchange(kakaoTokenUrl, HttpMethod.POST, kakaoTokenRequest, String.class);
+        // JSON 결과값 반환
+        String responseBody = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        KakaoTokenResponse kakaoTokenResponse = objectMapper.readValue(responseBody, KakaoTokenResponse.class);
+        System.out.println("접근 토큰22 by refreshToken : " + response.getBody());
+        System.out.println("kakaoTokenResponse : " + kakaoTokenResponse);
+
+        return kakaoTokenResponse;
+    }
+
 
     // TODO 갱신 토큰 삭제
-    public void deleteToken(Integer userId, String provider) {
+    public void deleteToken(Integer userId, Provider provider) {
         // https://developers.naver.com/docs/login/devguide/devguide.md#5-1-2-%EA%B0%B1%EC%8B%A0-%ED%86%A0%ED%81%B0%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC
         tokenRepository.deleteByUserIdAndProvider(userId, provider);
     }
 
     // 연동 소셜 로그인 사이트 조회
-    public String findProviderByUserId(Integer userId) {
+    public Provider findProviderByUserId(Integer userId) {
         RefreshToken refreshToken = tokenRepository.findByUserId(userId);
         return refreshToken.getProvider();
+    }
+
+    // 토큰 수정
+    public RefreshToken updateToken(Integer userId, String provider, String newToken) {
+        RefreshToken refreshToken = tokenRepository.getReferenceById(userId);
+
+        // refershToken 이 새 토큰과 다를 경우
+        if (Objects.equals(provider, refreshToken.getProvider()) && !Objects.equals(newToken, refreshToken.getToken())) {
+            refreshToken.setToken(newToken);
+            System.out.println(userId + " 회원 " + provider +" 토큰 값 변경");
+            tokenRepository.save(refreshToken);
+        }
+        return refreshToken;
     }
 
 }

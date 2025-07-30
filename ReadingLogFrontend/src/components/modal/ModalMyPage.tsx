@@ -33,6 +33,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
     const alertId = openModal( "ModalNotice", {
       title: message,
       confirmText: "닫기",
+      withMotion: true,
       onlyConfirm: true,
       onConfirm: () => closeModal( alertId ),
     } );
@@ -122,6 +123,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
       title: title || "회원 정보 수정 실패",
       subTitle: message || "회원 정보 수정에 실패하였습니다. 다시 시도해주세요.",
       onlyConfirm: true,
+      withMotion: true,
       confirmText: "닫기",
       onConfirm: () => {
         resetEditState();
@@ -143,6 +145,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
         openModal( "ModalNotice", {
           title: "회원 탈퇴가 완료되었습니다",
           confirmText: "닫기",
+          withMotion: true,
           onlyConfirm: true,
           onConfirm: () => {
             resetUser(); // localStorage 초기화
@@ -171,6 +174,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
       confirmText: "탈퇴하기",
       reverseBtn: true,
       showInput: true,
+      withMotion: true,
       loadingMessage: "탈퇴중",
       onConfirm: async (inputValue?: string) => {
         if (email !== inputValue) {
@@ -189,6 +193,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
       title: title || "회원 탈퇴 실패",
       subTitle: message || "회원 탈퇴에 실패하였습니다. 다시 시도해주세요.",
       onlyConfirm: true,
+      withMotion: true,
       confirmText: "닫기",
       onConfirm: () => {
         closeModal( deleteFailModal );

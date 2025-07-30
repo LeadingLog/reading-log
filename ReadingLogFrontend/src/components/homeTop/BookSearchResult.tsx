@@ -21,7 +21,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
   const { triggerChange } = useGlobalChangeStore.getState();
 
   /* 관심도서 클릭 시 도서 리스트 클릭 효과 제어 */
-  const [noneListClick, setNoneListClick] = useState<boolean>(false)
+  const [noneListClick, setNoneListClick] = useState<boolean>( false )
 
   /* 관심도서 버튼을 클릭하면 뜨는 모달 관련 ------------- */
   const [favorite, setFavorite] = useState<string[]>( [] );
@@ -117,6 +117,7 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
         subTitle: "관심도서에 추가됩니다.",
         cancelText: "아니요",
         confirmText: "추가하기",
+        withMotion: true,
         loadingMessage: "추가중",
         onConfirm: async () => {
           try {
@@ -223,9 +224,9 @@ const BookSearchResult: React.FC<BookSearchResultProps> = ({
               </div>
               <div className="group w-12 aspect-square relative">
                 <div
-                  onMouseDown={() => setNoneListClick(true)}
-                  onMouseUp={() => setNoneListClick(false)}
-                  onMouseLeave={() => setNoneListClick(false)}
+                  onMouseDown={() => setNoneListClick( true )}
+                  onMouseUp={() => setNoneListClick( false )}
+                  onMouseLeave={() => setNoneListClick( false )}
                   className={`${
                     item.bookStatus === "INTERESTED" || favorite.includes( item.isbn13 ) ? 'bg-favorite_Icon_Bg' : 'bg-unFavorite_Icon_Bg group-hover:bg-unFavorite_Icon_Hover_Bg duration-100 group-active:active:scale-95'
                   } absolute w-12 aspect-square left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full p-2`}
