@@ -12,7 +12,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.*;
@@ -411,6 +413,17 @@ public class UserService {
     // 이메일로 사용자를 찾는 서비스 메서드 추가
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findByUserEmail(email);
+    }
+
+    // httpOnly 설정을 위해 쿠키에 token을 저장
+    public void addAccessTokenCookie(HttpServletResponse response, String token) {
+        Cookie cookie = new Cookie("accessToken", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // 개발 환경에서는 false로 설정
+        cookie.setPath("/");
+        cookie.setMaxAge(30 * 60); // 30분
+
+        response.addCookie(cookie);
     }
 
 }
