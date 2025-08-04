@@ -7,10 +7,7 @@ import com.example.demo.code.Provider;
 import com.example.demo.response.ResponseService;
 import com.example.demo.user.Entity.*;
 import com.example.demo.user.Security.JwtTokenProvider;
-import com.example.demo.user.Service.ApiKeyService;
-import com.example.demo.user.Service.KakaoService;
-import com.example.demo.user.Service.RefreshTokenService;
-import com.example.demo.user.Service.UserService;
+import com.example.demo.user.Service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,17 +26,19 @@ import java.util.*;
 public class UserController {
 
     private final UserService userService;
+    private final KakaoService kakaoService;
+    private final NaverService naverService;
     private final RefreshTokenService tokenService;
     private final ResponseService responseService;
-    private final KakaoService kakaoService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService, ResponseService responseService, KakaoService kakaoService, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService, ResponseService responseService, KakaoService kakaoService, NaverService naverService, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.tokenService = tokenService;
         this.responseService = responseService;
         this.kakaoService = kakaoService;
+        this.naverService = naverService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
     }
@@ -70,12 +69,13 @@ public class UserController {
     // 회원 탈퇴
     @DeleteMapping("/{userId}/delete")
     public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("userId") Integer userId) throws JsonProcessingException {
-        Map<String, Object> serviceResult;
+        Map<String, Object> serviceResult = Map.of();
         Map<String, Object> finalResult = new HashMap<>();
         HttpStatus httpStatus;
 
         try {
-            serviceResult = userService.deleteUser(userId);
+            userService.deleteUserWithUnlink(userId);
+//            serviceResult = userService.deleteUserWithUnlink(userId);
 
             if ("success".equals(serviceResult.get("status"))) {
                 httpStatus = HttpStatus.OK;
@@ -92,7 +92,6 @@ public class UserController {
 
             finalResult = errorResponse;
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-
 
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
@@ -160,7 +159,7 @@ public class UserController {
         Map<String, Object> rtn = new HashMap<>();
 
         // 1. 접근 토큰 신규 발급
-        NaverTokenResponse accessTokenResult = userService.getNewNaverAccessToken(code, state);
+        NaverTokenResponse accessTokenResult = naverService.getNewNaverAccessToken(code, state);
         System.out.println("accessToken="+accessTokenResult);
 
         // 접근 토큰 에러 시 리턴
@@ -175,7 +174,7 @@ public class UserController {
 
         // 2. 네이버 프로필 정보 조회
         String accessToken = accessTokenResult.getAccessToken();
-        NaverProfile naverUserInfo = userService.getNaverUserInfo(accessToken);
+        NaverProfile naverUserInfo = naverService.getNaverUserInfo(accessToken);
 
         // 3. 사이트 가입 여부 조회 (미가입 : 회원가입/ 가입 : 로그인)
         String naverId = naverUserInfo.getId();
@@ -183,14 +182,14 @@ public class UserController {
 
         if (uuid.isEmpty()) {   // 회원 가입
             // 회원 추가
-            Integer userId = userService.joinUser(naverUserInfo, null);
+            Integer userId = userService.joinWithNaverProfile(naverUserInfo);
             // 갱신 토큰 저장
             RefreshToken refreshToken = new RefreshToken(null, userId, Provider.NAVER, accessTokenResult.getRefreshToken());
             RefreshToken result = tokenService.addToken(refreshToken);
 
             // 토큰 저장 불가 에러 발생 시 회원 삭제
             if (result == null) {
-                userService.deleteUser(userId);
+                userService.deleteUserWithUnlink(userId);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
             }
             // 회원가입한 회원 조회
@@ -248,13 +247,13 @@ public class UserController {
         // 회원가입
         if (uuid.isEmpty()) {
             // 회원 추가
-            Integer userId = userService.joinUser(null, kakaoUserInfo);
+            Integer userId = userService.joinWithKakaoProfile(kakaoUserInfo);
             // 갱신 토큰 저장
             RefreshToken refreshToken = new RefreshToken(null, userId, Provider.KAKAO, accessTokenResult.getRefreshToken());
             RefreshToken result = tokenService.addToken(refreshToken);
 
             if (result == null) {
-                userService.deleteUser(userId);
+                userService.deleteUserWithUnlink(userId);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
             }
 
