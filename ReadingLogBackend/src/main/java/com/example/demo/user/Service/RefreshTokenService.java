@@ -118,9 +118,9 @@ public class RefreshTokenService {
 
 
     // TODO 갱신 토큰 삭제
-    public void deleteToken(Integer userId, Provider provider) {
+    public void deleteToken(Integer userId) {
         // https://developers.naver.com/docs/login/devguide/devguide.md#5-1-2-%EA%B0%B1%EC%8B%A0-%ED%86%A0%ED%81%B0%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC
-        tokenRepository.deleteByUserIdAndProvider(userId, provider);
+        tokenRepository.deleteByUserId(userId);
     }
 
     // 연동 소셜 로그인 사이트 조회
