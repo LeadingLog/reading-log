@@ -30,14 +30,12 @@ public class KakaoService {
     private final ApiKeyService apiKey;
     private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
-    private final UserService userService;
 
 
-    public KakaoService(ApiKeyService apiKey, UserRepository userRepository, RefreshTokenService refreshTokenService, UserService userService) {
+    public KakaoService(ApiKeyService apiKey, UserRepository userRepository, RefreshTokenService refreshTokenService) {
         this.apiKey = apiKey;
         this.userRepository = userRepository;
         this.refreshTokenService = refreshTokenService;
-        this.userService = userService;
     }
 
     @Transactional
