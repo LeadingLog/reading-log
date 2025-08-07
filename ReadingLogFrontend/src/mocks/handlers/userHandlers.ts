@@ -1,6 +1,6 @@
-import { http, HttpResponse } from 'msw';
+// import { http, HttpResponse } from 'msw';
 
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+// const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const userHandlers = [
 
@@ -43,6 +43,7 @@ export const userHandlers = [
    */
 
   // 회원 정보 수정
+  /*
   http.post( `${serverUrl}/user/user_id/modified`, async ({ request }) => {
     const url = new URL( request.url );
     const userId = url.searchParams.get( 'user_id' );
@@ -58,8 +59,10 @@ export const userHandlers = [
       }
     } );
   } ),
+   */
 
   // 로그아웃
+  /*
   http.post( `${serverUrl}/user/logout`, async ({ request }) => {
     const url = new URL( request.url );
     const provider = url.searchParams.get( 'provider' );
@@ -70,8 +73,10 @@ export const userHandlers = [
       success: true,
     } );
   } ),
+   */
 
   // 탈퇴
+  /*
   http.delete( `${serverUrl}/user/:userId/delete`, async ({ request, params }) => {
     const body = await request.json() as { userId: string };
     const userIdFromParam = params.userId; // URL에서 가져온 userId (/user/123/delete)
@@ -84,8 +89,10 @@ export const userHandlers = [
       success: true,
     } );
   } ),
+   */
 
   // 세션 연장
+  /*
   http.get( `${serverUrl}/user/extend_session`, async ({ request }) => {
     const url = new URL( request.url );
     const userId = url.searchParams.get( 'user_id' );
@@ -95,5 +102,6 @@ export const userHandlers = [
       success: true,
     } );
   } ),
+   */
 
 ];
