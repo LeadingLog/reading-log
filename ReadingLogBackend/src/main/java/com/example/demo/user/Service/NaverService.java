@@ -36,15 +36,13 @@ public class NaverService {
     private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
     private final ResponseService responseService;
-    private final UserService userService;
 
 
-    public NaverService(ApiKeyService apiKey, UserRepository userRepository, RefreshTokenService refreshTokenService, ResponseService responseService, UserService userService) {
+    public NaverService(ApiKeyService apiKey, UserRepository userRepository, RefreshTokenService refreshTokenService, ResponseService responseService) {
         this.apiKey = apiKey;
         this.userRepository = userRepository;
         this.refreshTokenService = refreshTokenService;
         this.responseService = responseService;
-        this.userService = userService;
     }
 
     // 네이버 회원 정보 반환
