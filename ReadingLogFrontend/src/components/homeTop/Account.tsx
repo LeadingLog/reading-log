@@ -17,7 +17,13 @@ export default function Account() {
 
     try {
       setModalIsLoading( true )
-      await axios.post( `${serverUrl}/user/logout` );
+      // await axios.post( `${serverUrl}/user/logout` );
+      await axios.post(
+        `${serverUrl}/user/logout`, {},
+        {
+          withCredentials: true // 세션 포함
+        }
+      );
 
       openModal( "ModalNotice", { // 로그아웃 성공 시 모달 표시
         title: "로그아웃 완료!",
