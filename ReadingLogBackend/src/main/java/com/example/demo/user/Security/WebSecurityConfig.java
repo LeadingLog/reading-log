@@ -38,6 +38,7 @@ public class WebSecurityConfig {
 //                        .requestMatchers("/user/login", "/user/kakaologin", "/user/naverlogin").permitAll()
 //                        .requestMatchers("/user/**").authenticated()
 //                        .anyRequest().authenticated()
+                                .requestMatchers("/","/**").permitAll()
                                 .anyRequest().permitAll()
                 )
                 // ... 기존 필터 추가 로직
