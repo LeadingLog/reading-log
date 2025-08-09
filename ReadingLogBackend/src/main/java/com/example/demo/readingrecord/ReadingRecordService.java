@@ -109,7 +109,7 @@ public class ReadingRecordService {
 
 		for (Object[] row : rawResults) {
 
-			Long bookId = (long) ((Number) row[3]).intValue();
+			int bookId = ((Number) row[0]).intValue();
 			String bookTitle = (String) row[1];
 			String bookStatus = (String) row[2];
 			int bookTime = ((Number) row[3]).intValue();
@@ -118,7 +118,7 @@ public class ReadingRecordService {
 
 			Map<String, Object> map = new HashMap<>();
 
-			map.put("booId", bookId);
+			map.put("bookId", bookId);
 			map.put("bookTitle", bookTitle);
 			map.put("bookStatus", bookStatus); 
 			map.put("bookTime", bookTime);

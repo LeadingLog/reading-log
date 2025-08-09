@@ -52,20 +52,35 @@ export default function OAuthCallbackHandler({
         code: code || "",
         state: state || ""
       } );
-
+/*
+      const response = await axios.post( `${serverUrl}${apiEndpoint}`, loginData, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      } );
+*/
       const response = await axios.post( `${serverUrl}${apiEndpoint}`, loginData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        withCredentials: true
+        withCredentials: true,
       } );
 
       const data = response.data;
       if (response.status === 200) { // 로그인에 성공하면 사용자 정보를 저장한다.
+        console.log("===== 로그인 성공 =====");
+        console.log(data);
+
+        /* 테스트 응답
         useUserStore.getState().setUser( {
-          userId: data.userId,
-          nickname: data.nickname,
-          email: data.userEmail,
-          provider,
+          userId: 8370,
+          nickname: "nickName",
+          email: "email@gmail.com",
         } );
+        */
+
+        useUserStore.getState().setUser( {
+          userId: data.response.id,
+          nickname: data.response.nickname,
+          email: data.response.email,
+        });
+
         localStorage.removeItem( "state" ); // 요청시 생성했던 state를 지운다.
         navigate( "/" );
       } else {

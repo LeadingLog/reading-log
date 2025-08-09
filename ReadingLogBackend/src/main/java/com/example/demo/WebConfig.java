@@ -31,10 +31,12 @@ public class WebConfig {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-				        .allowedOrigins("*")
-				        .allowedMethods("*")
-				        .maxAge(3000)
-				        .allowCredentials(false);
+                                        .allowedOrigins("https://reading-log-zeta.vercel.app")
+										.allowedOrigins("http://localhost:5173")
+                                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+                                        .allowCredentials(true)
+                                        .allowedHeaders("*")
+                                        .maxAge(3600);
 
 			}
 		};

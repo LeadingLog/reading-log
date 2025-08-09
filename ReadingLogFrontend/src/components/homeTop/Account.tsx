@@ -17,7 +17,13 @@ export default function Account() {
 
     try {
       setModalIsLoading( true )
-      await axios.post( `${serverUrl}/user/logout` );
+      // await axios.post( `${serverUrl}/user/logout` );
+      await axios.post(
+        `${serverUrl}/user/logout`, {},
+        {
+          withCredentials: true // 세션 포함
+        }
+      );
 
       openModal( "ModalNotice", { // 로그아웃 성공 시 모달 표시
         title: "로그아웃 완료!",
@@ -50,6 +56,17 @@ export default function Account() {
     } );
   };
 
+  // 토큰으로 유저 정보를 불러올 수 있는지 테스트하는 api
+  const getTokenTest = async () => {
+    const serverUrl = import.meta.env.VITE_SERVER_URL; // server URL
+
+    const response = await axios.get( `${serverUrl}/user/getTokenTest`, {
+      withCredentials: true,
+    } );
+
+    console.log( 'API 응답:', response.data );
+  }
+
   return (
     <>
       {/* 닉네임 & 마이페이지 & 로그아웃 */}
@@ -59,6 +76,10 @@ export default function Account() {
         <article
           className="flex h-full overflow-hidden bg-myPage_LogOut_Bg divide-rou divide-x-2 divide-header_Right_Icon_Divide_Color">
           {/* MyPage 버튼 */}
+          <button
+            onClick={() => getTokenTest()}
+          >test
+          </button>
           <button
             className="flex justify-center items-center text-myPage_Icon_Color px-3"
             onClick={() => openModal( "ModalMyPage" )} // 클릭 시 ModalMyPage 열기

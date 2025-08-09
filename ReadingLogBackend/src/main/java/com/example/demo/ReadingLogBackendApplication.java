@@ -11,6 +11,7 @@ public class ReadingLogBackendApplication {
     @RequestMapping("/")
     String home() {
         return "배포테트스트";
+        
     }
 
     public static void main(String[] args) {

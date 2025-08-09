@@ -38,3 +38,5 @@ out/
 
 ### api-key properties ###
 /src/main/resources/application-api-key.properties
+/src/main/resources/application-db.properties
+/src/main/resources/application-jwt-secret-key.properties

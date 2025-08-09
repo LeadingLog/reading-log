@@ -1,10 +1,10 @@
 package com.example.demo.user.Service;
 
-import com.example.demo.user.Entity.KakaoProfile;
-import com.example.demo.user.Entity.KakaoTokenResponse;
-import com.example.demo.user.Entity.NaverProfile;
-import com.example.demo.user.Entity.NaverTokenResponse;
+import com.example.demo.code.Provider;
+import com.example.demo.user.Entity.*;
+import com.example.demo.user.Repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Service
@@ -27,9 +28,14 @@ public class KakaoService {
 
 
     private final ApiKeyService apiKey;
+    private final UserRepository userRepository;
+    private final RefreshTokenService refreshTokenService;
 
-    public KakaoService(ApiKeyService apiKey) {
+
+    public KakaoService(ApiKeyService apiKey, UserRepository userRepository, RefreshTokenService refreshTokenService) {
         this.apiKey = apiKey;
+        this.userRepository = userRepository;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Transactional
@@ -85,7 +91,7 @@ public class KakaoService {
         headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        HttpEntity<MultiValueMap<String,String>> kakaoProfileRequest = new HttpEntity<>(headers);
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
 
         RestTemplate restTemplate = new RestTemplate();
         // TODO 경로 requestentity 로 옮겨주기
@@ -149,6 +155,77 @@ public class KakaoService {
 //        kakaoProfile.setEmail((String) userProfile.get("email"));
 
         return kakaoProfile;
+    }
+
+    // 카카오 회원 정보 반환
+    @Transactional
+    public User prepareUserFromProfile(KakaoProfile userProfile) {
+        User user = new User();
+        System.out.println("카카오 회원 정보 처리");
+
+        user.setUserUUID(userProfile.getId());
+        user.setNickname(userProfile.getNickname());
+        user.setUserEmail(userProfile.getEmail());
+
+        user.setPassword(UUID.randomUUID().toString());
+
+        return user;
+
+    }
+
+    // 회원 탈퇴
+    @Transactional
+    public void unlinkKakaoUser(Integer userId) throws JsonProcessingException {
+
+        // 갱신 토큰 조회
+        RefreshToken refreshToken = refreshTokenService.findByUserId(userId);
+        String token = refreshToken.getToken();
+        Provider provider = refreshToken.getProvider();
+
+        // 카카오 토큰 재발급, aminKey 를 이용하는 방식 선택하여 필요없음.
+        String kakaoAdminKey = apiKey.getKakao_app_admin_key();
+        String targetId = userRepository.getReferenceById(userId).getUserUUID();
+
+        System.out.println(targetId);
+
+        String kakaoTokenUrl = "https://kapi.kakao.com/v1/user/unlink";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "KakaoAK " + kakaoAdminKey);
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("target_id_type", "user_id"); // 발급
+        params.add("target_id", targetId);
+
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        // TODO 경로 requestentity 로 옮겨주기
+        ResponseEntity<String> response = restTemplate
+                .exchange(kakaoTokenUrl, HttpMethod.POST, kakaoTokenRequest, String.class);
+        // JSON 결과값 반환
+        String responseBody = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(responseBody);
+        JsonNode idNode = rootNode.get("id");
+
+        String userIdFromKakao = null;
+        if (idNode != null) {
+            userIdFromKakao = idNode.asText(); // 값을 String으로 변환해서 가져옴!
+        }
+
+//        if (userIdFromKakao != null) {
+//            result = userService.deleteUser(userId);
+//        } else {
+//            // 카카오 탈퇴 실패 처리
+//            result.put("status", "error");
+//            result.put("message", "카카오 연동 해제 실패");
+//        }
+
+        System.out.println("접근 토큰22 by refreshToken : " + response.getBody());
+        System.out.println("kakaoTokenResponse : " + userIdFromKakao);
+
     }
 
 
