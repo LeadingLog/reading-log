@@ -22,6 +22,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.code.Role;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -54,6 +56,7 @@ public class NaverService {
         user.setUserUUID(userProfile.getId());
         user.setNickname(userProfile.getNickname());
         user.setUserEmail(userProfile.getEmail());
+        user.setRole(Role.ROLE_USER);
 
         user.setPassword(UUID.randomUUID().toString());
 
