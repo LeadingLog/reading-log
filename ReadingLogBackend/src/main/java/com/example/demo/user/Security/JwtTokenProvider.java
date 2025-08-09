@@ -1,5 +1,6 @@
 package com.example.demo.user.Security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -12,8 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
-import javax.crypto.SecretKey; // ✨ import 변경: java.security.Key -> javax.crypto.SecretKey
+import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -35,10 +37,11 @@ public class JwtTokenProvider {
     }
 
     // ✨ createToken 메소드에서 roles 파라미터와 관련 로직 제거
-    public String createToken(String userPk) {
+    public String createToken(String userPk, List<String> roles) {
         Date now = new Date();
         return Jwts.builder()
                 .subject(userPk)
+                .claim("roles", roles)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + tokenValidTime))
                 .signWith(key, Jwts.SIG.HS256)
