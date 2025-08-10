@@ -25,16 +25,6 @@ public class WebSecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    //    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/user/**").authenticated() // /user/** 경로는 "로그인한 사용자"면 누구나 접근 가능하도록 변경
-//                        .anyRequest().permitAll() // 나머지는 모두 허용
-//                )
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
-//    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -45,9 +35,10 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/login", "/user/kakaologin", "/user/naverlogin").permitAll()
-                        .requestMatchers("/user/**").authenticated()
-                        .anyRequest().permitAll()
+//                        .requestMatchers("/user/login", "/user/kakaologin", "/user/naverlogin").permitAll()
+//                        .requestMatchers("/user/**").authenticated()
+//                        .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 // ... 기존 필터 추가 로직
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

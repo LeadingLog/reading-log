@@ -197,14 +197,16 @@ public class UserController {
             //return new ResponseEntity<>(users, HttpStatus.OK);
 
             // JWT를 HttpOnly 쿠키에 저장
-            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+            List<String> roles = Collections.singletonList(users.getRole().name());
+            String jwt = jwtTokenProvider.createToken(users.getUserEmail(), roles);
             userService.addAccessTokenCookie(response, jwt);
             return ResponseEntity.ok().build();
 
         } else if (uuid.size() == 1) {  // 로그인
             // 로그인 처리
             users = uuid.get(0);
-            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+            List<String> roles = Collections.singletonList(users.getRole().name());
+            String jwt = jwtTokenProvider.createToken(users.getUserEmail(), roles);
 
             // JWT를 HttpOnly 쿠키에 저장
             userService.addAccessTokenCookie(response, jwt);
@@ -261,13 +263,15 @@ public class UserController {
 //            return new ResponseEntity<>(users, HttpStatus.OK);
 
             // JWT를 HttpOnly 쿠키에 저장
-            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+            List<String> roles = Collections.singletonList(users.getRole().name());
+            String jwt = jwtTokenProvider.createToken(users.getUserEmail(), roles);
             userService.addAccessTokenCookie(response, jwt);
             return ResponseEntity.ok().build();
 
         } else if (uuid.size() == 1) {  // 로그인
             users = uuid.get(0);
-            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+            List<String> roles = Collections.singletonList(users.getRole().name());
+            String jwt = jwtTokenProvider.createToken(users.getUserEmail(), roles);
             //return ResponseEntity.ok(jwt);
 //            Integer loginId = userService.loginUser(kakaoId, request);
 //            users = userService.findUserById(loginId);
@@ -327,7 +331,8 @@ public class UserController {
         // 비밀번호 일치 여부 확인
         if (passwordEncoder.matches(password, user.getPassword())) {
             // 로그인 성공: JWT 토큰 생성
-            String token = jwtTokenProvider.createToken(user.getUserEmail());
+            List<String> roles = Collections.singletonList(user.getRole().name());
+            String token = jwtTokenProvider.createToken(user.getUserEmail(), roles);
             return ResponseEntity.ok(token);
         } else {
             // 로그인 실패: 비밀번호 불일치

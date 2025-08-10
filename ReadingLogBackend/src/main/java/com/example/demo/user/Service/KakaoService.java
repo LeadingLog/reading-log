@@ -1,6 +1,7 @@
 package com.example.demo.user.Service;
 
 import com.example.demo.code.Provider;
+import com.example.demo.code.Role;
 import com.example.demo.user.Entity.*;
 import com.example.demo.user.Repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -150,10 +151,6 @@ public class KakaoService {
         System.out.println("KakaoProfile Nickname: " + kakaoProfile.getNickname());
         System.out.println("KakaoProfile Email: " + kakaoProfile.getEmail());
 
-//        kakaoProfile.setId((String) userProfile.get("id"));
-//        kakaoProfile.setNickname((String) userProfile.get("nickname"));
-//        kakaoProfile.setEmail((String) userProfile.get("email"));
-
         return kakaoProfile;
     }
 
@@ -166,6 +163,7 @@ public class KakaoService {
         user.setUserUUID(userProfile.getId());
         user.setNickname(userProfile.getNickname());
         user.setUserEmail(userProfile.getEmail());
+        user.setRole(Role.ROLE_USER);
 
         user.setPassword(UUID.randomUUID().toString());
 
