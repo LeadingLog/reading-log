@@ -71,11 +71,12 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
     formData.append( "nickname", tempNickname ? tempNickname.trim() : "" );
 
     try {
-      setIsLoading( true )
+      setIsLoading( true );
       const response = await axios.post( `${serverUrl}/user/${userId}/modified`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true, // 세션 쿠키 포함
       } );
 
       if (response.data.success) {
@@ -136,9 +137,11 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({ modalId }) => {
   // 회원 탈퇴 처리
   const handleAccountDeletion = async () => {
     try {
-      setModalIsLoading( true )
-      const response = await axios.delete( `${serverUrl}/user/${userId}/delete`, {
-        data: { userId }
+      setModalIsLoading( true );
+      const response = await axios.delete( `${serverUrl}/user/${userId}/delete`,
+        {
+        data: { userId },
+        withCredentials: true  // 세션 쿠키 포함
       } );
 
       if (response.data.success) {

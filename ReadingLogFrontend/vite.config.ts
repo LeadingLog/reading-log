@@ -13,7 +13,7 @@ export default defineConfig( {
         rewrite: (path) => path.replace( /^\/api\/aladin/, '/ttb/api' ),
       },
       '/user': {
-        target: 'http://localhost:8091',
+        target: 'http://localhost:9091',
         changeOrigin: true,
       },
     },

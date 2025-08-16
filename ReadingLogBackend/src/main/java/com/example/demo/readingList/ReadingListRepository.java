@@ -97,18 +97,17 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Intege
 
     // 월별 독서 리스트
     @Query ("SELECT r " +
-//            "r.bookTitle" +
-//            " , r.author" +
-//            " , r.isbn13" +
-//            " , r.bookId " +
-//            " , r.coverImgUrl" +
-//            " , r.bookStatus " +
-//            " , r.createdAt " +
             "FROM ReadingList r " +
             "WHERE r.userId = :userId " +
             "AND FUNCTION('TO_CHAR', r.readStartDt, 'YYYYMM') <= :yymm " +
             "AND FUNCTION('TO_CHAR', r.readEndDt, 'YYYYMM') >= :yymm " +
-			"AND r.bookStatus <> 'INTERESTED' ")
+			"AND r.bookStatus <> 'INTERESTED' " + 
+      	    "ORDER BY CASE r.bookStatus " +
+            "  WHEN 'IN_PROGRESS' THEN 1 " +
+            "  WHEN 'NOT_STARTED' THEN 2 " +
+            "  WHEN 'COMPLETED'   THEN 3 " +
+            "  ELSE 4 " +
+           "END ASC")
     Page<ReadingList> getMontlyReadingList (@Param("userId") Integer userId,@Param("yymm") String yymm, Pageable pageable);
 
 	public interface MonthlyStatusRawCountProjection {
