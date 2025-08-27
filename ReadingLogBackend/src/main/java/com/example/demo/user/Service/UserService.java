@@ -8,6 +8,7 @@ import com.example.demo.response.ResponseService;
 import com.example.demo.user.Entity.*;
 import com.example.demo.user.Repository.RefreshTokenRepository;
 import com.example.demo.user.Repository.UserRepository;
+import com.example.demo.user.Security.JwtTokenProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.*;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +33,19 @@ public class UserService {
 
     private final KakaoService kakaoService;
     private final NaverService naverService;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public UserService(UserRepository userRepository, RefreshTokenRepository tokenRepository, ApiKeyService apiKey, RefreshTokenService refreshTokenService, ResponseService responseService, KakaoService kakaoService, NaverService naverService) {
+
+    public UserService(UserRepository userRepository, RefreshTokenRepository tokenRepository, ApiKeyService apiKey, RefreshTokenService refreshTokenService, ResponseService responseService, KakaoService kakaoService, NaverService naverService, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.apiKey = apiKey;
         this.refreshTokenService = refreshTokenService;
         this.responseService = responseService;
         this.kakaoService = kakaoService;
         this.naverService = naverService;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     // 회원 가입
@@ -105,27 +112,30 @@ public class UserService {
 
     // 회원 내부 로그인
     @Transactional
-    public Integer loginUser(String userUUID, HttpServletRequest request) {
+    public User loginUser(String userUUID, HttpServletRequest request) {
         HttpSession session = null;
+        User rtnUser;
 
         // 회원 여부 조회
         ArrayList<User> uuid = getUserByUUID(userUUID);
-        Integer userId = uuid.get(0).getUserId();
+        rtnUser = uuid.get(0);
 
         if (uuid.size() == 1) { // 회원일 경우
-            extendSession(userId, request);
+            // User 객체 반환
+            return User.builder()
+                    .userEmail(rtnUser.getUserEmail())
+                    .nickname(rtnUser.getNickname())
+                    .build();
 
-            session = request.getSession();
-            session.setMaxInactiveInterval(604800); // 7일
-            session.setAttribute("loginUserId", userId);
+//            extendSession(rtnUser, request);
+//
+//            session = request.getSession();
+//            session.setMaxInactiveInterval(604800); // 7일
+//            session.setAttribute("loginUserId", userId);
 //            session.setAttribute("loginSessionValidTime", session.getMaxInactiveInterval());
-
-            System.out.println("ㅣㅣ야루" + request.getSession().getAttribute("loginUserId"));
         } else {
-            return 0;
+            return null;
         }
-
-        return userId;
     }
 
 

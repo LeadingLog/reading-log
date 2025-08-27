@@ -6,6 +6,7 @@ package com.example.demo.user.Controller;
 import com.example.demo.code.Provider;
 import com.example.demo.response.ResponseService;
 import com.example.demo.user.Entity.*;
+import com.example.demo.user.Security.JwtService;
 import com.example.demo.user.Security.JwtTokenProvider;
 import com.example.demo.user.Service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,8 +33,9 @@ public class UserController {
     private final ResponseService responseService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService, ResponseService responseService, KakaoService kakaoService, NaverService naverService, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, ApiKeyService apiKey, RefreshTokenService tokenService, ResponseService responseService, KakaoService kakaoService, NaverService naverService, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userService = userService;
         this.tokenService = tokenService;
         this.responseService = responseService;
@@ -41,6 +43,7 @@ public class UserController {
         this.naverService = naverService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     // 회원 세션 시간 조회
@@ -178,42 +181,48 @@ public class UserController {
 
         // 3. 사이트 가입 여부 조회 (미가입 : 회원가입/ 가입 : 로그인)
         String naverId = naverUserInfo.getId();
-        ArrayList<User> uuid = userService.getUserByUUID(naverId);
+//        ArrayList<User> uuid = userService.getUserByUUID(naverId);
 
-        if (uuid.isEmpty()) {   // 회원 가입
-            // 회원 추가
-            Integer userId = userService.joinWithNaverProfile(naverUserInfo);
-            // 갱신 토큰 저장
-            RefreshToken refreshToken = new RefreshToken(null, userId, Provider.NAVER, accessTokenResult.getRefreshToken());
-            RefreshToken result = tokenService.addToken(refreshToken);
+        try {
+            if (naverId.isEmpty()) {   // 회원 가입
+                // 회원 추가
+                Integer userId = userService.joinWithNaverProfile(naverUserInfo);
+                // 갱신 토큰 저장
+                RefreshToken refreshToken = new RefreshToken(null, userId, Provider.NAVER, accessTokenResult.getRefreshToken());
+                RefreshToken result = tokenService.addToken(refreshToken);
 
-            // 토큰 저장 불가 에러 발생 시 회원 삭제
-            if (result == null) {
-                userService.deleteUserWithUnlink(userId);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
+                // 토큰 저장 불가 에러 발생 시 회원 삭제
+                if (result == null) {
+                    userService.deleteUserWithUnlink(userId);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
+                }
+                // 회원가입한 회원 조회
+                users = userService.findUserById(userId);
+                //return new ResponseEntity<>(users, HttpStatus.OK);
+
+                // JWT를 HttpOnly 쿠키에 저장
+                // todo 회원가입 후 > 재로그인 과정
+//            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+//            userService.addAccessTokenCookie(response, jwt);
+
+                return ResponseEntity.ok().build();
+
+            } else {  // 로그인
+                // 로그인 처리
+//            users = uuid.get(0);
+//            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+
+                // JWT를 HttpOnly 쿠키에 저장
+//            userService.addAccessTokenCookie(response, jwt);
+//            return ResponseEntity.ok().build();
+                users = userService.loginUser(naverId, request);
+                JwtToken jwtToken = jwtService.signIn(users.getUserEmail());
+                // todo refreshtoken 을 DB 에 저장하는지?
+
+
+            return new ResponseEntity<>(jwtToken, HttpStatus.OK);
             }
-            // 회원가입한 회원 조회
-            users = userService.findUserById(userId);
-            //return new ResponseEntity<>(users, HttpStatus.OK);
-
-            // JWT를 HttpOnly 쿠키에 저장
-            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
-            userService.addAccessTokenCookie(response, jwt);
-            return ResponseEntity.ok().build();
-
-        } else if (uuid.size() == 1) {  // 로그인
-            // 로그인 처리
-            users = uuid.get(0);
-            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
-
-            // JWT를 HttpOnly 쿠키에 저장
-            userService.addAccessTokenCookie(response, jwt);
-            return ResponseEntity.ok().build();
-//            Integer loginId = userService.loginUser(naverId, request);
-//            users = userService.findUserById(loginId);
-//
-//            return new ResponseEntity<>(users, HttpStatus.OK);
-        } else {
+        } catch(Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }

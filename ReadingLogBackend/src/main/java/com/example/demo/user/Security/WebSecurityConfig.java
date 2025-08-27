@@ -38,7 +38,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF 보호 비활성화 (Stateless API에 권장)
+                // CSRF 보호 비활성화 (Stateless API(Rest API) 에 권장)
                 .csrf(AbstractHttpConfigurer::disable)
 
                 // 세션을 사용하지 않도록 설정 (JWT 기반 인증)

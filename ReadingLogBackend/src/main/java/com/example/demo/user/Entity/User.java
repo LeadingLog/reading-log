@@ -1,16 +1,17 @@
 package com.example.demo.user.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Builder
@@ -39,6 +40,8 @@ public class User {
     @Column(name = "user_email", nullable = true)
     private String userEmail;
 
+    private String role;
+
     @CreationTimestamp
     @Column(name = "ins_date", nullable = false)
     private Timestamp InsDate;
@@ -46,4 +49,16 @@ public class User {
     @UpdateTimestamp
     @Column(name = "upd_date")
     private Timestamp updDate;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+//    @Override
+    private Collection<? extends GrantedAuthority> getAuthorities(){
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+
+    }
 }
