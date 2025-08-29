@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.*;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -142,9 +143,33 @@ public class UserService {
     // 회원 로그아웃
     @Transactional
     public void logoutUser(HttpServletRequest request) {
-        // 로그인 세션 삭제
-        // todo 로그아웃 시 Redis 에서 Token 정보 지우기
-
+        try {
+            // 1. JWT 토큰 추출
+            String token = jwtTokenProvider.resolveToken(request);
+            
+            if (token != null && jwtTokenProvider.validateToken(token)) {
+                // 2. 토큰을 블랙리스트에 추가 (로그아웃 처리)
+                jwtTokenProvider.blacklistToken(token);
+                
+                // 3. 토큰에서 사용자 정보 추출
+                String userEmail = jwtTokenProvider.getUserPk(token);
+                
+                // 4. Refresh Token 삭제 (DB에서)
+                Optional<User> userOpt = userRepository.findByUserEmail(userEmail);
+                if (userOpt.isPresent()) {
+                    refreshTokenService.deleteToken(userOpt.get().getUserId());
+                }
+                
+                // 5. SecurityContext 클리어
+                SecurityContextHolder.clearContext();
+                
+                System.out.println("로그아웃 성공: " + userEmail);
+            } else {
+                System.out.println("유효하지 않은 토큰으로 로그아웃 시도");
+            }
+        } catch (Exception e) {
+            System.err.println("로그아웃 처리 중 오류: " + e.getMessage());
+        }
     }
 
 

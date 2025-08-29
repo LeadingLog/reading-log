@@ -20,10 +20,19 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
+import java.util.Optional;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.example.demo.response.ResponseService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
@@ -57,7 +66,7 @@ public class UserController {
     @GetMapping("/extend_session")
     public ResponseEntity<Map<String, Object>> extendSession(HttpServletRequest request, Integer userId) {
         try {
-            return userService.extendSession(userId, request);
+                return userService.extendSession(userId, request);
         } catch (Exception e) {
             return responseService.responseData(false, "extend session failed");
         }
@@ -65,8 +74,18 @@ public class UserController {
 
     // 로그아웃
     @PostMapping("/logout")
-    public void logoutUser(HttpServletRequest request) {
-        userService.logoutUser(request);
+    public ResponseEntity<Map<String, Object>> logoutUser(HttpServletRequest request, 
+                                        @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            log.info("로그아웃 요청: {}", userDetails != null ? userDetails.getUsername() : "알 수 없는 사용자");
+            
+            userService.logoutUser(request);
+            
+            return responseService.responseData(true, "로그아웃이 성공적으로 처리되었습니다.");
+        } catch (Exception e) {
+            log.error("로그아웃 처리 중 오류 발생", e);
+            return responseService.responseData(false, "로그아웃 처리 중 오류가 발생했습니다.");
+        }
     }
 
     // 회원 탈퇴
@@ -191,7 +210,7 @@ public class UserController {
 
                 // 토큰 저장 불가 에러 발생 시 회원 삭제
                 if (result == null) {
-                    userService.deleteUserWithUnlink(userId);
+            userService.deleteUserWithUnlink(userId);
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
                 }
                 // 회원가입한 회원 조회
@@ -352,5 +371,31 @@ public class UserController {
         }
     }
 
+    // 인증된 사용자 정보 조회 예시
+    @GetMapping("/me")
+    public ResponseEntity<Map<String, Object>> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        log.info("현재 인증된 사용자: {}", userDetails.getUsername());
+        
+        Optional<User> userOpt = userService.findUserByEmail(userDetails.getUsername());
+        if (userOpt.isPresent()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("user", userOpt.get());
+            return ResponseEntity.ok(response);
+        } else {
+            return responseService.responseData(false, "사용자를 찾을 수 없습니다.");
+        }
+    }
 
+    // SecurityContext에서 직접 사용자 정보 가져오기 예시
+    @GetMapping("/profile")
+    public ResponseEntity<Map<String, Object>> getUserProfile() {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("SecurityContext에서 가져온 사용자: {}", currentUsername);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "사용자 프로필: " + currentUsername);
+        return ResponseEntity.ok(response);
+    }
 }
