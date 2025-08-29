@@ -55,7 +55,7 @@ public class UserController {
 
     // 회원 세션 유지용 컨트롤러
     @GetMapping("/extend_session")
-    public ResponseEntity<Map<String,Object>> extendSession(HttpServletRequest request, Integer userId) {
+    public ResponseEntity<Map<String, Object>> extendSession(HttpServletRequest request, Integer userId) {
         try {
             return userService.extendSession(userId, request);
         } catch (Exception e) {
@@ -88,7 +88,7 @@ public class UserController {
                 finalResult.put("message", serviceResult.get("message"));
                 httpStatus = HttpStatus.BAD_REQUEST;
             }
-        }catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             Map<String, Object> errorResponse = new HashMap<>();
             finalResult.put("success", false);
             finalResult.put("message", "회원 탈퇴 처리 중 데이터 형식 오류 발생");
@@ -107,7 +107,6 @@ public class UserController {
 
         return new ResponseEntity<>(finalResult, httpStatus);
     }
-
 
 
     // 회원 상세 조회 (userId) - 마이페이지 조회
@@ -129,10 +128,9 @@ public class UserController {
     }
 
 
-
     // 회원 정보 수정 (userId) - 마이페이지 수정
     @PostMapping("/{userId}/modified")
-    public ResponseEntity<Map<String, Object>> updateUser (@PathVariable Integer userId, User user) {
+    public ResponseEntity<Map<String, Object>> updateUser(@PathVariable Integer userId, User user) {
         Map<String, Object> rtn = new HashMap<>();
         if (userId != user.getUserId()) {
             rtn.put("success", false);
@@ -163,7 +161,7 @@ public class UserController {
 
         // 1. 접근 토큰 신규 발급
         NaverTokenResponse accessTokenResult = naverService.getNewNaverAccessToken(code, state);
-        System.out.println("accessToken="+accessTokenResult);
+        System.out.println("accessToken=" + accessTokenResult);
 
         // 접근 토큰 에러 시 리턴
         if (accessTokenResult.getError() != null) {
@@ -197,13 +195,16 @@ public class UserController {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
                 }
                 // 회원가입한 회원 조회
-                users = userService.findUserById(userId);
+//                users = userService.findUserById(userId);
                 //return new ResponseEntity<>(users, HttpStatus.OK);
 
                 // JWT를 HttpOnly 쿠키에 저장
-                // todo 회원가입 후 > 재로그인 과정
 //            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
 //            userService.addAccessTokenCookie(response, jwt);
+
+                // User 로그인
+                users = userService.loginUser(naverId, request);
+                JwtToken jwtToken = jwtService.signIn(users.getUserEmail());
 
                 return ResponseEntity.ok().build();
 
@@ -220,9 +221,9 @@ public class UserController {
                 // todo refreshtoken 을 DB 에 저장하는지?
 
 
-            return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+                return new ResponseEntity<>(jwtToken, HttpStatus.OK);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
@@ -230,7 +231,7 @@ public class UserController {
     @ResponseBody
     @PostMapping("/kakaologin")
     // 카카오 회원가입 및 로그인
-    public ResponseEntity<?> kakaoLogin(String code, HttpServletResponse response) throws IOException, URISyntaxException {
+    public ResponseEntity<?> kakaoLogin(String code, HttpServletRequest request, HttpServletResponse response) throws IOException, URISyntaxException {
         User users = null;
         Map<String, Object> rtn = new HashMap<>();
 
@@ -238,8 +239,8 @@ public class UserController {
         KakaoTokenResponse accessTokenResult = kakaoService.getNewKakaoAccessToken(code);
 
         // 토큰 유효성 검증
-        
-        
+
+
         // 카카오 프로필 정보 조회
         String accessToken = accessTokenResult.getAccessToken();
         KakaoProfile kakaoUserInfo = kakaoService.getKakaoUserInfo(accessToken);
@@ -251,40 +252,49 @@ public class UserController {
 
         // 사이트 가입 여부 조회
         String kakaoId = kakaoUserInfo.getId();
-        ArrayList<User> uuid = userService.getUserByUUID(kakaoId);
+//        ArrayList<User> uuid = userService.getUserByUUID(kakaoId);
 
-        // 회원가입
-        if (uuid.isEmpty()) {
-            // 회원 추가
-            Integer userId = userService.joinWithKakaoProfile(kakaoUserInfo);
-            // 갱신 토큰 저장
-            RefreshToken refreshToken = new RefreshToken(null, userId, Provider.KAKAO, accessTokenResult.getRefreshToken());
-            RefreshToken result = tokenService.addToken(refreshToken);
+        try {
+            // 회원가입
+            if (kakaoId.isEmpty()) {
+                // 회원 추가
+                Integer userId = userService.joinWithKakaoProfile(kakaoUserInfo);
+                // 갱신 토큰 저장
+                RefreshToken refreshToken = new RefreshToken(null, userId, Provider.KAKAO, accessTokenResult.getRefreshToken());
+                RefreshToken result = tokenService.addToken(refreshToken);
 
-            if (result == null) {
-                userService.deleteUserWithUnlink(userId);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
-            }
+                if (result == null) {
+                    userService.deleteUserWithUnlink(userId);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 중 토큰 저장 에러 발생. 재가입 필요");
+                }
 
-            users = userService.findUserById(userId);
+                users = userService.loginUser(kakaoId, request);
+                JwtToken jwtToken = jwtService.signIn(users.getUserEmail());
 //            return new ResponseEntity<>(users, HttpStatus.OK);
 
-            // JWT를 HttpOnly 쿠키에 저장
-            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
-            userService.addAccessTokenCookie(response, jwt);
-            return ResponseEntity.ok().build();
+                // JWT를 HttpOnly 쿠키에 저장
+//                String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+//                userService.addAccessTokenCookie(response, jwt);
+                return new ResponseEntity<>(jwtToken, HttpStatus.OK);
 
-        } else if (uuid.size() == 1) {  // 로그인
-            users = uuid.get(0);
-            String jwt = jwtTokenProvider.createToken(users.getUserEmail());
-            //return ResponseEntity.ok(jwt);
+            } else {  // 로그인
+
+//                users = uuid.get(0);
+//                String jwt = jwtTokenProvider.createToken(users.getUserEmail());
+                //return ResponseEntity.ok(jwt);
 //            Integer loginId = userService.loginUser(kakaoId, request);
 //            users = userService.findUserById(loginId);
 
 //            return new ResponseEntity<>(users, HttpStatus.OK);
-            userService.addAccessTokenCookie(response, jwt);
-            return ResponseEntity.ok().build();
-        } else {
+//                userService.addAccessTokenCookie(response, jwt);
+
+                // User 로그인
+                users = userService.loginUser(kakaoId, request);
+                JwtToken jwtToken = jwtService.signIn(users.getUserEmail());
+
+                return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+            }
+        } catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
@@ -316,8 +326,6 @@ public class UserController {
     }
 
 
-
-
     // 테스트용 컨트롤러
     @PostMapping("/login")
     public ResponseEntity<?> loginTest(@RequestBody Map<String, String> loginRequest) throws IOException, URISyntaxException {
@@ -336,20 +344,13 @@ public class UserController {
         // 비밀번호 일치 여부 확인
         if (passwordEncoder.matches(password, user.getPassword())) {
             // 로그인 성공: JWT 토큰 생성
-            String token = jwtTokenProvider.createToken(user.getUserEmail());
-            return ResponseEntity.ok(token);
+            JwtToken jwtToken = jwtService.signIn(user.getUserEmail());
+            return ResponseEntity.ok(jwtToken);
         } else {
             // 로그인 실패: 비밀번호 불일치
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않습니다.");
         }
     }
-
-
-
-
-
-
-
 
 
 }
