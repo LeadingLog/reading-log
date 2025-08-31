@@ -18,6 +18,7 @@ export default function OAuthCallbackHandler({
   const { openModal, closeAllModals } = useModalStore(); // Zustand의 openModal 가져오기
   const navigate = useNavigate();
   const [searchParams] = useSearchParams(); // 네이버 로그인 URL 쿼리 파라미터 가져오기
+  const loggedIn = useUserStore( (state) => state.loggedIn );
 
   const code = searchParams.get( "code" ); // 인증 코드
   const state = searchParams.get( "state" ); // 요청 검증용 상태 값
@@ -45,6 +46,9 @@ export default function OAuthCallbackHandler({
 
   // 로그인 요청
   const requestLogin = useCallback( async (): Promise<void> => {
+    if (loggedIn == true) {
+      return;
+    }
     const serverUrl = import.meta.env.VITE_SERVER_URL;
 
     try {
@@ -52,33 +56,28 @@ export default function OAuthCallbackHandler({
         code: code || "",
         state: state || ""
       } );
-/*
-      const response = await axios.post( `${serverUrl}${apiEndpoint}`, loginData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      } );
-*/
+      /*
+            const response = await axios.post( `${serverUrl}${apiEndpoint}`, loginData, {
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            } );
+      */
       const response = await axios.post( `${serverUrl}${apiEndpoint}`, loginData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         withCredentials: true,
       } );
 
       const data = response.data;
+      console.log(response);
       if (response.status === 200) { // 로그인에 성공하면 사용자 정보를 저장한다.
-        console.log("===== 로그인 성공 =====");
+        console.log( "===== 로그인 성공 =====" );
+        console.log(data);
 
         useUserStore.getState().setUser( {
-          userId: 8370,
-          nickname: "nickName",
-          email: "email@gmail.com",
-        } );
-
-        /*
-        useUserStore.getState().setUser( {
-          userId: data.response.id,
-          nickname: data.response.nickname,
-          email: data.response.email,
+          //userId: data.response.id,
+          nickname: data.nickname,
+          loggedIn: true,
+          //email: data.response.email,
         });
-         */
 
         localStorage.removeItem( "state" ); // 요청시 생성했던 state를 지운다.
         navigate( "/" );
