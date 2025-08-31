@@ -6,6 +6,7 @@ interface UserState {
   nickname: string | null;
   email: string | null;
   provider: string | null;
+  loggedIn: boolean | null;
 
   setUser: (user: Partial<Omit<UserState, 'setUser' | 'resetUser'>>) => void;
   resetUser: () => void;
@@ -18,6 +19,7 @@ export const useUserStore = create<UserState>()(
       nickname: null,
       email: null,
       provider: null,
+      loggedIn: null,
 
       setUser: (user) =>
         set( (state) => ({
@@ -31,6 +33,7 @@ export const useUserStore = create<UserState>()(
           nickname: null,
           email: null,
           provider: null,
+          loggedIn: null,
         } ),
     }),
     {
